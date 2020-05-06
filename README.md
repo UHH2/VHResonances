@@ -10,84 +10,105 @@ TBA: add short instruction for each part
 
 # Things to do for setting up the new analysis.
 
-- From the UHH2 folder do: git remote add personal git@github.com:$USER/UHH2.git
-- Remember to add all the modifications at the last possible place to keep track easily of the changes.
-- Add #include "UHH2/VHResonances/include/ZprimeCandidate.h" into core/include/NtupleObjects.h
-- Add #pragma link C++ class ZprimeCandidate+; in core/include/SUHH2core_LinkDef.h
-- Add #pragma link C++ class std::vector<ZprimeCandidate>+; in core/include/SUHH2core_LinkDef.h
-- Add in the right place the following in core/include/TopJet.h
-    - if(tagname == "Matching") return Matching;
-    - if(tagname == "MatchingStatus") return MatchingStatus;
-    - if(tagname == "MC_HWW") return NN_HWW;
-    - if(tagname == "MC_Hbb") return NN_Hbb;
-    - if(tagname == "MC_QCD") return NN_QCD;
-    - if(tagname == "MC_Top") return NN_Top;
-    - if(tagname == "MC_W") return NN_W;
-    - if(tagname == "MC_Z") return NN_Z;
-    - if(tagname == "MC_HWW_1") return NN_HWW_1;
-    - if(tagname == "MC_Hbb_1") return NN_Hbb_1;
-    - if(tagname == "MC_QCD_1") return NN_QCD_1;
-    - if(tagname == "MC_Top_1") return NN_Top_1;
-    - if(tagname == "MC_W_1") return NN_W_1;
-    - if(tagname == "MC_Z_1") return NN_Z_1;
-    - if(tagname == "MC_HWW_2") return NN_HWW_2;
-    - if(tagname == "MC_Hbb_2") return NN_Hbb_2;
-    - if(tagname == "MC_QCD_2") return NN_QCD_2;
-    - if(tagname == "MC_Top_2") return NN_Top_2;
-    - if(tagname == "MC_W_2") return NN_W_2;
-    - if(tagname == "MC_Z_2") return NN_Z_2;
-    - if(tagname == "CNN_HWW") return CNN_HWW;
-    - if(tagname == "CNN_Hbb") return CNN_Hbb;
-    - if(tagname == "CNN_QCD") return CNN_QCD;
-    - if(tagname == "CNN_Top") return CNN_Top;
-    - if(tagname == "CNN_W") return CNN_W;
-    - if(tagname == "CNN_Z") return CNN_Z;
-    - if(tagname == "DCL_HWW") return DCL_HWW;
-    - if(tagname == "DCL_Hbb") return DCL_Hbb;
-    - if(tagname == "DCL_QCD") return DCL_QCD;
-    - if(tagname == "DCL_Top") return DCL_Top;
-    - if(tagname == "DCL_W") return DCL_W;
-    - if(tagname == "DCL_Z") return DCL_Z;
-- Add the following in the “tag” session in the core/include/TopJet.h. It MUST be at the end of the current one otherwise the enum order would be disrupted 
-    - Matching,
-    - MatchingStatus,
-    - NN_HWW,
-    - NN_Hbb,
-    - NN_QCD,
-    - NN_Top,
-    - NN_W,
-    - NN_Z,
-    - NN_HWW_1,
-    - NN_Hbb_1,
-    - NN_QCD_1,
-    - NN_Top_1,
-    - NN_W_1,
-    - NN_Z_1,
-    - NN_HWW_2,
-    - NN_Hbb_2,
-    - NN_QCD_2,
-    - NN_Top_2,
-    - NN_W_2,
-    - NN_Z_2,
-    - CNN_HWW,
-    - CNN_Hbb,
-    - CNN_QCD,
-    - CNN_Top,
-    - CNN_W,
-    - CNN_Z,
-    - DCL_HWW,
-    - DCL_Hbb,
-    - DCL_QCD,
-    - DCL_Top,
-    - DCL_W,
-    - DCL_Z,
-- Add in core/src/classes.h  :
-    - #include "UHH2/VHResonances/include/ZprimeCandidate.h"
-    - ZprimeCandidate ZprimeCandidate_dummy;
-    - std::vector<ZprimeCandidate> ZprimeCandidate_dummy_vector;
-- Add in core/src/classes_def.xml:
-    - <class name="ZprimeCandidate"/>
-- git clone git@github.com:UHH2/VHResonances.git
-- git clone git@github.com:anmalara/PersonalCode.git
-- cd VHResonances
-- git remote add personal git@github.com:$USER/VHResonances.git
+- Add remotes:
+    - cd $CMSSW_BASE/src/UHH2/
+    - git remote add personal git@github.com:$USER/UHH2.git
+- MANDATORY hacks of UHH2 for compiling the code.
+    - Remember to add all the modifications at the last possible place to keep track easily of the changes.
+    - Add #include "UHH2/VHResonances/include/ZprimeCandidate.h" into core/include/NtupleObjects.h
+    - Add #pragma link C++ class ZprimeCandidate+; in core/include/SUHH2core_LinkDef.h
+    - Add #pragma link C++ class std::vector<ZprimeCandidate>+; in core/include/SUHH2core_LinkDef.h
+    - Add in the right place the following in core/include/TopJet.h
+        - if(tagname == "Matching") return Matching;
+        - if(tagname == "MatchingStatus") return MatchingStatus;
+        - if(tagname == "MC_HWW") return NN_HWW;
+        - if(tagname == "MC_Hbb") return NN_Hbb;
+        - if(tagname == "MC_QCD") return NN_QCD;
+        - if(tagname == "MC_Top") return NN_Top;
+        - if(tagname == "MC_W") return NN_W;
+        - if(tagname == "MC_Z") return NN_Z;
+        - if(tagname == "MC_HWW_1") return NN_HWW_1;
+        - if(tagname == "MC_Hbb_1") return NN_Hbb_1;
+        - if(tagname == "MC_QCD_1") return NN_QCD_1;
+        - if(tagname == "MC_Top_1") return NN_Top_1;
+        - if(tagname == "MC_W_1") return NN_W_1;
+        - if(tagname == "MC_Z_1") return NN_Z_1;
+        - if(tagname == "MC_HWW_2") return NN_HWW_2;
+        - if(tagname == "MC_Hbb_2") return NN_Hbb_2;
+        - if(tagname == "MC_QCD_2") return NN_QCD_2;
+        - if(tagname == "MC_Top_2") return NN_Top_2;
+        - if(tagname == "MC_W_2") return NN_W_2;
+        - if(tagname == "MC_Z_2") return NN_Z_2;
+        - if(tagname == "CNN_HWW") return CNN_HWW;
+        - if(tagname == "CNN_Hbb") return CNN_Hbb;
+        - if(tagname == "CNN_QCD") return CNN_QCD;
+        - if(tagname == "CNN_Top") return CNN_Top;
+        - if(tagname == "CNN_W") return CNN_W;
+        - if(tagname == "CNN_Z") return CNN_Z;
+        - if(tagname == "DCL_HWW") return DCL_HWW;
+        - if(tagname == "DCL_Hbb") return DCL_Hbb;
+        - if(tagname == "DCL_QCD") return DCL_QCD;
+        - if(tagname == "DCL_Top") return DCL_Top;
+        - if(tagname == "DCL_W") return DCL_W;
+        - if(tagname == "DCL_Z") return DCL_Z;
+    - Add the following in the “tag” session in the core/include/TopJet.h. It MUST be at the end of the current one otherwise the enum order would be disrupted 
+        - Matching,
+        - MatchingStatus,
+        - NN_HWW,
+        - NN_Hbb,
+        - NN_QCD,
+        - NN_Top,
+        - NN_W,
+        - NN_Z,
+        - NN_HWW_1,
+        - NN_Hbb_1,
+        - NN_QCD_1,
+        - NN_Top_1,
+        - NN_W_1,
+        - NN_Z_1,
+        - NN_HWW_2,
+        - NN_Hbb_2,
+        - NN_QCD_2,
+        - NN_Top_2,
+        - NN_W_2,
+        - NN_Z_2,
+        - CNN_HWW,
+        - CNN_Hbb,
+        - CNN_QCD,
+        - CNN_Top,
+        - CNN_W,
+        - CNN_Z,
+        - DCL_HWW,
+        - DCL_Hbb,
+        - DCL_QCD,
+        - DCL_Top,
+        - DCL_W,
+        - DCL_Z,
+    - Add in core/src/classes.h  :
+        - #include "UHH2/VHResonances/include/ZprimeCandidate.h"
+        - ZprimeCandidate ZprimeCandidate_dummy;
+        - std::vector<ZprimeCandidate> ZprimeCandidate_dummy_vector;
+    - Add in core/src/classes_def.xml:
+        - <class name="ZprimeCandidate"/>
+- Add VHResonances Folder:
+    - git clone git@github.com:UHH2/VHResonances.git
+    - git clone git@github.com:anmalara/PersonalCode.git
+    - cd VHResonances
+    - git remote add personal git@github.com:$USER/VHResonances.git
+- Connect SFramePlotter
+    - mkdir cd /nfs/dust/cms/user/$USER/WorkingArea/
+    - cd /nfs/dust/cms/user/$USER/WorkingArea/
+    - git clone git@github.com:UHH2/SFramePlotter.git
+    - When running the plotter, remember to change the username
+    - Once should hack the Splotter to adapt to his own style
+- Set up Combine — Following http://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/ —
+    - cd $CMSSW_BASE/src/
+    - git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
+    - cd HiggsAnalysis/CombinedLimit
+    - git fetch origin
+    - git checkout v8.1.0
+    - cd $CMSSW_BASE/src/UHH2/VHResonances/Analysis/CombineFunctions/
+    - python ImportToCombine.py
+- Compile evrything
+    - cd $CMSSW_BASE/src/UHH2/VHResonances/Analysis/macros/
+    - ./steer.py
