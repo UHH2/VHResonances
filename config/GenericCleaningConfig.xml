@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
+
+<!-- Generic Value -->
+<!ENTITY CACHEABLE                  "False">
+<!ENTITY OUTDIR                     "/nfs/dust/cms/user/amalara/sframe_all/2018/GenericCleaning">
+<!ENTITY NEVT                       "-1">
+
+<!-- MC PuReweighting -->
+<!ENTITY SysType_PU                 "central">    <!-- central, up, down -->
+<!ENTITY pileup_directory           "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/2018/MyMCPileupHistogram.root">
+<!ENTITY pileup_directory_data      "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/2018/MyDataPileupHistogram2018.root">
+<!ENTITY pileup_directory_data_up   "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/2018/MyDataPileupHistogram2018_72383.root">
+<!ENTITY pileup_directory_data_down "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/2018/MyDataPileupHistogram2018_66017.root">
+
+<!-- Cleaning variables -->
+<!ENTITY lumisel                    "true">  <!--true/false -->
+<!ENTITY mclumiweight               "true">  <!--true/false -->
+<!ENTITY mcpileupreweight           "true">  <!--true/false -->
+<!ENTITY metfilters                 "true">  <!--true/false -->
+<!ENTITY jec                        "true">  <!--true/false -->
+<!ENTITY topjec                     "true">  <!--true/false -->
+<!ENTITY jersmear                   "true">  <!--true/false -->
+<!ENTITY topjersmear                "true">  <!--true/false -->
+<!ENTITY jetpfidcleaner             "true">  <!--true--> <!--fixed value -->
+<!ENTITY topjetpfidcleaner          "true">  <!--true/false -->
+<!ENTITY jetlepcleaner              "true">  <!--true/false -->
+<!ENTITY eleid                      "true">  <!--true/false -->
+<!ENTITY muid                       "true">  <!--true/false -->
+<!ENTITY tauid                      "false"> <!--true/false -->
+<!ENTITY jetid                      "true">  <!--true/false -->
+<!ENTITY topjetid                   "true">  <!--true/false -->
+
+<!ENTITY MatchingCondition          "noMatch">  <!--HWWMatch/Hbb/HMatch/ZMatch/WMatch/Zqq/Wqq/Zll/Wll/topMatch/gluonMatch/qMatch -->
+<!ENTITY MatchingRadius             "0.8">
+
+<!-- Systematic uncertainties -->
+<!ENTITY JEC_Version                "Autumn18_V8">
+<!ENTITY jecsmear_direction         "nominal">  <!--nominal/down/up -->
+<!ENTITY jersmear_direction         "nominal">  <!--nominal/down/up -->
+<!ENTITY isPuppi                    "true">  <!--false/true -->
+<!ENTITY isCHS                      "true">  <!--false/true -->
+
+
+<!-- MC Samples -->
+
+<!ENTITY MC_TTToSemiLeptonic        SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_TTToSemiLeptonic.xml">
+
+<!ENTITY MC_WZ                      SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_WZ_TuneCP5_13TeV-pythia8.xml">
+<!ENTITY MC_WW                      SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_WW_TuneCP5_13TeV-pythia8.xml">
+
+<!ENTITY MC_ZZ                      SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_ZZ_TuneCP5_13TeV-pythia8.xml">
+<!ENTITY MC_WZ_Zmatch               SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_WZ_TuneCP5_13TeV-pythia8.xml">
+
+
+<!ENTITY MC_QCD_HT50to100           SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT50to100_madgraph.xml">
+<!ENTITY MC_QCD_HT100to200          SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT100to200_madgraph.xml">
+<!ENTITY MC_QCD_HT200to300          SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT200to300_madgraph.xml">
+<!ENTITY MC_QCD_HT300to500          SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT300to500_madgraph.xml">
+<!ENTITY MC_QCD_HT500to700          SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT500to700_madgraph.xml">
+<!ENTITY MC_QCD_HT700to1000         SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT700to1000_madgraph.xml">
+<!ENTITY MC_QCD_HT1000to1500        SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT1000to1500_madgraph.xml">
+<!ENTITY MC_QCD_HT1500to2000        SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT1500to2000_madgraph.xml">
+<!ENTITY MC_QCD_HT2000toInf         SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT2000toInf_madgraph.xml">
+
+<!-- Data Samples -->
+<!ENTITY DATA_SingleMuon_RunA       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunA.xml">
+<!ENTITY DATA_SingleMuon_RunB       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunB.xml">
+<!-- <!ENTITY DATA_SingleMuon_RunC       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunC.xml"> -->
+<!-- <!ENTITY DATA_SingleMuon_RunD       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunD.xml"> -->
+
+]>
+
+<!--
+<ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
+<ConfigSGE RAM ="2" DISK ="2" Mail="andrea.malara@desy.de" Notification="as" Workdir="workdir_GenericCleaning"/>
+-->
+
+<!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
+<JobConfiguration JobName="GenericCleaningJob" OutputLevel="INFO">
+  <Library Name="libSUHH2HiggsToWWTagger"/>
+  <Package Name="SUHH2HiggsToWWTagger.par"/>
+
+  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTDIR;/" PostFix="" TargetLumi="1" >
+
+    <!-- MC -->
+
+    <InputData Type="MC"    Version="MC_TTToSemiLeptonic"       Lumi="101347964.9"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTToSemiLeptonic;   <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+
+    <InputData Type="MC"    Version="MC_WZ"                     Lumi="170245.3988"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ;                 <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW"                     Lumi="124189.2106"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW;                 <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+
+    <InputData Type="MC"    Version="MC_ZZ"                     Lumi="191763.5659"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ;                 <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_Zmatch"              Lumi="170245.3988"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_Zmatch;          <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+
+    <InputData Type="MC"    Version="MC_QCD_HT50to100"          Lumi="0.2291325801" NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_HT50to100;      <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_HT100to200"         Lumi="3.663204922"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_HT100to200;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_HT200to300"         Lumi="37.15909788"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_HT200to300;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_HT300to500"         Lumi="174.7762231"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_HT300to500;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_HT500to700"         Lumi="1854.82666"   NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_HT500to700;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_HT700to1000"        Lumi="8077.614559"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_HT700to1000;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_HT1000to1500"       Lumi="14871.46169"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_HT1000to1500;   <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_HT1500to2000"       Lumi="105185.1375"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_HT1500to2000;   <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_HT2000toInf"        Lumi="259451.9961"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_HT2000toInf;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+
+    <!-- Data -->
+    <InputData Type="DATA"  Version="DATA_SingleMuon_RunA"      Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunA;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_RunB"      Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunB;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <!-- <InputData Type="DATA"  Version="DATA_SingleMuon_RunC"      Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunC;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
+    <!-- <InputData Type="DATA"  Version="DATA_SingleMuon_RunD"      Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunD;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
+
+    <UserConfig>
+      <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
+      <Item Name="PrimaryVertexCollection"    Value="offlineSlimmedPrimaryVertices"/>
+      <Item Name="ElectronCollection"         Value="slimmedElectronsUSER"/>
+      <Item Name="MuonCollection"             Value="slimmedMuonsUSER"/>
+      <Item Name="GenInfoName"                Value="genInfo"/>
+      <Item Name="GenParticleCollection"      Value="GenParticles"/>
+      <Item Name="GenJetCollection"           Value="slimmedGenJets"/>
+      <Item Name="GenTopJetCollection"        Value="genjetsAk8SubstructureSoftDrop"/>
+      <Item Name="JetCollection"              Value="jetsAk4CHS"/>
+      <Item Name="TopJetCollection"           Value="jetsAk8CHSSubstructure_SoftDropCHS"/>
+      <Item Name="TopPuppiJetCollection"      Value="jetsAk8PuppiSubstructure_SoftDropPuppi"/>
+      <Item Name="METName"                    Value="slimmedMETs"/>
+      <Item Name="PFParticleCollection"       Value="PFParticles"/>
+
+
+      <Item Name="additionalBranches"         Value="jetsAk4Puppi slimmedMETsPuppi"/>
+
+
+      <!-- The list of available collections to read in corresponds to the pointer members in event. The 'Name's to use here in the configuration are:
+      TauCollection,PhotonCollection,PFParticleCollection,genMETName
+
+      Note that the last four are only read in for MC (InputData Type="MC"), so it is save to specify
+      them for real data, although those branches do not exist.
+
+      As 'Value', always use the branch name (if in doubt, open the input file in ROOT).
+
+      By default, triggers are read. To explicitly disable reading triggers, use:
+      <Item Name="readTrigger" Value="false"/>
+    -->
+    <Item Name="readTrigger" Value="false"/>
+
+    <!-- tell AnalysisModuleRunner NOT to use the MC event weight from SFrame; rather let
+    MCLumiWeight (called via CommonModules) calculate the MC event weight. The MC
+    event weight assigned by MCLumiWeight is InputData.Lumi / Cycle.TargetLumi. -->
+    <Item Name="use_sframe_weight"          Value="false"/>
+
+    <Item Name="lumi_file"                  Value="/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/2018/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.root"/>
+    <Item Name="lumihists_lumi_per_bin"     Value="500."/> <!-- used in UHH2/common/include/LuminosityHists.h -->
+
+    <!-- Systematic uncertainties -->
+    <Item Name="jersmear_direction"         Value="&jersmear_direction;"/>  <!--used only in UHH2/common/include/JetCorrections.cxx -->
+    <Item Name="jecsmear_direction"         Value="&jecsmear_direction;"/>  <!--used only in UHH2/common/include/JetCorrections.cxx -->
+    <Item Name="isPuppi"                    Value="&isPuppi;"/>
+    <Item Name="isCHS"                      Value="&isCHS;"/>
+
+    <!-- MC PuReweighting -->
+    <Item Name="SysType_PU"                 Value="&SysType_PU;"/>
+    <Item Name="pileup_directory"           Value="&pileup_directory;"/>            <!--used only in UHH2/common/include/MCWeight.h -->
+    <Item Name="pileup_directory_data"      Value="&pileup_directory_data;"/>       <!--used only in UHH2/common/include/MCWeight.h -->
+    <Item Name="pileup_directory_data_up"   Value="&pileup_directory_data_up;"/>    <!--used only in UHH2/common/include/MCWeight.h -->
+    <Item Name="pileup_directory_data_down" Value="&pileup_directory_data_down;"/>  <!--used only in UHH2/common/include/MCWeight.h -->
+
+    <!-- Cleaning variables -->
+    <Item Name="lumisel"                    Value="&lumisel;"/>
+    <Item Name="mclumiweight"               Value="&mclumiweight;"/>
+    <Item Name="mcpileupreweight"           Value="&mcpileupreweight;"/>
+    <Item Name="metfilters"                 Value="&metfilters;"/>
+    <Item Name="jec"                        Value="&jec;"/>
+    <Item Name="topjec"                     Value="&topjec;"/>
+    <Item Name="jersmear"                   Value="&jersmear;"/>
+    <Item Name="topjersmear"                Value="&topjersmear;"/>
+    <Item Name="jetpfidcleaner"             Value="&jetpfidcleaner;"/>
+    <Item Name="topjetpfidcleaner"          Value="&topjetpfidcleaner;"/>
+    <Item Name="jetlepcleaner"              Value="&jetlepcleaner;"/>
+    <Item Name="eleid"                      Value="&eleid;"/>
+    <Item Name="muid"                       Value="&muid;"/>
+    <Item Name="tauid"                      Value="&tauid;"/>
+    <Item Name="jetid"                      Value="&jetid;"/>
+    <Item Name="topjetid"                   Value="&topjetid;"/>
+
+    <Item Name="MatchingCondition"          Value="&MatchingCondition;"/>
+    <Item Name="MatchingRadius"             Value="&MatchingRadius;"/>
+
+    <!-- the class name of the AnalysisModule subclasses to run: -->
+    <Item Name="AnalysisModule"             Value="GenericCleaningModule"/>
+
+  </UserConfig>
+</Cycle>
+</JobConfiguration>

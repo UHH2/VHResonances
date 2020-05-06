@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
+
+<!ENTITY MODELNAME                  "model">
+
+<!-- Generic Value -->
+<!ENTITY CACHEABLE                  "False">
+<!-- <!ENTITY PRESELDIR                  "/nfs/dust/cms/user/amalara/sframe_all/Preselection"> -->
+<!ENTITY PRESELDIR                  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/GenericCleaning">
+<!ENTITY OUTDIR                     "/nfs/dust/cms/user/amalara/sframe_all/NeuralNetwork">
+<!ENTITY NEVT                       "-1">
+
+<!ENTITY PREFIX                     "uhh2.AnalysisModuleRunner.">
+<!ENTITY isPuppi                    "false">  <!--false/true -->
+<!ENTITY COLLECTION                 "CHS">  <!--false/true -->
+<!ENTITY CHANNEL                    "channel">  <!--muon/electron -->
+<!ENTITY muonchannel                "true">  <!--true/false -->
+<!ENTITY electronchannel            "true">  <!--true/false -->
+<!ENTITY modelName                  "/nfs/dust/cms/user/amalara/WorkingArea/File/NeuralNetwork/&MODELNAME;/">
+
+<!ENTITY MatchingCondition          "HWWMatch">  <!--HWWMatch/Hbb/HMatch/ZMatch/WMatch/Zqq/Wqq/Zll/Wll/topMatch/gluonMatch/qMatch -->
+<!ENTITY MatchingRadius             "0.8">
+
+<!-- MC Samples -->
+<!ENTITY MC_ZH_HWW                  "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_ZH_HWW.root">
+<!ENTITY MC_ZH_Hbb                  "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_ZH_Hbb.root">
+<!ENTITY MC_ttH                     "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_ttH.root">
+<!ENTITY MC_DYJetsToLL              "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_DYJetsToLL.root">
+<!ENTITY MC_TTbar                   "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_TTbar.root">
+<!ENTITY MC_WJetsToQQ               "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_WJetsToQQ.root">
+<!ENTITY MC_ZJetsToQQ               "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_ZJetsToQQ.root">
+<!ENTITY MC_WW                      "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_WW.root">
+<!ENTITY MC_WZ                      "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_WZ.root">
+<!ENTITY MC_DYJetsToQQ              "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_DYJetsToQQ.root">
+<!ENTITY MC_ZZ                      "&PRESELDIR;_MC/&COLLECTION;/leptonchannel/&PREFIX;MC.MC_ZZ.root">
+
+<!-- Data Samples -->
+<!ENTITY DATA                       "&PRESELDIR;_DATA/&COLLECTION;/leptonchannel/&PREFIX;DATA.DATA.root">
+
+]>
+
+<!--
+<ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
+<ConfigSGE RAM ="2" DISK ="2" Mail="andrea.malara@desy.de" Notification="as" Workdir="workdir_NeuralNetwork"/>
+-->
+
+<!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
+<JobConfiguration JobName="NeuralNetworkJob" OutputLevel="INFO">
+  <Library Name="libSUHH2HiggsToWWTagger"/>
+  <Package Name="SUHH2HiggsToWWTagger.par" />
+
+  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTDIR;/&MODELNAME;/" PostFix="" TargetLumi="1" >
+
+    <!-- MC -->
+    <InputData Type="MC"    Version="MC_ZH_HWW"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_ZH_HWW;"      Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+    <InputData Type="MC"    Version="MC_ZH_Hbb"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_ZH_Hbb;"      Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+    <InputData Type="MC"    Version="MC_ttH"        Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_ttH;"         Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+    <InputData Type="MC"    Version="MC_DYJetsToLL" Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_DYJetsToLL;"  Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+    <InputData Type="MC"    Version="MC_TTbar"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_TTbar;"       Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+    <InputData Type="MC"    Version="MC_WJetsToQQ"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_WJetsToQQ;"   Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+    <InputData Type="MC"    Version="MC_ZJetsToQQ"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_ZJetsToQQ;"   Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+    <InputData Type="MC"    Version="MC_WW"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_WW;"          Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+    <InputData Type="MC"    Version="MC_WZ"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_WZ;"          Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+    <InputData Type="MC"    Version="MC_DYJetsToQQ" Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_DYJetsToQQ;"  Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&MC_ZZ;"          Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData>
+
+    <!-- Data -->
+    <!-- <InputData Type="DATA"  Version="DATA"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  <In FileName="&DATA;"       Lumi="0.0" /> <InputTree Name="AnalysisTree" /> <OutputTree Name="AnalysisTree" /> </InputData> -->
+
+    <UserConfig>
+      <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
+      <Item Name="PrimaryVertexCollection"    Value="offlineSlimmedPrimaryVertices" />
+      <Item Name="ElectronCollection"         Value="slimmedElectronsUSER" />
+      <Item Name="MuonCollection"             Value="slimmedMuonsUSER" />
+      <Item Name="TauCollection"              Value="slimmedTaus" />
+      <Item Name="JetCollection"              Value="slimmedJets" />
+      <Item Name="TopJetCollection"           Value="packedPatJetsAk8CHSJets_SoftDropCHS" />
+      <Item Name="METName"                    Value="slimmedMETs" />
+      <Item Name="GenInfoName"                Value="genInfo" />
+      <Item Name="GenParticleCollection"      Value="GenParticles" />
+      <Item Name="GenJetCollection"           Value="slimmedGenJets"/>
+      <Item Name="TopJetCollectionGEN"        Value="slimmedGenJetsAK8"/>
+
+      <!-- slimmedJets, updatedPatJetsSlimmedJetsPuppi -->
+      <!-- packedPatJetsAk8CHSJets_SoftDropCHS, updatedPatJetsSlimmedJetsAK8_SoftDropPuppi -->
+
+      <!-- The list of available collections to read in corresponds to the pointer members in event. The 'Name's to use here in the configuration are:
+      PhotonCollection
+      GenTopJetCollection
+
+      Note that the last four are only read in for MC (InputData Type="MC"), so it is save to specify
+      them for real data, although those branches do not exist.
+
+      As 'Value', always use the branch name (if in doubt, open the input file in ROOT).
+
+      By default, triggers are read. To explicitly disable reading triggers, use:
+      <Item Name="readTrigger" Value="false" />
+    -->
+    <Item Name="readTrigger" Value="false" />
+    <Item Name="trigger" Value="HLT_IsoMu27_v*" />
+
+    <!-- tell AnalysisModuleRunner NOT to use the MC event weight from SFrame; rather let
+    MCLumiWeight (called via CommonModules) calculate the MC event weight. The MC
+    event weight assigned by MCLumiWeight is InputData.Lumi / Cycle.TargetLumi. -->
+    <Item Name="use_sframe_weight"          Value="false"/>
+
+    <Item Name="isPuppi"                    Value="&isPuppi;"/>
+
+    <Item Name="MatchingCondition"          Value="&MatchingCondition;"/>
+    <Item Name="MatchingRadius"             Value="&MatchingRadius;"/>
+
+    <Item Name="modelName"                  Value="&modelName;"/>
+    <Item Name="outPath"                    Value="&OUTDIR;/&MODELNAME;"/>
+
+    <!-- the class name of the AnalysisModule subclasses to run: -->
+    <Item Name="AnalysisModule"             Value="NeuralNetworkModule" />
+
+  </UserConfig>
+</Cycle>
+</JobConfiguration>

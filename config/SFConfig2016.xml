@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"[
+
+<!-- Generic Value -->
+<!ENTITY CACHEABLE                  "False">
+<!ENTITY NEVT                       "-1">
+<!ENTITY YEAR                       "2016">
+<!ENTITY OUTDIR                     "/nfs/dust/cms/user/amalara/sframe_all/&YEAR;/SF">
+
+<!-- MC PuReweighting -->
+<!ENTITY SysType_PU                 "central">    <!-- central, up, down -->
+<!ENTITY pileup_directory           "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/&YEAR;/MyMCPileupHistogram.root">
+<!ENTITY pileup_directory_data      "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;.root">
+<!ENTITY pileup_directory_data_up   "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;_72383.root">
+<!ENTITY pileup_directory_data_down "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;_66017.root">
+
+<!-- Cleaning variables -->
+<!ENTITY lumisel                    "true">  <!--true/false -->
+<!ENTITY mclumiweight               "true">  <!--true/false -->
+<!ENTITY mcpileupreweight           "true">  <!--true/false -->
+<!ENTITY metfilters                 "true">  <!--true/false -->
+<!ENTITY jlc                        "true">  <!--true/false -->
+<!ENTITY jec                        "true">  <!--true/false -->
+<!ENTITY topjec                     "true">  <!--true/false -->
+<!ENTITY jersmear                   "true">  <!--true/false -->
+<!ENTITY topjersmear                "true">  <!--true/false -->
+<!ENTITY jetpfidcleaner             "true">  <!--true--> <!--fixed value -->
+<!ENTITY topjetpfidcleaner          "true">  <!--true/false -->
+<!ENTITY jetlepcleaner              "true">  <!--true/false -->
+<!ENTITY eleid                      "true">  <!--true/false -->
+<!ENTITY muid                       "true">  <!--true/false -->
+<!ENTITY tauid                      "false"> <!--true/false -->
+<!ENTITY jetid                      "true">  <!--true/false -->
+<!ENTITY topjetid                   "true">  <!--true/false -->
+
+<!-- Systematic uncertainties -->
+<!ENTITY JEC_Version                "Summer16_07Aug2017_V11">
+<!ENTITY JER_Version                "Summer16_25nsV1">
+<!ENTITY jecsmear_direction         "nominal">  <!--nominal/down/up -->
+<!ENTITY jersmear_direction         "nominal">  <!--nominal/down/up -->
+
+<!-- Channels -->
+<!ENTITY isPuppi                    "true">  <!--false/true -->
+<!ENTITY isCHS                      "true">  <!--false/true -->
+<!ENTITY isHOTVR                    "true">  <!--false/true -->
+<!ENTITY muonchannel                "true">  <!--true/false -->
+<!ENTITY electronchannel            "true">  <!--true/false -->
+
+<!-- MC Samples -->
+
+<!ENTITY MC_TTbar                   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TT_TuneCUETP8M2T4.xml">
+
+<!-- Data Samples -->
+<!ENTITY DATA_SingleElectron_RunB   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunB.xml">
+<!ENTITY DATA_SingleElectron_RunC   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunC.xml">
+<!ENTITY DATA_SingleElectron_RunD   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunD.xml">
+<!ENTITY DATA_SingleElectron_RunE   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunE.xml">
+<!ENTITY DATA_SingleElectron_RunF   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunF.xml">
+<!ENTITY DATA_SingleElectron_RunG   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunG.xml">
+<!ENTITY DATA_SingleElectron_RunH   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunH.xml">
+<!ENTITY DATA_SingleMuon_RunB       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunB.xml">
+<!ENTITY DATA_SingleMuon_RunC       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunC.xml">
+<!ENTITY DATA_SingleMuon_RunD       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunD.xml">
+<!ENTITY DATA_SingleMuon_RunE       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunE.xml">
+<!ENTITY DATA_SingleMuon_RunF       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunF.xml">
+<!ENTITY DATA_SingleMuon_RunG       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunG.xml">
+<!ENTITY DATA_SingleMuon_RunH       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunH.xml">
+
+]>
+
+<!--
+<ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
+<ConfigSGE RAM ="2" DISK ="1" TIME ="1" Mail="andrea.malara@desy.de" Notification="as" Workdir="workdir_SF"/>
+-->
+
+<!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
+<JobConfiguration JobName="SFJob" OutputLevel="INFO">
+  <Library Name="libSUHH2HiggsToWWTagger"/>
+  <Package Name="SUHH2HiggsToWWTagger.par"/>
+
+  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTDIR;/" PostFix="" TargetLumi="35922" >
+
+    <!-- MC -->
+
+    <InputData Type="MC"    Version="MC_TTbar"                    Lumi="92260.16399"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar;                    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+
+    <!-- Data -->
+
+    <!-- <InputData Type="DATA"  Version="DATA_SingleElectron_RunB"    Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_RunB;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_RunC"    Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_RunC;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_RunD"    Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_RunD;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_RunE"    Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_RunE;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_RunF"    Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_RunF;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_RunG"    Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_RunG;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_RunH"    Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_RunH;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_RunB"        Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunB;        <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_RunC"        Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunC;        <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_RunD"        Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunD;        <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_RunE"        Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunE;        <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_RunF"        Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunF;        <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_RunG"        Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunG;        <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_RunH"        Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunH;        <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
+
+
+    <UserConfig>
+      <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
+      <Item Name="PrimaryVertexCollection"    Value="offlineSlimmedPrimaryVertices"/>
+      <Item Name="ElectronCollection"         Value="slimmedElectronsUSER"/>
+      <Item Name="MuonCollection"             Value="slimmedMuonsUSER"/>
+      <Item Name="GenInfoName"                Value="genInfo"/>
+      <Item Name="GenParticleCollection"      Value="GenParticles"/>
+      <Item Name="GenJetCollection"           Value="slimmedGenJets"/>
+      <Item Name="GenTopJetCollection"        Value="genjetsAk8SubstructureSoftDrop"/>
+      <Item Name="JetCollection"              Value="jetsAk4CHS"/>
+      <Item Name="TopJetCollection"           Value="jetsAk8CHSSubstructure_SoftDropCHS"/>
+      <Item Name="TopPuppiJetCollection"      Value="jetsAk8PuppiSubstructure_SoftDropPuppi"/>
+      <Item Name="METName"                    Value="slimmedMETs"/>
+      <Item Name="PFParticleCollection"       Value="PFParticles"/>
+
+
+      <Item Name="additionalBranchesPuppi"    Value="jetsAk4Puppi"/>
+      <Item Name="additionalBranches"         Value="hotvrGen hotvrPuppi jetsAk4Puppi"/>
+
+
+      <!-- The list of available collections to read in corresponds to the pointer members in event. The 'Name's to use here in the configuration are:
+      TauCollection,PhotonCollection,PFParticleCollection,genMETName
+
+      Note that the last four are only read in for MC (InputData Type="MC"), so it is save to specify
+      them for real data, although those branches do not exist.
+
+      As 'Value', always use the branch name (if in doubt, open the input file in ROOT).
+
+      By default, triggers are read. To explicitly disable reading triggers, use:
+      <Item Name="readTrigger" Value="false"/>
+    -->
+
+    <!-- tell AnalysisModuleRunner NOT to use the MC event weight from SFrame; rather let
+    MCLumiWeight (called via CommonModules) calculate the MC event weight. The MC
+    event weight assigned by MCLumiWeight is InputData.Lumi / Cycle.TargetLumi. -->
+    <Item Name="use_sframe_weight"          Value="false"/>
+
+    <Item Name="lumi_file"                  Value="/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/&YEAR;/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root"/>
+    <Item Name="lumihists_lumi_per_bin"     Value="500."/> <!-- used in UHH2/common/include/LuminosityHists.h -->
+
+    <Item Name="year"                       Value="&YEAR;"/>
+
+    <!-- Systematic uncertainties -->
+    <Item Name="JEC_Version"                Value="&JEC_Version;"/>
+    <Item Name="JER_Version"                Value="&JER_Version;"/>
+    <Item Name="jersmear_direction"         Value="&jersmear_direction;"/>  <!--used only in UHH2/common/include/JetCorrections.cxx -->
+    <Item Name="jecsmear_direction"         Value="&jecsmear_direction;"/>  <!--used only in UHH2/common/include/JetCorrections.cxx -->
+    <Item Name="isPuppi"                    Value="&isPuppi;"/>
+    <Item Name="isCHS"                      Value="&isCHS;"/>
+    <Item Name="isHOTVR"                    Value="&isHOTVR;"/>
+    <Item Name="muonchannel"                Value="&muonchannel;"/>
+    <Item Name="electronchannel"            Value="&electronchannel;"/>
+
+    <!-- MC PuReweighting -->
+    <Item Name="SysType_PU"                 Value="&SysType_PU;"/>
+    <Item Name="pileup_directory"           Value="&pileup_directory;"/>            <!--used only in UHH2/common/include/MCWeight.h -->
+    <Item Name="pileup_directory_data"      Value="&pileup_directory_data;"/>       <!--used only in UHH2/common/include/MCWeight.h -->
+    <Item Name="pileup_directory_data_up"   Value="&pileup_directory_data_up;"/>    <!--used only in UHH2/common/include/MCWeight.h -->
+    <Item Name="pileup_directory_data_down" Value="&pileup_directory_data_down;"/>  <!--used only in UHH2/common/include/MCWeight.h -->
+
+    <!-- Cleaning variables -->
+    <Item Name="lumisel"                    Value="&lumisel;"/>
+    <Item Name="mclumiweight"               Value="&mclumiweight;"/>
+    <Item Name="mcpileupreweight"           Value="&mcpileupreweight;"/>
+    <Item Name="metfilters"                 Value="&metfilters;"/>
+    <Item Name="jlc"                        Value="&jlc;"/>
+    <Item Name="jec"                        Value="&jec;"/>
+    <Item Name="topjec"                     Value="&topjec;"/>
+    <Item Name="jersmear"                   Value="&jersmear;"/>
+    <Item Name="topjersmear"                Value="&topjersmear;"/>
+    <Item Name="jetpfidcleaner"             Value="&jetpfidcleaner;"/>
+    <Item Name="topjetpfidcleaner"          Value="&topjetpfidcleaner;"/>
+    <Item Name="jetlepcleaner"              Value="&jetlepcleaner;"/>
+    <Item Name="eleid"                      Value="&eleid;"/>
+    <Item Name="muid"                       Value="&muid;"/>
+    <Item Name="tauid"                      Value="&tauid;"/>
+    <Item Name="jetid"                      Value="&jetid;"/>
+    <Item Name="topjetid"                   Value="&topjetid;"/>
+
+    <!-- the class name of the AnalysisModule subclasses to run: -->
+    <Item Name="AnalysisModule"             Value="SFModule"/>
+
+  </UserConfig>
+</Cycle>
+</JobConfiguration>
