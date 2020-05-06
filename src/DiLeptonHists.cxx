@@ -1,5 +1,5 @@
 #include "UHH2/core/include/Event.h"
-#include "UHH2/HiggsToWWTagger/include/DiLeptonHists.h"
+#include "UHH2/VHResonances/include/DiLeptonHists.h"
 
 #include "TH1F.h"
 #include "TH2F.h"

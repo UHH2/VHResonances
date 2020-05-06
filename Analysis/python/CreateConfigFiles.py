@@ -145,6 +145,11 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                         comments.append(["<Item Name", "TopPuppiJetCollection",   'Value', 'jetsAk8PuppiSubstructure_SoftDropPuppi'])
                     comment_lines(path, filename, comments, remove=True)
                     changes = []
+                    # TODO change anmalara when creating xml. change also email
+                    # changes.append(["user", "amalara/WorkingArea", "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/", os.environ["CMSSW_BASE"]+"/"])
+                    # change_lines(path, filename, [el[0:2] for el in changes ], [el[2:3] for el in changes ], [el[3:4] for el in changes ])
+                    # changes = []
+                    # changes.append(["user", "amalara", "amalara", os.environ["USER"]])
                     changes.append(["<ConfigSGE", "Workdir", "workdir_"+outdir, "workdir_"+outdir+"_"+sample])
                     changes.append(["<ConfigParse", 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile)+'"'])
                     changes.append(["<!ENTITY", "OUTDIR", outdir , outdir+"/"+folders])

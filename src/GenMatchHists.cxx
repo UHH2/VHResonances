@@ -2,8 +2,8 @@
 
 #include "UHH2/common/include/Utils.h"
 
-#include "UHH2/HiggsToWWTagger/include/HistsBase.hpp"
-#include "UHH2/HiggsToWWTagger/include/GenMatchHists.h"
+#include "UHH2/VHResonances/include/HistsBase.hpp"
+#include "UHH2/VHResonances/include/GenMatchHists.h"
 
 #include "TH1F.h"
 #include <type_traits>

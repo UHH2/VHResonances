@@ -13,8 +13,8 @@
 #include "TFile.h"
 #include "TLatex.h"
 #include "UHH2/core/include/Utils.h"
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
-#include "UHH2/HiggsToWWTagger/Analysis/include/tdrstyle_all.hpp"
+#include "UHH2/VHResonances/include/constants.hpp"
+#include "UHH2/VHResonances/Analysis/include/tdrstyle_all.hpp"
 
 // double plot_hi = 2800;
 extern const double plot_lo = 300;

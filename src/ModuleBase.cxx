@@ -1,4 +1,4 @@
-#include <UHH2/HiggsToWWTagger/include/ModuleBase.h>
+#include <UHH2/VHResonances/include/ModuleBase.h>
 
 bool ModuleBASE::process(uhh2::Event&){
 

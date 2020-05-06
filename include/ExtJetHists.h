@@ -5,8 +5,8 @@
 #include "UHH2/core/include/LorentzVector.h"
 #include "UHH2/common/include/JetIds.h"
 
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
-#include "UHH2/HiggsToWWTagger/include/HistsBase.hpp"
+#include "UHH2/VHResonances/include/constants.hpp"
+#include "UHH2/VHResonances/include/HistsBase.hpp"
 #include "TString.h"
 
 #include <vector>
@@ -20,10 +20,6 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "PhysicsTools/TensorFlow/interface/TensorFlow.h"
 #pragma GCC diagnostic pop
-
-// #include <eigen3/Eigen/Dense>
-#include <UHH2/Eigen/Eigen/Dense>
-
 
 
 class ExtJetHists: public HistsBase {

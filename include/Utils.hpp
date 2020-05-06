@@ -3,7 +3,7 @@
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/TopJet.h"
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
+#include "UHH2/VHResonances/include/constants.hpp"
 
 Matching FloatToMatching(const TopJet & jet);
 MatchingStatus FloatToMatchingStatus(const TopJet & jet);

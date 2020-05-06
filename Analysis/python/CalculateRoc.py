@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 import ROOT
 
-ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/HiggsToWWTagger/include/constants.hpp"')
+ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/VHResonances/include/constants.hpp"')
 
-sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/HiggsToWWTagger/Analysis/macros/")
+sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros/")
 from ModuleRunnerBase import *
 
 def SetCanvas():
@@ -52,7 +52,7 @@ def PlotRoc(varname,Sample, name=""):
 min_bkg_reg = 1e-03
 min_sig_sen = 0.3
 
-outputdir = os.environ["CMSSW_BASE"]+"/src/UHH2/HiggsToWWTagger/Analysis/python/Roc/"
+outputdir = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/python/Roc/"
 os.system("mkdir -p "+outputdir+"samples/")
 
 masses = [x.replace("MC_ZprimeToZH_M","") for x in ModuleRunnerBase().SignalSamples]

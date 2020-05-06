@@ -52,8 +52,8 @@
 #include "HiggsAnalysis/CombinedLimit/interface/BkgPdf3p.hpp"
 
 #include "UHH2/core/include/Utils.h"
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
-#include "UHH2/HiggsToWWTagger/Analysis/include/tdrstyle_all.hpp"
+#include "UHH2/VHResonances/include/constants.hpp"
+#include "UHH2/VHResonances/Analysis/include/tdrstyle_all.hpp"
 
 
 /*

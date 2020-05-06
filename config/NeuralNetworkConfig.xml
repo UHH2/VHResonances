@@ -46,8 +46,8 @@
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
 <JobConfiguration JobName="NeuralNetworkJob" OutputLevel="INFO">
-  <Library Name="libSUHH2HiggsToWWTagger"/>
-  <Package Name="SUHH2HiggsToWWTagger.par" />
+  <Library Name="libSUHH2VHResonances"/>
+  <Package Name="SUHH2VHResonances.par" />
 
   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTDIR;/&MODELNAME;/" PostFix="" TargetLumi="1" >
 

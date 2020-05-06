@@ -2,10 +2,10 @@
 
 #include "UHH2/common/include/Utils.h"
 
-#include "UHH2/HiggsToWWTagger/include/HistsBase.hpp"
-#include "UHH2/HiggsToWWTagger/include/VariableRStudiesHists.h"
-#include "UHH2/HiggsToWWTagger/include/GenLevelJetMatch.h"
-#include "UHH2/HiggsToWWTagger/include/Utils.hpp"
+#include "UHH2/VHResonances/include/HistsBase.hpp"
+#include "UHH2/VHResonances/include/VariableRStudiesHists.h"
+#include "UHH2/VHResonances/include/GenLevelJetMatch.h"
+#include "UHH2/VHResonances/include/Utils.hpp"
 
 #include "TH1F.h"
 #include <type_traits>

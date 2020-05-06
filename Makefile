@@ -1,4 +1,4 @@
-LIBRARY := SUHH2HiggsToWWTagger
+LIBRARY := SUHH2VHResonances
 LHAPDFINC=$(shell scram tool tag lhapdf INCLUDE)
 LHAPDFLIB=$(shell scram tool tag LHAPDF LIBDIR)
 LWTNNLIB= $(shell scram tool tag lwtnn LIBDIR)

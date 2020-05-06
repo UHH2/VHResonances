@@ -27,16 +27,16 @@
 #include "UHH2/common/include/TriggerSelection.h"
 #include "UHH2/common/include/Utils.h"
 
-#include "UHH2/HiggsToWWTagger/include/ModuleBase.h"
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
-#include "UHH2/HiggsToWWTagger/include/ExtJetHists.h"
-#include "UHH2/HiggsToWWTagger/include/ExtJetHistsWithConditions.h"
-#include "UHH2/HiggsToWWTagger/include/GenMatchHists.h"
-#include "UHH2/HiggsToWWTagger/include/VariableRStudiesHists.h"
-#include "UHH2/HiggsToWWTagger/include/GenLevelJetMatch.h"
-#include "UHH2/HiggsToWWTagger/include/PrintingFunctions.hpp"
+#include "UHH2/VHResonances/include/ModuleBase.h"
+#include "UHH2/VHResonances/include/constants.hpp"
+#include "UHH2/VHResonances/include/ExtJetHists.h"
+#include "UHH2/VHResonances/include/ExtJetHistsWithConditions.h"
+#include "UHH2/VHResonances/include/GenMatchHists.h"
+#include "UHH2/VHResonances/include/VariableRStudiesHists.h"
+#include "UHH2/VHResonances/include/GenLevelJetMatch.h"
+#include "UHH2/VHResonances/include/PrintingFunctions.hpp"
 
-#include "UHH2/HiggsToWWTagger/include/GenericJetCleaner.h"
+#include "UHH2/VHResonances/include/GenericJetCleaner.h"
 
 using namespace std;
 

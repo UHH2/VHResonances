@@ -39,6 +39,7 @@ $(OBJECTS_UTILS): $(OBJDIR)/%.o : $(SRCDIR)/%.cxx
 	@$(CC) -o $@ -c $^ $(CFLAGS) $(LIBSMAIN) $(LFLAGS)
 
 clean:
+	@rm -f $(BINS)
 	@rm -f $(OBJECTS)
 
 .PHONY: all clean

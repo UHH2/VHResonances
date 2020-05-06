@@ -6,8 +6,8 @@ def CountFiles(sample,**kwargs):
     if len(kwargs)== 0:
         return len(glob("/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/GenericCleaning/All/leptonchannel/workdir_GenericCleaning_"+sample+"/uhh2.AnalysisModuleRunner.MC."+sample+"*root"))
     else :
-        # print "/nfs/dust/cms/user/amalara/WorkingArea/File/NeuralNetwork/input_varariables/HiggsToWWTagger/2017/"+kwargs["Collection"]+"/leptonchannel/"+sample+"/Vars/TopJet"+kwargs["others"]+"_"+sample+"_*.npy"
-        return len(glob("/nfs/dust/cms/user/amalara/WorkingArea/File/NeuralNetwork/input_varariables/HiggsToWWTagger/2017/"+kwargs["Collection"]+"/leptonchannel/"+sample+"/Vars/TopJet"+kwargs["others"]+"_"+sample+"_*.npy"))
+        # print "/nfs/dust/cms/user/amalara/WorkingArea/File/NeuralNetwork/input_varariables/VHResonances/2017/"+kwargs["Collection"]+"/leptonchannel/"+sample+"/Vars/TopJet"+kwargs["others"]+"_"+sample+"_*.npy"
+        return len(glob("/nfs/dust/cms/user/amalara/WorkingArea/File/NeuralNetwork/input_varariables/VHResonances/2017/"+kwargs["Collection"]+"/leptonchannel/"+sample+"/Vars/TopJet"+kwargs["others"]+"_"+sample+"_*.npy"))
 
 def CreateFile(path,filename,JobName="Test", executable="submit_Condor.sh", dic={}, nHours = 3, Memory=2, isGPU=False, isMaxwell=False):
     # print dic["outdir"]
@@ -162,7 +162,7 @@ if __name__ == '__main__':
                     filename = "Condor_"+args.Collection+"_"+JobName+".submit"
                     executable="submit_Condor_"+args.Collection+"_"+JobName+".sh"
                     dic = {}
-                    dic["outdir"] = common_path+"input_varariables/HiggsToWWTagger/"+year+"/"+args.Collection+"/leptonchannel/"+Sample+"/"+args.mode+"/"
+                    dic["outdir"] = common_path+"input_varariables/VHResonances/"+year+"/"+args.Collection+"/leptonchannel/"+Sample+"/"+args.mode+"/"
                     dic["command"] = "python "+os.getcwd()+"/NtuplesProduction.py --do"+args.mode+" --Samples="+Sample+" --year="+year
                     dic["command"] += " --SubSample="+SubSample if args.mode == "Vars" else " --ptmin="+ptmin+" --ptmax="+ptmax+" --others="+others
                     dic["command"] += " --firstfile="+str(job)+" --lastfile="+str(job+step)
@@ -179,7 +179,7 @@ if __name__ == '__main__':
                 filename = "Condor_"+JobName+".submit"
                 executable="submit_Condor_"+JobName+".sh"
                 dic = {}
-                dic["outdir"] = common_path+"trainings/HiggsToWWTagger/"+year+"/"+args.Collection+"/leptonchannel/"+modelType+"/"+JobName+"/"
+                dic["outdir"] = common_path+"trainings/VHResonances/"+year+"/"+args.Collection+"/leptonchannel/"+modelType+"/"+JobName+"/"
                 dic["command"] = "python Training.py "+mypath+"/"+JobName+".json"
                 CreateFile(path=mypath,filename=filename,JobName=JobName, executable=executable, dic=dic, nHours=nHours, Memory=Memory, isGPU=True, isMaxwell=MRB.isMaxwell)
                 doFast = "10epoch" in JobName

@@ -1,8 +1,8 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/common/include/Utils.h"
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
-#include "UHH2/HiggsToWWTagger/include/HiggsToWWModules.h"
-#include <UHH2/HiggsToWWTagger/include/ZprimeCandidate.h>
+#include "UHH2/VHResonances/include/constants.hpp"
+#include "UHH2/VHResonances/include/HiggsToWWModules.h"
+#include <UHH2/VHResonances/include/ZprimeCandidate.h>
 
 #include <stdexcept>
 #include <set>

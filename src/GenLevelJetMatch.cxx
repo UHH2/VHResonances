@@ -3,9 +3,9 @@
 #include "UHH2/core/include/Utils.h"
 #include "UHH2/common/include/Utils.h"
 
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
-#include "UHH2/HiggsToWWTagger/include/Utils.hpp"
-#include "UHH2/HiggsToWWTagger/include/GenLevelJetMatch.h"
+#include "UHH2/VHResonances/include/constants.hpp"
+#include "UHH2/VHResonances/include/Utils.hpp"
+#include "UHH2/VHResonances/include/GenLevelJetMatch.h"
 
 #include <stdexcept>
 

@@ -5,7 +5,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/HiggsToWWTagger/Analysis/macros")
+sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros")
 from ModuleRunnerBase import *
 
 sys.path.append(GenericPath().PersonalCode)
@@ -80,7 +80,7 @@ class CreateDataCards:
         # self.extraOptions = ["-t", "-1"] #TODO move to main
         # self.extraOptions+= ["--freezeParameters","sg_p0,sg_p1"] #TODO move to main
 
-        self.AnalysisDir = os.environ["CMSSW_BASE"]+"/src/UHH2/HiggsToWWTagger/Analysis/Limits/"+studies+"/"
+        self.AnalysisDir = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/Limits/"+studies+"/"
         if (self.isHbb): self.AnalysisDir += "/Hbb/"
         # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "NN", "NN_1","NN_2", "CNN", "tau42"]
         # self.histFolders = ["btag_DeepBoosted_H4qvsQCD"]

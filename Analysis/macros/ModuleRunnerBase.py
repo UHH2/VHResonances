@@ -13,7 +13,7 @@ class GenericPath:
             self.isMaxwell = False
         self.Path_NFS       = "/nfs/dust/cms/user/"+self.user+"/"
         self.Path_Maxwell   = "/beegfs/desy/user/"+os.environ["USER"]+"/"
-        self.Path_ANALYSIS  = self.cmssw_base+"/src/UHH2/HiggsToWWTagger/"
+        self.Path_ANALYSIS  = self.cmssw_base+"/src/UHH2/VHResonances/"
         self.Path_SFRAME    = self.Path_NFS+"sframe_all/"
         self.Path_STORAGE   = self.Path_NFS+"WorkingArea/File/Analysis/"
         self.Path_SPlotter  = self.Path_NFS+"WorkingArea/SFramePlotter/"

@@ -6,9 +6,9 @@
 #include "UHH2/common/include/JetIds.h"
 #include "UHH2/common/include/PrintingModules.h"
 
-#include "UHH2/HiggsToWWTagger/include/ModuleBase.h"
-#include "UHH2/HiggsToWWTagger/include/ZprimeCandidate.h"
-#include "UHH2/HiggsToWWTagger/include/HiggsToWWSelections.h"
+#include "UHH2/VHResonances/include/ModuleBase.h"
+#include "UHH2/VHResonances/include/ZprimeCandidate.h"
+#include "UHH2/VHResonances/include/HiggsToWWSelections.h"
 
 class FinalStateMatching: public uhh2::AnalysisModule {
 public:

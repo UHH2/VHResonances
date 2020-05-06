@@ -155,7 +155,7 @@ void CreateWorkspace(std::string studies, std::string histFolder, std::string ch
   */
 
   std::string user            = std::getenv("USER");
-  std::string Path_ANALYSIS   = std::getenv("CMSSW_BASE"); Path_ANALYSIS += "/src/UHH2/HiggsToWWTagger/";
+  std::string Path_ANALYSIS   = std::getenv("CMSSW_BASE"); Path_ANALYSIS += "/src/UHH2/VHResonances/";
   std::string Path_NFS        = "/nfs/dust/cms/user/"+user+"/";
   std::string Path_SFRAME     = Path_NFS+"sframe_all/";
   std::string Path_STORAGE    = Path_NFS+"WorkingArea/File/Analysis/";

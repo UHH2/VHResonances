@@ -1,5 +1,5 @@
-#include "UHH2/HiggsToWWTagger/include/GenericJetCleaner.h"
-#include "UHH2/HiggsToWWTagger/include/HiggsToWWModules.h"
+#include "UHH2/VHResonances/include/GenericJetCleaner.h"
+#include "UHH2/VHResonances/include/HiggsToWWModules.h"
 #include <boost/algorithm/string.hpp>
 
 using namespace std;

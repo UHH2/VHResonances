@@ -5,7 +5,7 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/Selection.h"
 #include "UHH2/common/include/JetIds.h"
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
+#include "UHH2/VHResonances/include/constants.hpp"
 
 class JetDiLeptonPhiAngularSelection: public uhh2::Selection {
 public:

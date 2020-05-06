@@ -9,10 +9,10 @@
 
 <!-- MC PuReweighting -->
 <!ENTITY SysType_PU                 "central">    <!-- central, up, down -->
-<!ENTITY pileup_directory           "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/&YEAR;/MyMCPileupHistogram.root">
-<!ENTITY pileup_directory_data      "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;.root">
-<!ENTITY pileup_directory_data_up   "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;_72383.root">
-<!ENTITY pileup_directory_data_down "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;_66017.root">
+<!ENTITY pileup_directory           "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/&YEAR;/MyMCPileupHistogram.root">
+<!ENTITY pileup_directory_data      "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;.root">
+<!ENTITY pileup_directory_data_up   "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;_72383.root">
+<!ENTITY pileup_directory_data_down "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;_66017.root">
 
 <!-- Cleaning variables -->
 <!ENTITY lumisel                    "true">  <!--true/false -->
@@ -48,23 +48,23 @@
 
 <!-- MC Samples -->
 
-<!ENTITY MC_TTbar                   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TT_TuneCUETP8M2T4.xml">
+<!ENTITY MC_TTbar                   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TT_TuneCUETP8M2T4.xml">
 
 <!-- Data Samples -->
-<!ENTITY DATA_SingleElectron_RunB   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunB.xml">
-<!ENTITY DATA_SingleElectron_RunC   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunC.xml">
-<!ENTITY DATA_SingleElectron_RunD   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunD.xml">
-<!ENTITY DATA_SingleElectron_RunE   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunE.xml">
-<!ENTITY DATA_SingleElectron_RunF   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunF.xml">
-<!ENTITY DATA_SingleElectron_RunG   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunG.xml">
-<!ENTITY DATA_SingleElectron_RunH   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunH.xml">
-<!ENTITY DATA_SingleMuon_RunB       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunB.xml">
-<!ENTITY DATA_SingleMuon_RunC       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunC.xml">
-<!ENTITY DATA_SingleMuon_RunD       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunD.xml">
-<!ENTITY DATA_SingleMuon_RunE       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunE.xml">
-<!ENTITY DATA_SingleMuon_RunF       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunF.xml">
-<!ENTITY DATA_SingleMuon_RunG       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunG.xml">
-<!ENTITY DATA_SingleMuon_RunH       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunH.xml">
+<!ENTITY DATA_SingleElectron_RunB   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunB.xml">
+<!ENTITY DATA_SingleElectron_RunC   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunC.xml">
+<!ENTITY DATA_SingleElectron_RunD   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunD.xml">
+<!ENTITY DATA_SingleElectron_RunE   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunE.xml">
+<!ENTITY DATA_SingleElectron_RunF   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunF.xml">
+<!ENTITY DATA_SingleElectron_RunG   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunG.xml">
+<!ENTITY DATA_SingleElectron_RunH   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleElectron2016_RunH.xml">
+<!ENTITY DATA_SingleMuon_RunB       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunB.xml">
+<!ENTITY DATA_SingleMuon_RunC       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunC.xml">
+<!ENTITY DATA_SingleMuon_RunD       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunD.xml">
+<!ENTITY DATA_SingleMuon_RunE       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunE.xml">
+<!ENTITY DATA_SingleMuon_RunF       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunF.xml">
+<!ENTITY DATA_SingleMuon_RunG       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunG.xml">
+<!ENTITY DATA_SingleMuon_RunH       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunH.xml">
 
 ]>
 
@@ -75,8 +75,8 @@
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
 <JobConfiguration JobName="SFJob" OutputLevel="INFO">
-  <Library Name="libSUHH2HiggsToWWTagger"/>
-  <Package Name="SUHH2HiggsToWWTagger.par"/>
+  <Library Name="libSUHH2VHResonances"/>
+  <Package Name="SUHH2VHResonances.par"/>
 
   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTDIR;/" PostFix="" TargetLumi="35922" >
 
@@ -139,7 +139,7 @@
     event weight assigned by MCLumiWeight is InputData.Lumi / Cycle.TargetLumi. -->
     <Item Name="use_sframe_weight"          Value="false"/>
 
-    <Item Name="lumi_file"                  Value="/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/data/&YEAR;/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root"/>
+    <Item Name="lumi_file"                  Value="/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/&YEAR;/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root"/>
     <Item Name="lumihists_lumi_per_bin"     Value="500."/> <!-- used in UHH2/common/include/LuminosityHists.h -->
 
     <Item Name="year"                       Value="&YEAR;"/>

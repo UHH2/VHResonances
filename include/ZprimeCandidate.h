@@ -8,7 +8,7 @@
 
 #include "UHH2/core/include/Particle.h"
 #include "UHH2/core/include/TopJet.h"
-#include "UHH2/HiggsToWWTagger/include/Utils.hpp"
+#include "UHH2/VHResonances/include/Utils.hpp"
 
 class ZprimeCandidate : public Particle {
 

@@ -9,33 +9,33 @@
 
 <!-- MC Samples -->
 
-<!ENTITY MC_ZprimeToZH_M600_2016v2  SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M600.xml">
-<!ENTITY MC_ZprimeToZH_M800_2016v2  SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M800.xml">
-<!ENTITY MC_ZprimeToZH_M1000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M1000.xml">
-<!ENTITY MC_ZprimeToZH_M1200_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M1200.xml">
-<!ENTITY MC_ZprimeToZH_M1400_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M1400.xml">
-<!ENTITY MC_ZprimeToZH_M1600_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M1600.xml">
-<!ENTITY MC_ZprimeToZH_M1800_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M1800.xml">
-<!ENTITY MC_ZprimeToZH_M2000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M2000.xml">
-<!ENTITY MC_ZprimeToZH_M2500_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M2500.xml">
-<!ENTITY MC_ZprimeToZH_M3000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M3000.xml">
-<!ENTITY MC_ZprimeToZH_M3500_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M3500.xml">
-<!ENTITY MC_ZprimeToZH_M4000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M4000.xml">
-<!ENTITY MC_ZprimeToZH_M4500_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M4500.xml">
-<!ENTITY MC_ZprimeToZH_M5000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M5000.xml">
-<!ENTITY MC_ZprimeToZH_M5500_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M5500.xml">
-<!ENTITY MC_ZprimeToZH_M6000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M6000.xml">
+<!ENTITY MC_ZprimeToZH_M600_2016v2  SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M600.xml">
+<!ENTITY MC_ZprimeToZH_M800_2016v2  SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M800.xml">
+<!ENTITY MC_ZprimeToZH_M1000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M1000.xml">
+<!ENTITY MC_ZprimeToZH_M1200_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M1200.xml">
+<!ENTITY MC_ZprimeToZH_M1400_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M1400.xml">
+<!ENTITY MC_ZprimeToZH_M1600_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M1600.xml">
+<!ENTITY MC_ZprimeToZH_M1800_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M1800.xml">
+<!ENTITY MC_ZprimeToZH_M2000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M2000.xml">
+<!ENTITY MC_ZprimeToZH_M2500_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M2500.xml">
+<!ENTITY MC_ZprimeToZH_M3000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M3000.xml">
+<!ENTITY MC_ZprimeToZH_M3500_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M3500.xml">
+<!ENTITY MC_ZprimeToZH_M4000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M4000.xml">
+<!ENTITY MC_ZprimeToZH_M4500_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M4500.xml">
+<!ENTITY MC_ZprimeToZH_M5000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M5000.xml">
+<!ENTITY MC_ZprimeToZH_M5500_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M5500.xml">
+<!ENTITY MC_ZprimeToZH_M6000_2016v2 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v2/Zprime/MC_ZprimeToZHToZlepHinc_narrow_M6000.xml">
 
-<!ENTITY MC_DYJetsToLL_HT70to100    SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-70to100.xml">
-<!ENTITY MC_DYJetsToLL_HT100to200   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-100to200.xml">
-<!ENTITY MC_DYJetsToLL_HT200to400   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-200to400.xml">
-<!ENTITY MC_DYJetsToLL_HT400to600   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-400to600.xml">
-<!ENTITY MC_DYJetsToLL_HT600to800   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-600to800.xml">
-<!ENTITY MC_DYJetsToLL_HT800to1200  SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-800to1200.xml">
-<!ENTITY MC_DYJetsToLL_HT1200to2500 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-1200to2500.xml">
-<!ENTITY MC_DYJetsToLL_HT2500toInf  SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-2500toInf.xml">
+<!ENTITY MC_DYJetsToLL_HT70to100    SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-70to100.xml">
+<!ENTITY MC_DYJetsToLL_HT100to200   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-100to200.xml">
+<!ENTITY MC_DYJetsToLL_HT200to400   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-200to400.xml">
+<!ENTITY MC_DYJetsToLL_HT400to600   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-400to600.xml">
+<!ENTITY MC_DYJetsToLL_HT600to800   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-600to800.xml">
+<!ENTITY MC_DYJetsToLL_HT800to1200  SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-800to1200.xml">
+<!ENTITY MC_DYJetsToLL_HT1200to2500 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-1200to2500.xml">
+<!ENTITY MC_DYJetsToLL_HT2500toInf  SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-2500toInf.xml">
 
-<!ENTITY MC_TTbar                   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TT_TuneCUETP8M2T4.xml">
+<!ENTITY MC_TTbar                   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TT_TuneCUETP8M2T4.xml">
 
 ]>
 
@@ -46,8 +46,8 @@
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
 <JobConfiguration JobName="VariableRStudiesJob" OutputLevel="INFO">
-  <Library Name="libSUHH2HiggsToWWTagger"/>
-  <Package Name="SUHH2HiggsToWWTagger.par"/>
+  <Library Name="libSUHH2VHResonances"/>
+  <Package Name="SUHH2VHResonances.par"/>
 
   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTDIR;/" PostFix="" TargetLumi="1" >
 
@@ -86,7 +86,7 @@
       <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
       <Item Name="GenParticleCollection"      Value="GenParticles"/>
       <Item Name="TopJetCollection"           Value="jetsAk8CHSSubstructure_SoftDropCHS"/>
-      <Item Name="TopPuppiJetCollection"      Value="jetsAk8PuppiSubstructure_SoftDropPuppi"/>      
+      <Item Name="TopPuppiJetCollection"      Value="jetsAk8PuppiSubstructure_SoftDropPuppi"/>
 
       <!-- The list of available collections to read in corresponds to the pointer members in event. The 'Name's to use here in the configuration are:
       TauCollection,PhotonCollection,PFParticleCollection,genMETName

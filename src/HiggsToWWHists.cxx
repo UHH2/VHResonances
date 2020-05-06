@@ -1,6 +1,6 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/common/include/JetIds.h"
-#include "UHH2/HiggsToWWTagger/include/HiggsToWWHists.h"
+#include "UHH2/VHResonances/include/HiggsToWWHists.h"
 
 #include "TH1F.h"
 #include "TH2F.h"

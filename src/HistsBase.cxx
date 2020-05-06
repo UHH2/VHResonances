@@ -1,4 +1,4 @@
-#include <UHH2/HiggsToWWTagger/include/HistsBase.hpp>
+#include <UHH2/VHResonances/include/HistsBase.hpp>
 
 using namespace std;
 using namespace uhh2;

@@ -4,8 +4,8 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/LorentzVector.h"
 
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
-#include "UHH2/HiggsToWWTagger/include/HistsBase.hpp"
+#include "UHH2/VHResonances/include/constants.hpp"
+#include "UHH2/VHResonances/include/HistsBase.hpp"
 #include "TString.h"
 
 #include <vector>

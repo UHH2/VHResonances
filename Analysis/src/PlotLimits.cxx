@@ -23,7 +23,7 @@ void PlotLimits(bool doObs, bool isHbb) {
 
   // std::string mode = "CB";
   std::string mode = "Exp_2";
-  std::string Path_ANALYSIS = std::getenv("CMSSW_BASE"); Path_ANALYSIS += "/src/UHH2/HiggsToWWTagger/Analysis/";
+  std::string Path_ANALYSIS = std::getenv("CMSSW_BASE"); Path_ANALYSIS += "/src/UHH2/VHResonances/Analysis/";
   std::string studies = "nominal";
   // std::string studies = "noSignalFlatUncertainty";
 

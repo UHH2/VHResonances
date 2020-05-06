@@ -4,11 +4,11 @@ from numpy import arange
 from array import array
 from tdrstyle_all import *
 
-ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/HiggsToWWTagger/include/constants.hpp"')
+ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/VHResonances/include/constants.hpp"')
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.gStyle.SetOptStat(0)
 
-PlotFolder = os.environ["CMSSW_BASE"]+"/src/UHH2/HiggsToWWTagger/Analysis/OtherPlots/"
+PlotFolder = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/"
 
 color = {600:  400,
          800:  416,

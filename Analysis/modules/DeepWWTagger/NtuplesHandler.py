@@ -11,7 +11,7 @@ import numpy as np
 from root_numpy import root2array, rec2array, fill_hist
 import ROOT
 
-analysispath = "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v1/CMSSW_10_2_10/src/UHH2/HiggsToWWTagger/" if "/nfs" in os.getcwd() else "/beegfs/desy/user/amalara//HiggsToWWTagger/"
+analysispath = "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/VHResonances/" if "/nfs" in os.getcwd() else "/beegfs/desy/user/amalara//VHResonances/"
 sys.path.append(analysispath+"Analysis/macros/")
 from ModuleRunnerBase import *
 sys.path.append(GenericPath().PersonalCode)
@@ -88,7 +88,7 @@ class NtuplesHandlerBase(ModuleRunnerBase):
         self.extraText = extraText
         # self.FileStorageInput = self.Path_STORAGE+self.year+"/"+self.Module+"/"+self.Collection+"/"+self.Channel+"channel"+"/"
         self.FileStorageInput = self.Path_STORAGE+self.year+"/"+self.Module+"/All/"+self.Channel+"channel"+"/"
-        self.FileStorageOutput = self.Path_STORAGE.replace("Analysis","NeuralNetwork")+"input_varariables/HiggsToWWTagger/"+self.year+"/"+self.Collection+"/"+self.Channel+"channel"+"/"
+        self.FileStorageOutput = self.Path_STORAGE.replace("Analysis","NeuralNetwork")+"input_varariables/VHResonances/"+self.year+"/"+self.Collection+"/"+self.Channel+"channel"+"/"
         self.Workdir = self.FileStorageInput+"workdir_"+self.Module+"_"+self.SubSample+"/"
         self.outdir = self.FileStorageOutput+Sample+"/Vars/"
         self.n_jet = 3

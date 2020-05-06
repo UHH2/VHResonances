@@ -12,8 +12,8 @@
 #include "TLegend.h"
 #include "TFile.h"
 #include "TLatex.h"
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
-#include "UHH2/HiggsToWWTagger/Analysis/include/tdrstyle_all.hpp"
+#include "UHH2/VHResonances/include/constants.hpp"
+#include "UHH2/VHResonances/Analysis/include/tdrstyle_all.hpp"
 
 typedef std::pair<std::string, int> mypair_I;
 

@@ -1,7 +1,7 @@
 import os, ROOT, glob, subprocess, math
 from tdrstyle_all import *
 
-ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/HiggsToWWTagger/include/constants.hpp"')
+ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/VHResonances/include/constants.hpp"')
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.gStyle.SetOptStat(0)
 
@@ -15,7 +15,7 @@ colors = {  "h_bkg_inp"  : (ROOT.kFullSquare,   ROOT.kBlue+1),
 
 def CompareCombineInputs(year,studies,histFolder,channel,collection="Puppi", mass="M2000", mode="Exp_2"):
     Path_STORAGE = "/nfs/dust/cms/user/"+os.environ["USER"]+"/"+"WorkingArea/File/Analysis/"
-    Path_ANALYSIS = os.environ["CMSSW_BASE"]+"/src/UHH2/HiggsToWWTagger/Analysis/"
+    Path_ANALYSIS = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/"
     AnalysisDir = Path_ANALYSIS+"Limits/"+studies+"/"
     workingDir = AnalysisDir+"/"+year+"/"+collection+"/"+channel+"/"+histFolder+"/datacards/"
     DataCard = workingDir+"DataCard"+year+"_"+mass+"_"+mode+".txt"

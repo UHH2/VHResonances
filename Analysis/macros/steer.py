@@ -3,7 +3,7 @@ from ModuleRunner import *
 import time
 
 """
-This macro and guide describes and steers the complete progress of the HiggsToWWTagger analysis.
+This macro and guide describes and steers the complete progress of the VHResonances analysis.
 Modify these items, everything else will work. The files given here must already be adapted to new settings in case there are any.
 """
 

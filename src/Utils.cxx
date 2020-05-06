@@ -1,7 +1,7 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/TopJet.h"
-#include "UHH2/HiggsToWWTagger/include/constants.hpp"
-#include "UHH2/HiggsToWWTagger/include/Utils.hpp"
+#include "UHH2/VHResonances/include/constants.hpp"
+#include "UHH2/VHResonances/include/Utils.hpp"
 
 
 Matching FloatToMatching(const TopJet & jet) { return static_cast<Matching>(int(jet.get_tag(TopJet::Matching))); }

@@ -3,7 +3,7 @@ import numpy as np
 
 Collection = "HOTVR"
 # Collection = "Puppi"
-path = "/nfs/dust/cms/user/amalara//WorkingArea/File/NeuralNetwork/input_varariables/HiggsToWWTagger/2017/"+Collection+"/leptonchannel/"
+path = "/nfs/dust/cms/user/amalara//WorkingArea/File/NeuralNetwork/input_varariables/VHResonances/2017/"+Collection+"/leptonchannel/"
 
 mode = "Vars"
 mode = "Inputs"
