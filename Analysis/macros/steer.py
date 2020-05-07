@@ -87,7 +87,7 @@ Modules = ModuleRunner(controls=controls)
 
 # Modules.MakeRunII(Collections, Channels, Systematics)
 
-# Modules.RunCommand("TaggerCutStudy", isPython=True)
+Modules.RunCommand("TaggerCutStudy", isPython=True)
 # Modules.RunCommand("CalculateSignalEfficiencies")
 # Modules.RunCommand("CreateWorkspace", histFolders=["btag_DeepBoosted_H4qvsQCD"])
 # Modules.RunCommand("CreateWorkspace", histFolders=["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02"])
