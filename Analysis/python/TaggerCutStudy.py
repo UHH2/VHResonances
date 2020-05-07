@@ -3,6 +3,7 @@ from math import sqrt, log
 from numpy import arange
 from array import array
 from tdrstyle_all import *
+from Utils import *
 
 ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/VHResonances/include/constants.hpp"')
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
@@ -30,11 +31,11 @@ color = {600:  400,
          8000: 900,
          }
 
-
+@timeit
 def GetDeepBoostedvsPT():
-    imax = 100
-    imax = 5000
-    imax = -1
+    # imax = 100
+    imax = 1000
+    # imax = -1
     canv_PTSelection = tdrCanvas("canv_PTSelection", 200, 5000, 0.01, 7000, "pT","event")
     # canv_PTSelection.SetLogy()
 
@@ -102,10 +103,24 @@ def GetDeepBoostedvsPT():
     canv_DeepBoosted = tdrCanvas("canv_DeepBoosted", 0, 1.1, 0, 10000, "DeepBoosted","event")
     DeepBoosted.Draw("")
     canv_DeepBoosted.SaveAs(PlotFolder+"DeepBoosted.pdf")
+    File_DeepBoosted = ROOT.TFile.Open(PlotFolder+"DeepBoosted.root" ,"RECREATE")
+    File_DeepBoosted.cd()
+    DeepBoostedvsPT_DY.Write()
+    DeepBoostedvsPT.Write()
+    for name in DeepBoostedvsPT_all:
+        DeepBoostedvsPT_all[name].Write()
+    File_DeepBoosted.Close()
     return (DeepBoostedvsPT_DY,DeepBoostedvsPT,DeepBoostedvsPT_all)
 
+@timeit
 def SensitivityScan():
-    h_bkg,h_sig, h_sig_all = GetDeepBoostedvsPT()
+    File_DeepBoosted = ROOT.TFile.Open(PlotFolder+"DeepBoosted.root" ,"READ")
+    h_bkg = File_DeepBoosted.Get("DeepBoostedvsPT_DY")
+    h_sig = File_DeepBoosted.Get("DeepBoostedvsPT")
+    h_sig_all = {}
+    for mass in ROOT.MassPoints:
+        massName = str(int(mass))
+        h_sig_all[massName] = File_DeepBoosted.Get("DeepBoostedvsPT"+massName)
     max = -1
     bin_max = -1
     bin_max_y = -1
@@ -179,59 +194,7 @@ def SensitivityScan():
         print sig_my, "\t", s, "\t", b
 
 
-
-def AngularCutvsPT():
-
-    canv_PTPreselection = tdrCanvas("canv_PTPreselection", 200, 5000, 0.01, 7000, "pT","event")
-    # canv_PTPreselection.SetLogy()
-
-    AngularCutvsPT = ROOT.TH2F("AngularCutvsPT", "", 101,0,1.01, 50,0,5000)
-    AngularCut = ROOT.TH1F("AngularCut", "", 101,0,1.01)
-    PTPreselection = ROOT.TH1F("PTPreselection", "", 50,0,5000)
-    h_pts = []
-    for mass in ROOT.MassPoints:
-        massName = str(int(mass))
-        print mass
-        # if mass >5000: continue
-        f = ROOT.TFile("/nfs/dust/cms/user/amalara//WorkingArea/File//Analysis/2016/Preselection/Puppi/muonchannel/nominal/workdir_Preselection_MC_ZprimeToZH_M"+massName+"_2016/uhh2.AnalysisModuleRunner.MC.MC_ZprimeToZH_M"+massName+"_2016_0.root")
-        t = f.Get("AnalysisTree")
-        h_pt = ROOT.TH1F("PTPreselection"+massName, "; pT; events", 50, 0, 5000)
-        h_pt.SetDirectory(0)
-        h_pts.append(h_pt)
-        i_ = 0
-        for ev in t:
-            i_+=1
-            if i_>2000: break
-            for lep1 in ev.slimmedMuonsUSER:
-                for lep2 in ev.slimmedMuonsUSER:
-                    if lep1==lep2: continue
-                    diLep = lep1.v4() + lep2.v4();
-                    # if( (fabs(diLep.M() - ZMASS) < ZWIDTH) && (lep1.charge() + lep2.charge() == 0) && diLep.pt()>pt_min )
-                    for jet in ev.jetsAk8PuppiSubstructure_SoftDropPuppi:
-                        Dphi = ROOT.deltaPhi(diLep, jet);
-                        #       if( phi_min < Dphi  && Dphi< phi_max) return true;
-                        a = AngularCutvsPT.Fill(Dphi, jet.pt(),ev.weight_GLP)
-                        a = AngularCut.Fill(Dphi, ev.weight_GLP)
-                        a = PTPreselection.Fill(jet.pt(), ev.weight_GLP)
-                        a = h_pt.Fill(jet.pt(), ev.weight_GLP)
-        # h_pt.Draw("same")
-        tdrDraw(h_pt, "p same", ROOT.kFullDotLarge, color[mass], 1, color[mass], 0, color[mass])
-
-
-    PTPreselection.Draw("same")
-    # tdrDraw(PTPreselection, "hist same", ROOT.kFullDotLarge, ROOT.kBlack, 1, ROOT.kBlack, 0, ROOT.kBlack)
-    canv_PTPreselection.SaveAs(PlotFolder+"PTPreselection.pdf")
-
-    canv = tdrCanvas("canv", 0, 1.1, 200, 5000, "AngularCut","pT")
-    canv.SetRightMargin(0.15)
-    canv.SetLogz()
-    AngularCutvsPT.Draw("colz")
-    canv.SaveAs(PlotFolder+"AngularCutvsPT.pdf")
-    canv_AngularCut = tdrCanvas("canv_AngularCut", 0, 1.1, 0, 10000, "AngularCut","event")
-    AngularCut.Draw("")
-    canv_AngularCut.SaveAs(PlotFolder+"AngularCut.pdf")
-
-
+@timeit
 def Plot2DVar(folder,var):
     canv_Plot2DVar = tdrCanvas("canv_Plot2DVar", 200, 5000, 0.01, 7000, "pT","event")
     canv_Plot2DVar.SetLogz()
@@ -259,6 +222,7 @@ def Plot2DVar(folder,var):
     canv_Plot2DVar.SaveAs(PlotFolder+"Plot2DVar_"+folder+"_"+var+".pdf")
 
 
+@timeit
 def SensitivityScan2D():
     doFast = True
     doFast = False
@@ -370,10 +334,9 @@ def SensitivityScan2D():
     canv_projy.SaveAs(PlotFolder+"SensitivityScan2D_projY"+extraText+".pdf")
 
 def main():
-    SensitivityScan2D()
+    GetDeepBoostedvsPT()
     # SensitivityScan()
-    # GetDeepBoostedvsPT()
-    # AngularCutvsPT()
+    # SensitivityScan2D()
     # Plot2DVar("nTopJet_DeltaRDiLepton","jetptvsdeltaphi_dilep_jet")
     # Plot2DVar("nTopJet_JetDiLeptonPhiAngular","jetptvsdeltaphi_dilep_jet")
     # Plot2DVar("nTopJet_DeltaRDiLepton","jetptvsdeltaphi_dilep_1")

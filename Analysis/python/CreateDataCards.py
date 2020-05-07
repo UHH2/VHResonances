@@ -5,12 +5,12 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from fileManipulation import *
+from parallelise import *
+
 sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros")
 from ModuleRunnerBase import *
 
-sys.path.append(GenericPath().PersonalCode)
-from fileManipulation import *
-from parallelise import *
 
 nSpace_text   = 45
 nSpace_number = 25

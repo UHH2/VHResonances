@@ -5,12 +5,7 @@ class GenericPath:
     def __init__(self):
         self.user = os.environ["USER"]
         self.cmssw_base = os.environ["CMSSW_BASE"]
-        if "beegfs" in os.getcwd():
-            self.PersonalCode = "/beegfs/desy/user/"+self.user+"/PersonalCode/"
-            self.isMaxwell = True
-        else:
-            self.PersonalCode = self.cmssw_base+"/src/UHH2/PersonalCode/"
-            self.isMaxwell = False
+        self.isMaxwell = True if "beegfs" in os.getcwd() else False
         self.Path_NFS       = "/nfs/dust/cms/user/"+self.user+"/"
         self.Path_Maxwell   = "/beegfs/desy/user/"+os.environ["USER"]+"/"
         self.Path_ANALYSIS  = self.cmssw_base+"/src/UHH2/VHResonances/"

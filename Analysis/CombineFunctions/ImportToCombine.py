@@ -1,8 +1,4 @@
 import os, glob
-import sys
-sys.path.append("../macros")
-from ModuleRunnerBase import *
-sys.path.append(GenericPath().PersonalCode)
 
 def ImportFunctions():
     for func in glob.glob("*.hpp"):
