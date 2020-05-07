@@ -92,7 +92,6 @@ TBA: add short instruction for each part
         - <class name="ZprimeCandidate"/>
 - Add VHResonances Folder:
     - git clone git@github.com:UHH2/VHResonances.git
-    - git clone git@github.com:anmalara/PersonalCode.git
     - cd VHResonances
     - git remote add personal git@github.com:$USER/VHResonances.git
 - Connect SFramePlotter

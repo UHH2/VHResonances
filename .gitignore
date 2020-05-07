@@ -22,3 +22,6 @@ core/python/__init__.py
 **/*submitFiles
 ToDo.md
 config/SubmittedJobs*
+Analysis/CalculateSignalEfficiencies
+Analysis/CreateWorkspace
+Analysis/PlotLimits

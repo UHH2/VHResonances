@@ -14,7 +14,7 @@ import ROOT
 analysispath = "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/VHResonances/" if "/nfs" in os.getcwd() else "/beegfs/desy/user/amalara//VHResonances/"
 sys.path.append(analysispath+"Analysis/macros/")
 from ModuleRunnerBase import *
-sys.path.append(GenericPath().PersonalCode)
+sys.path.append(GenericPath().Path_ANALYSIS+"Analysis/python")
 
 ROOT.gInterpreter.ProcessLine('#include "'+analysispath+'include/constants.hpp"')
 

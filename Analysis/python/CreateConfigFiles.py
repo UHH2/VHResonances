@@ -1,8 +1,5 @@
-import sys
-sys.path.append("../macros")
-from ModuleRunnerBase import *
-sys.path.append(GenericPath().PersonalCode)
 
+from Utils import *
 from fileManipulation import *
 from xml.dom.minidom import parseString
 

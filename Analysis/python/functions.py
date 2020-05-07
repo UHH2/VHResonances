@@ -1,8 +1,4 @@
 from glob import glob
-import sys
-sys.path.append("../macros")
-from ModuleRunnerBase import *
-sys.path.append(GenericPath().PersonalCode)
 from parallelise import *
 from fileManipulation import *
 

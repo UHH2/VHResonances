@@ -2,8 +2,8 @@ from glob import glob
 import numpy as np
 
 from ModuleRunnerBase import *
-sys.path.append(GenericPath().PersonalCode)
 sys.path.append("../python")
+from Utils import *
 from parallelise import *
 from CreateConfigFiles import *
 from functions import *
@@ -23,6 +23,8 @@ class ModuleRunner(ModuleRunnerBase):
     def RunCommand(self,command="", isPython=False, **kwargs):
         cwd = os.getcwd()
         os.chdir(self.Path_ANALYSIS+"Analysis")
+        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/obj")
+        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/OtherPlots")
         process = subprocess.Popen("make -j 20", shell=True)
         process.wait()
         list_processes = []
