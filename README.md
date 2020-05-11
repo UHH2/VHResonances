@@ -17,7 +17,7 @@ TBA: add short instruction for each part
     - Remember to add all the modifications at the last possible place to keep track easily of the changes.
     - Add #include "UHH2/VHResonances/include/ZprimeCandidate.h" into core/include/NtupleObjects.h
     - Add #pragma link C++ class ZprimeCandidate+; in core/include/SUHH2core_LinkDef.h
-    - Add #pragma link C++ class std::vector<ZprimeCandidate>+; in core/include/SUHH2core_LinkDef.h
+    - Add #pragma link C++ class std::vector\<ZprimeCandidate\>+; in core/include/SUHH2core_LinkDef.h
     - Add in the right place the following in core/include/TopJet.h
         - if(tagname == "Matching") return Matching;
         - if(tagname == "MatchingStatus") return MatchingStatus;
@@ -87,7 +87,7 @@ TBA: add short instruction for each part
     - Add in core/src/classes.h  :
         - #include "UHH2/VHResonances/include/ZprimeCandidate.h"
         - ZprimeCandidate ZprimeCandidate_dummy;
-        - std::vector<ZprimeCandidate> ZprimeCandidate_dummy_vector;
+        - std::vector\<ZprimeCandidate\> ZprimeCandidate_dummy_vector;
     - Add in core/src/classes_def.xml:
         - <class name="ZprimeCandidate"/>
 - Add VHResonances Folder:
