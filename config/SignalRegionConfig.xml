@@ -5,7 +5,7 @@
 <!ENTITY CACHEABLE                  "False">
 <!ENTITY NEVT                       "-1">
 <!ENTITY YEAR                       "defaultValue">
-<!ENTITY OUTDIR                     "/nfs/dust/cms/user/amalara/sframe_all/&YEAR;/SignalRegion">
+<!ENTITY OUTDIR                     "/nfs/dust/cms/user/USER/sframe_all/&YEAR;/SignalRegion">
 
 <!-- Channels -->
 <!ENTITY isPuppi                    "true">  <!--false/true -->
@@ -17,109 +17,109 @@
 <!ENTITY lumi_file                  "defaultValue">
 
 <!-- MC Samples 2016 -->
-<!ENTITY MC_ZprimeToZH_M600_2016    SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2016.xml">
-<!ENTITY MC_ZprimeToZH_M800_2016    SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2016.xml">
-<!ENTITY MC_ZprimeToZH_M1000_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M1200_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_2016.xml">
-<!ENTITY MC_ZprimeToZH_M1400_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_2016.xml">
-<!ENTITY MC_ZprimeToZH_M1600_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_2016.xml">
-<!ENTITY MC_ZprimeToZH_M1800_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_2016.xml">
-<!ENTITY MC_ZprimeToZH_M2000_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M2500_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_2016.xml">
-<!ENTITY MC_ZprimeToZH_M3000_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M3500_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_2016.xml">
-<!ENTITY MC_ZprimeToZH_M4000_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M4500_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_2016.xml">
-<!ENTITY MC_ZprimeToZH_M5000_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M5500_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_2016.xml">
-<!ENTITY MC_ZprimeToZH_M6000_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M7000_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M8000_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_2016.xml">
+<!ENTITY MC_ZprimeToZH_M600_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2016.xml">
+<!ENTITY MC_ZprimeToZH_M800_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2016.xml">
+<!ENTITY MC_ZprimeToZH_M1000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_2016.xml">
+<!ENTITY MC_ZprimeToZH_M1200_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_2016.xml">
+<!ENTITY MC_ZprimeToZH_M1400_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_2016.xml">
+<!ENTITY MC_ZprimeToZH_M1600_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_2016.xml">
+<!ENTITY MC_ZprimeToZH_M1800_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_2016.xml">
+<!ENTITY MC_ZprimeToZH_M2000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_2016.xml">
+<!ENTITY MC_ZprimeToZH_M2500_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_2016.xml">
+<!ENTITY MC_ZprimeToZH_M3000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_2016.xml">
+<!ENTITY MC_ZprimeToZH_M3500_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_2016.xml">
+<!ENTITY MC_ZprimeToZH_M4000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_2016.xml">
+<!ENTITY MC_ZprimeToZH_M4500_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_2016.xml">
+<!ENTITY MC_ZprimeToZH_M5000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_2016.xml">
+<!ENTITY MC_ZprimeToZH_M5500_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_2016.xml">
+<!ENTITY MC_ZprimeToZH_M6000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_2016.xml">
+<!ENTITY MC_ZprimeToZH_M7000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_2016.xml">
+<!ENTITY MC_ZprimeToZH_M8000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_2016.xml">
 
-<!ENTITY MC_DY_2016                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_DY_2016.xml">
-<!ENTITY MC_TTbar_2016              SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_TTbar_2016.xml">
-<!ENTITY MC_WW_incl_2016            SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WW_incl_2016.xml">
-<!ENTITY MC_WZ_incl_2016            SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WZ_incl_2016.xml">
-<!ENTITY MC_ZZ_incl_2016            SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZZ_incl_2016.xml">
-<!ENTITY MC_WW_2016                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WW_2016.xml">
-<!ENTITY MC_WZ_2016                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WZ_2016.xml">
-<!ENTITY MC_ZZ_2016                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZZ_2016.xml">
+<!ENTITY MC_DY_2016                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_DY_2016.xml">
+<!ENTITY MC_TTbar_2016              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_TTbar_2016.xml">
+<!ENTITY MC_WW_incl_2016            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WW_incl_2016.xml">
+<!ENTITY MC_WZ_incl_2016            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WZ_incl_2016.xml">
+<!ENTITY MC_ZZ_incl_2016            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZZ_incl_2016.xml">
+<!ENTITY MC_WW_2016                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WW_2016.xml">
+<!ENTITY MC_WZ_2016                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WZ_2016.xml">
+<!ENTITY MC_ZZ_2016                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZZ_2016.xml">
 
 
 <!-- MC Samples 2017 -->
-<!ENTITY MC_ZprimeToZH_M600_2017    SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2017.xml">
-<!ENTITY MC_ZprimeToZH_M800_2017    SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2017.xml">
-<!ENTITY MC_ZprimeToZH_M1000_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M1200_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_2017.xml">
-<!ENTITY MC_ZprimeToZH_M1400_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_2017.xml">
-<!ENTITY MC_ZprimeToZH_M1600_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_2017.xml">
-<!ENTITY MC_ZprimeToZH_M1800_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_2017.xml">
-<!ENTITY MC_ZprimeToZH_M2000_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M2500_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_2017.xml">
-<!ENTITY MC_ZprimeToZH_M3000_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M3500_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_2017.xml">
-<!ENTITY MC_ZprimeToZH_M4000_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M4500_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_2017.xml">
-<!ENTITY MC_ZprimeToZH_M5000_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M5500_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_2017.xml">
-<!ENTITY MC_ZprimeToZH_M6000_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M7000_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M8000_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_2017.xml">
+<!ENTITY MC_ZprimeToZH_M600_2017    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2017.xml">
+<!ENTITY MC_ZprimeToZH_M800_2017    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2017.xml">
+<!ENTITY MC_ZprimeToZH_M1000_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_2017.xml">
+<!ENTITY MC_ZprimeToZH_M1200_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_2017.xml">
+<!ENTITY MC_ZprimeToZH_M1400_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_2017.xml">
+<!ENTITY MC_ZprimeToZH_M1600_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_2017.xml">
+<!ENTITY MC_ZprimeToZH_M1800_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_2017.xml">
+<!ENTITY MC_ZprimeToZH_M2000_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_2017.xml">
+<!ENTITY MC_ZprimeToZH_M2500_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_2017.xml">
+<!ENTITY MC_ZprimeToZH_M3000_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_2017.xml">
+<!ENTITY MC_ZprimeToZH_M3500_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_2017.xml">
+<!ENTITY MC_ZprimeToZH_M4000_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_2017.xml">
+<!ENTITY MC_ZprimeToZH_M4500_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_2017.xml">
+<!ENTITY MC_ZprimeToZH_M5000_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_2017.xml">
+<!ENTITY MC_ZprimeToZH_M5500_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_2017.xml">
+<!ENTITY MC_ZprimeToZH_M6000_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_2017.xml">
+<!ENTITY MC_ZprimeToZH_M7000_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_2017.xml">
+<!ENTITY MC_ZprimeToZH_M8000_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_2017.xml">
 
-<!ENTITY MC_DY_2017                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_DY_2017.xml">
-<!ENTITY MC_TTbar_2017              SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_TTbar_2017.xml">
-<!ENTITY MC_WW_incl_2017            SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WW_incl_2017.xml">
-<!ENTITY MC_WZ_incl_2017            SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WZ_incl_2017.xml">
-<!ENTITY MC_ZZ_incl_2017            SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZZ_incl_2017.xml">
-<!ENTITY MC_WW_2017                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WW_2017.xml">
-<!ENTITY MC_WZ_2017                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WZ_2017.xml">
-<!ENTITY MC_ZZ_2017                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZZ_2017.xml">
+<!ENTITY MC_DY_2017                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_DY_2017.xml">
+<!ENTITY MC_TTbar_2017              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_TTbar_2017.xml">
+<!ENTITY MC_WW_incl_2017            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WW_incl_2017.xml">
+<!ENTITY MC_WZ_incl_2017            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WZ_incl_2017.xml">
+<!ENTITY MC_ZZ_incl_2017            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZZ_incl_2017.xml">
+<!ENTITY MC_WW_2017                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WW_2017.xml">
+<!ENTITY MC_WZ_2017                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WZ_2017.xml">
+<!ENTITY MC_ZZ_2017                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZZ_2017.xml">
 
 
 <!-- MC Samples 2018 -->
-<!ENTITY MC_ZprimeToZH_M600_2018    SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2018.xml">
-<!ENTITY MC_ZprimeToZH_M800_2018    SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2018.xml">
-<!ENTITY MC_ZprimeToZH_M1000_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M1200_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_2018.xml">
-<!ENTITY MC_ZprimeToZH_M1400_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_2018.xml">
-<!ENTITY MC_ZprimeToZH_M1600_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_2018.xml">
-<!ENTITY MC_ZprimeToZH_M1800_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_2018.xml">
-<!ENTITY MC_ZprimeToZH_M2000_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M2500_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_2018.xml">
-<!ENTITY MC_ZprimeToZH_M3000_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M3500_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_2018.xml">
-<!ENTITY MC_ZprimeToZH_M4000_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M4500_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_2018.xml">
-<!ENTITY MC_ZprimeToZH_M5000_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M5500_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_2018.xml">
-<!ENTITY MC_ZprimeToZH_M6000_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M7000_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M8000_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_2018.xml">
+<!ENTITY MC_ZprimeToZH_M600_2018    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2018.xml">
+<!ENTITY MC_ZprimeToZH_M800_2018    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2018.xml">
+<!ENTITY MC_ZprimeToZH_M1000_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_2018.xml">
+<!ENTITY MC_ZprimeToZH_M1200_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_2018.xml">
+<!ENTITY MC_ZprimeToZH_M1400_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_2018.xml">
+<!ENTITY MC_ZprimeToZH_M1600_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_2018.xml">
+<!ENTITY MC_ZprimeToZH_M1800_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_2018.xml">
+<!ENTITY MC_ZprimeToZH_M2000_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_2018.xml">
+<!ENTITY MC_ZprimeToZH_M2500_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_2018.xml">
+<!ENTITY MC_ZprimeToZH_M3000_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_2018.xml">
+<!ENTITY MC_ZprimeToZH_M3500_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_2018.xml">
+<!ENTITY MC_ZprimeToZH_M4000_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_2018.xml">
+<!ENTITY MC_ZprimeToZH_M4500_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_2018.xml">
+<!ENTITY MC_ZprimeToZH_M5000_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_2018.xml">
+<!ENTITY MC_ZprimeToZH_M5500_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_2018.xml">
+<!ENTITY MC_ZprimeToZH_M6000_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_2018.xml">
+<!ENTITY MC_ZprimeToZH_M7000_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_2018.xml">
+<!ENTITY MC_ZprimeToZH_M8000_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_2018.xml">
 
-<!ENTITY MC_DY_2018                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_DY_2018.xml">
-<!ENTITY MC_TTbar_2018              SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_TTbar_2018.xml">
-<!ENTITY MC_WW_incl_2018            SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WW_incl_2018.xml">
-<!ENTITY MC_WZ_incl_2018            SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WZ_incl_2018.xml">
-<!ENTITY MC_ZZ_incl_2018            SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZZ_incl_2018.xml">
-<!ENTITY MC_WW_2018                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WW_2018.xml">
-<!ENTITY MC_WZ_2018                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WZ_2018.xml">
-<!ENTITY MC_ZZ_2018                 SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZZ_2018.xml">
+<!ENTITY MC_DY_2018                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_DY_2018.xml">
+<!ENTITY MC_TTbar_2018              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_TTbar_2018.xml">
+<!ENTITY MC_WW_incl_2018            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WW_incl_2018.xml">
+<!ENTITY MC_WZ_incl_2018            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WZ_incl_2018.xml">
+<!ENTITY MC_ZZ_incl_2018            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZZ_incl_2018.xml">
+<!ENTITY MC_WW_2018                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WW_2018.xml">
+<!ENTITY MC_WZ_2018                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WZ_2018.xml">
+<!ENTITY MC_ZZ_2018                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZZ_2018.xml">
 
 <!-- Data Samples -->
-<!ENTITY DATA_SingleMuon_2016       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/DATA_SingleMuon_2016.xml">
-<!ENTITY DATA_SingleElectron_2016   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/DATA_SingleElectron_2016.xml">
+<!ENTITY DATA_SingleMuon_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/DATA_SingleMuon_2016.xml">
+<!ENTITY DATA_SingleElectron_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/DATA_SingleElectron_2016.xml">
 
-<!ENTITY DATA_SingleMuon_2017       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/DATA_SingleMuon_2017.xml">
-<!ENTITY DATA_SingleElectron_2017   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/DATA_SingleElectron_2017.xml">
+<!ENTITY DATA_SingleMuon_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/DATA_SingleMuon_2017.xml">
+<!ENTITY DATA_SingleElectron_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/DATA_SingleElectron_2017.xml">
 
-<!ENTITY DATA_SingleMuon_2018       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/DATA_SingleMuon_2018.xml">
-<!ENTITY DATA_SingleElectron_2018   SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/DATA_SingleElectron_2018.xml">
+<!ENTITY DATA_SingleMuon_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/DATA_SingleMuon_2018.xml">
+<!ENTITY DATA_SingleElectron_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/DATA_SingleElectron_2018.xml">
 
 ]>
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
-<ConfigSGE RAM ="2" DISK ="1" TIME ="2" Mail="andrea.malara@desy.de" Notification="as" Workdir="workdir_SignalRegion"/>
+<ConfigSGE RAM ="2" DISK ="1" TIME ="2" Mail="USER@mail.desy.de" Notification="as" Workdir="workdir_SignalRegion"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->

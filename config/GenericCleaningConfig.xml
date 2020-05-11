@@ -3,15 +3,15 @@
 
 <!-- Generic Value -->
 <!ENTITY CACHEABLE                  "False">
-<!ENTITY OUTDIR                     "/nfs/dust/cms/user/amalara/sframe_all/2018/GenericCleaning">
+<!ENTITY OUTDIR                     "/nfs/dust/cms/user/USER/sframe_all/2018/GenericCleaning">
 <!ENTITY NEVT                       "-1">
 
 <!-- MC PuReweighting -->
 <!ENTITY SysType_PU                 "central">    <!-- central, up, down -->
-<!ENTITY pileup_directory           "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/2018/MyMCPileupHistogram.root">
-<!ENTITY pileup_directory_data      "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/2018/MyDataPileupHistogram2018.root">
-<!ENTITY pileup_directory_data_up   "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/2018/MyDataPileupHistogram2018_72383.root">
-<!ENTITY pileup_directory_data_down "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/2018/MyDataPileupHistogram2018_66017.root">
+<!ENTITY pileup_directory           "CMSSW_BASE/src/UHH2/common/data/2018/MyMCPileupHistogram.root">
+<!ENTITY pileup_directory_data      "CMSSW_BASE/src/UHH2/common/data/2018/MyDataPileupHistogram2018.root">
+<!ENTITY pileup_directory_data_up   "CMSSW_BASE/src/UHH2/common/data/2018/MyDataPileupHistogram2018_72383.root">
+<!ENTITY pileup_directory_data_down "CMSSW_BASE/src/UHH2/common/data/2018/MyDataPileupHistogram2018_66017.root">
 
 <!-- Cleaning variables -->
 <!ENTITY lumisel                    "true">  <!--true/false -->
@@ -44,36 +44,36 @@
 
 <!-- MC Samples -->
 
-<!ENTITY MC_TTToSemiLeptonic        SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_TTToSemiLeptonic.xml">
+<!ENTITY MC_TTToSemiLeptonic        SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_TTToSemiLeptonic.xml">
 
-<!ENTITY MC_WZ                      SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_WZ_TuneCP5_13TeV-pythia8.xml">
-<!ENTITY MC_WW                      SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_WW_TuneCP5_13TeV-pythia8.xml">
+<!ENTITY MC_WZ                      SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_WZ_TuneCP5_13TeV-pythia8.xml">
+<!ENTITY MC_WW                      SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_WW_TuneCP5_13TeV-pythia8.xml">
 
-<!ENTITY MC_ZZ                      SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_ZZ_TuneCP5_13TeV-pythia8.xml">
-<!ENTITY MC_WZ_Zmatch               SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_WZ_TuneCP5_13TeV-pythia8.xml">
+<!ENTITY MC_ZZ                      SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_ZZ_TuneCP5_13TeV-pythia8.xml">
+<!ENTITY MC_WZ_Zmatch               SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_WZ_TuneCP5_13TeV-pythia8.xml">
 
 
-<!ENTITY MC_QCD_HT50to100           SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT50to100_madgraph.xml">
-<!ENTITY MC_QCD_HT100to200          SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT100to200_madgraph.xml">
-<!ENTITY MC_QCD_HT200to300          SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT200to300_madgraph.xml">
-<!ENTITY MC_QCD_HT300to500          SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT300to500_madgraph.xml">
-<!ENTITY MC_QCD_HT500to700          SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT500to700_madgraph.xml">
-<!ENTITY MC_QCD_HT700to1000         SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT700to1000_madgraph.xml">
-<!ENTITY MC_QCD_HT1000to1500        SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT1000to1500_madgraph.xml">
-<!ENTITY MC_QCD_HT1500to2000        SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT1500to2000_madgraph.xml">
-<!ENTITY MC_QCD_HT2000toInf         SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT2000toInf_madgraph.xml">
+<!ENTITY MC_QCD_HT50to100           SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT50to100_madgraph.xml">
+<!ENTITY MC_QCD_HT100to200          SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT100to200_madgraph.xml">
+<!ENTITY MC_QCD_HT200to300          SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT200to300_madgraph.xml">
+<!ENTITY MC_QCD_HT300to500          SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT300to500_madgraph.xml">
+<!ENTITY MC_QCD_HT500to700          SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT500to700_madgraph.xml">
+<!ENTITY MC_QCD_HT700to1000         SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT700to1000_madgraph.xml">
+<!ENTITY MC_QCD_HT1000to1500        SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT1000to1500_madgraph.xml">
+<!ENTITY MC_QCD_HT1500to2000        SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT1500to2000_madgraph.xml">
+<!ENTITY MC_QCD_HT2000toInf         SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_QCD_HT2000toInf_madgraph.xml">
 
 <!-- Data Samples -->
-<!ENTITY DATA_SingleMuon_RunA       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunA.xml">
-<!ENTITY DATA_SingleMuon_RunB       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunB.xml">
-<!-- <!ENTITY DATA_SingleMuon_RunC       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunC.xml"> -->
-<!-- <!ENTITY DATA_SingleMuon_RunD       SYSTEM  "/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunD.xml"> -->
+<!ENTITY DATA_SingleMuon_RunA       SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunA.xml">
+<!ENTITY DATA_SingleMuon_RunB       SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunB.xml">
+<!-- <!ENTITY DATA_SingleMuon_RunC       SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunC.xml"> -->
+<!-- <!ENTITY DATA_SingleMuon_RunD       SYSTEM  "CMSSW_BASE/src/UHH2/common/datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunD.xml"> -->
 
 ]>
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
-<ConfigSGE RAM ="2" DISK ="2" Mail="andrea.malara@desy.de" Notification="as" Workdir="workdir_GenericCleaning"/>
+<ConfigSGE RAM ="2" DISK ="2" Mail="USER@mail.desy.de" Notification="as" Workdir="workdir_GenericCleaning"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
@@ -146,7 +146,7 @@
     event weight assigned by MCLumiWeight is InputData.Lumi / Cycle.TargetLumi. -->
     <Item Name="use_sframe_weight"          Value="false"/>
 
-    <Item Name="lumi_file"                  Value="/nfs/dust/cms/user/amalara/WorkingArea/UHH2_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/2018/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.root"/>
+    <Item Name="lumi_file"                  Value="CMSSW_BASE/src/UHH2/common/data/2018/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.root"/>
     <Item Name="lumihists_lumi_per_bin"     Value="500."/> <!-- used in UHH2/common/include/LuminosityHists.h -->
 
     <!-- Systematic uncertainties -->

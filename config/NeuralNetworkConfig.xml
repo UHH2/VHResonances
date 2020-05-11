@@ -5,9 +5,9 @@
 
 <!-- Generic Value -->
 <!ENTITY CACHEABLE                  "False">
-<!-- <!ENTITY PRESELDIR                  "/nfs/dust/cms/user/amalara/sframe_all/Preselection"> -->
-<!ENTITY PRESELDIR                  "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/GenericCleaning">
-<!ENTITY OUTDIR                     "/nfs/dust/cms/user/amalara/sframe_all/NeuralNetwork">
+<!-- <!ENTITY PRESELDIR                  "/nfs/dust/cms/user/USER/sframe_all/Preselection"> -->
+<!ENTITY PRESELDIR                  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/GenericCleaning">
+<!ENTITY OUTDIR                     "/nfs/dust/cms/user/USER/sframe_all/NeuralNetwork">
 <!ENTITY NEVT                       "-1">
 
 <!ENTITY PREFIX                     "uhh2.AnalysisModuleRunner.">
@@ -16,7 +16,7 @@
 <!ENTITY CHANNEL                    "channel">  <!--muon/electron -->
 <!ENTITY muonchannel                "true">  <!--true/false -->
 <!ENTITY electronchannel            "true">  <!--true/false -->
-<!ENTITY modelName                  "/nfs/dust/cms/user/amalara/WorkingArea/File/NeuralNetwork/&MODELNAME;/">
+<!ENTITY modelName                  "/nfs/dust/cms/user/USER/WorkingArea/File/NeuralNetwork/&MODELNAME;/">
 
 <!ENTITY MatchingCondition          "HWWMatch">  <!--HWWMatch/Hbb/HMatch/ZMatch/WMatch/Zqq/Wqq/Zll/Wll/topMatch/gluonMatch/qMatch -->
 <!ENTITY MatchingRadius             "0.8">
@@ -41,7 +41,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="5"/>
-<ConfigSGE RAM ="2" DISK ="2" Mail="andrea.malara@desy.de" Notification="as" Workdir="workdir_NeuralNetwork"/>
+<ConfigSGE RAM ="2" DISK ="2" Mail="USER@mail.desy.de" Notification="as" Workdir="workdir_NeuralNetwork"/>
 -->
 
 <!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
