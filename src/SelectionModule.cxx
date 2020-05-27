@@ -103,8 +103,8 @@ void SelectionModule::book_handles(uhh2::Context& ctx) {
   string tag;
   for(const auto & tag : weight_tags) {
     if (!MB["is_mc"] && tag.find("weight_pu")!=std::string::npos) continue;
-    book_WFolder(tag+"_in", new Event::Handle< float >, ctx.declare_event_output< float >(tag));
-    book_WFolder(tag+"_out", new Event::Handle< float >, ctx.declare_event_input< float >(tag));
+    book_WFolder(tag+"_in",  new Event::Handle< float >, ctx.declare_event_input< float >(tag));
+    book_WFolder(tag+"_out", new Event::Handle< float >, ctx.declare_event_output< float >(tag));
   }
 }
 
@@ -167,10 +167,6 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
 
   MS["jetLabel"]    = MB["isCHS"]? "jets":    (MB["isPuppi"]? "jetsAk4Puppi": (MB["isHOTVR"]? "jetsAk4Puppi": ""));
   MS["topjetLabel"] = MB["isCHS"]? "topjets": (MB["isPuppi"]? "toppuppijets": (MB["isHOTVR"]? "hotvrPuppi": ""));
-
-  const MuonId muoId(AndId<Muon> (MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta)));
-  const ElectronId eleId(AndId<Electron>(ElectronID_MVA_Fall17_loose_noIso, PtEtaSCCut(min_lepton_pt, min_lepton_eta)));
-  const TopJetId topjetId(NoLeptonInJet("all", eleId, muoId, MB["isHOTVR"]? 0.8: -1)); //TODO
 
   // Set up histograms:
 
