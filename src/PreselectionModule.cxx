@@ -98,7 +98,7 @@ void PreselectionModule::PrintInputs() {
   std::cout << "           PreselectionModule           " << std::endl;
   std::cout << "----------------------------------------" << std::endl;
   for (auto x : MS) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << x.second << '\n';
-  for (auto x : MB)   std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << (x.second? "true" : "false") << '\n';
+  for (auto x : MB) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << BoolToString(x.second) << '\n';
   std::cout << "****************************************\n" << std::endl;
 }
 

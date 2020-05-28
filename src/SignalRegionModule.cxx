@@ -66,6 +66,22 @@ protected:
 
   std::vector<std::string> histogram_tags = {"Selection", "FSSelection",
   "btag_DeepBoosted_H4qvsQCD_SR",           "btag_DeepBoosted_H4qvsQCD_CR",
+  // "btag_DeepBoosted_H4qvsQCDptdep_SR",      "btag_DeepBoosted_H4qvsQCDptdep_CR",
+
+  "btag_DeepBoosted_H4qvsQCDptdep_x3_SR", "btag_DeepBoosted_H4qvsQCDptdep_x3_CR",
+  "btag_DeepBoosted_H4qvsQCDptdep_x2x3_SR", "btag_DeepBoosted_H4qvsQCDptdep_x2x3_CR",
+  "btag_DeepBoosted_H4qvsQCDptdep_x1x3_SR", "btag_DeepBoosted_H4qvsQCDptdep_x1x3_CR",
+  "btag_DeepBoosted_H4qvsQCDptdep_x1x2_SR", "btag_DeepBoosted_H4qvsQCDptdep_x1x2_CR",
+  "btag_DeepBoosted_H4qvsQCDptdep_x2_SR", "btag_DeepBoosted_H4qvsQCDptdep_x2_CR",
+  "btag_DeepBoosted_H4qvsQCDptdep_sqrt_SR", "btag_DeepBoosted_H4qvsQCDptdep_sqrt_CR",
+  "btag_DeepBoosted_H4qvsQCDmassdep_x3_SR", "btag_DeepBoosted_H4qvsQCDmassdep_x3_CR",
+  "btag_DeepBoosted_H4qvsQCDmassdep2_x3_SR", "btag_DeepBoosted_H4qvsQCDmassdep2_x3_CR",
+  "btag_DeepBoosted_H4qvsQCDmassdep_x2x3_SR", "btag_DeepBoosted_H4qvsQCDmassdep_x2x3_CR",
+  "btag_DeepBoosted_H4qvsQCDmassdep_x1x3_SR", "btag_DeepBoosted_H4qvsQCDmassdep_x1x3_CR",
+  "btag_DeepBoosted_H4qvsQCDmassdep_x1x2_SR", "btag_DeepBoosted_H4qvsQCDmassdep_x1x2_CR",
+  "btag_DeepBoosted_H4qvsQCDmassdep_x2_SR", "btag_DeepBoosted_H4qvsQCDmassdep_x2_CR",
+  "btag_DeepBoosted_H4qvsQCDmassdep_sqrt_SR", "btag_DeepBoosted_H4qvsQCDmassdep_sqrt_CR",
+
   "btag_DeepBoosted_H4qvsQCDp2_SR",         "btag_DeepBoosted_H4qvsQCDp2_CR",
   "btag_DeepBoosted_H4qvsQCDp02_SR",        "btag_DeepBoosted_H4qvsQCDp02_CR",
   "btag_DeepBoosted_H4qvsQCDpt1000_SR",     "btag_DeepBoosted_H4qvsQCDpt1000_CR",
@@ -101,6 +117,22 @@ protected:
 
   std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCD_SR_selection,  btag_DeepBoosted_H4qvsQCD_CR_selection;
 
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDptdep_x3_SR_selection,    btag_DeepBoosted_H4qvsQCDptdep_x3_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDptdep_x2x3_SR_selection,  btag_DeepBoosted_H4qvsQCDptdep_x2x3_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDptdep_x1x3_SR_selection,  btag_DeepBoosted_H4qvsQCDptdep_x1x3_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDptdep_x1x2_SR_selection,  btag_DeepBoosted_H4qvsQCDptdep_x1x2_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDptdep_x2_SR_selection,    btag_DeepBoosted_H4qvsQCDptdep_x2_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDptdep_sqrt_SR_selection,  btag_DeepBoosted_H4qvsQCDptdep_sqrt_CR_selection;
+
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDmassdep_x3_SR_selection,    btag_DeepBoosted_H4qvsQCDmassdep_x3_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDmassdep2_x3_SR_selection,   btag_DeepBoosted_H4qvsQCDmassdep2_x3_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDmassdep_x2x3_SR_selection,  btag_DeepBoosted_H4qvsQCDmassdep_x2x3_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDmassdep_x1x3_SR_selection,  btag_DeepBoosted_H4qvsQCDmassdep_x1x3_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDmassdep_x1x2_SR_selection,  btag_DeepBoosted_H4qvsQCDmassdep_x1x2_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDmassdep_x2_SR_selection,    btag_DeepBoosted_H4qvsQCDmassdep_x2_CR_selection;
+  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDmassdep_sqrt_SR_selection,  btag_DeepBoosted_H4qvsQCDmassdep_sqrt_CR_selection;
+
+  // std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDptdep_SR_selection,     btag_DeepBoosted_H4qvsQCDptdep_CR_selection;
   std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDp2_SR_selection,        btag_DeepBoosted_H4qvsQCDp2_CR_selection;
   std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDp02_SR_selection,       btag_DeepBoosted_H4qvsQCDp02_CR_selection;
   std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDpt1000_SR_selection,    btag_DeepBoosted_H4qvsQCDpt1000_CR_selection;
@@ -129,7 +161,7 @@ void SignalRegionModule::PrintInputs() {
   std::cout << "           SignalRegionModule           " << std::endl;
   std::cout << "----------------------------------------" << std::endl;
   for (auto x : MS) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << x.second << '\n';
-  for (auto x : MB)   std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << (x.second? "true" : "false") << '\n';
+  for (auto x : MB) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << BoolToString(x.second) << '\n';
   std::cout << "****************************************\n" << std::endl;
 }
 
@@ -137,8 +169,8 @@ void SignalRegionModule::book_handles(uhh2::Context& ctx) {
   string tag;
   for(const auto & tag : weight_tags) {
     if (!MB["is_mc"] && tag.find("weight_pu")!=std::string::npos) continue;
-    book_WFolder(tag+"_in", new Event::Handle< float >, ctx.declare_event_output< float >(tag));
-    book_WFolder(tag+"_out", new Event::Handle< float >, ctx.declare_event_input< float >(tag));
+    book_WFolder(tag+"_in",  new Event::Handle< float >, ctx.declare_event_input< float >(tag));
+    book_WFolder(tag+"_out", new Event::Handle< float >, ctx.declare_event_output< float >(tag));
   }
 }
 
@@ -154,26 +186,26 @@ void SignalRegionModule::export_weights(uhh2::Event& event) {
 void SignalRegionModule::book_histograms(uhh2::Context& ctx){
   for(const auto & tag : histogram_tags){
     string mytag;
-    mytag = "nTopJet_"                + tag; book_HFolder(mytag, new ExtJetHists(ctx,mytag, MS["topjetLabel"] ));
-    mytag = "ZprimeCandidate_"        + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
-    mytag = "ZprimeCandidate_HWW"     + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "HWWMatch"));
-    mytag = "ZprimeCandidate_Hbb"     + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "HbbMatch"));
-    mytag = "ZprimeCandidate_HZZ"     + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "HZZMatch"));
-    mytag = "ZprimeCandidate_else"    + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "else"));
-    mytag = "ZprimeCandidate_PUup"    + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
-    mytag = "ZprimeCandidate_PUdown"  + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
+    mytag = "nTopJet_"                  + tag; book_HFolder(mytag, new ExtJetHists(ctx,mytag, MS["topjetLabel"] ));
+    mytag = "ZprimeCandidate_"          + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
+    mytag = "ZprimeCandidate_HWW_"      + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "HWWMatch"));
+    mytag = "ZprimeCandidate_Hbb_"      + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "HbbMatch"));
+    mytag = "ZprimeCandidate_HZZ_"      + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "HZZMatch"));
+    mytag = "ZprimeCandidate_else_"     + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "else"));
+    mytag = "ZprimeCandidate_PU_up_"    + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
+    mytag = "ZprimeCandidate_PU_down_"  + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
   }
 }
 
 void SignalRegionModule::fill_histograms(uhh2::Event& event, string tag){
-  std::vector<string> mytags = {"nTopJet_", "ZprimeCandidate_", "ZprimeCandidate_HWW", "ZprimeCandidate_Hbb", "ZprimeCandidate_HZZ", "ZprimeCandidate_else"};
+  std::vector<string> mytags = {"nTopJet_", "ZprimeCandidate_", "ZprimeCandidate_HWW_", "ZprimeCandidate_Hbb_", "ZprimeCandidate_HZZ_", "ZprimeCandidate_else_"};
   for (auto& mytag : mytags) HFolder(mytag+ tag)->fill(event);
   string mytag;
   float save_weight = event.weight;
   if (!event.isRealData) event.weight = save_weight*event.get(WFolder("weight_pu_up_in"))/event.get(WFolder("weight_pu_in"));
-  mytag = "ZprimeCandidate_PUup";   HFolder(mytag+ tag)->fill(event);
+  mytag = "ZprimeCandidate_PU_up_";   HFolder(mytag+ tag)->fill(event);
   if (!event.isRealData) event.weight = save_weight*event.get(WFolder("weight_pu_down_in"))/event.get(WFolder("weight_pu_in"));
-  mytag = "ZprimeCandidate_PUdown"; HFolder(mytag+ tag)->fill(event);
+  mytag = "ZprimeCandidate_PU_down_"; HFolder(mytag+ tag)->fill(event);
   event.weight = save_weight;
 }
 
@@ -232,6 +264,35 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
   btag_DeepBoosted_H4qvsQCD_SR_selection.reset(new TaggerCut(0.8, 1.0, -1, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
   btag_DeepBoosted_H4qvsQCD_CR_selection.reset(new TaggerCut(0.0, 0.2, -1, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
 
+
+
+  btag_DeepBoosted_H4qvsQCDptdep_x3_SR_selection.reset(new TaggerCut(0, 1, PtDepentdentCut_value_x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_x3_CR_selection.reset(new TaggerCut(0, -1, PtDepentdentCut_value_x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_x2x3_SR_selection.reset(new TaggerCut(0, 1, PtDepentdentCut_value_x2x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_x2x3_CR_selection.reset(new TaggerCut(0, -1, PtDepentdentCut_value_x2x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_x1x3_SR_selection.reset(new TaggerCut(0, 1, PtDepentdentCut_value_x1x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_x1x3_CR_selection.reset(new TaggerCut(0, -1, PtDepentdentCut_value_x1x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_x1x2_SR_selection.reset(new TaggerCut(0, 1, PtDepentdentCut_value_x1x2, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_x1x2_CR_selection.reset(new TaggerCut(0, -1, PtDepentdentCut_value_x1x2, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_x2_SR_selection.reset(new TaggerCut(0, 1, PtDepentdentCut_value_x2, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_x2_CR_selection.reset(new TaggerCut(0, -1, PtDepentdentCut_value_x2, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_sqrt_SR_selection.reset(new TaggerCut(0, 1, PtDepentdentCut_value_sqrt, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDptdep_sqrt_CR_selection.reset(new TaggerCut(0, -1, PtDepentdentCut_value_sqrt, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+
+  btag_DeepBoosted_H4qvsQCDmassdep_x3_SR_selection.reset(new TaggerCut(0, 1, MassDepentdentCut_value_x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_x3_CR_selection.reset(new TaggerCut(0, -1, MassDepentdentCut_value_x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep2_x3_SR_selection.reset(new TaggerCut(0, 1, MassDepentdentCut2_value_x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep2_x3_CR_selection.reset(new TaggerCut(0, -1, MassDepentdentCut2_value_x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_x2x3_SR_selection.reset(new TaggerCut(0, 1, MassDepentdentCut_value_x2x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_x2x3_CR_selection.reset(new TaggerCut(0, -1, MassDepentdentCut_value_x2x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_x1x3_SR_selection.reset(new TaggerCut(0, 1, MassDepentdentCut_value_x1x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_x1x3_CR_selection.reset(new TaggerCut(0, -1, MassDepentdentCut_value_x1x3, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_x1x2_SR_selection.reset(new TaggerCut(0, 1, MassDepentdentCut_value_x1x2, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_x1x2_CR_selection.reset(new TaggerCut(0, -1, MassDepentdentCut_value_x1x2, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_x2_SR_selection.reset(new TaggerCut(0, 1, MassDepentdentCut_value_x2, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_x2_CR_selection.reset(new TaggerCut(0, -1, MassDepentdentCut_value_x2, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_sqrt_SR_selection.reset(new TaggerCut(0, 1, MassDepentdentCut_value_sqrt, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_sqrt_CR_selection.reset(new TaggerCut(0, -1, MassDepentdentCut_value_sqrt, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
 
 
   btag_DeepBoosted_H4qvsQCDp2_SR_selection.reset(new TaggerCut(0.2, 1.0, -1, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
@@ -347,6 +408,29 @@ bool SignalRegionModule::process(uhh2::Event& event) {
 
   if(btag_DeepBoosted_H4qvsQCD_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCD_SR");
   if(btag_DeepBoosted_H4qvsQCD_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCD_CR");
+
+  // if(btag_DeepBoosted_H4qvsQCDptdep_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDptdep_SR");
+  // if(btag_DeepBoosted_H4qvsQCDptdep_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDptdep_CR");
+
+
+
+  if(btag_DeepBoosted_H4qvsQCDptdep_x3_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDptdep_x3_SR");
+  if(btag_DeepBoosted_H4qvsQCDptdep_x3_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDptdep_x3_CR");
+  if(btag_DeepBoosted_H4qvsQCDptdep_x2x3_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDptdep_x2x3_SR");
+  if(btag_DeepBoosted_H4qvsQCDptdep_x2x3_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDptdep_x2x3_CR");
+  if(btag_DeepBoosted_H4qvsQCDptdep_x1x3_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDptdep_x1x3_SR");
+  if(btag_DeepBoosted_H4qvsQCDptdep_x1x3_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDptdep_x1x3_CR");
+  if(btag_DeepBoosted_H4qvsQCDmassdep_x3_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_x3_SR");
+  if(btag_DeepBoosted_H4qvsQCDmassdep_x3_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_x3_CR");
+  if(btag_DeepBoosted_H4qvsQCDmassdep2_x3_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep2_x3_SR");
+  if(btag_DeepBoosted_H4qvsQCDmassdep2_x3_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep2_x3_CR");
+  if(btag_DeepBoosted_H4qvsQCDmassdep_x2x3_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_x2x3_SR");
+  if(btag_DeepBoosted_H4qvsQCDmassdep_x2x3_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_x2x3_CR");
+  if(btag_DeepBoosted_H4qvsQCDmassdep_x1x3_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_x1x3_SR");
+  if(btag_DeepBoosted_H4qvsQCDmassdep_x1x3_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_x1x3_CR");
+  if(btag_DeepBoosted_H4qvsQCDmassdep_x1x2_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_x1x2_SR");
+  if(btag_DeepBoosted_H4qvsQCDmassdep_x1x2_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_x1x2_CR");
+
 
   if(btag_DeepBoosted_H4qvsQCDp2_SR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDp2_SR");
   if(btag_DeepBoosted_H4qvsQCDp2_CR_selection->passes(event))   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDp2_CR");
