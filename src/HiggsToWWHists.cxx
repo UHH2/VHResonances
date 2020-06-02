@@ -47,6 +47,7 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   book_TH1F("Zprime_mass_rebin_full", "m^Zprime [GeV/c^{2}]", bins_Zprime_rebin_full.size()-1, &bins_Zprime_rebin_full[0]);
   book_TH1F("Zprime_mass_rebin1", "m^Zprime [GeV/c^{2}]", bins_Zprime_rebin1.size()-1, &bins_Zprime_rebin1[0]);
   book_TH1F("Zprime_mass_rebin2", "m^Zprime [GeV/c^{2}]", 10000, 0, 10000);
+  book_TH1F("Zprime_mass_rebin30","m^Zprime [GeV/c^{2}]", 330, 0, 9900);
 
   for (const string & name: {"Zprime","Z","H"}) {
     // bool check = (name.compare("Zprime")) == 0;
@@ -108,6 +109,10 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   H2("nsubjet_btags_DeepCSV")->GetYaxis()->SetBinLabel(4,"tight");
 
   book_TH1F("Zprime_ptinvmass",  "p_{T}^{ll}/m(jet,ll)",         200, 0, 2);
+  book_TH1F("HT_event", "HT_event", 300, 0, 3000);
+  book_TH1F("ST_event", "ST_event", 300, 0, 3000);
+  book_TH1F("HT_Zprime", "HT_Zprime", 300, 0, 3000);
+  book_TH1F("ST_Zprime", "ST_Zprime", 300, 0, 3000);
 
 }
 
@@ -165,6 +170,7 @@ void HiggsToWWHists::fill(const Event & event){
     fill_H1("Zprime_mass_rebin_full", cand.Zprime_mass(),weight);
     fill_H1("Zprime_mass_rebin1",     cand.Zprime_mass(),weight);
     fill_H1("Zprime_mass_rebin2",     cand.Zprime_mass(),weight);
+    fill_H1("Zprime_mass_rebin30",    cand.Zprime_mass(),weight);
     fill_H1("Zprime_pt",              cand.pt(),weight);
     fill_H1("Zprime_energy",          cand.energy(),weight);
     fill_H1("Zprime_eta",             cand.eta(),weight);
@@ -228,7 +234,18 @@ void HiggsToWWHists::fill(const Event & event){
     H1("H_MatchingStatus")->Fill(matchstatus.c_str(), weight);
     H2("H_MatchvsH_MatchingStatus")->Fill(match.c_str(), matchstatus.c_str(), weight);
 
+    fill_H1("HT_Zprime", cand.H().pt() ,weight);
+    fill_H1("ST_Zprime", cand.H().pt()+cand.Z().pt() ,weight);
   }
+
+  double HT = 0;
+  // vector<std::vector<TopJet>> topjets = event.get(h_topjets);
+  for (const auto & jet : *event.toppuppijets ) HT += jet.pt();
+  fill_H1("HT_event", HT ,weight);
+  double ST = HT;
+  for (const auto & electron : *event.electrons ) ST += electron.pt();
+  for (const auto & muon : *event.muons ) ST += muon.pt();
+  fill_H1("ST_event", ST ,weight);
 
 }
 
