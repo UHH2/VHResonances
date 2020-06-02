@@ -67,10 +67,6 @@
 *******************************************
 */
 
-void CreateWorkspace(std::string studies="nominal", std::string histFolder = "btag_DeepBoosted_H4qvsQCD", std::string channel = "muonchannel", std::string collection = "Puppi", std::string year = "2016", bool isHbb = false, bool fitCR = true, bool doObs = false);
-
-RooRealVar* ReDoVar(RooRealVar& var, TString& name);
-
 double GetRange(TH1F* h, double x);
 
 double CalculateIntegral(TH1F* h, double min, double max, bool dorebin);
@@ -78,3 +74,173 @@ double CalculateFractionArea(TH1F* h, double min, double max, double x_min, doub
 
 double DoFTest(double chi2_1, double chi2_2, double npar_1, double npar_2, double n);
 void CalculateChiSquare(double& chi2, int& nbins, RooHist* hpull, double xmin, double xmax);
+
+std::string GetSgName(int mass);
+
+std::unordered_map<std::string, int> Colors = {
+  { "Landau",      kRed+1},
+  { "Flatte",      kRed+1},
+  { "LN",          kRed+1},
+  { "LE",          kBlue+1},
+  { "GE",          kGreen+1},
+  { "BkgPdf3p",    kGreen+1},
+  { "BkgPdf4p",    kRed+1},
+
+  { "NO",          kBlue+1},
+  { "CB",          kOrange+1},
+  { "Exp_1",       kMagenta+1},
+  { "Exp_2",       kRed+1},
+  { "Exp_3",       kGreen+2},
+  { "Exp_4",       kGreen+1},
+  { "Exp_5",       kYellow+1},
+  { "Exp_6",       kBlack},
+
+  { "bkg_pred",    kBlue+1},
+  { "data",        kRed+1},
+  { "main_bkg_CR", kGreen+1},
+  { "main_bkg_SR", kOrange+1},
+  { "main_bkg",    kAzure+7},
+  { "extra_bkg",   kOrange+1},
+  { "DY_CR",       kGreen-2},
+  { "DY_SR",       kOrange-2},
+  { "DY",          kOrange-2},
+  { "TTbar",       kOrange+10},
+  { "VV",          kGreen+2},
+  { "WW",          kGreen},
+  { "WZ",          kGreen+3},
+  { "ZZ",          kGreen-10},
+};
+
+
+
+class CreateRooWorkspace {
+
+public:
+  CreateRooWorkspace(std::string year, std::string collection, std::string channel, std::string histFolder);
+  ~CreateRooWorkspace();
+
+  void Process();
+  void SetEnv();
+  void LoadFiles();
+  void LoadHistos();
+  void PrepocessHistos();
+  void NormaliseData();
+  void DoRebin();
+  void InitializePDFs();
+  void CreateRooDataHist();
+  void DoFits();
+  void ImportToWorkspace();
+  void DoPlots();
+  void PlotBkgFit();
+  void PlotSignals();
+  void PlotSgPars();
+  void PlotControl();
+  void PlotTranferFunction();
+  void InputDatacards();
+  void CalculateSignalFittingRange(double mass, double& rangeLo, double& rangeHi, double& plotLo, double& plotHi, double& ymax);
+  inline bool isNominalFolder(std::string syst) { return (syst=="nominal" || syst=="PU_up" || syst=="PU_down");};
+  inline bool isNominalSyst(std::string syst) { return syst=="nominal";}; // TODO
+
+private:
+  std::string year, collection, channel, histFolder;
+  std::string user, Path_ANALYSIS, Path_NFS, Path_STORAGE, PrefixrootFile;
+  std::string workingDir, unique_name_complete, unique_name, filepath;
+  std::string SRname, CRname;
+
+  std::vector<std::string> SystNames = {"nominal", "JEC_up", "JEC_down", "JER_up", "JER_down", "PU_up", "PU_down"};
+  // std::vector<std::string> BkgNames = {"DY", "TTbar", "WZ", "WW", "ZZ"}; //TODO
+  std::vector<std::string> BkgNames = {"DY", "TTbar", "WZ","ZZ"};
+  std::vector<std::string> Modes = {"bkg_pred", "data", "main_bkg_CR", "main_bkg_SR", "DY_CR", "DY_SR"};
+
+  //TODO
+  // const std::unordered_map<int, int> colors = {{600, kRed}, {800, kGreen}, {1000, kViolet}, {1200, kBlue}, {1400, kBlack}, {1600, kOrange}, {1800, kAzure}, {2000, kSpring}, {2500, kPink},
+  // {3000, kRed}, {3500, kGreen}, {4000, kViolet}, {4500, kBlue}, {5000, kBlack}, {5500, kOrange}, {6000, kAzure}, {7000, kSpring}, {8000, kPink}};
+
+  std::string dataName, dataFileName;
+  std::string BkgName = "DY";
+  std::string FitSignal = "CB";
+
+  std::unique_ptr<RooRealVar> x_var;
+  std::unique_ptr<RooDataHist> data_obs;
+  std::unique_ptr<RooPlot> plotter;
+
+  std::unordered_map<std::string, std::unique_ptr<TH1F> > histo_map;
+  std::unordered_map<std::string, std::unordered_map<std::string, bool> > doFits_map;
+  std::unordered_map<std::string, std::unique_ptr<RooDataHist> > rooHist_map;
+  std::unordered_map<std::string, std::unordered_map<std::string, std::unique_ptr<RooAbsPdf> > > Fits_map;
+  std::unordered_map<std::string, std::unordered_map<std::string, std::unique_ptr<RooFitResult> > > FitRes_map;
+
+  std::unordered_map<std::string, std::vector<std::unique_ptr<RooRealVar>> > fitPars;
+  std::unordered_map<std::string, std::vector<double>> SgPars;
+  std::vector<std::string> NameSgPars = {"Masses","nevents", "nevents_err", "mean","sigma","alpha","k","mean_err","sigma_err","alpha_err","k_err","chi2","pvalue","fit_min", "fit_max"};
+
+  std::unordered_map<std::string, double> nEventsSignal;
+  std::unordered_map<std::string, double> fit_min, fit_max, plot_min, plot_max, y_max;
+
+  // TFile file_WS("WS.root","RECREATE");
+  std::ofstream DataCard, output, SignalProperties;
+  std::unique_ptr<RooWorkspace> ws;
+
+  // TODO
+  std::string studies="nominal";
+  bool isHbb = false;
+  bool fitCR = true;
+  bool doObs = false;
+
+
+  std::string Module, Histtype, HistName;
+
+  // bool dorebin = true;
+  bool dorebin = false;
+  bool doBinWidth = false;
+
+  bool doCheckPlots = true;
+  bool doBkgPlots = true;
+  bool doFtest = false;
+  bool doPlotRatio = true;
+
+  std::string plotting_mode = "pdf";
+  // std::string plotting_mode_2 = "eps";
+  std::string plotting_mode_2 = "";
+
+  TString nameYaxis = doBinWidth? "Events/bin" :"Events";
+  TString nameXaxis = "m(Z')";
+  TString nameRatioaxis = doPlotRatio?"Hist/Fit": "Pull";
+
+  TString extra_text = doFtest? "_Ftest_": "";
+
+  double x_lo     = 200;
+  double x_hi     = 10000;
+  double plot_lo  = 200;
+  double plot_hi  = 4000;
+  double plot_ylo = 1.1*1e-03;
+  double plot_yhi = 1e07;
+  // double x_lo     = 750;
+  // double x_hi     = 2700;
+  // double plot_lo  = 750;
+  // double plot_hi  = 2700;
+  // double fit_lo_turnOn = 580; // not used
+  // double fit_hi_tails = 3560; // not used
+  // double fit_lo   = 580;
+  // double fit_hi   = 3560;
+  double fit_lo   = 600;
+  double fit_hi   = 4000;
+  double pull_lo  = 800;
+  double pull_hi  = 4000;
+  // TODO CHECK THIS
+
+
+  // bool debug = false;
+  bool debug = true;
+
+
+
+  int rebin;
+  int bin;
+  int bin2;
+  std::vector<double> bins_Zprime_rebin;
+
+  double nEventsSR, xsec_ref_;
+
+
+};
