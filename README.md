@@ -89,7 +89,8 @@ TBA: add short instruction for each part
         - ZprimeCandidate ZprimeCandidate_dummy;
         - std::vector\<ZprimeCandidate\> ZprimeCandidate_dummy_vector;
     - Add in core/src/classes_def.xml:
-        - <class name="ZprimeCandidate"/>
+        - \<class name="ZprimeCandidate"/\>
+        - \<class name="std::vector\<ZprimeCandidate\>"/\>
 - Add VHResonances Folder:
     - git clone git@github.com:UHH2/VHResonances.git
     - cd VHResonances
