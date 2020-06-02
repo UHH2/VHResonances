@@ -149,7 +149,7 @@ inline double MassDepentdentCut_x2(double pt) { double x = PtToMass(pt); return 
 const double MassDepentdentCut_value_sqrt = -600; // Fit on Mass [0]+[2]*pow(x,[1]). pt = m/2
 inline double MassDepentdentCut_sqrt(double pt) { double x = PtToMass(pt); return 2.5e-03+5.6e+04*TMath::Power(x,-2.1e+00);}
 
-inline const char * const BoolToString(bool b) { return b ? "true" : "false";}
+inline const char* BoolToString(bool b) { return b ? "true" : "false";}
 
 enum taggers {NN_IsHiggs=1000, NN_IsQCD, NN_IsTop};
 
