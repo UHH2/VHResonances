@@ -23,10 +23,6 @@ class ModuleRunner(ModuleRunnerBase):
     def RunCommand(self,command="", isPython=False, **kwargs):
         cwd = os.getcwd()
         os.chdir(self.Path_ANALYSIS+"Analysis")
-        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/obj")
-        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/OtherPlots")
-        process = subprocess.Popen("make -j 20", shell=True)
-        process.wait()
         list_processes = []
         list_logfiles = []
         print "RunCommand:", command
@@ -36,15 +32,20 @@ class ModuleRunner(ModuleRunnerBase):
         else:
             if len(kwargs)>0:
                 i = 0
-                for year in self.Samples_dict.keys()+["RunII"]:
-                    for collection in self.Collections:
-                        for channel in self.Channels:
-                            for histFolder in kwargs["histFolders"]:
-                                list_processes.append(["./"+command,histFolder,channel+"channel",collection,year])
+                def LoopOver(arg, defaultList):
+                    if not arg in kwargs: return [""]
+                    else:
+                        if len(kwargs[arg])>1: return kwargs[arg]
+                        else: return defaultList
+                for year in LoopOver("years", self.Samples_dict.keys()+["RunII"]):
+                    for collection in LoopOver("Collections", self.Collections):
+                        for channel in LoopOver("Channels", self.Channels):
+                            for histFolder in LoopOver("histFolders", kwargs["histFolders"]):
+                                list_processes.append(["./"+command,histFolder,channel+"channel" if channel!="" else channel,collection,year])
                                 list_logfiles.append("log_"+str(i)+".txt")
                                 i +=1
-                # for i in list_processes:
-                #     print i
+                for i in list_processes:
+                    print i
                 # print "Number of processes", len(list_processes)
                 # parallelise(list_processes, 20,list_logfiles)
                 parallelise(list_processes, 20)
@@ -69,7 +70,11 @@ class ModuleRunner(ModuleRunnerBase):
         os.chdir(self.Path_ANALYSIS)
         process = subprocess.Popen("make -j 20", shell=True)
         process.wait()
-        os.chdir(cwd)
+        os.chdir(self.Path_ANALYSIS+"Analysis")
+        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/obj")
+        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/OtherPlots")
+        process = subprocess.Popen("make -j 20", shell=True)
+        process.wait()
 
     def SetModule(self,module, Collections=[], Channels=[], Systematics=[]):
         self.Module     = module
@@ -189,12 +194,12 @@ class ModuleRunner(ModuleRunnerBase):
                         #     decays = ["ToWW","Tobb","_extra"]
                         for decay in decays:
                             sample = sample_.replace(self.signal,self.signal+decay)
-                            print sample
+                            # print sample
                             mode = "MC" if "MC" in sample else "DATA"
                             filePrefix = self.PrefixrootFile+mode+"."
                             commonpath = self.ModuleStorage+"/"+middlePath
                             out = open(commonpath+sample+".xml", 'w')
-                            print commonpath+sample+".xml"
+                            # print commonpath+sample+".xml"
                             nComment = 0
                             for dir in self.Samples_dict[self.year][sample] if not self.signal in sample and self.Samples != self.Samples_Category[self.year] else [sample]:
                                 print "Search in", commonpath+"workdir_"+self.Module+"_"+dir+"/*root"
@@ -253,17 +258,109 @@ class ModuleRunner(ModuleRunnerBase):
         #     print i
         print "Number of processes", len(list_processes)
         parallelise(list_processes, 20)
-        print "Number of processes", len(list_processes_plots)
-        cwd = os.getcwd()
-        os.chdir(self.Path_SPlotter)
-        for proc in list_processes_plots:
-            process = subprocess.Popen(" ".join(proc), shell=True)
-            process.wait()
-        os.chdir(cwd)
+        # print "Number of processes", len(list_processes_plots)
+        # cwd = os.getcwd()
+        # os.chdir(self.Path_SPlotter)
+        # for proc in list_processes_plots:
+        #     process = subprocess.Popen(" ".join(proc), shell=True)
+        #     process.wait()
+        # os.chdir(cwd)
+
+    @timeit
+    def DoChecks(self):
+        check = False
+        check = True
+        list_toCheck = []
+        orig_stderr = sys.stderr
+        errname = os.getcwd()+"/err_"+self.year+".txt"
+        if check:
+            with open(errname, 'w') as f_err:
+                sys.stderr = f_err
+                self.CreateXml()
+                sys.stderr = orig_stderr
+        for collection in self.Collections:
+            for channel in self.Channels:
+                for syst in self.Systematics:
+                    middlePath = collection+"/"+channel+"channel/"+syst+"/"
+                    for sample_ in self.Samples_Category[self.year]:
+                        if all(not control in sample_+channel+collection for control in self.controls):
+                            continue
+                        sample = sample_.replace(self.signal,self.signal)
+                        mode = "MC" if "MC" in sample else "DATA"
+                        filePrefix = self.PrefixrootFile+mode+"."
+                        commonpath = self.ModuleStorage+"/"+middlePath
+                        xml = commonpath+sample+".xml"
+                        if "muonchannel" in xml and "SingleElectron" in xml: continue
+                        if "electronchannel" in xml and "SingleMuon" in xml: continue
+                        with open(xml) as out:
+                            lines = out.readlines()
+                            if len(lines)==0:
+                                print "Empty xml:", xml
+                            elif len(lines)==1:
+                                if "File Commented" in lines[0]:
+                                    print "No files found in:", xml
+                                else:
+                                    print "Unexpected error:", xml
+                            else:
+                                ncomment = -1
+                                if "File Commented" in lines[-1]: ncomment = int(lines[-1].split()[3])
+                                else: print "Unexpected error:", xml
+                                if ncomment>0 and ncomment==(len(lines)-1):
+                                    print "Found files ",ncomment,"out of ",len(lines)-1," in:", xml
+                    for sample_ in self.Samples_original[self.year]:
+                        if all(not control in sample_+channel+collection for control in self.controls):
+                            continue
+                        sample = sample_.replace(self.signal,self.signal)
+                        mode = "MC" if "MC" in sample else "DATA"
+                        filePrefix = self.PrefixrootFile+mode+"."
+                        path = self.Path_ANALYSIS+"/config/SubmittedJobs/"+self.year+"/"+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"
+                        for err in glob(path+sample+"_*.e*"):
+                            num = err.replace(path,"").split(".")[0].replace(sample+"_","")
+                            list_toCheck.append(sample)
+                            # print err
+                            # for x in glob(path+sample+".e*"+num):
+                            #     print "\t", x
+        print set(list_toCheck)
+        mylist = []
+        with open(errname, 'r') as f_err:
+            for l in f_err.readlines():
+                if "probably not closed, trying to recover" in l: mylist.append(l.split()[3])
+        print len(mylist)
+        # if not check: os.system("rm -fr "+errname)
+        # self.ReRunList(mylist)
+
+    @timeit
+    def ReRunList(self, mylist=[]):
+        Path_SFRAME = self.Path_SFRAME.replace(self.year+"/","") # TODO not nice!!!
+        list_processes = []
+        list_copy = []
+        for x in mylist:
+            x = x.replace("//", "/")
+            root = x.split("/")[-1]
+            workdir = x.replace(root,"").replace(self.Path_STORAGE,"")
+            number = root.split("_")[-1].replace(".root","")
+            newnumber = str(int(number)+1)
+            xml = self.Path_ANALYSIS+"config/SubmittedJobs/"+workdir+root.replace("uhh2.AnalysisModuleRunner.DATA.", "").replace("uhh2.AnalysisModuleRunner.MC.","").replace(number+".root", newnumber+".xml")
+            cmd = "mkdir -p "+Path_SFRAME+"/"+workdir
+            os.system(cmd)
+            list_processes.append(["sframe_main",xml])
+            list_copy.append(["mv", Path_SFRAME+"/"+workdir+"/"+root, x])
+
+        for x in list_processes:
+            print x
+        print len(list_processes)
+        parallelise(list_processes, 10)
+
+        for x in list_copy:
+            print x
+        print len(list_copy)
+
+        parallelise(list_copy, 10)
+
+
 
     @timeit
     def HowToSpeedCondor(self):
-        Samples = self.Samples_matching+self.Samples_Category[self.year]
         Samples = self.Samples
         timeList = {}
         nFileList = {}

@@ -18,24 +18,30 @@ YearVars["lumi_file"]   = { "2016": os.environ["CMSSW_BASE"]+"/src/UHH2/common/d
                             "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2018/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.root",
                             }
 
-def newNumber(year,sample,ConfigFile):
+def newNumber(year,sample,ConfigFile,syst):
     newNumber = 20
     if "DATA" in sample:
         if year=="2016":
             newNumber = 350
-            if any(x in sample for x in ["DATA_SingleMuon_RunG", "DATA_SingleElectron_RunC", "DATA_SingleMuon_RunH"]):
+            if any(x in sample for x in ["DATA_SingleMuon_RunF", "DATA_SingleMuon_RunG", "DATA_SingleMuon_RunH"]):
                 newNumber = 300
-            if any(x in sample for x in ["DATA_SingleElectron_RunE", "DATA_SingleElectron_RunD", "DATA_SingleElectron_RunF"]):
+            if any(x in sample for x in ["DATA_SingleElectron_RunC", "DATA_SingleElectron_RunD", "DATA_SingleElectron_RunF"]):
                 newNumber = 250
-            if any(x in sample for x in ["DATA_SingleElectron_RunB", "DATA_SingleElectron_RunG", "DATA_SingleElectron_RunH"]):
+            if any(x in sample for x in ["DATA_SingleElectron_RunE", "DATA_SingleElectron_RunG", "DATA_SingleElectron_RunH"]):
                 newNumber = 200
+            if any(x in sample for x in ["DATA_SingleElectron_RunB"]):
+                newNumber = 180
         if year=="2017":
-            newNumber = 350
-            if any(x in sample for x in ["DATA_SingleMuon_RunF", "DATA_SingleElectron_RunF", "DATA_SingleMuon_RunE"]):
+            newNumber = 340
+            if any(x in sample for x in ["DATA_SingleMuon_RunF"]):
+                newNumber = 280
+            if any(x in sample for x in ["DATA_SingleElectron_RunF", "DATA_SingleMuon_RunE"]):
                 newNumber = 300
             if any(x in sample for x in ["DATA_SingleElectron_RunD"]):
-                newNumber = 400
-            if any(x in sample for x in ["DATA_SingleMuon_RunB", "DATA_SingleElectron_RunB"]):
+                newNumber = 390
+            if any(x in sample for x in ["DATA_SingleMuon_RunB"]):
+                newNumber = 430
+            if any(x in sample for x in ["DATA_SingleElectron_RunB"]):
                 newNumber = 520
         if year=="2018":
             newNumber = 80
@@ -43,27 +49,29 @@ def newNumber(year,sample,ConfigFile):
                 newNumber = 150
     if "MC_DY" in sample:
         newNumber = 60
-        if any(x in sample for x in ["MC_DY_HT600to800_2016", "MC_DY_HT800to1200_2016", "MC_DY_HT800to1200_2017"]):
+        if any(x in sample for x in ["MC_DY_HT600to800_2016", "MC_DY_HT800to1200_2016", "MC_DY_HT800to1200_2017", "MC_DY_HT600to800_2017"]):
             newNumber = 70
-        if any(x in sample for x in ["MC_DY_HT600to800_2017", "MC_DY_HT400to600_2017"]):
+        if any(x in sample for x in ["MC_DY_HT400to600_2017"]):
             newNumber = 80
         if any(x in sample for x in ["MC_DY_HT400to600_2016", "MC_DY_HT400to600_2018"]):
             newNumber = 100
-        if any(x in sample for x in ["MC_DY_HT200to400_2018", "MC_DY_HT200to400_2017"]):
+        if any(x in sample for x in ["MC_DY_HT200to400_2017"]):
+            newNumber = 140
+        if any(x in sample for x in ["MC_DY_HT200to400_2018"]):
             newNumber = 155
         if any(x in sample for x in ["MC_DY_HT200to400_2016"]):
             newNumber = 200
         if any(x in sample for x in ["MC_DY_HT100to200_2017"]):
-            newNumber = 250
+            newNumber = 240
         if any(x in sample for x in ["MC_DY_HT100to200_2018"]):
             newNumber = 330
         if any(x in sample for x in ["MC_DY_HT100to200_2016"]):
-            newNumber = 400
+            newNumber = 300
     if "MC_TT" in sample:
         newNumber = 40 if year=="2016" else 200 if year=="2017" else 60
     if "MC_W" in sample:
         newNumber = 230
-        if any(x in sample for x in ["MC_WWTo2L2Nu_2016", "MC_WZTo1L3Nu_2016", "MC_WZTo3LNu_2016", "MC_WW_2017"]):
+        if any(x in sample for x in ["MC_WWTo2L2Nu_2016", "MC_WZTo1L3Nu_2016", "MC_WZTo3LNu_2016"]):
             newNumber = 300
         if any(x in sample for x in ["MC_WZ_2017"]):
             newNumber = 700
@@ -85,6 +93,8 @@ def newNumber(year,sample,ConfigFile):
         newNumber = 100
     if not "Preselection" in ConfigFile and not "SF" in ConfigFile:
         newNumber = 1 if "MC_DY" in sample else 1000
+    if syst!="nominal":
+        newNumber = int(0.9*newNumber)
     # if "2017" in ConfigFile:
     #     isFast = False
     #     isFast = True
@@ -148,7 +158,7 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     changes.append(["<!ENTITY", "CMSSW_BASE", "CMSSW_BASE", os.environ["CMSSW_BASE"]])
                     change_lines(path, filename, [el[0:2] for el in changes ], [el[2:3] for el in changes ], [el[3:4] for el in changes ])
                     changes.append(["<ConfigSGE", "Workdir", "workdir_"+outdir, "workdir_"+outdir+"_"+sample])
-                    changes.append(["<ConfigParse", 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile)+'"'])
+                    changes.append(["<ConfigParse", 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile,syst)+'"'])
                     changes.append(["<!ENTITY", "OUTDIR", outdir , outdir+"/"+folders])
                     if "Selection" in ConfigFile:
                         changes.append(["<!ENTITY", "SYSTEM", "Preselection/All/leptonchannel/nominal/" , "Preselection/"+folders])
@@ -176,6 +186,6 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     for var in YearVars:
                         changes.append(["<!ENTITY", var, 'defaultValue', YearVars[var][year]])
                     for syst_ in ["JER","JEC"]:
-                        if syst_ in syst:
-                            changes.append(["<!ENTITY", syst_+"smear_direction", '"nominal"', '"'+syst.replace(syst_+"_","")+'"' ])
+                        if syst_.lower() in syst.lower():
+                            changes.append(["<!ENTITY", syst_.lower()+"smear_direction", '"nominal"', '"'+syst.lower().replace(syst_.lower()+"_","")+'"' ])
                     change_lines(path, filename, [el[0:2] for el in changes ], [el[2:3] for el in changes ], [el[3:4] for el in changes ])

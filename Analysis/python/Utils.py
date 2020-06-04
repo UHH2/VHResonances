@@ -1,4 +1,7 @@
-import time
+import time, sys, os
+
+sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros/")
+from ModuleRunnerBase import *
 
 def prettydic(d, indent=8):
     space = max([0]+[len(str(x)) for x in d])+2

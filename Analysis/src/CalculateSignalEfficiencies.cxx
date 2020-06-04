@@ -5,7 +5,11 @@ double EfficiencyError(double count, double N)  { double eff = count/N; return T
 
 bool isCSRegion(std::string tag) {return (tag.find("SR")!=std::string::npos || tag.find("CR")!=std::string::npos); }
 
-void CalculateSignalEfficiencies() {
+void CalculateSignalEfficiencies(std::string histFolder) {
+
+  std::string user            = std::getenv("USER");
+  std::string Path_NFS        = "/nfs/dust/cms/user/"+user+"/";
+  std::string Path_STORAGE    = Path_NFS+"WorkingArea/File/Analysis/";
 
   std::string outdir = "./SignalEfficiencies/";
   std::string prefix = "uhh2.AnalysisModuleRunner.MC.";
@@ -37,7 +41,7 @@ void CalculateSignalEfficiencies() {
     for (std::string collection: collections) {
       for (std::string channel: channels) {
         for (std::string decaymode: decaymodes) {
-          std::string namePlot = decaymode+"_"+collection+"_"+channel+"_"+year;
+          std::string namePlot = decaymode+"_"+collection+"_"+channel+"_"+year+"_"+histFolder;
           TString namePlotShort = "Hto"+namePlot; namePlotShort.ReplaceAll("Puppi_","").ReplaceAll("muon","#mu-").ReplaceAll("electron","e-").ReplaceAll("lepton","l-").ReplaceAll("_"," ");
 
           bool isInc = decaymode=="Inc";
@@ -49,9 +53,6 @@ void CalculateSignalEfficiencies() {
 
           //TODO do we want these plots or the "sum_event_weights" inclusive?
 
-          std::string user            = std::getenv("USER");
-          std::string Path_NFS        = "/nfs/dust/cms/user/"+user+"/";
-          std::string Path_STORAGE    = Path_NFS+"WorkingArea/File/Analysis/";
           std::string PresectionStorePath = Path_STORAGE+year+"/Preselection/"+collection+"/"+channel+"/"+syst+"/";
           std::string SectionStorePath    = Path_STORAGE+year+"/Selection/"+collection+"/"+channel+"/"+syst+"/";
           std::string CSRStorePath        = Path_STORAGE+year+"/SignalRegion/"+collection+"/"+channel+"/"+syst+"/";
@@ -77,9 +78,9 @@ void CalculateSignalEfficiencies() {
           // Cuts.insert(std::pair<std::string, mypair_I>("7_Z' Reconstruction",                   mypair_I("ZprimeReco",                    kGreen+2)));
           Cuts.insert(std::pair<std::string, mypair_I>("7_Z' Selection",                        mypair_I("ZprimeSelection",               kAzure+1)));
           Cuts.insert(std::pair<std::string, mypair_I>("8_#it{p}_{T}^{#it{ll}}/m_{Z'} #geq 0.2",mypair_I("PTMassCut",                     kBlue+1)));
-          Cuts.insert(std::pair<std::string, mypair_I>("9_DeepBoosted",                         mypair_I("btag_DeepBoosted_H4qvsQCD_SR",  kViolet+1)));
-          Cuts.insert(std::pair<std::string, mypair_I>("00_H4qvsQCD_SR",                        mypair_I("btag_DeepBoosted_H4qvsQCD_SR",  kGreen+3)));
-          Cuts.insert(std::pair<std::string, mypair_I>("01_H4qvsQCD_CR",                        mypair_I("btag_DeepBoosted_H4qvsQCD_CR",  kGreen+1)));
+          Cuts.insert(std::pair<std::string, mypair_I>("9_DeepBoosted",                         mypair_I(histFolder+"_SR",  kViolet+1)));
+          Cuts.insert(std::pair<std::string, mypair_I>("00_H4qvsQCD_SR",                        mypair_I(histFolder+"_SR",  kGreen+3)));
+          Cuts.insert(std::pair<std::string, mypair_I>("01_H4qvsQCD_CR",                        mypair_I(histFolder+"_CR",  kGreen+1)));
           Cuts.insert(std::pair<std::string, mypair_I>("10_HbbvsQCD_SR",                        mypair_I("btag_DeepBoosted_HbbvsQCD_SR",  kViolet+1)));
           Cuts.insert(std::pair<std::string, mypair_I>("11_HbbvsQCD_CR",                        mypair_I("btag_DeepBoosted_HbbvsQCD_CR",  kMagenta+1)));
           Cuts.insert(std::pair<std::string, mypair_I>("20_tau42_SR",                           mypair_I("tau42_SR",                      kOrange+1)));
@@ -317,15 +318,15 @@ void CalculateSignalEfficiencies() {
   canv_ComparisonFinal->SetLogy(1);
   leg_ComparisonFinal = tdrLeg(0.40,0.68,0.89,0.89, 0.030, 42, kBlack);
   leg_ComparisonFinal->SetNColumns(2);
-  color = kRed+1;     lineStyle = kSolid;  namePlot = "WW_Puppi_muonchannel_RunII";     nameLeg = "HToWW #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kOrange+1;  lineStyle = kDashed; namePlot = "bb_Puppi_muonchannel_RunII";     nameLeg = "HTobb #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kBlue+1;    lineStyle = kSolid;  namePlot = "WW_Puppi_electronchannel_RunII"; nameLeg = "HToWW e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kViolet+1;  lineStyle = kDashed; namePlot = "bb_Puppi_electronchannel_RunII"; nameLeg = "HTobb e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kGreen+3;   lineStyle = kSolid;  namePlot = "WW_Puppi_leptonchannel_RunII";   nameLeg = "HToWW lep-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kGreen+1;   lineStyle = kDashed; namePlot = "bb_Puppi_leptonchannel_RunII";   nameLeg = "HTobb lep-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  leg_ComparisonFinal->Draw("same");
-  canv_ComparisonFinal->SaveAs((outdir+"Eff_ComparisonFinal_RunII.pdf").c_str());
 
+  color = kRed+1;     lineStyle = kSolid;  namePlot = "WW_Puppi_muonchannel_RunII_"+histFolder;     nameLeg = "HToWW #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kOrange+1;  lineStyle = kDashed; namePlot = "bb_Puppi_muonchannel_RunII_"+histFolder;     nameLeg = "HTobb #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kBlue+1;    lineStyle = kSolid;  namePlot = "WW_Puppi_electronchannel_RunII_"+histFolder; nameLeg = "HToWW e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kViolet+1;  lineStyle = kDashed; namePlot = "bb_Puppi_electronchannel_RunII_"+histFolder; nameLeg = "HTobb e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kGreen+3;   lineStyle = kSolid;  namePlot = "WW_Puppi_leptonchannel_RunII_"+histFolder;   nameLeg = "HToWW lep-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kGreen+1;   lineStyle = kDashed; namePlot = "bb_Puppi_leptonchannel_RunII_"+histFolder;   nameLeg = "HTobb lep-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  leg_ComparisonFinal->Draw("same");
+  canv_ComparisonFinal->SaveAs((outdir+"Eff_ComparisonFinal_RunII_"+histFolder+".pdf").c_str());
   // color = kOrange-2;  lineStyle = kSolid; namePlot = "Inc_Puppi_muonchannel_RunII"; nameLeg = "HToInc #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
 
   lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at("RunII").at("lumi_fb"));
@@ -333,20 +334,20 @@ void CalculateSignalEfficiencies() {
   canv_ComparisonFinal->SetLogy(1);
   leg_ComparisonFinal = tdrLeg(0.40,0.68,0.89,0.89, 0.025, 42, kBlack);
   leg_ComparisonFinal->SetNColumns(3);
-  color = kOrange+1;  lineStyle = kDashed;  namePlot = "Inc_Puppi_muonchannel_2016";      nameLeg = "2016  #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kOrange+1;  lineStyle = kDotted;  namePlot = "Inc_Puppi_electronchannel_2016";  nameLeg = "2016  e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kOrange+1;  lineStyle = kSolid;   namePlot = "Inc_Puppi_leptonchannel_2016";    nameLeg = "2016  l-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kGreen+1;   lineStyle = kDashed;  namePlot = "Inc_Puppi_muonchannel_2017";      nameLeg = "2017  #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kGreen+1;   lineStyle = kDotted;  namePlot = "Inc_Puppi_electronchannel_2017";  nameLeg = "2017  e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kGreen+1;   lineStyle = kSolid;   namePlot = "Inc_Puppi_leptonchannel_2017";    nameLeg = "2017  l-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kAzure+1;   lineStyle = kDashed;  namePlot = "Inc_Puppi_muonchannel_2018";      nameLeg = "2018  #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kAzure+1;   lineStyle = kDotted;  namePlot = "Inc_Puppi_electronchannel_2018";  nameLeg = "2018  e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kAzure+1;   lineStyle = kSolid;   namePlot = "Inc_Puppi_leptonchannel_2018";    nameLeg = "2018  l-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kRed+1;     lineStyle = kDashed;  namePlot = "Inc_Puppi_muonchannel_RunII";     nameLeg = "RunII #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kRed+1;     lineStyle = kDotted;  namePlot = "Inc_Puppi_electronchannel_RunII"; nameLeg = "RunII e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-  color = kRed+1;     lineStyle = kSolid;   namePlot = "Inc_Puppi_leptonchannel_RunII";   nameLeg = "RunII l-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kOrange+1;  lineStyle = kDashed;  namePlot = "Inc_Puppi_muonchannel_2016_"+histFolder;      nameLeg = "2016  #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kOrange+1;  lineStyle = kDotted;  namePlot = "Inc_Puppi_electronchannel_2016_"+histFolder;  nameLeg = "2016  e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kOrange+1;  lineStyle = kSolid;   namePlot = "Inc_Puppi_leptonchannel_2016_"+histFolder;    nameLeg = "2016  l-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kGreen+1;   lineStyle = kDashed;  namePlot = "Inc_Puppi_muonchannel_2017_"+histFolder;      nameLeg = "2017  #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kGreen+1;   lineStyle = kDotted;  namePlot = "Inc_Puppi_electronchannel_2017_"+histFolder;  nameLeg = "2017  e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kGreen+1;   lineStyle = kSolid;   namePlot = "Inc_Puppi_leptonchannel_2017_"+histFolder;    nameLeg = "2017  l-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kAzure+1;   lineStyle = kDashed;  namePlot = "Inc_Puppi_muonchannel_2018_"+histFolder;      nameLeg = "2018  #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kAzure+1;   lineStyle = kDotted;  namePlot = "Inc_Puppi_electronchannel_2018_"+histFolder;  nameLeg = "2018  e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kAzure+1;   lineStyle = kSolid;   namePlot = "Inc_Puppi_leptonchannel_2018_"+histFolder;    nameLeg = "2018  l-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kRed+1;     lineStyle = kDashed;  namePlot = "Inc_Puppi_muonchannel_RunII_"+histFolder;     nameLeg = "RunII #mu-channel"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kRed+1;     lineStyle = kDotted;  namePlot = "Inc_Puppi_electronchannel_RunII_"+histFolder; nameLeg = "RunII e-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+  color = kRed+1;     lineStyle = kSolid;   namePlot = "Inc_Puppi_leptonchannel_RunII_"+histFolder;   nameLeg = "RunII l-channel";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
   leg_ComparisonFinal->Draw("same");
-  canv_ComparisonFinal->SaveAs((outdir+"Eff_ComparisonFinal_Inc.pdf").c_str());
+  canv_ComparisonFinal->SaveAs((outdir+"Eff_ComparisonFinal_Inc_"+histFolder+".pdf").c_str());
   //
   // for (int i = 0; i < 18; i++) {
   //   double x,y;
@@ -355,12 +356,28 @@ void CalculateSignalEfficiencies() {
   //   Plot_ComparisonFinal["WW_Puppi_leptonchannel_RunII"]->GetPoint(i,x,y); std::cout << i << " " << x << " " << y << '\n';
   //   std::cout << '\n';
   // }
-
 }
 
 
-int main() {
+int main(int argc, char** argv){
   gSystem->Exec("mkdir -p ./SignalEfficiencies");
-  CalculateSignalEfficiencies();
+
+  std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDptdep", "btag_DeepBoosted_H4qvsQCDp2",
+  "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDpt1000", "btag_DeepBoosted_H4qvsQCDpt1000p2", "btag_DeepBoosted_H4qvsQCDpt1000p02",
+  "btag_DeepBoosted_H4qvsQCDptdep_x3", "btag_DeepBoosted_H4qvsQCDptdep_x2x3", "btag_DeepBoosted_H4qvsQCDptdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x3",
+  "btag_DeepBoosted_H4qvsQCDmassdep2_x3", "btag_DeepBoosted_H4qvsQCDmassdep_x2x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x2" };
+
+  if (argc>1) {
+    std::string histFolder;
+    for (int i = 1; i < argc; i++) {
+      if (std::find(histFolders.begin(), histFolders.end(), argv[i]) != histFolders.end() ) histFolder = argv[i];
+    }
+    std::cout << histFolder << '\n';
+    CalculateSignalEfficiencies(histFolder);
+
+  } else {
+    std::cout << "more " << '\n';
+    for (std::string histFolder: histFolders) CalculateSignalEfficiencies(histFolder);
+  }
   return 0;
 }
