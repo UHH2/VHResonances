@@ -4,7 +4,11 @@
 double GetRange(TH1F* h, double x) { return h->GetXaxis()->GetBinLowEdge(h->FindBin(x)); }
 
 double CalculateIntegral(TH1F* h, double min, double max, bool doBinWidth) { return h->Integral(h->FindBin(min),h->FindBin(max),doBinWidth?"width":"");}
-double CalculateFractionArea(TH1F* h, double min, double max, double x_min, double x_max, bool doBinWidth) { return CalculateIntegral(h, min, max, doBinWidth)/CalculateIntegral(h, x_min, x_max, doBinWidth);}
+
+double CalculateFractionAreaPDF(RooAbsPdf* PDF, RooRealVar x_var, double fit_lo, double fit_hi) {
+  x_var.setRange("fitting", fit_lo, fit_hi);
+  return ((RooAbsReal*)(PDF)->createIntegral(x_var, RooFit::NormSet(x_var), RooFit::Range("fitting")))->getVal();
+}
 
 double DoFTest(double chi2_1, double chi2_2, double npar_1, double npar_2, double n) {return 1. - TMath::FDistI(((chi2_1-chi2_2)/(npar_2-npar_1))/(chi2_2/(n-npar_2-1)), npar_2-npar_1, n-npar_2); }
 
@@ -67,24 +71,24 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
 
   if ((histFolder.find("ptdep")!=std::string::npos || histFolder.find("massdep")!=std::string::npos)) ymax *= 6;
 
+  std::string hname = GetSgName(mass);
+  rangeLo = GetRange(histo_map[hname].get(), rangeLo);
+  rangeHi = GetRange(histo_map[hname].get(), rangeHi);
+  plotLo  = GetRange(histo_map[hname].get(), plotLo);
+  plotHi  = GetRange(histo_map[hname].get(), plotHi);
 
-  rangeLo = GetRange(histo_map[GetSgName(mass)].get(), rangeLo);
-  rangeHi = GetRange(histo_map[GetSgName(mass)].get(), rangeHi);
-  plotLo  = GetRange(histo_map[GetSgName(mass)].get(), plotLo);
-  plotHi  = GetRange(histo_map[GetSgName(mass)].get(), plotHi);
+  // rangeLo = GetRange(histo_map[hname].get(), 0.8*mass-88);
+  // rangeHi = GetRange(histo_map[hname].get(), 1.1*mass+18);
 
-  // rangeLo = GetRange(histo_map[GetSgName(mass)].get(), 0.8*mass-88);
-  // rangeHi = GetRange(histo_map[GetSgName(mass)].get(), 1.1*mass+18);
+  // rangeLo = GetRange(histo_map[hname].get(), 0.8*mass-60);
+  // rangeHi = GetRange(histo_map[hname].get(), 1.1*mass+44);
 
-  // rangeLo = GetRange(histo_map[GetSgName(mass)].get(), 0.8*mass-60);
-  // rangeHi = GetRange(histo_map[GetSgName(mass)].get(), 1.1*mass+44);
-
-  // rangeLo = GetRange(histo_map[GetSgName(mass)].get(), 0.8*mass-103);
-  // rangeHi = GetRange(histo_map[GetSgName(mass)].get(), 1.1*mass+18);
+  // rangeLo = GetRange(histo_map[hname].get(), 0.8*mass-103);
+  // rangeHi = GetRange(histo_map[hname].get(), 1.1*mass+18);
 
   // 2016 ele
-  // if (year=="2016" && channel=="electronchannel") rangeLo = GetRange(histo_map[GetSgName(mass)].get(), 0.8*mass-88);
-  // if (year=="2016" && channel=="electronchannel") rangeHi = GetRange(histo_map[GetSgName(mass)].get(), 1.1*mass+18);
+  // if (year=="2016" && channel=="electronchannel") rangeLo = GetRange(histo_map[hname].get(), 0.8*mass-88);
+  // if (year=="2016" && channel=="electronchannel") rangeHi = GetRange(histo_map[hname].get(), 1.1*mass+18);
   //   fit_max p0 = 43.636 +- 31.361
   // fit_max p1 = 1.086 +- 0.008
   // fit_min p0 = -60.489 +- 26.919
@@ -97,7 +101,10 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
 
 }
 
-std::string GetSgName(int mass) { return "M"+std::to_string(mass); }
+std::string GetSgName(int mass, std::string syst) {
+  if (syst=="nominal") return "M"+std::to_string(mass);
+  else return "M"+std::to_string(mass)+"_"+syst;
+}
 
 
 CreateRooWorkspace::CreateRooWorkspace(std::string year_, std::string collection_, std::string channel_, std::string histFolder_) : year(year_), collection(collection_), channel(channel_), histFolder(histFolder_) {
@@ -155,11 +162,12 @@ void CreateRooWorkspace::SetEnv() {
   // HistName  = "Zprime_mass";
   // HistName  = "Zprime_mass_rebin1";
   // HistName  = "Zprime_mass_rebin2";
-  HistName  = "Zprime_mass_rebin30"; // TODO
+  HistName  = "Zprime_mass_rebin30";
 
 
-  unique_name_complete = year+"_"+collection+"_"+channel+"_"+histFolder;
-  unique_name = "_"+year+"_"+collection+"_"+channel;
+  unique_name = "_"+channel+"_"+year;
+  unique_name = TString(unique_name).ReplaceAll("channel","");
+  unique_name_complete = unique_name.substr(1)+"_"+histFolder;
   filepath    = Path_STORAGE+year+"/"+Module+"/"+collection+"/"+channel+"/nominal/";
 
 
@@ -167,7 +175,7 @@ void CreateRooWorkspace::SetEnv() {
   dataFileName = PrefixrootFile+"DATA."+dataName+"_"+year+"_noTree.root";
 
   x_var.reset(new RooRealVar("x_var", "m_{Zprime} (GeV)", x_lo, x_hi));
-  ws.reset(new RooWorkspace((channel+"_"+year).c_str()));
+  ws.reset(new RooWorkspace((unique_name.substr(1)).c_str()));
   DataCard.open (workingDir+"datacards/OutputFit_"+histFolder+".txt");
   DataCard << "=== RooFit data fit result to be entered in datacard === " << std::endl;
   if (doFtest) output.open(workingDir+"datacards/output_"+year+"_"+histFolder+".txt");
@@ -175,6 +183,9 @@ void CreateRooWorkspace::SetEnv() {
 
 
 
+  nameXaxis = "m(Z')";
+  nameYaxis = doBinWidth? "Events/bin" :"Events";
+  nameRatioaxis = doPlotRatio?"Hist/Fit": "Pull";
 
   // rebin = 30;
   rebin = 0;
@@ -258,45 +269,21 @@ void CreateRooWorkspace::LoadFiles() {
       }
       histo_map["VV_"+reg]->Add(histo_map[bkg+"_"+reg].get());
     }
-    // TODO
-    // for (auto syst: SystNames) {
-    //   TString fname = filepath+PrefixrootFile+"MC.MC_"+bkg+"_"+year+"_noTree.root";
-    //   fname = fname.ReplaceAll("nominal",syst);
-    //   if (debug) std::cout << "Opening\t" << fname << '\n';
-    //   f_map[bkg+syst] = new TFile(fname);
-    // }
   }
 
-  for (const int & mass : MassPoints) {
+  for (auto syst: SystNames) {
+    for (const int & mass : MassPoints) {
 
-    std::string SgName = GetSgName(mass);
-    std::string fname = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+SgName+"_"+year+"_noTree.root";
-    if (debug) std::cout << "Opening\t" << fname << '\n';
-    f_map[SgName].reset(new TFile(fname.c_str()));
-    // histo_map[SgName] = (TH1F*)f_map[SgName]->Get(SRname.c_str());
-    histo_map[SgName].reset((TH1F*)((TH1F*)f_map[SgName]->Get((SRname).c_str()))->Clone((SgName+" SR").c_str()));
-    // TODO
-    // for (auto syst: SystNames) {
-    //   TString fname = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+SgName+"_"+year+"_noTree.root";
-    //   fname = fname.ReplaceAll("nominal",syst);
-    // if (debug) std::cout << "Opening\t" << fname << '\n';
-    //
-    //   histo_map[SgName+syst]=(TH1F*)TFile(fname).Get(SRname.c_str());
-    //   std::cout << "FIND ME " << histo_map[SgName+syst] << '\n';
-    //   // histo_map[SgName+syst]->SetDirectory(0);
-    // }
-
-
-    // if (isNominalFolder) Histtype  += "_"+syst;
-    //
-    // SRname = Histtype+"_HWW"+histFolder+"_SR/"+HistName; // WE DON'T WANT THE BR INVOLVED
-    // SRname = Histtype+"_"+histFolder+"_SR/"+HistName;
-    // SRname = Histtype+"_"+histFolder+"_SR/"+HistName;
-    // CRname = Histtype+"_"+histFolder+"_CR/"+HistName;
-    //
-    // if (isNominalFolder) SRname = Histtype+histFolder+"_SR/"+HistName;
-    // if (isNominalFolder) SRname = Histtype+histFolder+"_SR/"+HistName;
-    // if (isNominalFolder) CRname = Histtype+histFolder+"_CR/"+HistName;
+      std::string SgName = "M"+std::to_string(mass);
+      std::string fname  = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+SgName+"_"+year+"_noTree.root";
+      std::string hmname = GetSgName(mass, syst);
+      std::string hname  = SRname;
+      if (!isNominalFolder(syst)) fname = TString(fname).ReplaceAll("nominal",syst);
+      else if (!isNominalSyst(syst)) hname = TString(hname).ReplaceAll(Histtype,Histtype+"_"+syst);
+      if (debug) std::cout << "Opening\t" << fname << " " << hmname << " " << hname << '\n';
+      f_map[hmname].reset(new TFile(fname.c_str()));
+      histo_map[hmname].reset((TH1F*)((TH1F*)f_map[hmname]->Get((hname).c_str()))->Clone((hmname+" SR").c_str()));
+    }
   }
 
   histo_map["norm"].reset((TH1F*)((TH1F*)f_map["data"]->Get((SRname).c_str()))->Clone("data: data SR"));
@@ -367,7 +354,7 @@ void CreateRooWorkspace::PrepocessHistos() {
 
 
   // Normalize signal to arbitraty xsec.
-  for (const int & mass : MassPoints) histo_map[GetSgName(mass)]->Scale(xsec_ref_);
+  for (auto syst: SystNames) { for (const int & mass : MassPoints) { histo_map[GetSgName(mass,syst)]->Scale(xsec_ref_); } }
 
 }
 
@@ -383,11 +370,11 @@ void CreateRooWorkspace::NormaliseData() {
   # ########  ##     ##    ##    ##     ##           #######  ########   ######
   */
 
-  // Normalize h_MC_SR to h_Data_SR pretending it's data but has shape of bkg_pred in SR TODO
+  // Normalize h_MC_SR to h_Data_SR pretending it's data but has shape of bkg_pred in SR
   nEventsSR  = CalculateIntegral(histo_map["norm"].get(),fit_lo,fit_hi,doBinWidth);
   if (!doObs) {
+    // Normalization is taken such that it matches in the fitting range
     histo_map["data"]->Scale(nEventsSR/CalculateIntegral(histo_map["data"].get(),fit_lo,fit_hi,doBinWidth));
-    // histo_map["data"]->Scale(1./CalculateFractionArea(histo_map["data"],fit_lo,fit_hi, x_lo, x_hi,doBinWidth));
     histo_map["data"]->SetName((std::string(histo_map["data"]->GetName())+"*nEventsSR").c_str());
   }
 
@@ -401,7 +388,7 @@ void CreateRooWorkspace::NormaliseData() {
     std::cout << "----------------------------------------" << std::endl;
   }
 
-  DataCard << BkgName+" Background number of events = " << nEventsSR << std::endl;
+  DataCard << " Background number of events = " << nEventsSR << std::endl;
 
 }
 
@@ -435,7 +422,7 @@ void CreateRooWorkspace::DoRebin() {
   }
   RooBinning binningFitting(Nbins, xmin, xmax, "rebin");
   if (debug) std::cout << "binning fitting " << Nbins << " " << xmin << " " << xmax << binningFitting << '\n';
-  x_var->setBinning(binningFitting);
+  x_var->setBinning(binningFitting);//TODO also when no rebin?
 
   for (int i=0; i<histo_map["bkg_pred"]->GetNbinsX()+1; ++i){
     if (histo_map["bkg_pred"]->GetXaxis()->GetBinLowEdge(i)>=x_lo){
@@ -458,106 +445,107 @@ void CreateRooWorkspace::DoRebin() {
 void CreateRooWorkspace::InitializePDFs() {
   /*
   # #### ##    ## #### ######## ####    ###    ##       #### ######## ########    ########  ########  ########  ######
-  #  ##  ###   ##  ##       ##   ##    ## ##   ##        ##       ##  ##          ##     ## ##     ## ##       ##    ##
-  #  ##  ####  ##  ##      ##    ##   ##   ##  ##        ##      ##   ##          ##     ## ##     ## ##       ##
+  #  ##  ###   ##  ##     ##     ##    ## ##   ##        ##       ##  ##          ##     ## ##     ## ##       ##    ##
+  #  ##  ####  ##  ##     ##     ##   ##   ##  ##        ##      ##   ##          ##     ## ##     ## ##       ##
   #  ##  ## ## ##  ##     ##     ##  ##     ## ##        ##     ##    ######      ########  ##     ## ######    ######
-  #  ##  ##  ####  ##    ##      ##  ######### ##        ##    ##     ##          ##        ##     ## ##             ##
-  #  ##  ##   ###  ##   ##       ##  ##     ## ##        ##   ##      ##          ##        ##     ## ##       ##    ##
-  # #### ##    ## #### ######## #### ##     ## ######## #### ######## ########    ##        ########  ##        ######
+  #  ##  ##  ####  ##     ##     ##  ######### ##        ##    ##     ##          ##        ##     ## ##             ##
+  #  ##  ##   ###  ##     ##     ##  ##     ## ##        ##   ##      ##          ##        ##     ## ##       ##    ##
+  # #### ##    ## ####    ##    #### ##     ## ######## #### ######## ########    ##        ########  ##        ######
   */
 
-  std::string FitName, ParName;
+  std::string FitName;
 
-  for (const int & mass : MassPoints) {
-    FitName = GetSgName(mass);
-    ParName = "sg"+unique_name+FitName;
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_p0").c_str(), (ParName+"_p0").c_str(), mass, mass*0.8, mass*1.2));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_p1").c_str(), (ParName+"_p1").c_str(), (mass>3000)? 150: 30, (mass>3000)? 120: 10., (mass>3000)? 400:110.));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_p2").c_str(), (ParName+"_p2").c_str(), 1, -10, 10));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_p3").c_str(), (ParName+"_p3").c_str(), 0.1, -10, 10));
-    Fits_map[FitName]["Gauss"].reset(new RooGaussian(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
-    Fits_map[FitName]["CB"].reset(new RooCBShape(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+  for (auto syst: SystNames) {
+    for (const int & mass : MassPoints) {
+      FitName = GetSgName(mass,syst);
+      std::string ParName = "_"+FitName+unique_name;
+      fitPars[FitName].emplace_back(new RooRealVar(("sg_p0"+ParName).c_str(), ("sg_p0_"+ParName).c_str(), mass, mass*0.8, mass*1.2));
+      fitPars[FitName].emplace_back(new RooRealVar(("sg_p1"+ParName).c_str(), ("sg_p1_"+ParName).c_str(), (mass>3000)? 150: 30, (mass>3000)? 120: 10., (mass>3000)? 400:110.));
+      fitPars[FitName].emplace_back(new RooRealVar(("sg_p2"+ParName).c_str(), ("sg_p2_"+ParName).c_str(), 1, -10, 10));
+      fitPars[FitName].emplace_back(new RooRealVar(("sg_p3"+ParName).c_str(), ("sg_p3_"+ParName).c_str(), 0.1, -10, 10));
+      Fits_map[FitName]["Gauss"].reset(new RooGaussian(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
+      Fits_map[FitName]["CB"].reset(new RooCBShape(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+    }
   }
 
 
   for (auto mode: Modes) {
-    ParName = mode+unique_name;
 
     // Old functions
-    // FitName = mode+"NO";
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Novo_p1").c_str(), (ParName+"_Novo_p1").c_str(),  500, 200,  1000.));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Novo_p2").c_str(), (ParName+"_Novo_p2").c_str(),  100,  10,  200.));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Novo_p3").c_str(), (ParName+"_Novo_p3").c_str(), -0.6,  -2,  2. ));
-    // Fits_map[mode]["NO"].reset(new RooNovosibirsk((ParName+"_NO").c_str(),(ParName+"_NO").c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
+    // FitName = mode+"_NO";
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_Novo_p1"+unique_name).c_str(), (mode+"_Novo_p1"+unique_name).c_str(),  500, 200,  1000.));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_Novo_p2"+unique_name).c_str(), (mode+"_Novo_p2"+unique_name).c_str(),  100,  10,  200.));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_Novo_p3"+unique_name).c_str(), (mode+"_Novo_p3"+unique_name).c_str(), -0.6,  -2,  2. ));
+    // Fits_map[mode]["NO"].reset(new RooNovosibirsk((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
 
     //TODO To be put in the old functions
-    FitName = mode+"CB";
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_CB_p1").c_str(), (ParName+"_CB_p1").c_str(), +1,   0,   10));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_CB_p2").c_str(), (ParName+"_CB_p2").c_str(), +10,  0,   100));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_CB_p3").c_str(), (ParName+"_CB_p3").c_str(), +500, 100, 1000));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_CB_p4").c_str(), (ParName+"_CB_p4").c_str(), +100, 10,  500));
-    Fits_map[mode]["CB"].reset(new RevCrystalBall((ParName+"_CB").c_str(), (ParName+"_CB").c_str(), *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
-    FitName = mode+"Exp_1";
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_1_p1").c_str(), (ParName+"_Exp_1_p1").c_str(), -4., -100, 100));
-    Fits_map[mode]["Exp_1"].reset(new PolinomialExponent_1p((ParName+"_Exp_1").c_str(),(ParName+"_Exp_1").c_str(),*x_var, *fitPars[FitName][0]));
+    FitName = mode+"_CB";
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_CB_p1"+unique_name).c_str(), (mode+"_CB_p1"+unique_name).c_str(), +1,   0,   10));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_CB_p2"+unique_name).c_str(), (mode+"_CB_p2"+unique_name).c_str(), +10,  0,   100));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_CB_p3"+unique_name).c_str(), (mode+"_CB_p3"+unique_name).c_str(), +500, 100, 1000));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_CB_p4"+unique_name).c_str(), (mode+"_CB_p4"+unique_name).c_str(), +100, 10,  500));
+    Fits_map[mode]["CB"].reset(new RevCrystalBall((FitName+unique_name).c_str(), (FitName+unique_name).c_str(), *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
 
+    FitName = mode+"_Exp_1";
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_1_p1"+unique_name).c_str(), (mode+"_Exp_1_p1"+unique_name).c_str(), -4., -100, 100));
+    Fits_map[mode]["Exp_1"].reset(new PolinomialExponent_1p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0]));
 
-    FitName = mode+"Exp_2";
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_2_p1").c_str(), (ParName+"_Exp_2_p1").c_str(), -4., -100, 100));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_2_p2").c_str(), (ParName+"_Exp_2_p2").c_str(), 0.4, -100, 100));
-    Fits_map[mode]["Exp_2"].reset(new PolinomialExponent_2p((ParName+"_Exp_2").c_str(),(ParName+"_Exp_2").c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
+    FitName = mode+"_Exp_2";
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p1"+unique_name).c_str(), (mode+"_Exp_2_p1"+unique_name).c_str(), -4., -100, 100));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p2"+unique_name).c_str(), (mode+"_Exp_2_p2"+unique_name).c_str(), 0.4, -100, 100));
+    Fits_map[mode]["Exp_2"].reset(new PolinomialExponent_2p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
 
-    FitName = mode+"Exp_3";
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_3_p1").c_str(), (ParName+"_Exp_3_p1").c_str(), -4., -100, 100));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_3_p2").c_str(), (ParName+"_Exp_3_p2").c_str(), 0.4, -100, 100));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_3_p3").c_str(), (ParName+"_Exp_3_p3").c_str(), -0.1, -100, 100));
-    Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((ParName+"_Exp_3").c_str(),(ParName+"_Exp_3").c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
+    FitName = mode+"_Exp_3";
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p1"+unique_name).c_str(), (mode+"_Exp_3_p1"+unique_name).c_str(), -4., -100, 100));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p2"+unique_name).c_str(), (mode+"_Exp_3_p2"+unique_name).c_str(), 0.4, -100, 100));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p3"+unique_name).c_str(), (mode+"_Exp_3_p3"+unique_name).c_str(), -0.1, -100, 100));
+    Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
 
-    FitName = mode+"Exp_4";
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_4_p1").c_str(), (ParName+"_Exp_4_p1").c_str(), 4., -100, 100));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_4_p2").c_str(), (ParName+"_Exp_4_p2").c_str(), -10, -100,  10));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_4_p3").c_str(), (ParName+"_Exp_4_p3").c_str(), 4, -100, 100));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_4_p4").c_str(), (ParName+"_Exp_4_p4").c_str(), -0.4, -100, 100));
-    Fits_map[mode]["Exp_4"].reset(new PolinomialExponent_4p((ParName+"_Exp_4").c_str(),(ParName+"_Exp_4").c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+    FitName = mode+"_Exp_4";
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_4_p1"+unique_name).c_str(), (mode+"_Exp_4_p1"+unique_name).c_str(), 4., -100, 100));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_4_p2"+unique_name).c_str(), (mode+"_Exp_4_p2"+unique_name).c_str(), -10, -100,  10));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_4_p3"+unique_name).c_str(), (mode+"_Exp_4_p3"+unique_name).c_str(), 4, -100, 100));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_4_p4"+unique_name).c_str(), (mode+"_Exp_4_p4"+unique_name).c_str(), -0.4, -100, 100));
+    Fits_map[mode]["Exp_4"].reset(new PolinomialExponent_4p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
 
-    FitName = mode+"Exp_5";
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_5_p1").c_str(), (ParName+"_Exp_5_p1").c_str(), -8.46, -9.00, -8.00));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_5_p2").c_str(), (ParName+"_Exp_5_p2").c_str(),  7.75,  7.00,  9.00));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_5_p3").c_str(), (ParName+"_Exp_5_p3").c_str(), -7.45, -8.00, -6.00));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_5_p4").c_str(), (ParName+"_Exp_5_p4").c_str(),  3.35,  3.00,  4.00));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_5_p5").c_str(), (ParName+"_Exp_5_p5").c_str(), -5.37, -6.00, -4.00));
-    Fits_map[mode]["Exp_5"].reset(new PolinomialExponent_5p((ParName+"_Exp_5").c_str(),(ParName+"_Exp_5").c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3], *fitPars[FitName][4]));
+    FitName = mode+"_Exp_5";
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_5_p1"+unique_name).c_str(), (mode+"_Exp_5_p1"+unique_name).c_str(), -8.46, -9.00, -8.00));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_5_p2"+unique_name).c_str(), (mode+"_Exp_5_p2"+unique_name).c_str(),  7.75,  7.00,  9.00));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_5_p3"+unique_name).c_str(), (mode+"_Exp_5_p3"+unique_name).c_str(), -7.45, -8.00, -6.00));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_5_p4"+unique_name).c_str(), (mode+"_Exp_5_p4"+unique_name).c_str(),  3.35,  3.00,  4.00));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_5_p5"+unique_name).c_str(), (mode+"_Exp_5_p5"+unique_name).c_str(), -5.37, -6.00, -4.00));
+    Fits_map[mode]["Exp_5"].reset(new PolinomialExponent_5p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3], *fitPars[FitName][4]));
 
-    FitName = mode+"Exp_6";
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_6_p1").c_str(), (ParName+"_Exp_6_p1").c_str(), -3.68, -4.0, -3.0 ));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_6_p2").c_str(), (ParName+"_Exp_6_p2").c_str(), -1.57, -2.0, -1.0 ));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_6_p3").c_str(), (ParName+"_Exp_6_p3").c_str(), +1.56, +1.0, +2.0 ));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_6_p4").c_str(), (ParName+"_Exp_6_p4").c_str(), -1.14, -1.5, -1.0 ));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_6_p5").c_str(), (ParName+"_Exp_6_p5").c_str(), +5.29, +5.0, +5.5 ));
-    fitPars[FitName].emplace_back(new RooRealVar((ParName+"_Exp_6_p6").c_str(), (ParName+"_Exp_6_p6").c_str(), -7.05, -9.5, -9.0 ));
-    Fits_map[mode]["Exp_6"].reset(new PolinomialExponent_6p((ParName+"_Exp_6").c_str(),(ParName+"_Exp_6").c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3], *fitPars[FitName][4], *fitPars[FitName][5]));
+    FitName = mode+"_Exp_6";
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_6_p1"+unique_name).c_str(), (mode+"_Exp_6_p1"+unique_name).c_str(), -3.68, -4.0, -3.0 ));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_6_p2"+unique_name).c_str(), (mode+"_Exp_6_p2"+unique_name).c_str(), -1.57, -2.0, -1.0 ));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_6_p3"+unique_name).c_str(), (mode+"_Exp_6_p3"+unique_name).c_str(), +1.56, +1.0, +2.0 ));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_6_p4"+unique_name).c_str(), (mode+"_Exp_6_p4"+unique_name).c_str(), -1.14, -1.5, -1.0 ));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_6_p5"+unique_name).c_str(), (mode+"_Exp_6_p5"+unique_name).c_str(), +5.29, +5.0, +5.5 ));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_6_p6"+unique_name).c_str(), (mode+"_Exp_6_p6"+unique_name).c_str(), -7.05, -9.5, -9.0 ));
+    Fits_map[mode]["Exp_6"].reset(new PolinomialExponent_6p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3], *fitPars[FitName][4], *fitPars[FitName][5]));
 
     // Not fitting functions
-    // FitName = mode+"BkgPdf4p";
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf4p_p1").c_str(), (ParName+"_BkgPdf4p_p1").c_str(), +2.0, +2.0, +4.0));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf4p_p2").c_str(), (ParName+"_BkgPdf4p_p2").c_str(), +4.2, +3.0, +5.0));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf4p_p3").c_str(), (ParName+"_BkgPdf4p_p3").c_str(), +1.4, +0.5, +2.0));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf4p_p4").c_str(), (ParName+"_BkgPdf4p_p4").c_str(), -1.0, -2.0, -0.5));
-    // Fits_map[mode]["BkgPdf4p"].reset(new BkgPdf4p((ParName+"_BkgPdf4p").c_str(),(ParName+"_BkgPdf4p").c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+    // FitName = mode+"_BkgPdf4p";
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf4p_p1"+unique_name).c_str(), (mode+"_BkgPdf4p_p1"+unique_name).c_str(), +2.0, +2.0, +4.0));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf4p_p2"+unique_name).c_str(), (mode+"_BkgPdf4p_p2"+unique_name).c_str(), +4.2, +3.0, +5.0));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf4p_p3"+unique_name).c_str(), (mode+"_BkgPdf4p_p3"+unique_name).c_str(), +1.4, +0.5, +2.0));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf4p_p4"+unique_name).c_str(), (mode+"_BkgPdf4p_p4"+unique_name).c_str(), -1.0, -2.0, -0.5));
+    // Fits_map[mode]["BkgPdf4p"].reset(new BkgPdf4p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
     //
-    // FitName = mode+"BkgPdf3p";
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf3p_p1").c_str(), (ParName+"_BkgPdf3p_p1").c_str(), -10., -11., -9.0));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf3p_p2").c_str(), (ParName+"_BkgPdf3p_p2").c_str(), +7.0, +6.0, +8.0));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf3p_p3").c_str(), (ParName+"_BkgPdf3p_p3").c_str(), +3.7, +3.0, +4.0));
+    // FitName = mode+"_BkgPdf3p";
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p1"+unique_name).c_str(), (mode+"_BkgPdf3p_p1"+unique_name).c_str(), -10., -11., -9.0));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p2"+unique_name).c_str(), (mode+"_BkgPdf3p_p2"+unique_name).c_str(), +7.0, +6.0, +8.0));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p3"+unique_name).c_str(), (mode+"_BkgPdf3p_p3"+unique_name).c_str(), +3.7, +3.0, +4.0));
     //
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf3p_p1").c_str(), (ParName+"_BkgPdf3p_p1").c_str(), -13.2, -1000, 1000));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf3p_p2").c_str(), (ParName+"_BkgPdf3p_p2").c_str(), +9.1, -1000, 1000));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf3p_p3").c_str(), (ParName+"_BkgPdf3p_p3").c_str(), +2.5, -100, 100));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p1"+unique_name).c_str(), (mode+"_BkgPdf3p_p1"+unique_name).c_str(), -13.2, -1000, 1000));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p2"+unique_name).c_str(), (mode+"_BkgPdf3p_p2"+unique_name).c_str(), +9.1, -1000, 1000));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p3"+unique_name).c_str(), (mode+"_BkgPdf3p_p3"+unique_name).c_str(), +2.5, -100, 100));
     //
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf3p_p1").c_str(), (ParName+"_BkgPdf3p_p1").c_str(), -4.3, -5.3, -3.3));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf3p_p2").c_str(), (ParName+"_BkgPdf3p_p2").c_str(), +5.7, +4.7, +7.7));
-    // fitPars[FitName].emplace_back(new RooRealVar((ParName+"_BkgPdf3p_p3").c_str(), (ParName+"_BkgPdf3p_p3").c_str(), +2.5, +1.5, +3.5));
-    // Fits_map[mode]["BkgPdf3p"].reset(new BkgPdf3p((ParName+"_BkgPdf3p").c_str(),(ParName+"_BkgPdf3p").c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p1"+unique_name).c_str(), (mode+"_BkgPdf3p_p1"+unique_name).c_str(), -4.3, -5.3, -3.3));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p2"+unique_name).c_str(), (mode+"_BkgPdf3p_p2"+unique_name).c_str(), +5.7, +4.7, +7.7));
+    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p3"+unique_name).c_str(), (mode+"_BkgPdf3p_p3"+unique_name).c_str(), +2.5, +1.5, +3.5));
+    // Fits_map[mode]["BkgPdf3p"].reset(new BkgPdf3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
 
 
   }
@@ -578,10 +566,20 @@ void CreateRooWorkspace::CreateRooDataHist() {
 
   if (dorebin && rebin!=0) {
     for (auto mode: Modes) rooHist_map[mode].reset(new RooDataHist(mode.c_str(), mode.c_str(), RooArgList(*x_var), RooFit::Import(*histo_map[mode].get(),doBinWidth)));
-    for (const int & mass : MassPoints) rooHist_map[GetSgName(mass)].reset(new RooDataHist(GetSgName(mass).c_str(), GetSgName(mass).c_str(), RooArgList(*x_var), RooFit::Import(*histo_map[GetSgName(mass)].get(),doBinWidth)));
+    for (auto syst: SystNames) {
+      for (const int & mass : MassPoints) {
+        std::string hname = GetSgName(mass,syst);
+        rooHist_map[hname].reset(new RooDataHist(hname.c_str(), hname.c_str(), RooArgList(*x_var), RooFit::Import(*histo_map[hname].get(),doBinWidth)));
+      }
+    }
   } else {
     for (auto mode: Modes) rooHist_map[mode].reset(new RooDataHist(mode.c_str(), mode.c_str(), RooArgList(*x_var), histo_map[mode].get()));
-    for (const int & mass : MassPoints) rooHist_map[GetSgName(mass)].reset(new RooDataHist(GetSgName(mass).c_str(), GetSgName(mass).c_str(), RooArgList(*x_var), histo_map[GetSgName(mass)].get()));
+    for (auto syst: SystNames) {
+      for (const int & mass : MassPoints) {
+        std::string hname = GetSgName(mass,syst);
+        rooHist_map[hname].reset(new RooDataHist(hname.c_str(), hname.c_str(), RooArgList(*x_var), histo_map[hname].get()));
+      }
+    }
   }
 
 }
@@ -600,12 +598,12 @@ void CreateRooWorkspace::DoFits() {
   for (const auto& x : histo_map) {
     fit_min[x.first] = GetRange(x.second.get(),fit_lo);
     fit_max[x.first] = GetRange(x.second.get(),fit_hi);
-    if ("DY_SR"==x.first) fit_min[x.first] = GetRange(x.second.get(),800);
+    if ("DY_SR"==x.first) fit_min[x.first] = GetRange(x.second.get(),fit_SR);
     std::string mass = x.first;
     if (mass.compare(0,1,"M")==0) {
-      CalculateSignalFittingRange(std::stoi(mass.substr(1, mass.size()-1)), fit_min[x.first], fit_max[x.first], plot_min[x.first], plot_max[x.first], y_max[x.first]); // TODO
-      // nEventsSignal[x.first] = CalculateIntegral(histo_map[x.first].get(),x_lo,x_hi,doBinWidth); //TODO what range?
-      nEventsSignal[x.first] = CalculateIntegral(histo_map[x.first].get(),fit_min[x.first]-100,fit_max[x.first]+100,doBinWidth);// TODO!!!!
+      CalculateSignalFittingRange(std::stoi(mass.substr(1, mass.find("_")-1)), fit_min[x.first], fit_max[x.first], plot_min[x.first], plot_max[x.first], y_max[x.first]); // TODO
+      // Normalization into the fitting range. Need to be corrected for the effected area of the PDF later.
+      nEventsSignal[x.first] = CalculateIntegral(histo_map[x.first].get(),fit_min[x.first],fit_max[x.first],doBinWidth);
     }
   }
 
@@ -644,9 +642,12 @@ void CreateRooWorkspace::DoFits() {
   std::cout << "*    Signal Fits   *" << '\n';
   std::cout << "********************" << '\n';
 
-  for (const int & mass : MassPoints) {
-    if (debug) std::cout << "fit mass:" << mass << "\t" << fit_min[GetSgName(mass)] << " -- " << fit_max[GetSgName(mass)] << '\n';
-    FitRes_map[GetSgName(mass)][FitSignal].reset(Fits_map[GetSgName(mass)][FitSignal]->fitTo(*rooHist_map[GetSgName(mass)], RooFit::Range(fit_min[GetSgName(mass)], fit_max[GetSgName(mass)]), RooFit::SumW2Error(kTRUE), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
+  for (auto syst: SystNames) {
+    for (const int & mass : MassPoints) {
+      std::string hname = GetSgName(mass,syst);
+      if (debug) std::cout << "fit mass:" << syst << "\t" << mass << "\t" << fit_min[hname] << " -- " << fit_max[hname] << '\n';
+      FitRes_map[hname][FitSignal].reset(Fits_map[hname][FitSignal]->fitTo(*rooHist_map[hname], RooFit::Range(fit_min[hname], fit_max[hname]), RooFit::SumW2Error(kTRUE), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
+    }
   }
 
 }
@@ -663,7 +664,9 @@ void CreateRooWorkspace::ImportToWorkspace() {
   # #### ##     ## ##         #######  ##     ##    ##       ##     #######   ###  ###   #######  ##     ## ##    ##  ######  ##        ##     ##  ######  ########
   */
 
-  for (const int & mass : MassPoints) ws->import(*Fits_map[GetSgName(mass)][FitSignal], RooFit::Silence());
+  for (auto syst: SystNames) { for (const int & mass : MassPoints) {ws->import(*Fits_map[GetSgName(mass,syst)][FitSignal], RooFit::Silence()); }}
+  for (auto mode: Modes) { for (auto const& [model,dofit] : doFits_map[mode] ) { if (dofit) ws->import(*Fits_map[mode][model], RooFit::Silence()); }}
+
   ws->import(*data_obs.get());
 
   //TODO decide weather to go for shaped analysis or not
@@ -693,13 +696,142 @@ void CreateRooWorkspace::DoPlots() {
   */
 
   PlotBkgFit();
-  PlotSignals();
+  for (auto syst: SystNames) PlotSignals(syst);
   PlotSgPars();
 }
 
-void CreateRooWorkspace::PlotSignals() {
-  // c_sg_all.reset(tdrDiCanvas("signal", plot_lo, x_hi, 1*1e-03, 1, -6, 6, nameXaxis, nameYaxis, "Pull"));
-  //TODO
+
+void CreateRooWorkspace::PlotBkgFit() {
+  plotter.reset(x_var->frame(plot_lo,plot_hi));
+
+  for (auto mode: Modes) {
+    if (mode!="bkg_pred" && mode!="DY_CR" && mode!="DY_SR") continue;
+    // if (mode!="bkg_pred" && mode!="DY_CR") continue;
+    // if (mode!="bkg_pred") continue;
+
+    std::unordered_map<std::string, RooHist*> hpull;
+    std::unordered_map<std::string, RooHist*> hratio;
+    std::unordered_map<std::string, double> chi2_map;
+
+    TCanvas* c_bg = tdrDiCanvas(("Events"+mode).c_str(), plot_lo, plot_hi, plot_ylo, plot_yhi, doPlotRatio?0.8:-6, doPlotRatio?1.2:6, nameXaxis, nameYaxis, nameRatioaxis);
+    c_bg->cd(1)->SetLogy(1);
+    // plotter = x_var->frame(plot_lo,plot_hi);
+    plotter.reset(x_var->frame(plot_lo,plot_hi));
+
+    if (mode=="bkg_pred" || mode=="data") rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::Poisson));
+    else rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
+    // rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
+    // rooHist_map[mode]->plotOn(plotter.get());
+
+    std::unique_ptr<RooCurve> curve;
+    std::unique_ptr<RooHist> hist_;
+    for (auto const& [model,dofit] : doFits_map[mode] ) {
+      if (dofit) {
+        int color = Colors[model];
+        // if (!doFtest && model.Contains("Exp") && model!="Exp_2" && model!="Exp_3" && model!="Exp_4" ) continue;
+        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::LineColor(color), RooFit::Range(fit_min[mode], fit_max[mode], kFALSE));
+        // Fits_map[mode][model]->plotOn(plotter, RooFit::LineColor(color), RooFit::Range(fit_min[mode], fit_max[mode], kFALSE));
+
+        // CREATE RATIO BETWEEN CURVE AND HIST
+        double xstart, xstop, y;
+        curve.reset((RooCurve*) ( (RooCurve*) plotter->findObject(0,RooCurve::Class()))->Clone(""));
+        hist_.reset((RooHist*) ( (RooHist*) plotter->findObject(0,RooHist::Class()))->Clone(""));
+        curve->GetPoint(0,xstart,y);
+        curve->GetPoint(curve->GetN()-1,xstop,y);
+        hratio[model] = new RooHist();
+        for(int i=0 ; i<hist_->GetN() ; i++) {
+          double x,point;
+          hist_->GetPoint(i,x,point) ;
+          if (x<xstart || x>xstop) continue ;
+          double yy = point/ curve->interpolate(x);
+          double dyl = 2*hist_->GetErrorYlow(i)/ curve->interpolate(x);
+          double dyh = 2*hist_->GetErrorYhigh(i)/ curve->interpolate(x);
+          hratio[model]->addBinWithError(x,yy,dyl,dyh);
+        }
+
+        // CREATE PULL BETWEEN CURVE AND HIST
+        hpull[model] = plotter->pullHist();
+        int npf = FitRes_map[mode][model]->floatParsFinal().getSize();
+        int ndf = hpull[model]->GetN()-npf;
+        chi2_map[model] = plotter->chiSquare(npf);
+        double pv = TMath::Prob(chi2_map[model]*ndf, ndf)*100;
+        TString name = model+std::string(7-model.size(), ' ' )+" #chi^{2}/n.d.f. = "+TString::Format("%.1f",chi2_map[model])+" p-value = "+TString::Format("%.2f",pv)+"\%";
+        // TString name = model+std::string(5-model.size(), ' ' )+"np="+TString::Format("%d",npf);
+        hratio[model]->SetName(name);
+        hratio[model]->SetMarkerColor(color);
+        hratio[model]->SetLineColor(color);
+
+        hpull[model]->SetName(name);
+        hpull[model]->SetMarkerColor(color);
+        hpull[model]->SetLineColor(color);
+
+        // Remove points with meaningless pull
+        for(int i=0 ; i<hpull[model]->GetN() ; i++) {
+          double x,point;
+          hpull[model]->GetPoint(i,x,point);
+          if (hpull[model]->GetErrorYlow(i)==0) hpull[model]->SetPoint(i,x,-10);
+        }
+
+        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::Range(fit_min[mode], fit_max[mode], kFALSE), RooFit::FillColor(color), RooFit::VisualizeError(*FitRes_map[mode][model], 1), RooFit::FillStyle(3001), RooFit::VLines());
+      }
+    }
+
+    plotter->Draw("same");
+
+    std::unique_ptr<TLegend>leg_bg(tdrLeg(0.40,0.55,0.7,0.85, 0.032));
+    tdrHeader(leg_bg.get(), histo_map[mode]->GetName(), 12, 0.04, 42, kBlack, true);
+
+    std::unique_ptr<RooPlot> Pullplotter_bkg(x_var->frame(RooFit::Range(plot_lo,plot_hi), RooFit::Name("bkg")));
+    for (auto x : doPlotRatio?hratio:hpull) {
+      std::string model = x.first;
+      if (model.find("Exp_")!=std::string::npos || model.find("BkgPdf")!=std::string::npos) {
+        int deg = atoi(new char((model.find("Exp_")!=std::string::npos)? model[4] : model[6]));
+        std::string old_model = TString(x.first).ReplaceAll(std::to_string(deg),std::to_string(deg-1)).Data();
+        if (chi2_map.find(old_model)!= chi2_map.end()) {
+          double FTest = DoFTest(chi2_map[old_model],chi2_map[model],deg-1,deg,hpull[model]->GetN());
+          if (doFtest) output << mode << " " << model << " FTest " << FTest << " chi2: " << chi2_map[model] << '\n';
+          x.second->SetName(x.second->GetName()+TString::Format(" F-test = %.2f",FTest));
+        }
+      }
+      leg_bg->AddEntry(x.second, x.second->GetName() ,"l");
+      Pullplotter_bkg->addPlotable(x.second,"P same");
+    }
+    leg_bg->Draw("same");
+
+    c_bg->cd(2);
+    Pullplotter_bkg->SetNdivisions(505,"Y");
+    Pullplotter_bkg->Draw("same");
+    std::unique_ptr<TLine> line(new TLine(plot_lo, 0, plot_hi, 0));
+    line->SetLineWidth(2);
+    line->Draw("same");
+
+    c_bg->SaveAs(workingDir+"Fit_Bg_all_"+mode+"_"+histFolder+extra_text+"."+plotting_mode);
+    if (plotting_mode_2!="") c_bg->SaveAs(workingDir+"Fit_Bg_all_"+mode+"_"+histFolder+extra_text+"."+plotting_mode_2);
+
+
+    if (doCheckPlots) {
+      for (auto [model,pull] : hpull) {
+        TCanvas* c_gauss = tdrCanvas(("gaus_"+mode+"_"+model).c_str(), -6, 6, 0.00001,100, nameXaxis, nameYaxis);
+        std::unique_ptr<TH1F> gauss(new TH1F(model.c_str(), model.c_str(), 13, -6, 6));
+        std::unique_ptr<TF1> f1(new TF1("f1","gaus",-5,5));
+        for (int i = 0; i < pull->GetN(); i++) {
+          double x,y;
+          pull->GetPoint(i,x,y);
+          gauss->Fill(y);
+        }
+        gauss->Fit(f1.get(),"RMQ");
+        tdrDraw(gauss.get(), "Hist", kSolid, kBlack, kSolid, kBlack, 3000, kBlack);
+        std::unique_ptr<TLegend> leg_gauss(tdrLeg(0.70,0.60,0.9,0.85, 0.035));
+        tdrHeader(leg_gauss.get(), mode+" "+model, 12, 0.04, 42, kBlack, true);
+        c_gauss->SaveAs(workingDir+"Gauss_Bg_all_"+mode+"_"+model+"_"+histFolder+extra_text+"."+plotting_mode);
+        if (plotting_mode_2!="") c_gauss->SaveAs(workingDir+"Gauss_Bg_all_"+mode+"_"+model+"_"+histFolder+extra_text+"."+plotting_mode_2);
+      }
+    }
+  }
+}
+
+void CreateRooWorkspace::PlotSignals(std::string syst) {
+
   RooPlot* Pullplotter_all = x_var->frame(RooFit::Range(x_lo-10,x_hi+10), RooFit::Name("sgALL_pull"));
   std::unique_ptr<RooPlot> plotter_all(x_var->frame(RooFit::Range(x_lo,x_hi), RooFit::Name("signal_all")));
   std::unique_ptr<TCanvas> c_sg_all(tdrDiCanvas("signal", plot_lo, x_hi, 1*1e-03, 1, -6, 6, nameXaxis, nameYaxis, "Pull"));
@@ -707,24 +839,37 @@ void CreateRooWorkspace::PlotSignals() {
   int i_mass = -1;
   for (const int & mass : MassPoints) {
     i_mass++;
-    std::string SgName = GetSgName(mass);
-
-    // std::cout << "FIND pre " << Pullplotter.get() << '\n';
-    // Pullplotter.reset(x_var->frame(RooFit::Range(plot_min[SgName],plot_max[SgName]),RooFit::Name(SgName.c_str())));
-    // std::cout << "FIND post " << Pullplotter.get() << '\n'; //TODO
+    std::string SgName = GetSgName(mass,syst);
 
     RooPlot* Pullplotter = x_var->frame(RooFit::Range(plot_min[SgName],plot_max[SgName]),RooFit::Name(SgName.c_str()));
 
     if (debug) std::cout << "plotting mass:" << mass << "\t" << plot_min[SgName] << " -- " << plot_max[SgName] << "\tymax " << y_max[SgName] << '\n';
 
+    if (isNominalSyst(syst)) {
+      std::unique_ptr<RooPlot> plotter_syst(x_var->frame(RooFit::Range(plot_min[SgName],plot_max[SgName]), RooFit::Name("signal_syst")));
+      std::unique_ptr<TLegend> leg_syst(tdrLeg(0.75,0.50,0.9,0.7, 0.035));
+      TCanvas* c_sg_syst = tdrCanvas(SgName.c_str(), plot_min[SgName],plot_max[SgName], 2*1e-03, y_max[SgName],nameXaxis, nameYaxis);
+      rooHist_map[SgName]->plotOn(plotter_syst.get(), RooFit::LineColor(kWhite), RooFit::MarkerColor(kWhite));
+      for (auto syst: SystNames) {
+        Fits_map[GetSgName(mass,syst)][FitSignal]->plotOn(plotter_syst.get(), RooFit::LineColor(Colors[syst]));
+        TLine* line = new TLine(); line->SetLineColor(Colors[syst]);
+        leg_syst->AddEntry(line,  syst.c_str() ,"l");
+      }
+      Fits_map[SgName][FitSignal]->plotOn(plotter_syst.get(), RooFit::VisualizeError(*FitRes_map[SgName][FitSignal], 1), RooFit::FillColor(kRed-7), RooFit::FillStyle(3001));
+      Fits_map[SgName][FitSignal]->plotOn(plotter_syst.get(), RooFit::VisualizeError(*FitRes_map[SgName][FitSignal], 2), RooFit::FillColor(kRed-9), RooFit::FillStyle(3001));
+      Fits_map[SgName][FitSignal]->plotOn(plotter_syst.get(), RooFit::LineColor(Colors["nominal"]));
+      leg_syst->Draw("same");
+      plotter_syst->Draw("same");
+      c_sg_syst->SaveAs(workingDir+"Fit_Sg"+TString(SgName).ReplaceAll("nominal","syst")+"_"+histFolder+extra_text+"."+plotting_mode);
+      if (plotting_mode_2!="") c_sg_syst->SaveAs(workingDir+"Fit_Sg"+SgName+"_syst_"+histFolder+extra_text+"."+plotting_mode_2);
+    }
+
     plotter.reset(x_var->frame(plot_min[SgName],plot_max[SgName]));
     TCanvas* c_sg = tdrDiCanvas(SgName.c_str(), plot_min[SgName],plot_max[SgName], 2*1e-03, y_max[SgName], -6, 6, nameXaxis, nameYaxis, "Pull");
-    // c_sg->cd(1)->SetLogy(1);
-    // rooHist_map[SgName]->plotOn(plotter.get());
     rooHist_map[SgName]->plotOn(plotter.get(), RooFit::LineColor(kBlack), RooFit::MarkerColor(kBlack));
     Fits_map[SgName][FitSignal]->plotOn(plotter.get(), RooFit::VisualizeError(*FitRes_map[SgName][FitSignal], 1), RooFit::FillColor(kRed-7), RooFit::FillStyle(3001));
     Fits_map[SgName][FitSignal]->plotOn(plotter.get(), RooFit::VisualizeError(*FitRes_map[SgName][FitSignal], 2), RooFit::FillColor(kRed-9), RooFit::FillStyle(3001));
-    Fits_map[SgName][FitSignal]->plotOn(plotter.get(), RooFit::LineColor(kRed));
+    Fits_map[SgName][FitSignal]->plotOn(plotter.get(), RooFit::LineColor(Colors["nominal"]));
     rooHist_map[SgName]->plotOn(plotter.get(), RooFit::LineColor(kBlack), RooFit::MarkerColor(kBlack));
     RooHist* hpull = plotter->pullHist();
     int npf = FitRes_map[SgName][FitSignal]->floatParsFinal().getSize();
@@ -735,13 +880,18 @@ void CreateRooWorkspace::PlotSignals() {
     ndf -=npf;
     double pv = TMath::Prob(chi2, ndf)*100;
     chi2 /=ndf;
-    std::cout << "FIND ME " << mass << " " << year << " " << channel << " " << chi2 << " " << chi2*ndf << " " << ndf << '\n';
-    SignalProperties << SgName+" signal number of events = " << nEventsSignal[SgName] <<""<<std::endl;//TODO
-    SignalProperties << " chi2-ndf-pvalue "  << chi2 << " " << ndf << " " << pv <<std::endl;
+    // std::cout << "FIND ME " << mass << " " << year << " " << channel << " " << chi2 << " " << chi2*ndf << " " << ndf << '\n';
+    SignalProperties << SgName+" signal number of events = " << nEventsSignal[SgName] << std::endl;
+    SignalProperties << " chi2-ndf-pvalue "  << chi2 << " " << ndf << " " << pv << std::endl;
     SignalProperties << fitPars[SgName][0]->GetName() << "   param   " << fitPars[SgName][0]->getVal() << " " << fitPars[SgName][0]->getError() << std::endl;
     SignalProperties << fitPars[SgName][1]->GetName() << "   param   " << fitPars[SgName][1]->getVal() << " " << fitPars[SgName][1]->getError() << std::endl;
     SignalProperties << fitPars[SgName][2]->GetName() << "   param   " << fitPars[SgName][2]->getVal() << " " << fitPars[SgName][2]->getError() << std::endl;
     SignalProperties << fitPars[SgName][3]->GetName() << "   param   " << fitPars[SgName][3]->getVal() << " " << fitPars[SgName][3]->getError() << std::endl;
+
+
+    std::cout << "FIND ME SIGNAL " << SgName << " " << FitSignal << '\n';
+    nEventsSignal[SgName] /= CalculateFractionAreaPDF(Fits_map[SgName][FitSignal].get(), *x_var.get(), fit_min[SgName], fit_max[SgName]);
+    SignalProperties << SgName+" signal number of events corrected = " << nEventsSignal[SgName] << std::endl;
 
     std::unique_ptr<TPaveText> pave(new TPaveText(0.7,0.6,0.8,0.8,"NDC"));
     pave->SetBorderSize(0); pave->SetTextSize(0.03); pave->SetLineColor(1); pave->SetLineStyle(1);
@@ -754,8 +904,7 @@ void CreateRooWorkspace::PlotSignals() {
     pave->AddText(TString::Format("#alpha = %2.3f +- %2.3f", fitPars[SgName][2]->getVal(),fitPars[SgName][2]->getError()));
     pave->AddText(TString::Format("k = %2.3f +- %2.3f", fitPars[SgName][3]->getVal(),fitPars[SgName][3]->getError()));
     SgPars["Masses"].at(i_mass)       = (double)mass;
-    // SgPars["nevents"].at(i_mass)      = CalculateIntegral(histo_map[SgName],rangeLo-100,rangeHi+100,doBinWidth);//TODO
-    SgPars["nevents"].at(i_mass)      = CalculateIntegral(histo_map[SgName].get(),x_lo,x_hi,doBinWidth);//TODO what range?
+    SgPars["nevents"].at(i_mass)      = nEventsSignal[SgName];
     SgPars["nevents_err"].at(i_mass)  = TMath::Sqrt(SgPars["nevents"].at(i_mass));
     SgPars["mean"].at(i_mass)         = fitPars[SgName][0]->getVal();
     SgPars["mean_err"].at(i_mass)     = fitPars[SgName][0]->getError();
@@ -1030,26 +1179,11 @@ void CreateRooWorkspace::InputDatacards(){
     for (auto const& [model,dofit] : doFits_map[mode] ) {
       if (!dofit || (model.find("Exp")!= std::string::npos && model!="Exp_2" && model!="Exp_3" && model!="Exp_4") ) continue;
 
-      x_var->setRange("fitting", fit_lo, fit_hi);
-      double i_fit = ((RooAbsReal*)((RooAbsPdf*)Fits_map[mode][model].get())->createIntegral(*x_var, RooFit::NormSet(*x_var), RooFit::Range("fitting")))->getVal();
-      x_var->setRange("total", x_lo, x_hi);
-      double i_tot = ((RooAbsReal*)((RooAbsPdf*)Fits_map[mode][model].get())->createIntegral(*x_var, RooFit::NormSet(*x_var), RooFit::Range("total")))->getVal();
-      // std::cout << mode << " " << model << " test integral " << i_tot << " " << i_fit << std::endl;
+      std::cout << "FIND ME BKG " << mode << " " << model << '\n';
+      double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_lo, fit_hi);
 
-      // EXPLAINATION OF INTEGRALS:
-      // CalculateIntegral(histo_map[mode],x_lo,x_hi,doBinWidth) = Integral over the range where the histogram is defined, using TH1F
-      // rooHist_map[mode]->sum(!doBinWidth) = Integral over the range where the histogram is defined, using RooDataHist
-      // CalculateIntegral(histo_map[mode],fit_lo,fit_hi,doBinWidth) = Integral over the fit range, using TH1F
-      // CalculateFractionArea(histo_map[mode],fit_lo,fit_hi, x_lo, x_hi,doBinWidth) = Fraction of fitting area over the full range where the histo is defined
-      // CalculateIntegral(histo_map[mode],fit_lo,fit_hi,doBinWidth)/CalculateFractionArea(histo_map[mode],fit_lo,fit_hi, x_lo, x_hi,doBinWidth) = Should give the same value of the integral in the full range
-      // Normalization in the full range is rooHist_map[mode]->sum(!doBinWidth). Needed in combine because the histo is defined here.
-      // i_tot = Integral over the full range, using RooAbsPdf. Should be 1 because it's normalized
-      // i_fit = Integral over the fit range, using RooAbsPdf
-      // CalculateIntegral(histo_map[mode],fit_lo,fit_hi,doBinWidth)*i_tot/i_fit = Normalization of the RooAbsPdf, such that it has the correct norm in the fitting range.
-      // nEventsSR*i_tot/i_fit = Normalization of the RooAbsPdf, such that it has the correct norm in the fitting range as the event in the SR.
-
-      if (debug) std::cout << mode+unique_name+"_"+model << " integral " << nEventsSR*i_tot/i_fit << " " << CalculateIntegral(histo_map[mode].get(),fit_lo,fit_hi,doBinWidth)*i_tot/i_fit << " " << CalculateIntegral(histo_map[mode].get(),fit_lo,fit_hi,doBinWidth)/CalculateFractionArea(histo_map[mode].get(),fit_lo,fit_hi, x_lo, x_hi,doBinWidth) << " " << rooHist_map[mode]->sum(!doBinWidth) << std::endl;
-      DataCard  << mode+unique_name+"_"+model << " integral " << nEventsSR*i_tot/i_fit << " " << CalculateIntegral(histo_map[mode].get(),fit_lo,fit_hi,doBinWidth)*i_tot/i_fit << " " << CalculateIntegral(histo_map[mode].get(),fit_lo,fit_hi,doBinWidth)/CalculateFractionArea(histo_map[mode].get(),fit_lo,fit_hi, x_lo, x_hi,doBinWidth) << " " << rooHist_map[mode]->sum(!doBinWidth) << std::endl;
+      if (debug) std::cout << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << std::endl;
+      DataCard  << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << std::endl;
 
 
       std::unique_ptr<RooArgSet> model_params(Fits_map[mode][model]->getParameters(*x_var));
@@ -1061,20 +1195,17 @@ void CreateRooWorkspace::InputDatacards(){
     }
   }
 
-
-  for (const int & mass : MassPoints) {
-    std::string SgName = GetSgName(mass);
-    //TODO fix the norm of signal
-    // DataCard << SgName+" signal number of events = " << histo_map[SgName]->GetSumOfWeights()<<""<<std::endl;
-    // DataCard << SgName+" signal number of events = " << histo_map[SgName]->Integral(histo_map[SgName]->FindBin(rangeLo-100),histo_map[SgName]->FindBin(rangeHi+100), doBinWidth?"width":"")<<""<<std::endl;
-    DataCard << SgName+" signal number of events = " << nEventsSignal[SgName] <<""<<std::endl;
-    for (unsigned int i = 0; i < fitPars[GetSgName(mass)].size(); i++) {
-      DataCard << SgName << " " << fitPars[GetSgName(mass)][i]->GetName() << "   param   " <<fitPars[GetSgName(mass)][i]->getVal() << " " << fitPars[GetSgName(mass)][i]->getError() <<  std::endl;
+  for (auto syst: SystNames) {
+    for (const int & mass : MassPoints) {
+      std::string SgName = GetSgName(mass,syst);
+      DataCard << SgName+" signal number of events = " << nEventsSignal[SgName] <<""<<std::endl;
+      for (unsigned int i = 0; i < fitPars[SgName].size(); i++) {
+        DataCard << SgName << " " << fitPars[SgName][i]->GetName() << "   param   " <<fitPars[SgName][i]->getVal() << " " << fitPars[SgName][i]->getError() <<  std::endl;
+      }
     }
   }
 
 }
-
 
 
 
@@ -1104,141 +1235,17 @@ void CreateRooWorkspace::Process() {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-void CreateRooWorkspace::PlotBkgFit() {
-  plotter.reset(x_var->frame(plot_lo,plot_hi));
-  double pull_min = GetRange(histo_map["bkg_pred"].get(),pull_lo);
-  double pull_max = GetRange(histo_map["bkg_pred"].get(),pull_hi);
-
-  for (auto mode: Modes) {
-    if (mode!="bkg_pred" && mode!="DY_CR" && mode!="DY_SR") continue;
-    // if (mode!="bkg_pred" && mode!="DY_CR") continue;
-    // if (mode!="bkg_pred") continue;
-
-    std::unordered_map<std::string, RooHist*> hpull;
-    std::unordered_map<std::string, RooHist*> hratio;
-    std::unordered_map<std::string, double> chi2_map;
-
-    TCanvas* c_bg = tdrDiCanvas(("Events"+mode).c_str(), plot_lo, plot_hi, plot_ylo, plot_yhi, doPlotRatio?0.8:-6, doPlotRatio?1.2:6, nameXaxis, nameYaxis, nameRatioaxis);
-    c_bg->cd(1)->SetLogy(1);
-    // plotter = x_var->frame(plot_lo,plot_hi);
-    plotter.reset(x_var->frame(plot_lo,plot_hi));
-
-    if (mode=="bkg_pred" || mode=="data") rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::Poisson));
-    else rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
-    // rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
-    // rooHist_map[mode]->plotOn(plotter.get());
-
-    std::unique_ptr<RooCurve> curve;
-    std::unique_ptr<RooHist> hist_;
-    for (auto const& [model,dofit] : doFits_map[mode] ) {
-      if (dofit) {
-        int color = Colors[model];
-        // if (!doFtest && model.Contains("Exp") && model!="Exp_2" && model!="Exp_3" && model!="Exp_4" ) continue;
-        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::LineColor(color), RooFit::Range(pull_min, pull_max, kFALSE));
-        // Fits_map[mode][model]->plotOn(plotter, RooFit::LineColor(color), RooFit::Range(fit_min[mode], fit_max[mode], kFALSE));
-
-        // CREATE RATIO BETWEEN CURVE AND HIST
-        double xstart,xstop,y ;
-        curve.reset((RooCurve*) ( (RooCurve*) plotter->findObject(0,RooCurve::Class()))->Clone(""));
-        hist_.reset((RooHist*) ( (RooHist*) plotter->findObject(0,RooHist::Class()))->Clone(""));
-        curve->GetPoint(0,xstart,y) ;
-        curve->GetPoint(curve->GetN()-1,xstop,y) ;
-        hratio[model] = new RooHist() ;
-        for(int i=0 ; i<hist_->GetN() ; i++) {
-          double x,point;
-          hist_->GetPoint(i,x,point) ;
-          if (x<xstart || x>xstop) continue ;
-          double yy = point/ curve->interpolate(x) ;
-          double dyl = 2*hist_->GetErrorYlow(i)/ curve->interpolate(x);
-          double dyh = 2*hist_->GetErrorYhigh(i)/ curve->interpolate(x);
-          hratio[model]->addBinWithError(x,yy,dyl,dyh);
-        }
-
-        // CREATE PULL BETWEEN CURVE AND HIST
-        hpull[model] = plotter->pullHist();
-        int npf = FitRes_map[mode][model]->floatParsFinal().getSize();
-        int ndf = hpull[model]->GetN()-npf;
-        chi2_map[model] = plotter->chiSquare(npf);
-        double pv = TMath::Prob(chi2_map[model]*ndf, ndf)*100;
-        TString name = model+std::string(7-model.size(), ' ' )+" #chi^{2}/n.d.f. = "+TString::Format("%.1f",chi2_map[model])+" p-value = "+TString::Format("%.2f",pv)+"\%";
-        // TString name = model+std::string(5-model.size(), ' ' )+"np="+TString::Format("%d",npf);
-        hpull[model]->SetName(name);
-        hpull[model]->SetMarkerColor(color);
-        hpull[model]->SetLineColor(color);
-        hratio[model]->SetName(name);
-        hratio[model]->SetMarkerColor(color);
-        hratio[model]->SetLineColor(color);
-        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::Range(fit_min[mode], fit_max[mode], kFALSE), RooFit::FillColor(color), RooFit::VisualizeError(*FitRes_map[mode][model], 1), RooFit::FillStyle(3001), RooFit::VLines());
-      }
-    }
-
-    plotter->Draw("same");
-
-    std::unique_ptr<TLegend>leg_bg(tdrLeg(0.40,0.55,0.7,0.85, 0.032));
-    tdrHeader(leg_bg.get(), histo_map[mode]->GetName(), 12, 0.04, 42, kBlack, true);
-
-    std::unique_ptr<RooPlot> Pullplotter_bkg(x_var->frame(RooFit::Range(plot_lo,plot_hi), RooFit::Name("bkg")));
-    for (auto x : doPlotRatio?hratio:hpull) {
-      std::string model = x.first;
-      if (model.find("Exp_")!=std::string::npos || model.find("BkgPdf")!=std::string::npos) {
-        int deg = atoi(new char((model.find("Exp_")!=std::string::npos)? model[4] : model[6]));
-        std::string old_model = TString(x.first).ReplaceAll(std::to_string(deg),std::to_string(deg-1)).Data();
-        if (chi2_map.find(old_model)!= chi2_map.end()) {
-          double FTest = DoFTest(chi2_map[old_model],chi2_map[model],deg-1,deg,hpull[model]->GetN());
-          if (doFtest) output << mode << " " << model << " FTest " << FTest << " chi2: " << chi2_map[model] << '\n';
-          x.second->SetName(x.second->GetName()+TString::Format(" F-test = %.2f",FTest));
-        }
-      }
-      leg_bg->AddEntry(x.second, x.second->GetName() ,"l");
-      Pullplotter_bkg->addPlotable(x.second,"P same");
-    }
-    leg_bg->Draw("same");
-
-    c_bg->cd(2);
-    Pullplotter_bkg->SetNdivisions(505,"Y");
-    Pullplotter_bkg->Draw("same");
-    std::unique_ptr<TLine> line(new TLine(plot_lo, 0, plot_hi, 0));
-    line->SetLineWidth(2);
-    line->Draw("same");
-
-    c_bg->SaveAs(workingDir+"Fit_Bg_all_"+mode+"_"+histFolder+extra_text+"."+plotting_mode);
-    if (plotting_mode_2!="") c_bg->SaveAs(workingDir+"Fit_Bg_all_"+mode+"_"+histFolder+extra_text+"."+plotting_mode_2);
-
-
-    if (doCheckPlots) {
-      for (auto [model,pull] : hpull) {
-        TCanvas* c_gauss = tdrCanvas(("gaus_"+mode+"_"+model).c_str(), -6, 6, 0.00001,100, nameXaxis, nameYaxis);
-        std::unique_ptr<TH1F> gauss(new TH1F(model.c_str(), model.c_str(), 13, -6, 6));
-        std::unique_ptr<TF1> f1(new TF1("f1","gaus",-5,5));
-        for (int i = 0; i < pull->GetN(); i++) {
-          double x,y;
-          pull->GetPoint(i,x,y);
-          gauss->Fill(y);
-        }
-        gauss->Fit(f1.get(),"RMQ");
-        tdrDraw(gauss.get(), "Hist", kSolid, kBlack, kSolid, kBlack, 3000, kBlack);
-        std::unique_ptr<TLegend> leg_gauss(tdrLeg(0.70,0.60,0.9,0.85, 0.035));
-        tdrHeader(leg_gauss.get(), mode+" "+model, 12, 0.04, 42, kBlack, true);
-        c_gauss->SaveAs(workingDir+"Gauss_Bg_all_"+mode+"_"+model+"_"+histFolder+extra_text+"."+plotting_mode);
-        if (plotting_mode_2!="") c_gauss->SaveAs(workingDir+"Gauss_Bg_all_"+mode+"_"+model+"_"+histFolder+extra_text+"."+plotting_mode_2);
-      }
-    }
-  }
-}
-
-
 int main(int argc, char** argv){
+  /*
+  # ##     ##    ###    #### ##    ##
+  # ###   ###   ## ##    ##  ###   ##
+  # #### ####  ##   ##   ##  ####  ##
+  # ## ### ## ##     ##  ##  ## ## ##
+  # ##     ## #########  ##  ##  ####
+  # ##     ## ##     ##  ##  ##   ###
+  # ##     ## ##     ## #### ##    ##
+  */
+
   gErrorIgnoreLevel = kFatal;
   RooMsgService::instance().setSilentMode(true);
   RooMsgService::instance().setStreamStatus(1,false);

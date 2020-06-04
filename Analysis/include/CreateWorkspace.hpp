@@ -67,15 +67,33 @@
 *******************************************
 */
 
+/*
+******************************************
+/        Explaination of Integrals       /
+/-----------------------------------------/
+/ CalculateIntegral(histo_map[mode],x_lo,x_hi,doBinWidth) = Integral over the range where the histogram is defined, using TH1F
+/ rooHist_map[mode]->sum(!doBinWidth) = Integral over the range where the histogram is defined, using RooDataHist
+/ CalculateIntegral(histo_map[mode],fit_lo,fit_hi,doBinWidth) = Integral over the fit range, using TH1F
+/ CalculateFractionArea(histo_map[mode],fit_lo,fit_hi, x_lo, x_hi,doBinWidth) = Fraction of fitting area over the full range where the histo is defined
+/ CalculateIntegral(histo_map[mode],fit_lo,fit_hi,doBinWidth)/CalculateFractionArea(histo_map[mode],fit_lo,fit_hi, x_lo, x_hi,doBinWidth) = Should give the same value of the integral in the full range
+/ Normalization in the full range is rooHist_map[mode]->sum(!doBinWidth). Needed in combine because the histo is defined here.
+/ i_tot = Integral over the full range, using RooAbsPdf. Should be 1 because it's normalized
+/ i_fit = Integral over the fit range, using RooAbsPdf
+/ CalculateIntegral(histo_map[mode],fit_lo,fit_hi,doBinWidth)*i_tot/i_fit = Normalization of the RooAbsPdf, such that it has the correct norm in the fitting range.
+/ nEventsSR*i_tot/i_fit = Normalization of the RooAbsPdf, such that it has the correct norm in the fitting range as the event in the SR.
+*******************************************
+*/
+
 double GetRange(TH1F* h, double x);
 
 double CalculateIntegral(TH1F* h, double min, double max, bool dorebin);
 double CalculateFractionArea(TH1F* h, double min, double max, double x_min, double x_max, bool dorebin);
+double CalculateFractionAreaPDF(RooAbsPdf* PDF, RooRealVar x_var, double fit_lo, double fit_hi);
 
 double DoFTest(double chi2_1, double chi2_2, double npar_1, double npar_2, double n);
 void CalculateChiSquare(double& chi2, int& nbins, RooHist* hpull, double xmin, double xmax);
 
-std::string GetSgName(int mass);
+std::string GetSgName(int mass, std::string syst="nominal");
 
 std::unordered_map<std::string, int> Colors = {
   { "Landau",      kRed+1},
@@ -109,6 +127,14 @@ std::unordered_map<std::string, int> Colors = {
   { "WW",          kGreen},
   { "WZ",          kGreen+3},
   { "ZZ",          kGreen-10},
+
+  { "nominal",     kRed},
+  { "JEC_up",      kOrange+1},
+  { "JEC_down",    kOrange-2},
+  { "JER_up",      kGreen+2},
+  { "JER_down",    kGreen+1},
+  { "PU_up",       kBlue+1},
+  { "PU_down",     kAzure+10},
 };
 
 
@@ -132,7 +158,7 @@ public:
   void ImportToWorkspace();
   void DoPlots();
   void PlotBkgFit();
-  void PlotSignals();
+  void PlotSignals(std::string syst="nominal");
   void PlotSgPars();
   void PlotControl();
   void PlotTranferFunction();
@@ -197,15 +223,15 @@ private:
   bool doCheckPlots = true;
   bool doBkgPlots = true;
   bool doFtest = false;
-  bool doPlotRatio = true;
+  // bool doPlotRatio = true;
+  bool doPlotRatio = false;
 
   std::string plotting_mode = "pdf";
   // std::string plotting_mode_2 = "eps";
   std::string plotting_mode_2 = "";
 
-  TString nameYaxis = doBinWidth? "Events/bin" :"Events";
-  TString nameXaxis = "m(Z')";
-  TString nameRatioaxis = doPlotRatio?"Hist/Fit": "Pull";
+
+  TString nameXaxis, nameYaxis, nameRatioaxis;
 
   TString extra_text = doFtest? "_Ftest_": "";
 
@@ -215,23 +241,12 @@ private:
   double plot_hi  = 4000;
   double plot_ylo = 1.1*1e-03;
   double plot_yhi = 1e07;
-  // double x_lo     = 750;
-  // double x_hi     = 2700;
-  // double plot_lo  = 750;
-  // double plot_hi  = 2700;
-  // double fit_lo_turnOn = 580; // not used
-  // double fit_hi_tails = 3560; // not used
-  // double fit_lo   = 580;
-  // double fit_hi   = 3560;
   double fit_lo   = 600;
   double fit_hi   = 4000;
-  double pull_lo  = 800;
-  double pull_hi  = 4000;
-  // TODO CHECK THIS
+  double fit_SR   = 810;
 
-
-  // bool debug = false;
-  bool debug = true;
+  bool debug = false;
+  // bool debug = true;
 
 
 
