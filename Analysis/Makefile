@@ -24,6 +24,7 @@ BINS_UTILS     := $(SOURCES_UTILS:$(SRCDIR)/%.cxx=%)
 
 # all: print $(BINS)
 all: $(BINS)
+	@echo "--> Successfully created all executables. Thanks Robin!"
 
 print:
 	@echo OBJECTS $(OBJECTS)
@@ -33,9 +34,11 @@ $(BINS): $(OBJECTS) $(OBJECTS_UTILS)
 	@$(CC) -o $@ $(OBJDIR)/$@.o $(OBJECTS_UTILS) $(LFLAGS) $(LIBSMAIN)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cxx
+	@echo "--> Creating object $@"
 	@$(CC) -o $@ -c $^ $(CFLAGS) $(LIBSMAIN) $(LFLAGS)
 
 $(OBJECTS_UTILS): $(OBJDIR)/%.o : $(SRCDIR)/%.cxx
+	@echo "--> Creating utils object $@"
 	@$(CC) -o $@ -c $^ $(CFLAGS) $(LIBSMAIN) $(LFLAGS)
 
 clean:
