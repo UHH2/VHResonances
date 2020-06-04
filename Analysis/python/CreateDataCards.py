@@ -12,7 +12,7 @@ sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros
 from ModuleRunnerBase import *
 
 
-nSpace_text   = 45
+nSpace_text   = 50
 nSpace_number = 25
 def nSpace(word=""):
     return word+" "*(nSpace_number -len(word))
@@ -69,32 +69,39 @@ def CreateDataCard(path, filename, mode = "", signalName="MC_ZprimeToZH", Channe
             outputfile.write(line+"\n")
 
 
-class CreateDataCards:
+class CreateDataCards(VariablesBase):
     def __init__(self,studies = "nominal", RunCombine = True, Method="AsymptoticLimits", extraOptions = ["-t", "-1"], extraOptionsText = "Asimov" , isHbb = False):
+        VariablesBase.__init__(self)
         self.studies = studies
         self.RunCombine = RunCombine
         self.isHbb = isHbb
         self.Method = Method
         self.extraOptions = extraOptions
         self.extraOptionsText = extraOptionsText
-        # self.extraOptions = ["-t", "-1"] #TODO move to main
-        # self.extraOptions+= ["--freezeParameters","sg_p0,sg_p1"] #TODO move to main
 
         self.AnalysisDir = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/Limits/"+studies+"/"
         if (self.isHbb): self.AnalysisDir += "/Hbb/"
         # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "NN", "NN_1","NN_2", "CNN", "tau42"]
         # self.histFolders = ["btag_DeepBoosted_H4qvsQCD"]
+        self.histFolders = ["btag_DeepBoosted_H4qvsQCDptdep"]
+        self.histFolders=["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDptdep_x3", "btag_DeepBoosted_H4qvsQCDptdep_x2x3", "btag_DeepBoosted_H4qvsQCDptdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x3", "btag_DeepBoosted_H4qvsQCDmassdep2_x3", "btag_DeepBoosted_H4qvsQCDmassdep_x2x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x2"]
+        # self.histFolders=["btag_DeepBoosted_H4qvsQCDp02",]
+        self.histFolders=["btag_DeepBoosted_H4qvsQCDptdep_x3"]
         # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDpt1000", "btag_DeepBoosted_H4qvsQCDpt1000p2", "btag_DeepBoosted_H4qvsQCDpt1000p02"]
-        self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02"]
-        self.years = ["2016", "2017", "2018", "RunII"]
-        self.channels = ["muonchannel", "electronchannel"]
+        # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02"]
+        # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDptdep", "btag_DeepBoosted_H4qvsQCDp02"]
+        # self.years = ["2016", "2017", "2018", "RunII"]
+        # self.channels = ["muonchannel", "electronchannel"]
         self.collections = ["Puppi"]
-        # self.years = ["2016"]
-        # self.channels = ["muonchannel"]
-        # self.mode = "CB"
-        # self.mode = "Exp_3"
-        self.mode = "Exp_2"
+        self.years = ["2016"]
+        self.channels = ["muonchannel"]
+        # self.fitFunction = "CB"
+        # self.fitFunction = "Exp_3"
+        self.fitFunction = "Exp_2"
+        self.mode = "bkg_pred"
+        self.mode = "DY_SR"
         self.ResetLists()
+
     def ResetLists(self):
         self.list_processes = []
         self.list_logfiles = []
@@ -105,13 +112,13 @@ class CreateDataCards:
         self.RatesSignal = {}
         self.Parameters = {}
         self.ParametersSignal = {}
-    def ExtractParameters(self,uniqueName,workingDir,year,collection,channel,histFolder):
-        ChannelName = channel+"_"+year
+
+    def ExtractParameters(self,uniqueName,workingDir,year,channel,histFolder):
         AnalysisOutput = "OutputFit_"+histFolder+".txt"
         self.ChannelNames.setdefault(uniqueName,{"single":[], "leptonchannel": [], "fullRunII": []})
-        self.ChannelNames[uniqueName]["leptonchannel"].append(ChannelName) # TODO not yet implemented. Do we need it?
-        self.ChannelNames[uniqueName]["fullRunII"].append(ChannelName) # TODO not yet implemented. Do we need it?
-        self.ChannelNames[uniqueName]["single"] = [ChannelName]
+        self.ChannelNames[uniqueName]["leptonchannel"].append(self.ChannelName(channel,year)) # TODO not yet implemented. Do we need it?
+        self.ChannelNames[uniqueName]["fullRunII"].append(self.ChannelName(channel,year)) # TODO not yet implemented. Do we need it?
+        self.ChannelNames[uniqueName]["single"] = [self.ChannelName(channel,year)]
         self.Observed.setdefault(uniqueName,[])
         self.Observed[uniqueName] = [-1]
         self.bkgNames.setdefault(uniqueName,[])
@@ -122,60 +129,68 @@ class CreateDataCards:
         with open(workingDir+AnalysisOutput, "U") as file:
             lines = file.readlines()
             for line in lines:
-                if "integral" in line and self.mode in line and "bkg_pred" in line:
-                    self.bkgNames[uniqueName].append(line.split()[0]  if "h_" in self.mode else line.split()[0])
-                    self.RatesBkg[uniqueName].setdefault(ChannelName,[]).append(line.split()[-1] if "h_" in self.mode else line.split()[-4]) #TODO fix for all cases. Before was -3
-                if "signal" in line:
-                    self.RatesSignal[uniqueName][int(line.split()[0][1:])] = line.split()[-1]
+                if "integral" in line and self.fitFunction in line and self.mode in line:
+                    self.bkgNames[uniqueName].append(line.split()[0]  if "h_" in self.fitFunction else line.split()[0])
+                    self.RatesBkg[uniqueName].setdefault(self.ChannelName(channel,year),[]).append(line.split()[-1] if "h_" in self.fitFunction else line.split()[-2]) #TODO fix for all cases. Before was -3
+                if "signal" in line and not any(syst in line for syst in self.Systematics+self.Systematics_Scale):
+                    self.RatesSignal[uniqueName][line.split()[0]] = line.split()[-1]
                 if "param" in line.lower():
                     # if "rateParam" in line:
-                    #     Parameters.append(MergeListString(["TF","rateParam",ChannelName]+[self.mode if "h_" in self.mode else "default_value"]+[line.split()[-1]]))
+                    #     Parameters.append(MergeListString(["TF","rateParam",self.ChannelName(channel,year)]+[self.fitFunction if "h_" in self.fitFunction else "default_value"]+[line.split()[-1]]))
                     # elif "sg_" in line:
                     if "sg_" in line:
                         self.ParametersSignal[uniqueName].setdefault(line.split()[0],[]).append(MergeListString(line.split()[1:]))
-                    elif self.mode in line and not self.mode == line.split()[0] and "bkg_pred" in line:
+
+                    elif self.fitFunction in line and not self.fitFunction == line.split()[0] and self.mode in line:
                         self.Parameters[uniqueName].append(MergeListString(line.split()))
         for index, par in enumerate(self.Parameters[uniqueName]):
             self.Parameters[uniqueName][index] = par.replace("default_value",self.bkgNames[uniqueName][-1])
+
+    def ChannelName(self,channel,year):
+        return channel.replace("channel","")+"_"+year
     def DataCardName(self,uniqueName,signalName):
-        return "DataCard_"+uniqueName+"_"+signalName+"_"+self.mode+".txt"
+        return "DataCard_"+uniqueName+"_"+signalName+"_"+self.fitFunction+".txt"
+
     def DataCardOutPutName(self,workingDir,filename):
         return workingDir+"out/"+filename.replace(".txt","")+"_"+self.Method+"_"+self.extraOptionsText+".out"
+
     def GetWorkdirName(self,uniqueName):
         workingDir = self.AnalysisDir+"/"+uniqueName+"/datacards/"
         os.system("mkdir -p "+workingDir+"out")
         uniqueName = uniqueName.replace("/","_")
         return uniqueName,workingDir
+
     def AppendDataCard(self,workingDir,outname,filename,signalName=""):
         # cmd = ["combine", "-M", "AsymptoticLimits", "-d", workingDir+filename, "-t", "-1", "-n", signalName]
-        cmd = [workingDir, "combine", "-M", self.Method, "-d", filename, "-n", signalName]
+        cmd = [workingDir, "combine", "-M", self.Method, "-d", filename, "-n", signalName+"_"+self.fitFunction]
         cmd+= self.extraOptions
         self.list_processes.append(cmd)
         self.list_logfiles.append(outname)
         if self.RunCombine and os.path.exists(outname): os.remove(outname)
+
     def CombineCards(self,workingDir,filename,signalName,inputCards):
-        a = os.system("combineCards.py "+inputCards+" > "+workingDir+filename)
+        if not self.RunCombine: a = os.system("combineCards.py "+inputCards+" > "+workingDir+filename)
         outname = self.DataCardOutPutName(workingDir,filename)
         self.AppendDataCard(workingDir=workingDir,outname=outname,filename=filename,signalName=signalName)
+
     @timeit
     def WriteDataCards(self):
         for histFolder in self.histFolders:
             for collection in self.collections:
                 for year in self.years:
                     for channel in self.channels:
-                        ChannelName = channel+"_"+year
                         uniqueName = year+"/"+collection+"/"+channel+"/"+histFolder
                         uniqueName, workingDir = self.GetWorkdirName(uniqueName)
-                        self.ExtractParameters(uniqueName,workingDir,year,collection,channel,histFolder)
-                        for sn in self.RatesSignal[uniqueName]:
-                            signalName = "M"+str(sn)
+                        self.ExtractParameters(uniqueName,workingDir,year,channel,histFolder)
+                        for signalName in self.RatesSignal[uniqueName]:
                             filename = self.DataCardName(uniqueName,signalName)
-                            Rates = [self.RatesSignal[uniqueName][sn]]+self.RatesBkg[uniqueName][ChannelName]
+                            Rates = [self.RatesSignal[uniqueName][signalName]]+self.RatesBkg[uniqueName][self.ChannelName(channel,year)]
                             CreateDataCard(workingDir, filename, mode=histFolder, signalName= signalName, ChannelNames=self.ChannelNames[uniqueName]["single"], Observed=self.Observed[uniqueName], bkgNames=self.bkgNames[uniqueName],Rates=Rates, Parameters=self.Parameters[uniqueName]+self.ParametersSignal[uniqueName][signalName], year=year)
                             outname = self.DataCardOutPutName(workingDir,filename)
                             self.AppendDataCard(workingDir=workingDir,outname=outname,filename=filename,signalName=signalName)
                             # TODO output tree with different workingDir/name
                             # TODO Parallelize/ Optimize for multi toys (now takes 10 minutes)
+
     @timeit
     def CombineChannels(self):
         for histFolder in self.histFolders:
@@ -183,10 +198,10 @@ class CreateDataCards:
                 for year in self.years:
                     uniqueName = year+"/"+collection+"/leptonchannel/"+histFolder
                     uniqueName, workingDir = self.GetWorkdirName(uniqueName)
-                    for sn in self.RatesSignal[uniqueName.replace("leptonchannel","muonchannel")]:
-                        signalName = "M"+str(sn)
+                    for signalName in self.RatesSignal[uniqueName.replace("leptonchannel","muonchannel")]:
                         filename = self.DataCardName(uniqueName,signalName)
                         self.CombineCards(workingDir,filename,signalName, inputCards=" ".join([(channel+"_"+year+"="+workingDir+filename).replace("leptonchannel",channel) for channel in self.channels]))
+
     @timeit
     def CombineYear(self):
         for histFolder in self.histFolders:
@@ -194,28 +209,32 @@ class CreateDataCards:
                 for channel in self.channels+["leptonchannel"]:
                     uniqueName = "fullRunII/"+collection+"/"+channel+"/"+histFolder
                     uniqueName, workingDir = self.GetWorkdirName(uniqueName)
-                    for sn in self.RatesSignal[uniqueName.replace("fullRunII","2016").replace("leptonchannel","muonchannel")]:
-                        signalName = "M"+str(sn)
+                    for signalName in self.RatesSignal[uniqueName.replace("fullRunII","2016").replace("leptonchannel","muonchannel")]:
                         filename = self.DataCardName(uniqueName,signalName)
                         self.CombineCards(workingDir,filename,signalName,inputCards=" ".join([(lambda x,y: x if y!="leptonchannel" else x.replace("lepton","muon")+" "+x.replace("lepton","electron"))((channel+"_"+year+"="+workingDir+filename).replace("fullRunII",year),channel) for year in self.years if year!="RunII"]))
+
     @timeit
     def RunDataCards(self):
         # TODO if one wants to filter the running cards.
-        # list_logfiles   = list(map(lambda x: list_logfiles[x] if ("M30" in list_processes[x][-1]) else "" , range(len(list_processes))))
-        # list_processes = list(map(lambda x: list_processes[x] if ("M30" in list_processes[x][-1]) else "" , range(len(list_processes))))
-        # list_logfiles  = list(filter(lambda x: x!="", list_logfiles))
-        # list_processes = list(filter(lambda x: x!="", list_processes))
-        # for i in range(len(list_processes)):
-        #     print list_processes[i], list_logfiles[i]
-        # print len(list_processes)
-        # print " ".join(list_processes[0])
-        # print list_logfiles[0]
+        # self.list_logfiles  = list(map(lambda x: self.list_logfiles[x]  if ("RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
+        # self.list_processes = list(map(lambda x: self.list_processes[x] if ("RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
+        self.list_logfiles  = list(map(lambda x: self.list_logfiles[x]  if (not "RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
+        self.list_processes = list(map(lambda x: self.list_processes[x] if (not "RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
+        self.list_logfiles  = list(filter(lambda x: x!="", self.list_logfiles))
+        self.list_processes = list(filter(lambda x: x!="", self.list_processes))
+        # for i in range(len(self.list_processes)):
+        #     print self.list_processes[i], self.list_logfiles[i]
+        print len(self.list_processes)
+        # print " ".join(self.list_processes[0])
+        print self.list_processes[0]
         if self.RunCombine: parallelise(self.list_processes, 20, self.list_logfiles, cwd=True)
 
 
 if __name__ == '__main__':
-    Method="AsymptoticLimits"
-    extraOptions = ["-t", "-1"]
+    # Method="AsymptoticLimits"
+    # extraOptions = ["-t", "-1"]
+    Method="FitDiagnostics"
+    extraOptions = ["--saveWorkspace", "--saveShapes"]
     extraOptionsText = "Asimov"
     isHbb = False
     # TODO Don't create datacards if not needed.
