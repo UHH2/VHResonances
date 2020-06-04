@@ -19,4 +19,4 @@ typedef std::pair<std::string, int> mypair_I;
 
 double EfficiencyError(double count, double N);
 bool isCSRegion(std::string tag);
-void CalculateSignalEfficiencies();
+void CalculateSignalEfficiencies(std::string histFolder ="btag_DeepBoosted_H4qvsQCD");
