@@ -11,6 +11,7 @@ import ROOT as rt
 #############
 
 def tdrGrid( gridOn):
+  tdrStyle = gROOT.FindObject("tdrStyle")
   tdrStyle.SetPadGridX(gridOn)
   tdrStyle.SetPadGridY(gridOn)
 
@@ -183,6 +184,7 @@ lumi_sqrtS = ""
 drawLogo = False
 
 def CMS_lumi(pad, iPeriod=4, iPosX=11):
+
   outOfFrame    = False
   if(iPosX/10==0 ): outOfFrame = True
   alignY_=3
@@ -234,7 +236,7 @@ def CMS_lumi(pad, iPeriod=4, iPosX=11):
     lumiText += "8 TeV"
   elif ( iPeriod==0 ):
     lumiText += lumi_sqrtS
-  # print lumiText
+
   latex = rt.TLatex()
   latex.SetNDC()
   latex.SetTextAngle(0)
@@ -306,10 +308,10 @@ kRectangular = False
 
 # Give the macro an empty histogram for h.Draw("AXIS")
 # Create h after calling setTDRStyle to get all the settings right
-def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square=kRectangular, iPeriod=4, iPos=11, extraText_ = "Preliminary"):
-  # setTDRStyle()
+def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square=kRectangular, iPeriod=4, iPos=11):
+  setTDRStyle()
   # writeExtraText = true       # if extra text
-  extraText  = extraText_  # default extra text is "Preliminary"
+  # extraText  = extraText_  # default extra text is "Preliminary"
   # lumi_8TeV  = "19.5 fb^{-1}" # default is "19.7 fb^{-1}"
   # lumi_7TeV  = "5.0 fb^{-1}"  # default is "5.1 fb^{-1}"
   # int iPeriod = 3    # 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV
@@ -321,6 +323,7 @@ def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square
   # mode generally :
   #   iPos = 10*(alignement 1/2/3) + position (1/2/3 = left/center/right)
   #  if( iPos==0 ) relPosX = 0.12
+
   W = 600 if square else 800
   H = 600 if square else 600
   # Simple example of macro: plot with CMS name and lumi text
@@ -336,8 +339,8 @@ def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square
   # references for T, B, L, R
   T = 0.07*H_ref if square else 0.08*H_ref
   B = 0.13*H_ref if square else 0.12*H_ref
-  L = 0.15*H_ref if square else 0.12*H_ref
-  R = 0.05*H_ref if square else 0.04*H_ref
+  L = 0.15*H_ref if square else 0.16*H_ref
+  R = 0.05*H_ref if square else 0.05*H_ref
   #
   canv = rt.TCanvas(canvName,canvName,50,50,W,H)
   canv.SetFillColor(0)
@@ -361,7 +364,7 @@ def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square
   h.Draw("AXIS")
   #
   # writing the lumi information and the CMS "logo"
-  # CMS_lumi( canv, iPeriod, iPos )
+  CMS_lumi( canv, iPeriod, iPos )
   #
   canv.Update()
   canv.RedrawAxis()

@@ -16,9 +16,6 @@
 #include "UHH2/VHResonances/include/constants.hpp"
 #include "UHH2/VHResonances/Analysis/include/tdrstyle_all.hpp"
 
-// double plot_hi = 2800;
-extern const double plot_lo = 300;
-extern const double plot_hi = 8200;
 extern const unsigned int nPoints=MassPoints.size();
 
 

@@ -188,7 +188,7 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
     Trigger_selection[t.first].reset(new TriggerSelection( t.first ));
   }
 
-  ZprimeCandidateReconstruction_module.reset(new ZprimeCandidateReconstruction(ctx, min_jet_dilep_pt, min_DR_dilep, max_DR_dilep, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, MS["leptons"], MS["topjetLabel"]));
+  ZprimeCandidateReconstruction_module.reset(new ZprimeCandidateReconstruction(ctx, min_dilep_pt, min_DR_dilep, max_DR_dilep, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, MS["leptons"], MS["topjetLabel"]));
   CollectionProducer_module.reset(new CollectionProducer<ZprimeCandidate>( ctx, "ZprimeCandidate", "ZprimeCandidate", (ZprimeCandidate_ID)ZprimeCandidateID(h_ZprimeCandidates)));
   PTMassCut_selection.reset(new PTMassCut(min_Z_pt_ZH_mass, h_ZprimeCandidates));
 

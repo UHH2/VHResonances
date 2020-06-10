@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 import os, ROOT, glob, subprocess, math
 from tdrstyle_all import *
-
 from Utils import *
 
 ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/VHResonances/include/constants.hpp"')
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.gStyle.SetOptStat(0)
+
+import tdrstyle_all
+tdrstyle_all.writeExtraText = True
+tdrstyle_all.extraText  = "Work in progress"
 
 colors = {  "h_bkg_inp"  : (ROOT.kFullSquare,   ROOT.kBlue+1),
             "h_sig_inp"  : (ROOT.kFullSquare,   ROOT.kGreen+3),
@@ -29,6 +32,8 @@ class CompareCombineInputs(ModuleRunnerBase):
         self.max = 4000 #TODO take it from file
         self.nEventsSR = 1235. #TODO take it from file
         self.xsec_ref = 0.001 #TODO take it from file
+        self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/CompareCombineInputs/"
+        os.system("mkdir -p "+self.outdir)
 
     def RunAll(self):
         self.LoadHistos()
@@ -43,9 +48,9 @@ class CompareCombineInputs(ModuleRunnerBase):
         file_ = ROOT.TFile(self.Path_STORAGE+self.year+"/"+self.nameFolders+"uhh2.AnalysisModuleRunner.MC.MC_DY_"+self.year+"_noTree.root")
         self.histos["bkg_SR"] = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone("bkg_SR")
         self.histos["bkg_SR"].SetDirectory(0)
-        self.histos["bkg_pred"] = file_.Get("ZprimeCandidate_"+self.histFolder+"_CR/"+self.histoName).Clone("bkg_pred")
-        self.histos["bkg_pred"].SetDirectory(0)
-        self.histos["bkg_pred"].Scale(self.nEventsSR/(self.histos["bkg_pred"].Integral(self.histos["bkg_pred"].FindBin(self.min),self.histos["bkg_pred"].FindBin(self.max))))
+        self.histos["DATA_CR"] = file_.Get("ZprimeCandidate_"+self.histFolder+"_CR/"+self.histoName).Clone("DATA_CR")
+        self.histos["DATA_CR"].SetDirectory(0)
+        self.histos["DATA_CR"].Scale(self.nEventsSR/(self.histos["DATA_CR"].Integral(self.histos["DATA_CR"].FindBin(self.min),self.histos["DATA_CR"].FindBin(self.max))))
         for massPoint in self.SignalSamples:
             file_ = ROOT.TFile(self.Path_STORAGE+self.year+"/"+self.nameFolders+"uhh2.AnalysisModuleRunner.MC."+massPoint+"_"+self.year+"_noTree.root")
             self.histos[massPoint] = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone(massPoint)
@@ -55,40 +60,39 @@ class CompareCombineInputs(ModuleRunnerBase):
             self.histos[massPoint+"sign_prefit"] = fileCombine.Get("shapes_prefit/"+self.channel+"_"+self.year+"/total_signal")
             self.histos[massPoint+"sign_prefit"].SetDirectory(0)
             self.histos[massPoint+"sign_prefit"].Scale(self.histos[massPoint+"sign_prefit"].GetBinWidth(1))
-            self.histos[massPoint+"shapes_fit_s"] = fileCombine.Get("shapes_fit_s/"+self.channel+"_"+self.year+"/total_signal")
-            self.histos[massPoint+"shapes_fit_s"].SetDirectory(0)
-            self.histos[massPoint+"shapes_fit_s"].Scale(self.histos[massPoint+"shapes_fit_s"].GetBinWidth(1))
-            self.histos[massPoint+"bkg_prefit"] = fileCombine.Get("shapes_fit_s/"+self.channel+"_"+self.year+"/total_background")
-            self.histos[massPoint+"bkg_prefit"].SetDirectory(0)
-            self.histos[massPoint+"bkg_prefit"].Scale(self.histos[massPoint+"bkg_prefit"].GetBinWidth(1))
+            # self.histos[massPoint+"shapes_fit_s"] = fileCombine.Get("shapes_fit_s/"+self.channel+"_"+self.year+"/total_signal")
+            # self.histos[massPoint+"shapes_fit_s"].SetDirectory(0)
+            # self.histos[massPoint+"shapes_fit_s"].Scale(self.histos[massPoint+"shapes_fit_s"].GetBinWidth(1))
+            self.histos["bkg_prefit"] = fileCombine.Get("shapes_fit_s/"+self.channel+"_"+self.year+"/total_background")
+            self.histos["bkg_prefit"].SetDirectory(0)
+            self.histos["bkg_prefit"].Scale(self.histos["bkg_prefit"].GetBinWidth(1))
 
 
 
     def CreateCanvas(self):
-        self.canv = tdrCanvas("bkg_pred_signals", 300, 10000, 1e-3, 1e06, "M(Z')", "Events")
+        tdrstyle_all.lumi_13TeV  = str(self.lumi_fb)+" fb^{-1}"
+        self.canv = tdrCanvas("canv", 300, 10000, 1e-3, 1e06, "M(Z')", "Events")
         self.canv.SetLogy(1)
         self.leg = tdrLeg(0.40,0.70,0.89,0.89, 0.030, 42, ROOT.kBlack)
         self.leg.SetNColumns(4)
 
     def Plot(self):
         for name,hist in self.histos.items():
-            col = ROOT.kRed+1 if "Zprime" in name else ROOT.kBlue+1 if "bkg_pred" in name else ROOT.kBlack
+            col = ROOT.kRed+1 if "Zprime" in name else ROOT.kBlue+1 if "DATA_CR" in name else ROOT.kBlack
             if "bkg_SR" in name : col = ROOT.kGreen+2
-            if "bkg_prefit" in name : col = ROOT.kRed+1
+            if "bkg_prefit" in name : col = ROOT.kOrange+1
             line = ROOT.kDashed if not "fit" else ROOT.kSolid
             tdrDraw(hist,  "hist", ROOT.kFullDotLarge, col, line, col, 0, col)
-            if not "fit" in name: self.leg.AddEntry(hist, name.replace(self.signal+"_",""), "l")
+            if not self.signal in name or "bkg" in name: self.leg.AddEntry(hist, name.replace(self.signal+"_",""), "l")
 
     def Save(self):
         self.leg.Draw("same")
-        self.canv.SaveAs(self.Path_ANALYSIS+"Analysis/OtherPlots/CompareCombineInputs_bkg_pred_signals_"+self.histFolder+"_"+self.year+"_"+self.channel+".pdf")
-
+        self.canv.SaveAs(self.outdir+"bkg_pred_signals_"+self.histFolder+"_"+self.year+"_"+self.channel+".pdf")
 
 
 class CompareDistibutionsOverYear(VariablesBase):
     def __init__(self, nameFolders="SignalRegion/Puppi/muonchannel/nominal/", sampleName="MC_DY", histFolder="ZprimeCandidate_Selection", extraname="muon"):
         VariablesBase.__init__(self)
-        # self.years        = ["2016"]
         self.defYear        = "2016"
         self.nameFolders    = nameFolders
         self.sampleName     = sampleName
@@ -97,6 +101,8 @@ class CompareDistibutionsOverYear(VariablesBase):
         self.h_inp          = {}
         self.h_ratio        = {}
         self.files          = {}
+        self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/CompareCombineInputs/"
+        os.system("mkdir -p "+self.outdir)
 
     def RunAll(self):
         self.LoadFiles()
@@ -131,6 +137,7 @@ class CompareDistibutionsOverYear(VariablesBase):
             self.h_ratio[year].Scale(math.sqrt(ModuleRunnerBase(year).lumi_fb/ModuleRunnerBase(self.defYear).lumi_fb))
 
     def CreateCanvas(self):
+        tdrstyle_all.lumi_13TeV  = str(ModuleRunnerBase("RunII").lumi_fb)+" fb^{-1}"
         if "Zprime" in self.hname:
             self.canv = tdrCanvas(self.hname, 300, 4500, 1e-01, 1e05, "M(Z')", "Events")
         elif "jet" in self.hname:
@@ -150,10 +157,7 @@ class CompareDistibutionsOverYear(VariablesBase):
 
     def Save(self):
         self.leg.Draw("same")
-        self.canv.SaveAs(self.Path_ANALYSIS+"Analysis/OtherPlots/CompareCombineInputs_"+self.sampleName+"_"+self.histFolder+"_"+self.extraname+".pdf")
-
-
-
+        self.canv.SaveAs(self.outdir+self.sampleName+"_"+self.histFolder+"_"+self.extraname+".pdf")
 
 
 

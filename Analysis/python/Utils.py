@@ -1,7 +1,13 @@
-import time, sys, os
+import time, sys, os, functools, ROOT
 
 sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros/")
 from ModuleRunnerBase import *
+
+ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/VHResonances/include/constants.hpp"')
+ROOT.gROOT.SetBatch(ROOT.kTRUE)
+ROOT.gStyle.SetOptStat(0)
+
+from tdrstyle_all import *
 
 def prettydic(d, indent=8):
     space = max([0]+[len(str(x)) for x in d])+2
@@ -14,6 +20,7 @@ def prettydic(d, indent=8):
             print(" "*(space-len(str(key))) + str(value))
 
 def timeit(method):
+    @functools.wraps(method)
     def timed(*args, **kw):
         print "Start", method.__name__
         ts = time.time()

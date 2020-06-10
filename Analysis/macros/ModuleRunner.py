@@ -7,7 +7,6 @@ from Utils import *
 from parallelise import *
 from CreateConfigFiles import *
 from functions import *
-import ROOT
 
 #This file contains all the classes and functions to clean up the steer.py code
 
@@ -62,6 +61,7 @@ class ModuleRunner(ModuleRunnerBase):
                                     "Selection"          : {"sample": self.Samples_Category[self.year], "all": self.Samples_CategoryAll},
                                     "SignalRegion"       : {"sample": self.Samples_Category[self.year], "all": self.Samples_CategoryAll},
                                     "SF"                 : {"sample": self.Samples_original[self.year], "all": self.Samples_NamesAll},
+                                    "LeptonIDStudies"    : {"sample": self.Samples_original[self.year], "all": self.Samples_NamesAll},
                                     "VariableRStudies"   : {"sample": [x for x in self.Samples_original[self.year] if not "DATA".lower() in x.lower()], "all": self.Samples_NamesAll},
                                     }
 
@@ -94,9 +94,9 @@ class ModuleRunner(ModuleRunnerBase):
         #     self.Samples = list(self.Samples[~mask]) + [self.signal+"Tobb"+x[len(self.signal):] for x in temp] + [self.signal+"ToWW"+x[len(self.signal):] for x in temp] + [self.signal+"_extra"+x[len(self.signal):] for x in temp]
         # else:
         #     self.Samples = self.Samples
-        if self.Module == "SF":
-            # self.Samples = [sample for sample in self.Samples if "DATA" in sample or "MC_TT" in sample]
-            self.Samples = [sample for sample in self.Samples if "MC_TT" in sample]
+        # if self.Module == "SF":
+        #     # self.Samples = [sample for sample in self.Samples if "DATA" in sample or "MC_TT" in sample]
+        #     self.Samples = [sample for sample in self.Samples if "MC_TT" in sample]
         if "Test" in self.Module or "GenericCleaning" in self.Module or "VariableRStudies" in self.Module:
             self.Collections = ["All"]
         if ( "GenericCleaning" in self.Module or "Test" in self.Module or "NeuralNetwork" in self.Module or "VariableRStudies" in self.Module ):
@@ -232,11 +232,11 @@ class ModuleRunner(ModuleRunnerBase):
                     process.wait()
         os.chdir(cwd)
 
-    def MakeRunII(self, Collections=[], Channels=[], Systematics=[]):
+    def MakeRunII(self, Collections=[], Channels=[], Systematics=[], doPlots=False):
         year = "RunII"
         list_processes = []
         list_processes_plots = []
-        for module in ["Preselection","Selection","SignalRegion"]:
+        for module in ["Preselection","Selection","SignalRegion", "LeptonIDStudies"]:
             self.SetModule(module, Collections=Collections, Channels=Channels, Systematics=Systematics)
             for collection in self.Collections:
                 for channel in self.Channels:
@@ -258,13 +258,14 @@ class ModuleRunner(ModuleRunnerBase):
         #     print i
         print "Number of processes", len(list_processes)
         parallelise(list_processes, 20)
-        # print "Number of processes", len(list_processes_plots)
-        # cwd = os.getcwd()
-        # os.chdir(self.Path_SPlotter)
-        # for proc in list_processes_plots:
-        #     process = subprocess.Popen(" ".join(proc), shell=True)
-        #     process.wait()
-        # os.chdir(cwd)
+        if doPlots:
+            print "Number of processes", len(list_processes_plots)
+            cwd = os.getcwd()
+            os.chdir(self.Path_SPlotter)
+            for proc in list_processes_plots:
+                process = subprocess.Popen(" ".join(proc), shell=True)
+                process.wait()
+            os.chdir(cwd)
 
     @timeit
     def DoChecks(self):

@@ -14,7 +14,7 @@ DiLeptonHists::DiLeptonHists(Context & ctx, const string & dname, const string &
   if (topjetcollection != "") h_topjets = ctx.get_handle<vector<TopJet>>(topjetcollection);
 
   // book all histograms here
-  for (const string & lepton: {"Electron", "Muon"}) {
+  for (const string & lepton: leptonNames) {
     string dilepton = (lepton=="Electron") ? "ee" : "#mu#mu";
     book_TH1F("di"+lepton+"_number",  "number of "+dilepton,                11, -.5, 10.5);
     book_TH1F("di"+lepton+"_charge",  "charge of "+dilepton,                5,-2.5,2.5);
@@ -42,7 +42,7 @@ void DiLeptonHists::fill(const Event & event){
   // fill the histograms.
   auto weight = event.weight;
 
-  for (const string & lepton: {"Electron", "Muon"}) {
+  for (const string & lepton: leptonNames) {
     vector<Particle> leptons;
     if (lepton == "Muon") leptons.assign(event.muons->begin(), event.muons->end());
     else if (lepton == "Electron") leptons.assign(event.electrons->begin(), event.electrons->end());
