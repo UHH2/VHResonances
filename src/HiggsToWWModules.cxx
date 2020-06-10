@@ -38,7 +38,7 @@ bool FinalStateMatching::process(Event &event){
     ParticleFlavorMap["Z"] = 1;
     ParticleFlavorMap["H"] = 2;
     if (!d1 || !d2) continue;
-    if (DobleDecay(d1->pdgId(), d2->pdgId(),ZH)) {
+    if (DoubleDecay(d1->pdgId(), d2->pdgId(),ZH)) {
       if (d2->pdgId()!=25) {
         ParticleFlavorMap["Z"] = 2;
         ParticleFlavorMap["H"] = 1;
@@ -50,16 +50,16 @@ bool FinalStateMatching::process(Event &event){
     const GenParticle* Z_dau1 = gp.daughter(event.genparticles, ParticleFlavorMap["Z"])->daughter(event.genparticles, 1);
     const GenParticle* Z_dau2 = gp.daughter(event.genparticles, ParticleFlavorMap["Z"])->daughter(event.genparticles, 2);
     if (Z_dau1 && Z_dau2) {
-      if (DobleDecay(Z_dau1->pdgId(), Z_dau2->pdgId(),ee))        ParticleDecayMap["Z"] = Zee;
-      else if (DobleDecay(Z_dau1->pdgId(), Z_dau2->pdgId(),mumu)) ParticleDecayMap["Z"] = Zmumu;
+      if (DoubleDecay(Z_dau1->pdgId(), Z_dau2->pdgId(),ee))        ParticleDecayMap["Z"] = Zee;
+      else if (DoubleDecay(Z_dau1->pdgId(), Z_dau2->pdgId(),mumu)) ParticleDecayMap["Z"] = Zmumu;
       else ParticleDecayMap["Z"] = Zelse;
     }
 
     const GenParticle* H_dau1 = gp.daughter(event.genparticles, ParticleFlavorMap["H"])->daughter(event.genparticles, 1);
     const GenParticle* H_dau2 = gp.daughter(event.genparticles, ParticleFlavorMap["H"])->daughter(event.genparticles, 2);
     if (H_dau1 && H_dau2) {
-      if (DobleDecay(H_dau1->pdgId(), H_dau2->pdgId(),bb)) ParticleDecayMap["H"] = Hbb;
-      else if (DobleDecay(H_dau1->pdgId(), H_dau2->pdgId(),WW)) {
+      if (DoubleDecay(H_dau1->pdgId(), H_dau2->pdgId(),bb)) ParticleDecayMap["H"] = Hbb;
+      else if (DoubleDecay(H_dau1->pdgId(), H_dau2->pdgId(),WW)) {
         const GenParticle* W_dau1_1 = H_dau1->daughter(event.genparticles, 1);
         const GenParticle* W_dau1_2 = H_dau1->daughter(event.genparticles, 2);
         const GenParticle* W_dau2_1 = H_dau2->daughter(event.genparticles, 1);
@@ -68,8 +68,8 @@ bool FinalStateMatching::process(Event &event){
         auto ID1_2 = W_dau1_2->pdgId();
         auto ID2_1 = W_dau2_1->pdgId();
         auto ID2_2 = W_dau2_2->pdgId();
-        if (W_dau1_1 && W_dau1_2 && W_dau2_1 && W_dau2_2 && DobleDecay(ID1_1, ID1_2,hadronic) && DobleDecay(ID2_1, ID2_2,hadronic) ){
-          if (DobleDecay(ID1_1, ID1_2,hadronic) && DobleDecay(ID2_1, ID2_2,hadronic)) {
+        if (W_dau1_1 && W_dau1_2 && W_dau2_1 && W_dau2_2 && DoubleDecay(ID1_1, ID1_2,hadronic) && DoubleDecay(ID2_1, ID2_2,hadronic) ){
+          if (DoubleDecay(ID1_1, ID1_2,hadronic) && DoubleDecay(ID2_1, ID2_2,hadronic)) {
             ParticleDecayMap["H"] = HWW;
           } else ParticleDecayMap["H"] = Helse;
         } else ParticleDecayMap["H"] = Helse;
