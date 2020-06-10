@@ -4,12 +4,29 @@
 
 void PlotLimits(bool doObs, bool isHbb) {
 
+  // double plot_hi = 2800;
+  const double plot_lo = 300;
+  const double plot_hi = 8200;
+
+  const double yaxis_lo = 1e-02;
+  const double yaxis_hi = 1e05;
+
   std::map<std::string, int> colors = {
     {"2016",kViolet+1}, {"2017",kOrange+1}, {"2018",kCyan+1}, {"RunII",kGreen+2}, {"fullRunII", kGreen+1},
     {"btag_DeepBoosted_H4qvsQCD",kGreen+1}, {"NN",kOrange+1}, {"NN_1",kViolet+1}, {"NN_2",kCyan+1}, {"CNN",kBlue+1}, {"tau42",kRed+1},
     {"btag_DeepBoosted_HbbvsQCD",kGreen+1}, {"btag_DeepBoosted_probHbb",kViolet+1}, {"tau32",kBlue+1}, {"tau21",kOrange+1},
-    {"btag_DeepBoosted_H4qvsQCDp2", kOrange+1}, {"btag_DeepBoosted_H4qvsQCDp02", kViolet+1}, {"btag_DeepBoosted_H4qvsQCDpt1000", kCyan+1},
+    {"btag_DeepBoosted_H4qvsQCDp2", kOrange+1}, {"btag_DeepBoosted_H4qvsQCDp02", kYellow+1}, {"btag_DeepBoosted_H4qvsQCDpt1000", kCyan+1},
     {"btag_DeepBoosted_H4qvsQCDpt1000p2", kBlue+1}, {"btag_DeepBoosted_H4qvsQCDpt1000p02", kRed+1},
+    {"btag_DeepBoosted_H4qvsQCDptdep", kRed+1},
+    {"btag_DeepBoosted_H4qvsQCDptdep_x3",   kOrange+1},
+    {"btag_DeepBoosted_H4qvsQCDptdep_x2x3", kMagenta+1},
+    {"btag_DeepBoosted_H4qvsQCDptdep_x1x3", kViolet+1},
+    {"btag_DeepBoosted_H4qvsQCDmassdep_x3",   kBlue+1},
+    {"btag_DeepBoosted_H4qvsQCDmassdep2_x3",  kCyan},
+    {"btag_DeepBoosted_H4qvsQCDmassdep_x2x3", kGreen+3},
+    {"btag_DeepBoosted_H4qvsQCDmassdep_x1x3", kAzure+1},
+    {"btag_DeepBoosted_H4qvsQCDmassdep_x1x2", kViolet-9},
+
   };
 
 
@@ -35,13 +52,20 @@ void PlotLimits(bool doObs, bool isHbb) {
   std::vector<std::string> collections = {"Puppi"};
   // std::vector<std::string> channels = {"muonchannel", "electronchannel"};
   std::vector<std::string> channels = {"muonchannel", "electronchannel", "leptonchannel"};
-  std::vector<std::string> years = {"2016", "2017", "2018", "RunII", "fullRunII"};
+  // std::vector<std::string> years = {"2016", "2017", "2018", "RunII", "fullRunII"};
+  std::vector<std::string> years = {"RunII"};
   // std::vector<std::string> years = {"2016"};
   // std::vector<std::string> channels = {"muonchannel"};
   // std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "NN", "tau21","tau31", "tau41", "tau32", "tau42", "tau43"};
   // std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD"};
-  std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDpt1000", "btag_DeepBoosted_H4qvsQCDpt1000p2", "btag_DeepBoosted_H4qvsQCDpt1000p02"};
-  if (isHbb) histFolders = {"btag_DeepBoosted_HbbvsQCD", "btag_DeepBoosted_probHbb", "tau42", "tau32", "tau21" };
+  // std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDpt1000", "btag_DeepBoosted_H4qvsQCDpt1000p2", "btag_DeepBoosted_H4qvsQCDpt1000p02"};
+  // std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCDptdep", "btag_DeepBoosted_H4qvsQCDp02",
+  // "btag_DeepBoosted_H4qvsQCDptdep_x3", "btag_DeepBoosted_H4qvsQCDptdep_x2x3", "btag_DeepBoosted_H4qvsQCDptdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x3",
+  // "btag_DeepBoosted_H4qvsQCDmassdep2_x3", "btag_DeepBoosted_H4qvsQCDmassdep_x2x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x2" };
+  std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCDmassdep_x3","btag_DeepBoosted_H4qvsQCDptdep",
+  "btag_DeepBoosted_H4qvsQCDptdep_x3", "btag_DeepBoosted_H4qvsQCDptdep_x2x3", "btag_DeepBoosted_H4qvsQCDptdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x3",
+  "btag_DeepBoosted_H4qvsQCDmassdep2_x3", "btag_DeepBoosted_H4qvsQCDmassdep_x2x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x2" };
+  // // if (isHbb) histFolders = {"btag_DeepBoosted_HbbvsQCD", "btag_DeepBoosted_probHbb", "tau42", "tau32", "tau21" };
 
   std::unordered_map<std::string, std::unordered_map<std::string, std::vector<double>>> Limits;
 
@@ -104,7 +128,7 @@ void PlotLimits(bool doObs, bool isHbb) {
     }
   }
 
-  TString nameXaxix = "m(Z')";
+  TString nameXaxix = "m(Z') [GeV]";
   // TString nameYaxix = "#sigma\(pp#rightarrowX\) #times Br\(Z'#rightarrowZ\(ll\) H\(WW\)\) \(fb\)";
   TString nameYaxix = "#sigma#left(pp#rightarrowX#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)";
 
@@ -115,7 +139,7 @@ void PlotLimits(bool doObs, bool isHbb) {
   std::unordered_map<std::string, TCanvas*> Canvas_Limits_Comparison;
   std::unordered_map<std::string, TLegend*> Legend_Limits_Comparison;
 
-  Canvas_Limits_Comparison["all"] = tdrCanvas("c_limits_comparison_all", plot_lo, plot_hi, 1e-01, 1e3, nameXaxix, nameYaxix);
+  Canvas_Limits_Comparison["all"] = tdrCanvas("c_limits_comparison_all", plot_lo, plot_hi, yaxis_lo, yaxis_hi, nameXaxix, nameYaxix);
   Legend_Limits_Comparison["all"] = tdrLeg(0.65,0.5,0.9,0.85, 0.025, 42, kBlack);
 
   for (auto [name,canvas]: Canvas_Limits_Comparison ) {
@@ -145,21 +169,25 @@ void PlotLimits(bool doObs, bool isHbb) {
         extraText  = "Work in progress" ;//"Preliminary";
         lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at((year=="fullRunII")?"RunII":year).at("lumi_fb"));
 
-        TCanvas* c_xsec_modecomparison = tdrCanvas("c_xsec_modecomparison", plot_lo, plot_hi, 1e-01, 1e5, nameXaxix, nameYaxix);
-        c_xsec_modecomparison->SetLogy(1);
+        // TCanvas* c_xsec_modecomparison = tdrCanvas("c_xsec_modecomparison", plot_lo, plot_hi, yaxis_lo, yaxis_hi, nameXaxix, nameYaxix);
+        TCanvas* c_xsec_modecomparison = tdrCanvas("c_xsec_modecomparison", plot_lo, plot_hi, 0.8, 1.3, nameXaxix, nameYaxix);
+        // c_xsec_modecomparison->SetLogy(1);
         c_xsec_modecomparison->SetGridx(1);
         c_xsec_modecomparison->SetGridy(1);
 
-        TLegend *leg_modecomparison = tdrLeg(0.45,0.65,0.9,0.85, 0.03, 42, kBlack);
+        TLegend *leg_modecomparison = tdrLeg(0.45,0.65,0.9,0.85, 0.02, 42, kBlack);
         leg_modecomparison->SetFillStyle(1); leg_modecomparison->SetFillColor(kWhite);
         leg_modecomparison->SetFillStyle(0);
 
         std::string dir_modecomparison = AnalysisDir+"/"+year+"/"+collection+"/"+channel+"/";
 
+
+        TGraphAsymmErrors *g_xsec_mode_ref;
+
         for (std::string histFolder : histFolders) {
           std::string workingDir = year+"/"+collection+"/"+channel+"/"+histFolder+"/";
 
-          TCanvas* c_xsec = tdrCanvas(("xsec"+workingDir).c_str(), plot_lo, plot_hi, 1e-01, 1e5, nameXaxix, nameYaxix);
+          TCanvas* c_xsec = tdrCanvas(("xsec"+workingDir).c_str(), plot_lo, plot_hi, yaxis_lo, yaxis_hi, nameXaxix, nameYaxix);
           c_xsec->SetLogy(1);
           c_xsec->SetGridx(1);
           c_xsec->SetGridy(1);
@@ -219,8 +247,24 @@ void PlotLimits(bool doObs, bool isHbb) {
           // g_xsec_2sigma->Write("g_xsec_2sigma");
           // file->Close();
           c_xsec_modecomparison->cd();
-          tdrDraw(g_xsec_mode,  "L",  20, colors[histFolder], 2, colors[histFolder], 1000, colors[histFolder]);
-          leg_modecomparison->AddEntry(g_xsec_mode, histFolder.c_str(), "L");
+          // if (histFolder=="btag_DeepBoosted_H4qvsQCDptdep") g_xsec_mode_ref = new TGraphAsymmErrors(nPoints, &(MassPoints[0]), &(Limits[workingDir]["xsec"][0]));
+          if (histFolder=="btag_DeepBoosted_H4qvsQCDmassdep_x3") g_xsec_mode_ref = new TGraphAsymmErrors(nPoints, &(MassPoints[0]), &(Limits[workingDir]["xsec"][0]));
+          if (histFolder=="btag_DeepBoosted_H4qvsQCDptdep") continue;
+
+          TGraphAsymmErrors* g_xsec_mode_scale  = new TGraphAsymmErrors(nPoints, &(MassPoints[0]), &(Limits[workingDir]["xsec"][0]));
+          for (size_t i = 0; i < nPoints; i++) {
+            double x_num, y_num, x_den, y_den;
+            g_xsec_mode_scale->GetPoint(i,x_num, y_num);
+            g_xsec_mode_ref->GetPoint(i,x_den, y_den);
+            std::cout << i << " " << x_num << " " << y_num << " " << x_den << " " << y_den << '\n';
+            g_xsec_mode_scale->SetPoint(i,x_num, y_num/y_den);
+            g_xsec_mode_scale->GetPoint(i,x_num, y_num);
+            std::cout << i << " " << x_num << " " << y_num << " " << x_den << " " << y_den << '\n';
+          }
+          tdrDraw(g_xsec_mode_scale,  "L",  20, colors[histFolder], 2, colors[histFolder], 1000, colors[histFolder]);
+          leg_modecomparison->AddEntry(g_xsec_mode_scale, histFolder.c_str(), "L");
+          // tdrDraw(g_xsec_mode,  "L",  20, colors[histFolder], 2, colors[histFolder], 1000, colors[histFolder]);
+          // leg_modecomparison->AddEntry(g_xsec_mode, histFolder.c_str(), "L");
 
           if (histFolder=="btag_DeepBoosted_H4qvsQCD") {
             Canvas_Limits_Comparison["all"]->cd();
@@ -229,11 +273,24 @@ void PlotLimits(bool doObs, bool isHbb) {
           }
         }
         c_xsec_modecomparison->cd();
-        leg_modecomparison->Draw("");
+        // tdrDraw(gr_theo,  "C", kFullDotLarge, kRed+1, kSolid, kRed+1);
+        // tdrDraw(gr_Hbb,  "C", kFullDotLarge, kBlue+1, kDotted, kBlue+1);
+        // tdrDraw(gr_Hbb0b,  "C", kFullDotLarge, kBlue+1, kDashed, kBlue+1);
+        // leg_modecomparison->AddEntry(gr_theo, "Prediction", "l");
+        // leg_modecomparison->AddEntry(gr_Hbb, "Hbb", "l");
+        // leg_modecomparison->AddEntry(gr_Hbb0b, "Hbb cat 0b", "l");
+        // leg_modecomparison->Draw("");
         c_xsec_modecomparison->SaveAs((dir_modecomparison+"UpperLimit_modecomparison.pdf").c_str());
       }
     }
   }
+  Canvas_Limits_Comparison["all"]->cd();
+  tdrDraw(gr_theo,  "C", kFullDotLarge, kRed+1, kSolid, kRed+1);
+  tdrDraw(gr_Hbb,  "C", kFullDotLarge, kBlue+1, kDotted, kBlue+1);
+  tdrDraw(gr_Hbb0b,  "C", kFullDotLarge, kBlue+1, kDashed, kBlue+1);
+  Legend_Limits_Comparison["all"]->AddEntry(gr_theo, "Prediction", "l");
+  Legend_Limits_Comparison["all"]->AddEntry(gr_Hbb, "Hbb", "l");
+  Legend_Limits_Comparison["all"]->AddEntry(gr_Hbb0b, "Hbb cat 0b", "l");
   Legend_Limits_Comparison["all"]->Draw("");
   Canvas_Limits_Comparison["all"]->SaveAs((AnalysisDir+"UpperLimit_comparison.pdf").c_str());
 
@@ -248,7 +305,7 @@ void PlotLimits(bool doObs, bool isHbb) {
   // std::string histFolder = "btag_DeepBoosted_H4qvsQCDp2";
   // std::string histFolder = "btag_DeepBoosted_H4qvsQCDp02";
   std::string workingDir = collection+"/"+channel+"/"+histFolder+"/";
-  Canvas_Limits_Ratio[workingDir] = tdrCanvas("c_limits_ratio", plot_lo, plot_hi, 1e-01, 5, nameXaxix, "Ratio Limits");
+  Canvas_Limits_Ratio[workingDir] = tdrCanvas("c_limits_ratio", plot_lo, plot_hi, yaxis_lo, 5, nameXaxix, "Ratio Limits");
   Legend_Limits_Ratio[workingDir] = tdrLeg(0.65,0.5,0.9,0.85, 0.025, 42, kBlack);
 
   for (std::string year: years) {

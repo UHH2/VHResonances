@@ -1,6 +1,5 @@
 from glob import glob
 from parallelise import *
-from fileManipulation import *
 
 import ROOT
 

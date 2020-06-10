@@ -1,4 +1,3 @@
-
 from Utils import *
 from fileManipulation import *
 from xml.dom.minidom import parseString
@@ -91,10 +90,12 @@ def newNumber(year,sample,ConfigFile,syst):
             newNumber = 1000
     if "MC_ZprimeToZH" in sample:
         newNumber = 100
-    if not "Preselection" in ConfigFile and not "SF" in ConfigFile:
+    if not "Preselection" in ConfigFile and not "SF" in ConfigFile and not "LeptonIDStudies" in ConfigFile:
         newNumber = 1 if "MC_DY" in sample else 1000
     if syst!="nominal":
         newNumber = int(0.9*newNumber)
+    if "LeptonIDStudies" in ConfigFile:
+        if not "MC_ZprimeToZH" in sample: newNumber = int(newNumber/3)
     # if "2017" in ConfigFile:
     #     isFast = False
     #     isFast = True

@@ -38,7 +38,7 @@ bool FinalStateMatching::process(Event &event){
     ParticleFlavorMap["Z"] = 1;
     ParticleFlavorMap["H"] = 2;
     if (!d1 || !d2) continue;
-    if (DobleDecay(d1->pdgId(), d2->pdgId(),ZH)) {
+    if (DoubleDecay(d1->pdgId(), d2->pdgId(),ZH)) {
       if (d2->pdgId()!=25) {
         ParticleFlavorMap["Z"] = 2;
         ParticleFlavorMap["H"] = 1;
@@ -50,16 +50,16 @@ bool FinalStateMatching::process(Event &event){
     const GenParticle* Z_dau1 = gp.daughter(event.genparticles, ParticleFlavorMap["Z"])->daughter(event.genparticles, 1);
     const GenParticle* Z_dau2 = gp.daughter(event.genparticles, ParticleFlavorMap["Z"])->daughter(event.genparticles, 2);
     if (Z_dau1 && Z_dau2) {
-      if (DobleDecay(Z_dau1->pdgId(), Z_dau2->pdgId(),ee))        ParticleDecayMap["Z"] = Zee;
-      else if (DobleDecay(Z_dau1->pdgId(), Z_dau2->pdgId(),mumu)) ParticleDecayMap["Z"] = Zmumu;
+      if (DoubleDecay(Z_dau1->pdgId(), Z_dau2->pdgId(),ee))        ParticleDecayMap["Z"] = Zee;
+      else if (DoubleDecay(Z_dau1->pdgId(), Z_dau2->pdgId(),mumu)) ParticleDecayMap["Z"] = Zmumu;
       else ParticleDecayMap["Z"] = Zelse;
     }
 
     const GenParticle* H_dau1 = gp.daughter(event.genparticles, ParticleFlavorMap["H"])->daughter(event.genparticles, 1);
     const GenParticle* H_dau2 = gp.daughter(event.genparticles, ParticleFlavorMap["H"])->daughter(event.genparticles, 2);
     if (H_dau1 && H_dau2) {
-      if (DobleDecay(H_dau1->pdgId(), H_dau2->pdgId(),bb)) ParticleDecayMap["H"] = Hbb;
-      else if (DobleDecay(H_dau1->pdgId(), H_dau2->pdgId(),WW)) {
+      if (DoubleDecay(H_dau1->pdgId(), H_dau2->pdgId(),bb)) ParticleDecayMap["H"] = Hbb;
+      else if (DoubleDecay(H_dau1->pdgId(), H_dau2->pdgId(),WW)) {
         const GenParticle* W_dau1_1 = H_dau1->daughter(event.genparticles, 1);
         const GenParticle* W_dau1_2 = H_dau1->daughter(event.genparticles, 2);
         const GenParticle* W_dau2_1 = H_dau2->daughter(event.genparticles, 1);
@@ -68,8 +68,8 @@ bool FinalStateMatching::process(Event &event){
         auto ID1_2 = W_dau1_2->pdgId();
         auto ID2_1 = W_dau2_1->pdgId();
         auto ID2_2 = W_dau2_2->pdgId();
-        if (W_dau1_1 && W_dau1_2 && W_dau2_1 && W_dau2_2 && DobleDecay(ID1_1, ID1_2,hadronic) && DobleDecay(ID2_1, ID2_2,hadronic) ){
-          if (DobleDecay(ID1_1, ID1_2,hadronic) && DobleDecay(ID2_1, ID2_2,hadronic)) {
+        if (W_dau1_1 && W_dau1_2 && W_dau2_1 && W_dau2_2 && DoubleDecay(ID1_1, ID1_2,hadronic) && DoubleDecay(ID2_1, ID2_2,hadronic) ){
+          if (DoubleDecay(ID1_1, ID1_2,hadronic) && DoubleDecay(ID2_1, ID2_2,hadronic)) {
             ParticleDecayMap["H"] = HWW;
           } else ParticleDecayMap["H"] = Helse;
         } else ParticleDecayMap["H"] = Helse;
@@ -140,7 +140,7 @@ bool ZprimeCandidateReconstruction::process(Event& event){
           auto Dphi = deltaPhi(diLep, jet);
           if( phi_min < Dphi  && Dphi< phi_max){
             auto ZplusJet = diLep + jet.v4();
-            double chi2 = TMath::Power(((jet.softdropmass()-120)/15),2)+ TMath::Power(((diLep.M()-ZMASS)/ZWIDTH),2);
+            double chi2 = TMath::Power(((jet.softdropmass()-HMASS)/HWIDTH),2)+ TMath::Power(((diLep.M()-ZMASS)/ZWIDTH),2);
             ZprimeCandidate candidate;
             candidate.set_Zprime(ZplusJet);
             candidate.set_Z(diLep);
@@ -158,50 +158,50 @@ bool ZprimeCandidateReconstruction::process(Event& event){
               candidate.set_discriminators("btag_DeepCSV_tight_subjet_"+std::to_string(sj_ind),  (double)Btag_map["DeepCSV_tight"](subjet,event));
               sj_ind++;
             }
-            candidate.set_discriminators("SDmass", jet.softdropmass());
-            candidate.set_discriminators("tau1",   jet.tau1());
-            candidate.set_discriminators("tau2",   jet.tau2());
-            candidate.set_discriminators("tau3",   jet.tau3());
-            candidate.set_discriminators("tau4",   jet.tau4());
-            candidate.set_discriminators("tau21",  (jet.tau1()!=0) ? (jet.tau2()/jet.tau1()) : -1);
-            candidate.set_discriminators("tau31",  (jet.tau1()!=0) ? (jet.tau3()/jet.tau1()) : -1);
-            candidate.set_discriminators("tau41",  (jet.tau1()!=0) ? (jet.tau4()/jet.tau1()) : -1);
-            candidate.set_discriminators("tau32",  (jet.tau2()!=0) ? (jet.tau3()/jet.tau2()) : -1);
-            candidate.set_discriminators("tau42",  (jet.tau2()!=0) ? (jet.tau4()/jet.tau2()) : -1);
-            candidate.set_discriminators("tau43",  (jet.tau3()!=0) ? (jet.tau4()/jet.tau3()) : -1);
-            candidate.set_discriminators("NN_HWW", jet.has_tag(TopJet::NN_HWW)   ? jet.get_tag(TopJet::NN_HWW) : 9999);
-            candidate.set_discriminators("NN_Hbb", jet.has_tag(TopJet::NN_Hbb)   ? jet.get_tag(TopJet::NN_Hbb) : 9999);
-            candidate.set_discriminators("NN_QCD", jet.has_tag(TopJet::NN_QCD)   ? jet.get_tag(TopJet::NN_QCD) : 9999);
-            candidate.set_discriminators("NN_Top", jet.has_tag(TopJet::NN_Top)   ? jet.get_tag(TopJet::NN_Top) : 9999);
-            candidate.set_discriminators("NN_W",   jet.has_tag(TopJet::NN_W)     ? jet.get_tag(TopJet::NN_W) : 9999);
-            candidate.set_discriminators("NN_Z",   jet.has_tag(TopJet::NN_Z)     ? jet.get_tag(TopJet::NN_Z) : 9999);
-            candidate.set_discriminators("NN_HWW_1", jet.has_tag(TopJet::NN_HWW_1)  ? jet.get_tag(TopJet::NN_HWW_1) : 9999);
-            candidate.set_discriminators("NN_Hbb_1", jet.has_tag(TopJet::NN_Hbb_1)  ? jet.get_tag(TopJet::NN_Hbb_1) : 9999);
-            candidate.set_discriminators("NN_QCD_1", jet.has_tag(TopJet::NN_QCD_1)  ? jet.get_tag(TopJet::NN_QCD_1) : 9999);
-            candidate.set_discriminators("NN_Top_1", jet.has_tag(TopJet::NN_Top_1)  ? jet.get_tag(TopJet::NN_Top_1) : 9999);
-            candidate.set_discriminators("NN_W_1",   jet.has_tag(TopJet::NN_W_1)    ? jet.get_tag(TopJet::NN_W_1) : 9999);
-            candidate.set_discriminators("NN_Z_1",   jet.has_tag(TopJet::NN_Z_1)    ? jet.get_tag(TopJet::NN_Z_1) : 9999);
-            candidate.set_discriminators("NN_HWW_2", jet.has_tag(TopJet::NN_HWW_2)  ? jet.get_tag(TopJet::NN_HWW_2) : 9999);
-            candidate.set_discriminators("NN_Hbb_2", jet.has_tag(TopJet::NN_Hbb_2)  ? jet.get_tag(TopJet::NN_Hbb_2) : 9999);
-            candidate.set_discriminators("NN_QCD_2", jet.has_tag(TopJet::NN_QCD_2)  ? jet.get_tag(TopJet::NN_QCD_2) : 9999);
-            candidate.set_discriminators("NN_Top_2", jet.has_tag(TopJet::NN_Top_2)  ? jet.get_tag(TopJet::NN_Top_2) : 9999);
-            candidate.set_discriminators("NN_W_2",   jet.has_tag(TopJet::NN_W_2)    ? jet.get_tag(TopJet::NN_W_2) : 9999);
-            candidate.set_discriminators("NN_Z_2",   jet.has_tag(TopJet::NN_Z_2)    ? jet.get_tag(TopJet::NN_Z_2) : 9999);
-            candidate.set_discriminators("CNN_HWW",  jet.has_tag(TopJet::CNN_HWW)   ? jet.get_tag(TopJet::CNN_HWW) : 9999);
-            candidate.set_discriminators("CNN_Hbb",  jet.has_tag(TopJet::CNN_Hbb)   ? jet.get_tag(TopJet::CNN_Hbb) : 9999);
-            candidate.set_discriminators("CNN_QCD",  jet.has_tag(TopJet::CNN_QCD)   ? jet.get_tag(TopJet::CNN_QCD) : 9999);
-            candidate.set_discriminators("CNN_Top",  jet.has_tag(TopJet::CNN_Top)   ? jet.get_tag(TopJet::CNN_Top) : 9999);
-            candidate.set_discriminators("CNN_W",    jet.has_tag(TopJet::CNN_W)     ? jet.get_tag(TopJet::CNN_W) : 9999);
-            candidate.set_discriminators("CNN_Z",    jet.has_tag(TopJet::CNN_Z)     ? jet.get_tag(TopJet::CNN_Z) : 9999);
-            candidate.set_discriminators("DCL_HWW",  jet.has_tag(TopJet::DCL_HWW)   ? jet.get_tag(TopJet::DCL_HWW) : 9999);
-            candidate.set_discriminators("DCL_Hbb",  jet.has_tag(TopJet::DCL_Hbb)   ? jet.get_tag(TopJet::DCL_Hbb) : 9999);
-            candidate.set_discriminators("DCL_QCD",  jet.has_tag(TopJet::DCL_QCD)   ? jet.get_tag(TopJet::DCL_QCD) : 9999);
-            candidate.set_discriminators("DCL_Top",  jet.has_tag(TopJet::DCL_Top)   ? jet.get_tag(TopJet::DCL_Top) : 9999);
-            candidate.set_discriminators("DCL_W",    jet.has_tag(TopJet::DCL_W)     ? jet.get_tag(TopJet::DCL_W) : 9999);
-            candidate.set_discriminators("DCL_Z",    jet.has_tag(TopJet::DCL_Z)     ? jet.get_tag(TopJet::DCL_Z) : 9999);
+            candidate.set_discriminators("SDmass",    jet.softdropmass());
+            candidate.set_discriminators("tau1",      jet.tau1());
+            candidate.set_discriminators("tau2",      jet.tau2());
+            candidate.set_discriminators("tau3",      jet.tau3());
+            candidate.set_discriminators("tau4",      jet.tau4());
+            candidate.set_discriminators("tau21",     (jet.tau1()!=0) ? (jet.tau2()/jet.tau1()) : -1);
+            candidate.set_discriminators("tau31",     (jet.tau1()!=0) ? (jet.tau3()/jet.tau1()) : -1);
+            candidate.set_discriminators("tau41",     (jet.tau1()!=0) ? (jet.tau4()/jet.tau1()) : -1);
+            candidate.set_discriminators("tau32",     (jet.tau2()!=0) ? (jet.tau3()/jet.tau2()) : -1);
+            candidate.set_discriminators("tau42",     (jet.tau2()!=0) ? (jet.tau4()/jet.tau2()) : -1);
+            candidate.set_discriminators("tau43",     (jet.tau3()!=0) ? (jet.tau4()/jet.tau3()) : -1);
+            candidate.set_discriminators("NN_HWW",    jet.has_tag(TopJet::NN_HWW)   ? jet.get_tag(TopJet::NN_HWW)   : 9999);
+            candidate.set_discriminators("NN_Hbb",    jet.has_tag(TopJet::NN_Hbb)   ? jet.get_tag(TopJet::NN_Hbb)   : 9999);
+            candidate.set_discriminators("NN_QCD",    jet.has_tag(TopJet::NN_QCD)   ? jet.get_tag(TopJet::NN_QCD)   : 9999);
+            candidate.set_discriminators("NN_Top",    jet.has_tag(TopJet::NN_Top)   ? jet.get_tag(TopJet::NN_Top)   : 9999);
+            candidate.set_discriminators("NN_W",      jet.has_tag(TopJet::NN_W)     ? jet.get_tag(TopJet::NN_W)     : 9999);
+            candidate.set_discriminators("NN_Z",      jet.has_tag(TopJet::NN_Z)     ? jet.get_tag(TopJet::NN_Z)     : 9999);
+            candidate.set_discriminators("NN_HWW_1",  jet.has_tag(TopJet::NN_HWW_1) ? jet.get_tag(TopJet::NN_HWW_1) : 9999);
+            candidate.set_discriminators("NN_Hbb_1",  jet.has_tag(TopJet::NN_Hbb_1) ? jet.get_tag(TopJet::NN_Hbb_1) : 9999);
+            candidate.set_discriminators("NN_QCD_1",  jet.has_tag(TopJet::NN_QCD_1) ? jet.get_tag(TopJet::NN_QCD_1) : 9999);
+            candidate.set_discriminators("NN_Top_1",  jet.has_tag(TopJet::NN_Top_1) ? jet.get_tag(TopJet::NN_Top_1) : 9999);
+            candidate.set_discriminators("NN_W_1",    jet.has_tag(TopJet::NN_W_1)   ? jet.get_tag(TopJet::NN_W_1)   : 9999);
+            candidate.set_discriminators("NN_Z_1",    jet.has_tag(TopJet::NN_Z_1)   ? jet.get_tag(TopJet::NN_Z_1)   : 9999);
+            candidate.set_discriminators("NN_HWW_2",  jet.has_tag(TopJet::NN_HWW_2) ? jet.get_tag(TopJet::NN_HWW_2) : 9999);
+            candidate.set_discriminators("NN_Hbb_2",  jet.has_tag(TopJet::NN_Hbb_2) ? jet.get_tag(TopJet::NN_Hbb_2) : 9999);
+            candidate.set_discriminators("NN_QCD_2",  jet.has_tag(TopJet::NN_QCD_2) ? jet.get_tag(TopJet::NN_QCD_2) : 9999);
+            candidate.set_discriminators("NN_Top_2",  jet.has_tag(TopJet::NN_Top_2) ? jet.get_tag(TopJet::NN_Top_2) : 9999);
+            candidate.set_discriminators("NN_W_2",    jet.has_tag(TopJet::NN_W_2)   ? jet.get_tag(TopJet::NN_W_2)   : 9999);
+            candidate.set_discriminators("NN_Z_2",    jet.has_tag(TopJet::NN_Z_2)   ? jet.get_tag(TopJet::NN_Z_2)   : 9999);
+            candidate.set_discriminators("CNN_HWW",   jet.has_tag(TopJet::CNN_HWW)  ? jet.get_tag(TopJet::CNN_HWW)  : 9999);
+            candidate.set_discriminators("CNN_Hbb",   jet.has_tag(TopJet::CNN_Hbb)  ? jet.get_tag(TopJet::CNN_Hbb)  : 9999);
+            candidate.set_discriminators("CNN_QCD",   jet.has_tag(TopJet::CNN_QCD)  ? jet.get_tag(TopJet::CNN_QCD)  : 9999);
+            candidate.set_discriminators("CNN_Top",   jet.has_tag(TopJet::CNN_Top)  ? jet.get_tag(TopJet::CNN_Top)  : 9999);
+            candidate.set_discriminators("CNN_W",     jet.has_tag(TopJet::CNN_W)    ? jet.get_tag(TopJet::CNN_W)    : 9999);
+            candidate.set_discriminators("CNN_Z",     jet.has_tag(TopJet::CNN_Z)    ? jet.get_tag(TopJet::CNN_Z)    : 9999);
+            candidate.set_discriminators("DCL_HWW",   jet.has_tag(TopJet::DCL_HWW)  ? jet.get_tag(TopJet::DCL_HWW)  : 9999);
+            candidate.set_discriminators("DCL_Hbb",   jet.has_tag(TopJet::DCL_Hbb)  ? jet.get_tag(TopJet::DCL_Hbb)  : 9999);
+            candidate.set_discriminators("DCL_QCD",   jet.has_tag(TopJet::DCL_QCD)  ? jet.get_tag(TopJet::DCL_QCD)  : 9999);
+            candidate.set_discriminators("DCL_Top",   jet.has_tag(TopJet::DCL_Top)  ? jet.get_tag(TopJet::DCL_Top)  : 9999);
+            candidate.set_discriminators("DCL_W",     jet.has_tag(TopJet::DCL_W)    ? jet.get_tag(TopJet::DCL_W)    : 9999);
+            candidate.set_discriminators("DCL_Z",     jet.has_tag(TopJet::DCL_Z)    ? jet.get_tag(TopJet::DCL_Z)    : 9999);
 
-            candidate.set_discriminators("Match",  jet.has_tag(TopJet::Matching)? jet.get_tag(TopJet::Matching) : 0);
-            candidate.set_discriminators("MatchingStatus", jet.has_tag(TopJet::MatchingStatus)? jet.get_tag(TopJet::MatchingStatus): 0);
+            candidate.set_discriminators("Match",           jet.has_tag(TopJet::Matching)       ? jet.get_tag(TopJet::Matching)       : 0);
+            candidate.set_discriminators("MatchingStatus",  jet.has_tag(TopJet::MatchingStatus) ? jet.get_tag(TopJet::MatchingStatus) : 0);
             MYTAGSETDISCR(btag_DeepBoosted_H4qvsQCD)
             MYTAGSETDISCR(btag_MassDecorrelatedDeepBoosted_H4qvsQCD)
             MYTAGSETDISCR(btag_DeepBoosted_probHqqqq)

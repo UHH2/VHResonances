@@ -12,7 +12,7 @@ bool XOR( bool a, bool b) { return (!a&&b) || (!b && a); };
 bool isLeptonic(int pdgId) { return (fabs(pdgId)>= 11 && fabs(pdgId)<=18) ? true : false; }
 bool isHadronic(int pdgId) { return (fabs(pdgId) <= 5) ? true : false; }
 
-bool DobleDecay(int pdgId1, int pdgId2, Decay decay) {
+bool DoubleDecay(int pdgId1, int pdgId2, Decay decay) {
   if (decay==nodecay) return true;
   if ( isLeptonic(pdgId1) && isLeptonic(pdgId2) && decay==leptonic)     return true;
   if ( isLeptonic(pdgId1) && isHadronic(pdgId2) && decay==semileptonic) return true;

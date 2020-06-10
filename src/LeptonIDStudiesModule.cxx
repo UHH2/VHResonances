@@ -40,6 +40,7 @@
 #include "UHH2/VHResonances/include/HiggsToWWModules.h"
 #include "UHH2/VHResonances/include/HiggsToWWHists.h"
 #include "UHH2/VHResonances/include/DiLeptonHists.h"
+#include "UHH2/VHResonances/include/LeptonIDHists.h"
 
 using namespace std;
 
@@ -51,11 +52,11 @@ using namespace std;
 █ ██████  ███████ ██      ██ ██   ████ ██    ██    ██  ██████  ██   ████
 */
 
-class PreselectionModule: public ModuleBASE {
+class LeptonIDStudiesModule: public ModuleBASE {
 
 public:
 
-  explicit PreselectionModule(uhh2::Context&);
+  explicit LeptonIDStudiesModule(uhh2::Context&);
   virtual bool process(uhh2::Event&) override;
   void book_histograms(uhh2::Context&);
   void fill_histograms(uhh2::Event&, string);
@@ -86,23 +87,23 @@ protected:
 
 };
 
-void PreselectionModule::book_handles(uhh2::Context& ctx) {
+void LeptonIDStudiesModule::book_handles(uhh2::Context& ctx) {
   string tag;
   tag = "weight_lumi";  book_WFolder(tag, new Event::Handle< float >, ctx.declare_event_output< float >(tag));
   tag = "weight_GLP";   book_WFolder(tag, new Event::Handle< float >, ctx.declare_event_output< float >(tag));
   tag = "weight_pu";    book_WFolder(tag, new Event::Handle< float >, MB["is_mc"]? ctx.get_handle< float >(tag) : ctx.declare_event_output< float >(tag));
 }
 
-void PreselectionModule::PrintInputs() {
+void LeptonIDStudiesModule::PrintInputs() {
   std::cout << "****************************************" << std::endl;
-  std::cout << "           PreselectionModule           " << std::endl;
+  std::cout << "          LeptonIDStudiesModule         " << std::endl;
   std::cout << "----------------------------------------" << std::endl;
   for (auto x : MS) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << x.second << '\n';
   for (auto x : MB) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << BoolToString(x.second) << '\n';
   std::cout << "****************************************\n" << std::endl;
 }
 
-void PreselectionModule::book_histograms(uhh2::Context& ctx){
+void LeptonIDStudiesModule::book_histograms(uhh2::Context& ctx){
   for(const auto & tag : histogram_tags){
     string mytag;
     mytag = "event_"    + tag; book_HFolder(mytag, new EventHists(ctx,mytag));
@@ -112,12 +113,12 @@ void PreselectionModule::book_histograms(uhh2::Context& ctx){
     mytag = "ele_"      + tag; book_HFolder(mytag, new ElectronHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "muon_"     + tag; book_HFolder(mytag, new MuonHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "diLepton_" + tag; book_HFolder(mytag, new DiLeptonHists(ctx,mytag, "", MS["topjetLabel"]));
-    mytag = "ZprimeCandidate_" + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
+    mytag = "LeptonID_" + tag; book_HFolder(mytag, new LeptonIDHists(ctx,mytag));
   }
 }
 
-void PreselectionModule::fill_histograms(uhh2::Event& event, string tag){
-  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "ZprimeCandidate_"};
+void LeptonIDStudiesModule::fill_histograms(uhh2::Event& event, string tag){
+  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "LeptonID_"};
   for (auto& mytag : mytags) HFolder(mytag+ tag)->fill(event);
 }
 
@@ -129,7 +130,7 @@ void PreselectionModule::fill_histograms(uhh2::Event& event, string tag){
 █  ██████  ██████  ██   ████ ███████    ██    ██   ██  ██████   ██████    ██     ██████  ██   ██
 */
 
-PreselectionModule::PreselectionModule(uhh2::Context& ctx){
+LeptonIDStudiesModule::LeptonIDStudiesModule(uhh2::Context& ctx){
 
   // Set up variables
   MS["year"]             = ctx.get("year");
@@ -148,8 +149,8 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   MB["muonchannel"]      = string2bool(ctx.get("muonchannel"));
   MB["electronchannel"]  = string2bool(ctx.get("electronchannel"));
 
-  if (MB["isPuppi"] == MB["isCHS"] && MB["isPuppi"] == MB["isHOTVR"]) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one jet collection.");
-  if (MB["muonchannel"] == MB["electronchannel"]) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one lepton channel.");
+  if (MB["isPuppi"] == MB["isCHS"] && MB["isPuppi"] == MB["isHOTVR"]) throw std::runtime_error("In LeptonIDStudiesModule.cxx: Choose exactly one jet collection.");
+  if (MB["muonchannel"] == MB["electronchannel"]) throw std::runtime_error("In LeptonIDStudiesModule.cxx: Choose exactly one lepton channel.");
 
   MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": "");
 
@@ -169,11 +170,8 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
   // Set up selections
 
-  // const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta));
-  // const ElectronId eleId = AndId<Electron>(ElectronID_MVA_Fall17_loose_noIso, PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-
-  const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdLoose), PtEtaCut(min_lepton_pt, min_lepton_eta));
-  const ElectronId eleId = AndId<Electron>(ElectronID_Fall17_loose, PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+  const MuonId muoId = PtEtaCut(min_lepton_pt, min_lepton_eta);
+  const ElectronId eleId = PtEtaSCCut(min_lepton_pt, min_lepton_eta);
 
   const JetId jetId = AndId<Jet> (JetPFID(JETwp), PtEtaCut(min_jet_pt, min_lepton_eta));
   const TopJetId topjetId = AndId<TopJet> (JetPFID(JETwp), PtEtaCut(min_topjet_pt, min_lepton_eta), NoLeptonInJet("all", eleId, muoId, MB["isHOTVR"]? 0.8: -1));
@@ -235,9 +233,9 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 █ ██      ██   ██  ██████   ██████ ███████ ███████ ███████
 */
 
-bool PreselectionModule::process(uhh2::Event& event) {
+bool LeptonIDStudiesModule::process(uhh2::Event& event) {
 
-  if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In PreselectionModule.cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
+  if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In LeptonIDStudiesModule.cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
 
   auto weight_gen = event.weight;
   fill_histograms(event, "nocuts");
@@ -289,5 +287,5 @@ bool PreselectionModule::process(uhh2::Event& event) {
 }
 
 // as we want to run the ExampleCycleNew directly with AnalysisModuleRunner,
-// make sure the PreselectionModule is found by class name. This is ensured by this macro:
-UHH2_REGISTER_ANALYSIS_MODULE(PreselectionModule)
+// make sure the LeptonIDStudiesModule is found by class name. This is ensured by this macro:
+UHH2_REGISTER_ANALYSIS_MODULE(LeptonIDStudiesModule)

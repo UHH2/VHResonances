@@ -10,6 +10,9 @@
 const float ZMASS  = 91.0;
 const float ZWIDTH = 10.0;
 
+const float HMASS  = 120.0;
+const float HWIDTH = 15.0;
+
 const int min_leptons = 2;
 const float min_jet_pt = 30.0;
 const float min_topjet_pt = 200.0;
@@ -19,7 +22,7 @@ const float min_lepton_eta = 2.4;
 // const float max_lepton_iso = 0.15;
 // const float min_jet_dilep_delta_phi = 2.7;
 
-const float min_jet_dilep_pt = 150;
+const float min_dilep_pt = 150;
 const float min_DR_dilep = 0.0;
 const float max_DR_dilep = 1.0;
 const float min_jet_dilep_delta_phi = M_PI/2;

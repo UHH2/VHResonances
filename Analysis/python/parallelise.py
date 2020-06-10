@@ -6,6 +6,7 @@ from glob import glob
 import multiprocessing as mp
 
 from Utils import *
+from fileManipulation import *
 
 
 def MultiProcDecorator(f,*args, **kw):

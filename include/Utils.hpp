@@ -10,6 +10,6 @@ MatchingStatus FloatToMatchingStatus(const TopJet & jet);
 
 bool isLeptonic(int pdgId);
 bool isHadronic(int pdgId);
-bool DobleDecay(int pdgId1, int pdgId2, Decay decay);
+bool DoubleDecay(int pdgId1, int pdgId2, Decay decay);
 
 bool FindInString(const std::string& search, const std::string& str);
