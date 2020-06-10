@@ -50,21 +50,21 @@ bool GenLevelJetMatch::MatchGenPart(const Event & event, TopJet& jet, double Dr)
       int ID1 = d1->pdgId();
       int ID2 = d2->pdgId();
 
-      if      (fabs(gp.pdgId())== H && DobleDecay(ID1, ID2,WW))       jet.set_tag(TopJet::Matching, (float)HWWMatch);
-      else if (fabs(gp.pdgId())== H && DobleDecay(ID1, ID2,bb))       jet.set_tag(TopJet::Matching, (float)HbbMatch);
-      else if (fabs(gp.pdgId())== H && DobleDecay(ID1, ID2,light))    jet.set_tag(TopJet::Matching, (float)HqqMatch);
-      else if (fabs(gp.pdgId())== H && DobleDecay(ID1, ID2,gluon))    jet.set_tag(TopJet::Matching, (float)HqqMatch);
-      else if (fabs(gp.pdgId())== H && DobleDecay(ID1, ID2,ZZ))       jet.set_tag(TopJet::Matching, (float)HZZMatch);
-      else if (fabs(gp.pdgId())== H && DobleDecay(ID1, ID2,tautau))   jet.set_tag(TopJet::Matching, (float)HtautauMatch);
-      else if (fabs(gp.pdgId())== t && DobleDecay(ID1, ID2,Wb))       jet.set_tag(TopJet::Matching, (float)tWbMatch);
-      else if (fabs(gp.pdgId())== W && DobleDecay(ID1, ID2,hadronic)) jet.set_tag(TopJet::Matching, (float)WqqMatch);
-      else if (fabs(gp.pdgId())== W && DobleDecay(ID1, ID2,leptonic)) jet.set_tag(TopJet::Matching, (float)WllMatch);
-      else if (fabs(gp.pdgId())== Z && DobleDecay(ID1, ID2,hadronic)) jet.set_tag(TopJet::Matching, (float)ZqqMatch);
-      else if (fabs(gp.pdgId())== Z && DobleDecay(ID1, ID2,leptonic)) jet.set_tag(TopJet::Matching, (float)ZllMatch);
+      if      (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,WW))       jet.set_tag(TopJet::Matching, (float)HWWMatch);
+      else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,bb))       jet.set_tag(TopJet::Matching, (float)HbbMatch);
+      else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,light))    jet.set_tag(TopJet::Matching, (float)HqqMatch);
+      else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,gluon))    jet.set_tag(TopJet::Matching, (float)HqqMatch);
+      else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,ZZ))       jet.set_tag(TopJet::Matching, (float)HZZMatch);
+      else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,tautau))   jet.set_tag(TopJet::Matching, (float)HtautauMatch);
+      else if (fabs(gp.pdgId())== t && DoubleDecay(ID1, ID2,Wb))       jet.set_tag(TopJet::Matching, (float)tWbMatch);
+      else if (fabs(gp.pdgId())== W && DoubleDecay(ID1, ID2,hadronic)) jet.set_tag(TopJet::Matching, (float)WqqMatch);
+      else if (fabs(gp.pdgId())== W && DoubleDecay(ID1, ID2,leptonic)) jet.set_tag(TopJet::Matching, (float)WllMatch);
+      else if (fabs(gp.pdgId())== Z && DoubleDecay(ID1, ID2,hadronic)) jet.set_tag(TopJet::Matching, (float)ZqqMatch);
+      else if (fabs(gp.pdgId())== Z && DoubleDecay(ID1, ID2,leptonic)) jet.set_tag(TopJet::Matching, (float)ZllMatch);
       else continue;
 
       jet.set_tag(TopJet::MatchingStatus, (float)DaughterMatched);
-      if (!DobleDecay(ID1, ID2,WW) && !DobleDecay(ID1, ID2,Wb) && !DobleDecay(ID1, ID2,ZZ)) continue;
+      if (!DoubleDecay(ID1, ID2,WW) && !DoubleDecay(ID1, ID2,Wb) && !DoubleDecay(ID1, ID2,ZZ)) continue;
 
       std::vector<Decay> Daughters = {nodecay,nodecay}; int nInside = 0;
 
@@ -74,8 +74,8 @@ bool GenLevelJetMatch::MatchGenPart(const Event & event, TopJet& jet, double Dr)
         const GenParticle* sd1 = dau->daughter(event.genparticles, 1);
         const GenParticle* sd2 = dau->daughter(event.genparticles, 2);
         if (!sd1 || !sd2) continue;
-        if (DobleDecay(sd1->pdgId(), sd2->pdgId(),hadronic)) Daughters[i] = hadronic;
-        if (DobleDecay(sd1->pdgId(), sd2->pdgId(),leptonic)) Daughters[i] = leptonic;
+        if (DoubleDecay(sd1->pdgId(), sd2->pdgId(),hadronic)) Daughters[i] = hadronic;
+        if (DoubleDecay(sd1->pdgId(), sd2->pdgId(),leptonic)) Daughters[i] = leptonic;
         if (deltaR(*sd1,jet)<Dr) nInside++;
         if (deltaR(*sd2,jet)<Dr) nInside++;
       }
