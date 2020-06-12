@@ -45,10 +45,10 @@ for year in ["2016","2017","2018"]:
     # isNice=False
     nProcess=20
 
-    Modules = ModuleRunner(year,controls)
+    # Modules = ModuleRunner(year,controls)
 
     # Modules.SetModule("GenericCleaning", Collections, Channels, Systematics)
-    Modules.SetModule("Preselection", Collections, Channels, Systematics)
+    # Modules.SetModule("Preselection", Collections, Channels, Systematics)
     # Modules.SetModule("Selection", Collections, Channels, Systematics)
     # Modules.SetModule("SignalRegion", Collections, Channels, Systematics)
     # Modules.SetModule("ProbeNN", Collections, Channels, Systematics)
@@ -106,6 +106,7 @@ Modules = ModuleRunner(controls=controls)
 # histFolders=["btag_DeepBoosted_H4qvsQCDptdep_x3"]
 
 # Modules.RunCommand("PlotLeptonIDEfficiency", isPython=True)
+Modules.RunCommand("PlotBTagEfficiencies", isPython=True)
 # Modules.RunCommand("TaggerCutStudy", isPython=True)
 # Modules.RunCommand("CalculateSignalEfficiencies", histFolders=histFolders)
 # Modules.RunCommand("PlotSystematics", isPython=True)
