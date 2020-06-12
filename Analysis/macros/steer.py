@@ -105,7 +105,7 @@ Modules = ModuleRunner(controls=controls)
 # histFolders=["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDptdep_x3", "btag_DeepBoosted_H4qvsQCDptdep_x2x3", "btag_DeepBoosted_H4qvsQCDptdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x3", "btag_DeepBoosted_H4qvsQCDmassdep2_x3", "btag_DeepBoosted_H4qvsQCDmassdep_x2x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x2"]
 # histFolders=["btag_DeepBoosted_H4qvsQCDptdep_x3"]
 
-# Modules.RunCommand("PlotEfficiencyLeptonID", isPython=True)
+# Modules.RunCommand("PlotLeptonIDEfficiency", isPython=True)
 # Modules.RunCommand("TaggerCutStudy", isPython=True)
 # Modules.RunCommand("CalculateSignalEfficiencies", histFolders=histFolders)
 # Modules.RunCommand("PlotSystematics", isPython=True)
