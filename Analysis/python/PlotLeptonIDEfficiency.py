@@ -32,7 +32,7 @@ colors = {"ele_ID_kincut":                  (ROOT.kBlack,ROOT.kDot),
 
 }
 
-class PlotEfficiencyLeptonID(ModuleRunnerBase):
+class PlotLeptonIDEfficiency(ModuleRunnerBase):
     def __init__(self,year="2016", collection="Puppi", channel="muonchannel", isDR=True):
         ModuleRunnerBase.__init__(self,year)
         self.outdir     = self.Path_ANALYSIS+"Analysis/OtherPlots/LeptonID/"
@@ -143,7 +143,7 @@ def main():
         for channel in channels:
             for isDR in [True,False]:
             # for isDR in [True]:
-                PlotSyst = PlotEfficiencyLeptonID(year=year, channel=channel, isDR=isDR)
+                PlotSyst = PlotLeptonIDEfficiency(year=year, channel=channel, isDR=isDR)
                 PlotSyst.LoadHistos()
                 PlotSyst.NormHistos()
                 PlotSyst.PlotHistos()

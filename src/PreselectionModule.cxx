@@ -13,6 +13,7 @@
 #include "UHH2/common/include/ElectronIds.h"
 #include "UHH2/common/include/ObjectIdUtils.h"
 #include "UHH2/common/include/JetIds.h"
+#include "UHH2/common/include/JetHists.h"
 #include "UHH2/common/include/JetCorrections.h"
 #include "UHH2/common/include/CleaningModules.h"
 #include "UHH2/common/include/CommonModules.h"
@@ -112,12 +113,13 @@ void PreselectionModule::book_histograms(uhh2::Context& ctx){
     mytag = "ele_"      + tag; book_HFolder(mytag, new ElectronHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "muon_"     + tag; book_HFolder(mytag, new MuonHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "diLepton_" + tag; book_HFolder(mytag, new DiLeptonHists(ctx,mytag, "", MS["topjetLabel"]));
+    mytag = "BTagEff_"  + tag; book_HFolder(mytag, new BTagMCEfficiencyHists(ctx, mytag,BTag(BTag::DEEPCSV, BTag::WP_LOOSE), MS["topjetLabel"]));
     mytag = "ZprimeCandidate_" + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
   }
 }
 
 void PreselectionModule::fill_histograms(uhh2::Event& event, string tag){
-  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "ZprimeCandidate_"};
+  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "BTagEff_", "ZprimeCandidate_"};
   for (auto& mytag : mytags) HFolder(mytag+ tag)->fill(event);
 }
 
