@@ -364,7 +364,7 @@ def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square
   h.Draw("AXIS")
   #
   # writing the lumi information and the CMS "logo"
-  CMS_lumi( canv, iPeriod, iPos )
+  if iPeriod>0: CMS_lumi( canv, iPeriod, iPos )
   #
   canv.Update()
   canv.RedrawAxis()
