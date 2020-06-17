@@ -1,3 +1,4 @@
+
 from Utils import *
 from fileManipulation import *
 from xml.dom.minidom import parseString
@@ -90,12 +91,10 @@ def newNumber(year,sample,ConfigFile,syst):
             newNumber = 1000
     if "MC_ZprimeToZH" in sample:
         newNumber = 100
-    if not "Preselection" in ConfigFile and not "SF" in ConfigFile and not "LeptonIDStudies" in ConfigFile:
+    if not "Preselection" in ConfigFile and not "SF" in ConfigFile:
         newNumber = 1 if "MC_DY" in sample else 1000
     if syst!="nominal":
         newNumber = int(0.9*newNumber)
-    if "LeptonIDStudies" in ConfigFile:
-        if not "MC_ZprimeToZH" in sample: newNumber = int(newNumber/3)
     # if "2017" in ConfigFile:
     #     isFast = False
     #     isFast = True
@@ -179,9 +178,11 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                         changes.append(["<!ENTITY", "isCHS",    '"true"', '"false"'])
                         changes.append(["<Item Name", "METName", 'slimmedMETs', 'slimmedMETsPuppi'])
                     if "muon" in channel:
-                        changes.append(["<!ENTITY", "electronchannel",  '"true"', '"false"'])
+                        changes.append(["<!ENTITY", "muonchannel",   '"false"', '"true"'])
                     if "electron" in channel:
-                        changes.append(["<!ENTITY", "muonchannel",      '"true"', '"false"'])
+                        changes.append(["<!ENTITY", "electronchannel",   '"false"', '"true"'])
+                    if "invisible" in channel:
+                        changes.append(["<!ENTITY", "invisiblechannel",   '"false"', '"true"'])
                     changes.append(["<!ENTITY", "YEAR", 'defaultValue', year])
                     changes.append(["<Cycle", "TargetLumi", 'defaultValue', str(lumi)])
                     for var in YearVars:
