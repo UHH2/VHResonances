@@ -13,6 +13,7 @@
 #include "UHH2/common/include/ElectronIds.h"
 #include "UHH2/common/include/ObjectIdUtils.h"
 #include "UHH2/common/include/JetIds.h"
+#include "UHH2/common/include/JetHists.h"
 #include "UHH2/common/include/JetCorrections.h"
 #include "UHH2/common/include/CleaningModules.h"
 #include "UHH2/common/include/CommonModules.h"
@@ -66,9 +67,9 @@ public:
 protected:
 
   // Define variables
+  std::string NameModule = "SelectionModule";
   std::vector<std::string> histogram_tags = {"Preselection", "ScaleFactors", "NLOCorrections", "Trigger", "ZprimeReco", "ZprimeSelection", "PTMassCut"};
   std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "weight_pu", "weight_pu_up", "weight_pu_down", "HDecay", "ZDecay", "ZprimeDecay", "weight_btag","weight_btag_up", "weight_btag_down"};
-
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
@@ -80,7 +81,6 @@ protected:
   Event::Handle<std::vector<tensorflow::Tensor> > h_image;
 
   // Define selections
-
 
   std::unique_ptr<Selection> PTMassCut_selection;
   std::unique_ptr<AnalysisModule> ZprimeCandidateReconstruction_module;
@@ -94,7 +94,7 @@ protected:
 
 void SelectionModule::PrintInputs() {
   std::cout << "****************************************" << std::endl;
-  std::cout << "            SelectionModule             " << std::endl;
+  std::cout << "             "+NameModule+"             " << std::endl;
   std::cout << "----------------------------------------" << std::endl;
   for (auto x : MS) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << x.second << '\n';
   for (auto x : MB) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << BoolToString(x.second) << '\n';
@@ -125,25 +125,20 @@ void SelectionModule::book_histograms(uhh2::Context& ctx){
     string mytag;
     mytag = "event_"    + tag; book_HFolder(mytag, new EventHists(ctx,mytag));
     mytag = "gen_"      + tag; book_HFolder(mytag, new GenMatchHists(ctx,mytag));
-    mytag = "nTopJet_"  + tag; book_HFolder(mytag, new ExtJetHists(ctx,mytag, MS["topjetLabel"] ));
+    mytag = "nTopJet_"  + tag; book_HFolder(mytag, new ExtJetHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "nJet_"     + tag; book_HFolder(mytag, new ExtJetHists(ctx,mytag, MS["jetLabel"]));
     mytag = "ele_"      + tag; book_HFolder(mytag, new ElectronHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "muon_"     + tag; book_HFolder(mytag, new MuonHists(ctx,mytag, MS["topjetLabel"]));
-    mytag = "diLepton_" + tag; book_HFolder(mytag, new DiLeptonHists(ctx,mytag, "", MS["topjetLabel"] ));
+    mytag = "diLepton_" + tag; book_HFolder(mytag, new DiLeptonHists(ctx,mytag, "", MS["topjetLabel"]));
+    mytag = "BTagEff_"  + tag; book_HFolder(mytag, new BTagMCEfficiencyHists(ctx, mytag,BTag(BTag::DEEPCSV, BTag::WP_LOOSE), MS["topjetLabel"]));
     mytag = "ZprimeCandidate_" + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
-    mytag = "ZprimeCandidate_HWW_"  + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "HWWMatch"));
-    mytag = "ZprimeCandidate_Hbb_"  + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "HbbMatch"));
-    mytag = "ZprimeCandidate_HZZ_"  + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "HZZMatch"));
-    mytag = "ZprimeCandidate_else_" + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag, "else"));
-
   }
 }
 
 void SelectionModule::fill_histograms(uhh2::Event& event, string tag){
-  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "ZprimeCandidate_", "ZprimeCandidate_HWW_", "ZprimeCandidate_Hbb_", "ZprimeCandidate_HZZ_", "ZprimeCandidate_else_"};
+  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "BTagEff_", "ZprimeCandidate_"};
   for (auto& mytag : mytags) HFolder(mytag+ tag)->fill(event);
 }
-
 
 /*
 █  ██████  ██████  ███    ██ ███████ ████████ ██████  ██    ██  ██████ ████████  ██████  ██████
@@ -156,14 +151,13 @@ void SelectionModule::fill_histograms(uhh2::Event& event, string tag){
 SelectionModule::SelectionModule(uhh2::Context& ctx){
 
   // Set up variables
-
-  MS["year"]            = ctx.get("year");
-  MB["is_mc"]           = ctx.get("dataset_type") == "MC";
-  MB["isPuppi"]         = string2bool(ctx.get("isPuppi"));
-  MB["isCHS"]           = string2bool(ctx.get("isCHS"));
-  MB["isHOTVR"]         = string2bool(ctx.get("isHOTVR"));
-  MB["muonchannel"]     = string2bool(ctx.get("muonchannel"));
-  MB["electronchannel"] = string2bool(ctx.get("electronchannel"));
+  MS["year"]              = ctx.get("year");
+  MB["is_mc"]             = ctx.get("dataset_type") == "MC";
+  MB["isPuppi"]           = string2bool(ctx.get("isPuppi"));
+  MB["isCHS"]             = string2bool(ctx.get("isCHS"));
+  MB["isHOTVR"]           = string2bool(ctx.get("isHOTVR"));
+  MB["muonchannel"]       = string2bool(ctx.get("muonchannel"));
+  MB["electronchannel"]   = string2bool(ctx.get("electronchannel"));
 
   if (MB["isPuppi"] == MB["isCHS"] && MB["isPuppi"] == MB["isHOTVR"]) throw std::runtime_error("In SelectionModule.cxx: Choose exactly one jet collection.");
   if (MB["muonchannel"] == MB["electronchannel"]) throw std::runtime_error("In SelectionModule.cxx: Choose exactly one lepton channel.");
@@ -214,6 +208,8 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
 */
 
 bool SelectionModule::process(uhh2::Event& event) {
+
+  if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In "+NameModule+".cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
 
   event.weight = event.get(WFolder("weight_GLP_in"));
 

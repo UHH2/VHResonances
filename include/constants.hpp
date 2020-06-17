@@ -42,7 +42,7 @@ const double default_DY_kFactor = 1.23;
 const bool do_EWK = true;
 const bool do_QCD_EWK = false;
 const bool do_QCD_NLO  = true;
-const bool do_QCD_NNLO = true;
+const bool do_QCD_NNLO = false;
 
 // Taken from :
 // https://twiki.cern.ch/twiki/bin/view/CMS/EgHLTRunIISummary

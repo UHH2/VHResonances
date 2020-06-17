@@ -1,6 +1,7 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/Utils.h"
 #include "UHH2/common/include/Utils.h"
+#include "UHH2/common/include/MuonIds.h"
 #include "UHH2/VHResonances/include/constants.hpp"
 #include "UHH2/VHResonances/include/HiggsToWWModules.h"
 #include <UHH2/VHResonances/include/ZprimeCandidate.h>
@@ -134,6 +135,12 @@ bool ZprimeCandidateReconstruction::process(Event& event){
     Particle lep1 = leptons.at(i);
     for (unsigned int j = i+1; j < leptons.size(); j++) {
       Particle lep2 = leptons.at(j);
+      if (lepton == "muons") {
+        bool TrkhighID1, TrkhighID2;
+        TrkhighID1 = MuonID(Muon::CutBasedIdGlobalHighPt)(event.muons->at(i), event);
+        TrkhighID2 = MuonID(Muon::CutBasedIdGlobalHighPt)(event.muons->at(j), event);
+        if (!TrkhighID1 && !TrkhighID2) continue;
+      }
       auto DR = uhh2::deltaR(lep1, lep2);
       auto diLep = lep1.v4() + lep2.v4();
       if( (fabs(diLep.M() - ZMASS) < ZWIDTH) && (lep1.charge() + lep2.charge() == 0) && diLep.pt()>pt_min && DR_min < DR && DR < DR_max) {
@@ -351,7 +358,7 @@ bool NLOCorrections::process(uhh2::Event& event){
 
   double objpt = uhh2::infinity, theory_weight = 1.0;
   std::string process = "";
-  
+
   // TODO only DY or also Znn?
   if (is_DY) theory_weight /= default_DY_kFactor;
 

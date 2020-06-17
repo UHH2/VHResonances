@@ -17,8 +17,6 @@
 <!ENTITY MCBtagEfficiencies         "defaultValue">
 <!ENTITY BTagCalibration            "defaultValue">
 
-<!ENTITY NLOCorrections             "CMSSW_BASE/src/UHH2/VHResonances/Analysis/Theory/">
-
 <!-- MC Samples 2016 -->
 <!ENTITY MC_ZprimeToZH_M600_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2016.xml">
 <!ENTITY MC_ZprimeToZH_M800_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2016.xml">
@@ -279,8 +277,6 @@
 
     <Item Name="MCBtagEfficiencies"         Value="&MCBtagEfficiencies;"/>
     <Item Name="BTagCalibration"            Value="&BTagCalibration;"/>
-
-    <Item Name="NLOCorrections"             Value="&NLOCorrections;"/>
 
     <!-- the class name of the AnalysisModule subclasses to run: -->
     <Item Name="AnalysisModule"             Value="SelectionModule"/>
