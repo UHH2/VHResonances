@@ -9,6 +9,7 @@
 #include "UHH2/VHResonances/include/ModuleBase.h"
 #include "UHH2/VHResonances/include/ZprimeCandidate.h"
 #include "UHH2/VHResonances/include/HiggsToWWSelections.h"
+#include "UHH2/VHResonances/include/Utils.hpp"
 
 class FinalStateMatching: public uhh2::AnalysisModule {
 public:
@@ -46,13 +47,13 @@ private:
 
 class SDMassCalculator: public uhh2::AnalysisModule {
 public:
-    explicit SDMassCalculator(uhh2::Context & ctx, const std::string & jetCollName="topjets");
-    virtual ~SDMassCalculator() {};
-    virtual bool process(uhh2::Event&) override;
-    float calcSDmass(const TopJet & jet);
+  explicit SDMassCalculator(uhh2::Context & ctx, const std::string & jetCollName="topjets");
+  virtual ~SDMassCalculator() {};
+  virtual bool process(uhh2::Event&) override;
+  float calcSDmass(const TopJet & jet);
 private:
-    uhh2::Event::Handle<std::vector<TopJet>> h_topjets_;
-    uhh2::Event::Handle<std::vector<GenTopJet>> h_gentopjets_;
+  uhh2::Event::Handle<std::vector<TopJet>> h_topjets_;
+  uhh2::Event::Handle<std::vector<GenTopJet>> h_gentopjets_;
 };
 
 
@@ -66,5 +67,30 @@ private:
 
   uhh2::Event::Handle< std::vector<ZprimeCandidate> > h_ZprimeCandidates_;
   uhh2::Event::Handle<bool> h_is_Blind;
+
+};
+
+// Generic Class for Applying SFs
+class ScaleFactorsFromHistos : public uhh2::AnalysisModule {
+
+public:
+  void LoadHisto(TFile* file, std::string name, std::string hname);
+  double Evaluator(std::string hname, double var);
+
+protected:
+  std::unordered_map<std::string, std::unique_ptr<TH1F> > histos;
+
+};
+
+// Apply Theory weights
+class NLOCorrections : public ScaleFactorsFromHistos {
+
+public:
+  explicit NLOCorrections(uhh2::Context& ctx);
+  virtual bool process(uhh2::Event&) override;
+  double GetPartonObjectPt(uhh2::Event& event, ParticleID objID);
+
+private:
+  bool is_Wjets, is_Zjets, is_DY, is_Znn, is2017;
 
 };

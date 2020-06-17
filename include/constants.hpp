@@ -5,6 +5,8 @@
 
 #include "TMath.h"
 
+#include "UHH2/common/include/JetIds.h"
+
 // DEFINE GLOBAL VARIABLES
 
 const float ZMASS  = 91.0;
@@ -29,6 +31,18 @@ const float min_jet_dilep_delta_phi = M_PI/2;
 const float max_jet_dilep_delta_phi = M_PI;
 
 const float min_Z_pt_ZH_mass = 0.2;
+
+
+const BTag::algo BTag_algo = BTag::DEEPCSV;
+const BTag::wp BTag_wp = BTag::WP_LOOSE;
+
+
+// Theory Corrections
+const double default_DY_kFactor = 1.23;
+const bool do_EWK = true;
+const bool do_QCD_EWK = false;
+const bool do_QCD_NLO  = true;
+const bool do_QCD_NNLO = false;
 
 // Taken from :
 // https://twiki.cern.ch/twiki/bin/view/CMS/EgHLTRunIISummary

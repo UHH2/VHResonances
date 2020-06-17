@@ -66,6 +66,7 @@ public:
 protected:
 
   // Define variables
+  std::string NameModule = "PreselectionModule";
   std::vector<std::string> histogram_tags = { "nocuts", "weights", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
 
   std::unordered_map<std::string, std::string> MS;
@@ -96,14 +97,14 @@ void PreselectionModule::book_handles(uhh2::Context& ctx) {
 
 void PreselectionModule::PrintInputs() {
   std::cout << "****************************************" << std::endl;
-  std::cout << "           PreselectionModule           " << std::endl;
+  std::cout << "             "+NameModule+"             " << std::endl;
   std::cout << "----------------------------------------" << std::endl;
   for (auto x : MS) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << x.second << '\n';
   for (auto x : MB) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << BoolToString(x.second) << '\n';
   std::cout << "****************************************\n" << std::endl;
 }
 
-void PreselectionModule::book_histograms(uhh2::Context& ctx){
+void PreselectionModule::book_histograms(uhh2::Context& ctx) {
   for(const auto & tag : histogram_tags){
     string mytag;
     mytag = "event_"    + tag; book_HFolder(mytag, new EventHists(ctx,mytag));
@@ -134,21 +135,21 @@ void PreselectionModule::fill_histograms(uhh2::Event& event, string tag){
 PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
   // Set up variables
-  MS["year"]             = ctx.get("year");
-  MS["SysType_PU"]       = ctx.get("SysType_PU");
-  MB["is_mc"]            = ctx.get("dataset_type") == "MC";
-  MB["lumisel"]          = string2bool(ctx.get("lumisel"));
-  MB["mclumiweight"]     = string2bool(ctx.get("mclumiweight"));
-  MB["mcpileupreweight"] = string2bool(ctx.get("mcpileupreweight"));
-  MB["isPuppi"]          = string2bool(ctx.get("isPuppi"));
-  MB["isCHS"]            = string2bool(ctx.get("isCHS"));
-  MB["isHOTVR"]          = string2bool(ctx.get("isHOTVR"));
-  MB["eleid"]            = string2bool(ctx.get("eleid"));
-  MB["muid"]             = string2bool(ctx.get("muid"));
-  MB["tauid"]            = string2bool(ctx.get("tauid"));
-  MB["metfilters"]       = string2bool(ctx.get("metfilters"));
-  MB["muonchannel"]      = string2bool(ctx.get("muonchannel"));
-  MB["electronchannel"]  = string2bool(ctx.get("electronchannel"));
+  MS["year"]              = ctx.get("year");
+  MB["is_mc"]             = ctx.get("dataset_type") == "MC";
+  MB["isPuppi"]           = string2bool(ctx.get("isPuppi"));
+  MB["isCHS"]             = string2bool(ctx.get("isCHS"));
+  MB["isHOTVR"]           = string2bool(ctx.get("isHOTVR"));
+  MB["muonchannel"]       = string2bool(ctx.get("muonchannel"));
+  MB["electronchannel"]   = string2bool(ctx.get("electronchannel"));
+  MS["SysType_PU"]        = ctx.get("SysType_PU");
+  MB["lumisel"]           = string2bool(ctx.get("lumisel"));
+  MB["mclumiweight"]      = string2bool(ctx.get("mclumiweight"));
+  MB["mcpileupreweight"]  = string2bool(ctx.get("mcpileupreweight"));
+  MB["eleid"]             = string2bool(ctx.get("eleid"));
+  MB["muid"]              = string2bool(ctx.get("muid"));
+  MB["tauid"]             = string2bool(ctx.get("tauid"));
+  MB["metfilters"]        = string2bool(ctx.get("metfilters"));
 
   if (MB["isPuppi"] == MB["isCHS"] && MB["isPuppi"] == MB["isHOTVR"]) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one jet collection.");
   if (MB["muonchannel"] == MB["electronchannel"]) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one lepton channel.");
@@ -171,10 +172,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
   // Set up selections
 
-  // const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta));
-  // const ElectronId eleId = AndId<Electron>(ElectronID_MVA_Fall17_loose_noIso, PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-
-  const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdLoose), PtEtaCut(min_lepton_pt, min_lepton_eta));
+  const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta));
   const ElectronId eleId = AndId<Electron>(ElectronID_Fall17_loose, PtEtaSCCut(min_lepton_pt, min_lepton_eta));
 
   const JetId jetId = AndId<Jet> (JetPFID(JETwp), PtEtaCut(min_jet_pt, min_lepton_eta));
@@ -194,6 +192,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
   weightsmodules.emplace_back(new GenLevelJetMatch(ctx,MS["topjetLabel"]));
   weightsmodules.emplace_back(new FinalStateMatching(ctx));
+  weightsmodules.emplace_back(new NLOCorrections(ctx));
 
   // https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2
   metfilters_selection.reset(new AndSelection(ctx, "metfilters"));
@@ -239,7 +238,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
 bool PreselectionModule::process(uhh2::Event& event) {
 
-  if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In PreselectionModule.cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
+  if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In "+NameModule+".cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
 
   auto weight_gen = event.weight;
   fill_histograms(event, "nocuts");
