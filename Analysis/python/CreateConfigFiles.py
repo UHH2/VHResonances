@@ -1,3 +1,4 @@
+
 from Utils import *
 from fileManipulation import *
 from xml.dom.minidom import parseString
@@ -31,8 +32,6 @@ YearVars["BTagCalibration"]     = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/V
 #                                    "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2017/DeepCSV_94XSF_WP_V4_B_F.csv",
 #                                    "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2018/DeepCSV_102XSF_WP_V1.csv",
 #                                    }
-
-
 
 
 
@@ -198,9 +197,11 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                         changes.append(["<!ENTITY", "isCHS",    '"true"', '"false"'])
                         changes.append(["<Item Name", "METName", 'slimmedMETs', 'slimmedMETsPuppi'])
                     if "muon" in channel:
-                        changes.append(["<!ENTITY", "electronchannel",  '"true"', '"false"'])
+                        changes.append(["<!ENTITY", "muonchannel",   '"false"', '"true"'])
                     if "electron" in channel:
-                        changes.append(["<!ENTITY", "muonchannel",      '"true"', '"false"'])
+                        changes.append(["<!ENTITY", "electronchannel",   '"false"', '"true"'])
+                    if "invisible" in channel:
+                        changes.append(["<!ENTITY", "invisiblechannel",   '"false"', '"true"'])
                     changes.append(["<!ENTITY", "YEAR", 'defaultValue', year])
                     changes.append(["<Cycle", "TargetLumi", 'defaultValue', str(lumi)])
                     for var in YearVars:

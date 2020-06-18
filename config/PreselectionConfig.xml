@@ -46,8 +46,9 @@
 <!ENTITY isPuppi                    "true">  <!--false/true -->
 <!ENTITY isCHS                      "true">  <!--false/true -->
 <!ENTITY isHOTVR                    "true">  <!--false/true -->
-<!ENTITY muonchannel                "true">  <!--true/false -->
-<!ENTITY electronchannel            "true">  <!--true/false -->
+<!ENTITY muonchannel                "false">  <!--true/false -->
+<!ENTITY electronchannel            "false">  <!--true/false -->
+<!ENTITY invisiblechannel           "false">  <!--true/false -->
 
 <!-- MC Samples 2016 -->
 
