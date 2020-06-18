@@ -14,6 +14,9 @@
 <!ENTITY muonchannel                "true">  <!--true/false -->
 <!ENTITY electronchannel            "true">  <!--true/false -->
 
+<!ENTITY MCBtagEfficiencies         "defaultValue">
+<!ENTITY BTagCalibration            "defaultValue">
+
 <!-- MC Samples 2016 -->
 <!ENTITY MC_ZprimeToZH_M600_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2016.xml">
 <!ENTITY MC_ZprimeToZH_M800_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2016.xml">
@@ -271,6 +274,9 @@
     <Item Name="isHOTVR"                    Value="&isHOTVR;"/>
     <Item Name="muonchannel"                Value="&muonchannel;"/>
     <Item Name="electronchannel"            Value="&electronchannel;"/>
+
+    <Item Name="MCBtagEfficiencies"         Value="&MCBtagEfficiencies;"/>
+    <Item Name="BTagCalibration"            Value="&BTagCalibration;"/>
 
     <!-- the class name of the AnalysisModule subclasses to run: -->
     <Item Name="AnalysisModule"             Value="SelectionModule"/>

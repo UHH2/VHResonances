@@ -15,6 +15,8 @@
 <!ENTITY pileup_directory_data_up   "CMSSW_BASE/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;_72383.root">
 <!ENTITY pileup_directory_data_down "CMSSW_BASE/src/UHH2/common/data/&YEAR;/MyDataPileupHistogram&YEAR;_66017.root">
 
+<!ENTITY NLOCorrections             "CMSSW_BASE/src/UHH2/VHResonances/Analysis/Theory/">
+
 <!-- Cleaning variables -->
 <!ENTITY lumisel                    "true">  <!--true/false -->
 <!ENTITY mclumiweight               "true">  <!--true/false -->
@@ -457,6 +459,8 @@
     <Item Name="pileup_directory_data"      Value="&pileup_directory_data;"/>       <!--used only in UHH2/common/include/MCWeight.h -->
     <Item Name="pileup_directory_data_up"   Value="&pileup_directory_data_up;"/>    <!--used only in UHH2/common/include/MCWeight.h -->
     <Item Name="pileup_directory_data_down" Value="&pileup_directory_data_down;"/>  <!--used only in UHH2/common/include/MCWeight.h -->
+
+    <Item Name="NLOCorrections"             Value="&NLOCorrections;"/>
 
     <!-- Cleaning variables -->
     <Item Name="lumisel"                    Value="&lumisel;"/>

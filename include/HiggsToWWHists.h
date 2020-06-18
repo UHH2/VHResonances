@@ -2,7 +2,7 @@
 
 #include "UHH2/core/include/Hists.h"
 #include "UHH2/VHResonances/include/HistsBase.hpp"
-#include "UHH2/VHResonances/include/constants.hpp"
+#include "UHH2/VHResonances/include/Utils.hpp"
 #include "UHH2/VHResonances/include/HiggsToWWSelections.h"
 
 class HiggsToWWHists: public HistsBase {

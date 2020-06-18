@@ -5,18 +5,37 @@ from xml.dom.minidom import parseString
 
 
 YearVars = {}
-YearVars["JEC_Version"] = { "2016": "Summer16_07Aug2017_V11",
-                            "2017": "Fall17_17Nov2017_V32",
-                            "2018": "Autumn18_V19",
-                            }
-YearVars["JER_Version"] = { "2016": "Summer16_25nsV1",
-                            "2017": "Fall17_V3",
-                            "2018": "Autumn18_V7b",
-                            }
-YearVars["lumi_file"]   = { "2016": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2016/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root",
-                            "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2017/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.root",
-                            "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2018/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.root",
-                            }
+YearVars["JEC_Version"]         = {"2016": "Summer16_07Aug2017_V11",
+                                   "2017": "Fall17_17Nov2017_V32",
+                                   "2018": "Autumn18_V19",
+                                   }
+YearVars["JER_Version"]         = {"2016": "Summer16_25nsV1",
+                                   "2017": "Fall17_V3",
+                                   "2018": "Autumn18_V7b",
+                                   }
+YearVars["lumi_file"]           = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2016/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root",
+                                   "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2017/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.root",
+                                   "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2018/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.root",
+                                   }
+
+YearVars["MCBtagEfficiencies"]  = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/SF_2016.root",
+                                   "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/SF_2017.root",
+                                   "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/SF_2018.root",
+                                   }
+
+YearVars["BTagCalibration"]     = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/subjet_DeepCSV_102XSF_V1.csv",
+                                   "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/subjet_DeepCSV_2016LegacySF_V1.csv",
+                                   "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/subjet_DeepCSV_94XSF_V4_B_F.csv",
+                                   }
+
+# YearVars["BTagCalibration"]     = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2016/DeepCSV_2016LegacySF_WP_V1.csv",
+#                                    "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2017/DeepCSV_94XSF_WP_V4_B_F.csv",
+#                                    "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2018/DeepCSV_102XSF_WP_V1.csv",
+#                                    }
+
+
+
+
 
 def newNumber(year,sample,ConfigFile,syst):
     newNumber = 20
