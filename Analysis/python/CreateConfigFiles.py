@@ -141,12 +141,9 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                 if not os.path.exists(path):
                     os.makedirs(path)
                 for sample in samples:
-                    if ("Electron" in sample and "muon" in channel): continue
-                    if ("Invisible" in sample and "muon" in channel): continue
-                    if ("Muon" in sample and "electron" in channel): continue
-                    if ("Invisible" in sample and "electron" in channel): continue
-                    if ("Electron" in sample and "invisible" in channel): continue
-                    if ("Muon" in sample and "invisible" in channel): continue
+                    if (("Electron" in sample or "Invisible" in sample) and "muon" in channel): continue
+                    if (("Electron" in sample or "Muon" in sample) and "invisible" in channel): continue
+                    if (("Invisible" in sample or "Muon" in sample) and "electron" in channel): continue
                     if all(not control in collection+channel+syst+sample for control in controls):
                         continue
                     filename = outdir+"_"+sample+".xml"
@@ -155,6 +152,7 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     comments = []
                     for el in all_samples:
                         if sample == el: continue
+                        print "We are here: " + el
                         if "MC" in el:
                             comments.append(["<InputData", "Type", "MC",   '"'+el+'"'])
                         elif "DATA" in el:
