@@ -199,13 +199,13 @@
 <!ENTITY DATA_SingleMuon_RunF_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunF.xml">
 <!ENTITY DATA_SingleMuon_RunG_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunG.xml">
 <!ENTITY DATA_SingleMuon_RunH_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunH.xml">
-<!ENTITY MET_RunB_2016                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016B_ver2_v1.xml">
-<!ENTITY MET_RunC_2016                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016C_v1.xml">
-<!ENTITY MET_RunD_2016                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016D_v1.xml">
-<!ENTITY MET_RunE_2016                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016E_v1.xml">
-<!ENTITY MET_RunF_2016                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016F_v1.xml">
-<!ENTITY MET_RunG_2016                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016G_v1.xml">
-<!ENTITY MET_RunH_2016                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016H_v2.xml">
+<!ENTITY DATA_MET_RunB_2016             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016B_ver2_v1.xml">
+<!ENTITY DATA_MET_RunC_2016             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016C_v1.xml">
+<!ENTITY DATA_MET_RunD_2016             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016D_v1.xml">
+<!ENTITY DATA_MET_RunE_2016             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016E_v1.xml">
+<!ENTITY DATA_MET_RunF_2016             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016F_v1.xml">
+<!ENTITY DATA_MET_RunG_2016             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016G_v1.xml">
+<!ENTITY DATA_MET_RunH_2016             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MET_2016H_v2.xml">
 
 <!ENTITY DATA_SingleElectron_RunB_2017  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2017/DATA_SingleElectron_Run2017B.xml">
 <!ENTITY DATA_SingleElectron_RunC_2017  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2017/DATA_SingleElectron_Run2017C.xml">
@@ -217,11 +217,11 @@
 <!ENTITY DATA_SingleMuon_RunD_2017      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2017/DATA_SingleMuon2017_RunD.xml">
 <!ENTITY DATA_SingleMuon_RunE_2017      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2017/DATA_SingleMuon2017_RunE.xml">
 <!ENTITY DATA_SingleMuon_RunF_2017      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2017/DATA_SingleMuon2017_RunF.xml">
-<!ENTITY MET_RunB_2017                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2017B_v1.xml">
-<!ENTITY MET_RunC_2017                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2017C_v1.xml">
-<!ENTITY MET_RunD_2017                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2017D_v1.xml">
-<!ENTITY MET_RunE_2017                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2017E_v1.xml">
-<!ENTITY MET_RunF_2017                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2017F_v1.xml">
+<!ENTITY DATA_MET_RunB_2017             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2017B_v1.xml">
+<!ENTITY DATA_MET_RunC_2017             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2017C_v1.xml">
+<!ENTITY DATA_MET_RunD_2017             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2017D_v1.xml">
+<!ENTITY DATA_MET_RunE_2017             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2017E_v1.xml">
+<!ENTITY DATA_MET_RunF_2017             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2017F_v1.xml">
 
 <!ENTITY DATA_SingleElectron_RunA_2018  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2018/DATA_EGamma2018_RunB.xml">
 <!ENTITY DATA_SingleElectron_RunB_2018  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2018/DATA_EGamma2018_RunB.xml">
@@ -231,10 +231,10 @@
 <!ENTITY DATA_SingleMuon_RunB_2018      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunB.xml">
 <!ENTITY DATA_SingleMuon_RunC_2018      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunC.xml">
 <!ENTITY DATA_SingleMuon_RunD_2018      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunD.xml">
-<!ENTITY MET_RunA_2018                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2018A_v1.xml">
-<!ENTITY MET_RunB_2018                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2018B_v1.xml">
-<!ENTITY MET_RunC_2018                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2018C_v1.xml">
-<!ENTITY MET_RunD_2018                  SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2018D_v2.xml">
+<!ENTITY DATA_MET_RunA_2018             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2018A_v1.xml">
+<!ENTITY DATA_MET_RunB_2018             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2018B_v1.xml">
+<!ENTITY DATA_MET_RunC_2018             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2018C_v1.xml">
+<!ENTITY DATA_MET_RunD_2018             SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/MET_2018D_v2.xml">
 ]>
 
 <!--
@@ -393,6 +393,13 @@
     <InputData Type="DATA"  Version="DATA_SingleMuon_RunF_2016"     Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunF_2016;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="DATA"  Version="DATA_SingleMuon_RunG_2016"     Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunG_2016;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="DATA"  Version="DATA_SingleMuon_RunH_2016"     Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunH_2016;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunB_2016"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunB_2016;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunC_2016"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunC_2016;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunD_2016"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunD_2016;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunE_2016"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunE_2016;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunF_2016"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunF_2016;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunG_2016"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunG_2016;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunH_2016"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunH_2016;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
     <!-- Data 2017 -->
 
@@ -406,6 +413,11 @@
     <InputData Type="DATA"  Version="DATA_SingleMuon_RunD_2017"     Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunD_2017;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="DATA"  Version="DATA_SingleMuon_RunE_2017"     Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunE_2017;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="DATA"  Version="DATA_SingleMuon_RunF_2017"     Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunF_2017;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunB_2017"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunB_2017;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunC_2017"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunC_2017;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunD_2017"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunD_2017;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunE_2017"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunE_2017;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunF_2017"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunF_2017;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
     <!-- Data 2018 -->
 
@@ -417,6 +429,10 @@
     <InputData Type="DATA"  Version="DATA_SingleMuon_RunB_2018"     Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunB_2018;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="DATA"  Version="DATA_SingleMuon_RunC_2018"     Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunC_2018;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="DATA"  Version="DATA_SingleMuon_RunD_2018"     Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_RunD_2018;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunA_2018"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunA_2018;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunB_2018"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunB_2018;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunC_2018"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunC_2018;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_RunD_2018"            Lumi="1"            NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_RunD_2018;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
     <UserConfig>
       <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
