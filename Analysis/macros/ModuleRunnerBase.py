@@ -44,6 +44,7 @@ class VariablesBase(GenericPath):
             "MC_ZZ"                 : ["MC_ZZTo4Q", "MC_ZZTo2Q2Nu", "MC_ZZTo2L2Q", "MC_ZZTo2L2Nu", "MC_ZZTo4L"],
             "DATA_SingleElectron"   : ["DATA_SingleElectron_RunA", "DATA_SingleElectron_RunB", "DATA_SingleElectron_RunC", "DATA_SingleElectron_RunD", "DATA_SingleElectron_RunE", "DATA_SingleElectron_RunF", "DATA_SingleElectron_RunG", "DATA_SingleElectron_RunH" ],
             "DATA_SingleMuon"       : ["DATA_SingleMuon_RunA", "DATA_SingleMuon_RunB", "DATA_SingleMuon_RunC", "DATA_SingleMuon_RunD", "DATA_SingleMuon_RunE", "DATA_SingleMuon_RunF", "DATA_SingleMuon_RunG", "DATA_SingleMuon_RunH" ],
+            "DATA_SingleInvisible"  : ["DATA_SingleInvisible_RunA"], # add more here
             self.signal             : self.SignalSamples,
             }
 

@@ -453,6 +453,7 @@
     <Item Name="isHOTVR"                    Value="&isHOTVR;"/>
     <Item Name="muonchannel"                Value="&muonchannel;"/>
     <Item Name="electronchannel"            Value="&electronchannel;"/>
+    <Item Name="invisiblechannel"           Value="&invisiblechannel;"/>
 
     <!-- MC PuReweighting -->
     <Item Name="SysType_PU"                 Value="&SysType_PU;"/>
