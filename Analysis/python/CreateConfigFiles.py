@@ -141,9 +141,10 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                 if not os.path.exists(path):
                     os.makedirs(path)
                 for sample in samples:
-                    if (("Electron" in sample or "MET" in sample) and "muon" in channel): continue
-                    if (("Electron" in sample or "Muon" in sample) and "invisible" in channel): continue
-                    if (("MET" in sample or "Muon" in sample) and "electron" in channel): continue
+                    if ("Electron" in sample and not "electron" in channel) : continue
+                    if ("Muon" in sample and not "muon" in channel) : continue
+                    if ("MET" in sample and not "invisible" in channel) : continue
+
                     if all(not control in collection+channel+syst+sample for control in controls):
                         continue
                     filename = outdir+"_"+sample+".xml"
