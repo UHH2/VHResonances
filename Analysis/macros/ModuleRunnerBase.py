@@ -33,6 +33,7 @@ class VariablesBase(GenericPath):
                                 "2018": ["A", "B", "C", "D"],
                                 }
 
+        # TODO MC_DY_inv only includes the 2016 data so far
         self.Samples_dict_ = {# TODO MC_DY_HT70to100
             "MC_DY"                 : ["MC_DY_HT100to200", "MC_DY_HT200to400", "MC_DY_HT400to600", "MC_DY_HT600to800", "MC_DY_HT800to1200", "MC_DY_HT1200to2500", "MC_DY_HT2500toInf"],
             "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],
@@ -42,6 +43,7 @@ class VariablesBase(GenericPath):
             "MC_WW"                 : ["MC_WWTo4Q", "MC_WWToLNuQQ", "MC_WWTo2L2Nu"],
             "MC_WZ"                 : ["MC_WZToLNu2Q", "MC_WZTo2Q2Nu", "MC_WZTo2L2Q", "MC_WZTo1L3Nu", "MC_WZTo3LNu"],
             "MC_ZZ"                 : ["MC_ZZTo4Q", "MC_ZZTo2Q2Nu", "MC_ZZTo2L2Q", "MC_ZZTo2L2Nu", "MC_ZZTo4L"],
+            "MC_DY_inv"             : ["MC_DY_inv_PtZ_50To100", "MC_DY_inv_PtZ_100To250", "MC_DY_inv_PtZ_250To400", "MC_DY_inv_PtZ_400To650", "MC_DY_inv_PtZ_400To650_ext1", "MC_DY_inv_PtZ_650ToInf", "MC_DY_inv_PtZ_650ToInf_ext1"],
             "DATA_SingleElectron"   : ["DATA_SingleElectron_RunA", "DATA_SingleElectron_RunB", "DATA_SingleElectron_RunC", "DATA_SingleElectron_RunD", "DATA_SingleElectron_RunE", "DATA_SingleElectron_RunF", "DATA_SingleElectron_RunG", "DATA_SingleElectron_RunH" ],
             "DATA_SingleMuon"       : ["DATA_SingleMuon_RunA", "DATA_SingleMuon_RunB", "DATA_SingleMuon_RunC", "DATA_SingleMuon_RunD", "DATA_SingleMuon_RunE", "DATA_SingleMuon_RunF", "DATA_SingleMuon_RunG", "DATA_SingleMuon_RunH" ],
             "DATA_MET"              : ["DATA_MET_RunA", "DATA_MET_RunB", "DATA_MET_RunC", "DATA_MET_RunD", "DATA_MET_RunE", "DATA_MET_RunF", "DATA_MET_RunG", "DATA_MET_RunH"],
@@ -97,7 +99,7 @@ class ModuleRunnerBase(VariablesBase):
                 if (year=="2016" and x=="MC_TTbar"): loop_over = ["MC_TTbar"]
                 if (year!="2016" and (x=="MC_WW" or x=="MC_WZ" or x=="MC_ZZ") ): loop_over = self.Samples_dict_[x+"_incl"]
                 self.Samples_dict.setdefault(year, {}).setdefault(x+"_"+year, [el+"_"+year for el in loop_over] )
-            for x in ["DATA_SingleElectron","DATA_SingleMuon"]:
+            for x in ["DATA_SingleElectron","DATA_SingleMuon", "DATA_MET"]:
                 self.Samples_dict[year][x+"_"+year] = [el for el in self.Samples_dict[year][x+"_"+year] if any("Run"+crl in el for crl in self.RunControls[year])]
             self.Samples_original.setdefault(year, list(dict.fromkeys([el for list_ in self.Samples_dict[year].values() for el in list_])))
             self.Samples_Category.setdefault(year, self.Samples_dict[year].keys())
