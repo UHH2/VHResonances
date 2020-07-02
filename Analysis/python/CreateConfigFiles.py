@@ -84,6 +84,8 @@ def newNumber(year,sample,ConfigFile,syst):
             newNumber = 330
         if any(x in sample for x in ["MC_DY_HT100to200_2016"]):
             newNumber = 300
+        if any(x in sample for x in ["MC_DY_inv_PtZ_50To100", "MC_DY_inv_PtZ_100To250", "MC_DY_inv_PtZ_250To400", "MC_DY_inv_PtZ_400To650", "MC_DY_inv_PtZ_650ToInf", "MC_DY_inv_HT_100To200", "MC_DY_inv_HT_200To400", "MC_DY_inv_HT_400To600", "MC_DY_inv_HT_600To800", "MC_DY_inv_HT_800To1200", "MC_DY_inv_HT_1200To2500", "MC_DY_inv_HT_2500ToInf"]):
+            newNumber = 100
     if "MC_TT" in sample:
         newNumber = 40 if year=="2016" else 200 if year=="2017" else 60
     if "MC_W" in sample:
@@ -181,7 +183,7 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     changes.append(["<ConfigSGE", "Workdir", "workdir_"+outdir, "workdir_"+outdir+"_"+sample])
                     changes.append(["<ConfigParse", 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile,syst)+'"'])
                     changes.append(["<!ENTITY", "OUTDIR", outdir , outdir+"/"+folders])
-                    if "Selection" in ConfigFile:
+                    if "Selection" in ConfigFile: # TODO How does this need to change with the invisiblechannel?
                         changes.append(["<!ENTITY", "SYSTEM", "Preselection/All/leptonchannel/nominal/" , "Preselection/"+folders])
                     if "SignalRegion" in ConfigFile:
                         changes.append(["<!ENTITY", "SYSTEM", "Selection/All/leptonchannel/nominal/" , "Selection/"+folders])
