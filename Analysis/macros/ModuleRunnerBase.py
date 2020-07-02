@@ -43,14 +43,12 @@ class VariablesBase(GenericPath):
             "MC_WW"                 : ["MC_WWTo4Q", "MC_WWToLNuQQ", "MC_WWTo2L2Nu"],
             "MC_WZ"                 : ["MC_WZToLNu2Q", "MC_WZTo2Q2Nu", "MC_WZTo2L2Q", "MC_WZTo1L3Nu", "MC_WZTo3LNu"],
             "MC_ZZ"                 : ["MC_ZZTo4Q", "MC_ZZTo2Q2Nu", "MC_ZZTo2L2Q", "MC_ZZTo2L2Nu", "MC_ZZTo4L"],
-            "MC_DY_inv"             : ["MC_DY_inv_PtZ_50To100", "MC_DY_inv_PtZ_100To250", "MC_DY_inv_PtZ_250To400", "MC_DY_inv_PtZ_400To650", "MC_DY_inv_PtZ_400To650_ext1", "MC_DY_inv_PtZ_650ToInf", "MC_DY_inv_PtZ_650ToInf_ext1"],
+            "MC_DY_inv"             : ["MC_DY_inv_PtZ_50To100", "MC_DY_inv_PtZ_100To250", "MC_DY_inv_PtZ_250To400", "MC_DY_inv_PtZ_400To650", "MC_DY_inv_PtZ_650ToInf", "MC_DY_inv_HT_100To200", "MC_DY_inv_HT_200To400_2018", "MC_DY_inv_HT_400To600_2018", "MC_DY_inv_HT_600To800_2018", "MC_DY_inv_HT_800To1200_2018", "MC_DY_inv_HT_1200To2500_2018", "MC_DY_inv_HT_2500ToInf_2018"],
             "DATA_SingleElectron"   : ["DATA_SingleElectron_RunA", "DATA_SingleElectron_RunB", "DATA_SingleElectron_RunC", "DATA_SingleElectron_RunD", "DATA_SingleElectron_RunE", "DATA_SingleElectron_RunF", "DATA_SingleElectron_RunG", "DATA_SingleElectron_RunH" ],
             "DATA_SingleMuon"       : ["DATA_SingleMuon_RunA", "DATA_SingleMuon_RunB", "DATA_SingleMuon_RunC", "DATA_SingleMuon_RunD", "DATA_SingleMuon_RunE", "DATA_SingleMuon_RunF", "DATA_SingleMuon_RunG", "DATA_SingleMuon_RunH" ],
             "DATA_MET"              : ["DATA_MET_RunA", "DATA_MET_RunB", "DATA_MET_RunC", "DATA_MET_RunD", "DATA_MET_RunE", "DATA_MET_RunF", "DATA_MET_RunG", "DATA_MET_RunH"],
             self.signal             : self.SignalSamples,
             }
-
-
 
         self.ExtractVariableFromConstants()
 
