@@ -103,13 +103,27 @@ class ModuleRunner(ModuleRunnerBase):
             self.Channels = ["lepton"]
         print "\n****************************************\t","\n \tModule Name: \t", self.Module, "\n****************************************\t", "\nRunning \t", self.ConfigFile, "\nUsing \t \t", self.ModuleFile, "\nSamples:\t", len(self.Samples), self.Samples, "\n", self.Channels, "\n", self.Systematics, "\n", self.Collections
 
+    def DoControl(self, control_, channel, sample):
+        check = False
+        if all(not control in control_ for control in self.controls):
+            check = True
+        if "invisible" in channel and "MC_DY" in sample and not "MC_DY_inv" in sample:
+            check = True
+        if "invisible" in channel and "PtZ" in sample and not "2016" in sample:
+            check = True
+        if "invisible" in channel and "HT" in sample and "2016" in sample:
+            check = True
+        if not "invisible" in channel and "MC_DY_inv" in sample:
+            check = True
+        return check
+
     def DeleteWorkdirs(self):
         for path in [self.Path_STORAGE+self.year+"/",self.SubmitDir,self.Path_SFRAME]:
             for collection in self.Collections:
                 for channel in self.Channels:
                     for syst in self.Systematics:
                         for sample in self.Samples:
-                            if all(not control in collection+channel+syst+sample for control in self.controls):
+                            if self.DoControl(collection+channel+syst+sample, channel, sample):
                                 continue
                             cmd = "rm -fr "+path+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/*"+sample+"*"
                             # print cmd
@@ -119,7 +133,7 @@ class ModuleRunner(ModuleRunnerBase):
         for collection in self.Collections:
                 for channel in self.Channels:
                     for syst in self.Systematics:
-                        if all(not control in self.year+collection+channel+syst for control in self.controls):
+                        if self.DoControl(self.year+collection+channel+syst, channel, ""):
                             continue
         		a = os.system("rm -fr " +self.SubmitDir+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/")
         CreateConfigFiles(self.year, self.Samples, self.AllSamples, self.Collections, self.Channels, self.Systematics, self.controls, self.Path_ANALYSIS, self.SubmitDir+self.Module+"/", self.ConfigFile, self.Path_SFRAME, self.lumi_pb)
@@ -140,7 +154,7 @@ class ModuleRunner(ModuleRunnerBase):
                 for syst in self.Systematics:
                     middlePath = collection+"/"+channel+"channel/"+syst+"/"
                     for sample in Samples:
-                        if all(not control in collection+channel+syst+sample for control in self.controls):
+                        if self.DoControl(collection+channel+syst+sample, channel, sample):
                             continue
                         mode = "MC" if "MC" in sample else "DATA"
                         commonpath = self.ModuleStorage+"/"+middlePath
@@ -187,7 +201,7 @@ class ModuleRunner(ModuleRunnerBase):
                 for syst in self.Systematics:
                     middlePath = collection+"/"+channel+"channel/"+syst+"/"
                     for sample_ in self.Samples_Category[self.year]:
-                        if all(not control in sample_+channel+collection for control in self.controls):
+                        if self.DoControl(collection+channel+sample_, channel, sample_):
                             continue
                         decays = [""]
                         # if self.Module == "SignalRegion" and self.signal in sample_:
@@ -225,7 +239,7 @@ class ModuleRunner(ModuleRunnerBase):
         for collection in self.Collections:
             for channel in self.Channels:
                 for syst in self.Systematics:
-                    if all(not control in self.year+collection+channel+syst for control in self.controls):
+                    if self.DoControl(self.year+collection+channel+syst, channel, ""):
                         continue
                     a = os.system("mkdir -p "+self.Path_STORAGE+self.year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/Plots")
                     process = subprocess.Popen("Plots -f Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+self.year+".steer", shell=True)
@@ -241,7 +255,7 @@ class ModuleRunner(ModuleRunnerBase):
             for collection in self.Collections:
                 for channel in self.Channels:
                     for syst in self.Systematics:
-                        if all(not control in module+collection+channel+syst for control in self.controls):
+                        if self.DoControl(module+collection+channel+syst, channel, ""):
                             continue
                         path_RunII = self.Path_STORAGE+year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/"
                         a = os.system("mkdir -p "+path_RunII+"Plots")
@@ -267,6 +281,7 @@ class ModuleRunner(ModuleRunnerBase):
                 process.wait()
             os.chdir(cwd)
 
+
     @timeit
     def DoChecks(self):
         check = False
@@ -284,7 +299,7 @@ class ModuleRunner(ModuleRunnerBase):
                 for syst in self.Systematics:
                     middlePath = collection+"/"+channel+"channel/"+syst+"/"
                     for sample_ in self.Samples_Category[self.year]:
-                        if all(not control in sample_+channel+collection for control in self.controls):
+                        if self.DoControl(collection+channel+sample_, channel, sample_):
                             continue
                         sample = sample_.replace(self.signal,self.signal)
                         mode = "MC" if "MC" in sample else "DATA"
@@ -309,7 +324,7 @@ class ModuleRunner(ModuleRunnerBase):
                                 if ncomment>0 and ncomment==(len(lines)-1):
                                     print "Found files ",ncomment,"out of ",len(lines)-1," in:", xml
                     for sample_ in self.Samples_original[self.year]:
-                        if all(not control in sample_+channel+collection for control in self.controls):
+                        if self.DoControl(collection+channel+sample_, channel, sample_):
                             continue
                         sample = sample_.replace(self.signal,self.signal)
                         mode = "MC" if "MC" in sample else "DATA"
@@ -378,7 +393,7 @@ class ModuleRunner(ModuleRunnerBase):
                     for syst in self.Systematics:
                         middlePath = collection+"/"+channel+"channel/"+syst+"/"
                         for sample in Samples:
-                            if all(not control in sample+channel+collection for control in self.controls):
+                            if self.DoControl(collection+channel+sample, channel, sample):
                                 continue
                             path = self.SubmitDir+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"+sample+check
                             if "NF" in check: path = self.SubmitDir+self.Module+"/"+middlePath+"/workdir_"+self.Module+"_"+sample+"/"+sample+"*"

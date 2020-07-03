@@ -34,7 +34,7 @@ class VariablesBase(GenericPath):
                                 }
 
         self.Samples_dict_ = {# TODO MC_DY_HT70to100
-            "MC_DY"                 : ["MC_DY_HT100to200", "MC_DY_HT200to400", "MC_DY_HT400to600", "MC_DY_HT600to800", "MC_DY_HT800to1200", "MC_DY_HT1200to2500", "MC_DY_HT2500toInf"],
+            "MC_DY"                 : ["MC_DY_HT100to200", "MC_DY_HT200to400", "MC_DY_HT400to600", "MC_DY_HT600to800", "MC_DY_HT800to1200", "MC_DY_HT1200to2500", "MC_DY_HT2500toInf", "MC_DY_inv_PtZ_50To100", "MC_DY_inv_PtZ_100To250", "MC_DY_inv_PtZ_250To400", "MC_DY_inv_PtZ_400To650", "MC_DY_inv_PtZ_650ToInf", "MC_DY_inv_HT_100To200", "MC_DY_inv_HT_200To400", "MC_DY_inv_HT_400To600", "MC_DY_inv_HT_600To800", "MC_DY_inv_HT_800To1200", "MC_DY_inv_HT_1200To2500", "MC_DY_inv_HT_2500ToInf"],
             "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],
             "MC_WW_incl"            : ["MC_WW"],
             "MC_WZ_incl"            : ["MC_WZ"],
@@ -47,8 +47,6 @@ class VariablesBase(GenericPath):
             "DATA_MET"              : ["DATA_MET_RunA", "DATA_MET_RunB", "DATA_MET_RunC", "DATA_MET_RunD", "DATA_MET_RunE", "DATA_MET_RunF", "DATA_MET_RunG", "DATA_MET_RunH"],
             self.signal             : self.SignalSamples,
             }
-
-
 
         self.ExtractVariableFromConstants()
 
@@ -97,7 +95,7 @@ class ModuleRunnerBase(VariablesBase):
                 if (year=="2016" and x=="MC_TTbar"): loop_over = ["MC_TTbar"]
                 if (year!="2016" and (x=="MC_WW" or x=="MC_WZ" or x=="MC_ZZ") ): loop_over = self.Samples_dict_[x+"_incl"]
                 self.Samples_dict.setdefault(year, {}).setdefault(x+"_"+year, [el+"_"+year for el in loop_over] )
-            for x in ["DATA_SingleElectron","DATA_SingleMuon"]:
+            for x in ["DATA_SingleElectron","DATA_SingleMuon", "DATA_MET"]:
                 self.Samples_dict[year][x+"_"+year] = [el for el in self.Samples_dict[year][x+"_"+year] if any("Run"+crl in el for crl in self.RunControls[year])]
             self.Samples_original.setdefault(year, list(dict.fromkeys([el for list_ in self.Samples_dict[year].values() for el in list_])))
             self.Samples_Category.setdefault(year, self.Samples_dict[year].keys())
