@@ -3,14 +3,6 @@ from parallelise import *
 
 import ROOT
 
-def cont_event(original_dir):
-    count = 0
-    for sample in glob(original_dir+"*/*/*/*"):
-        if not ".xml" in sample:
-            continue
-        count += 1
-    return count
-
 @timeit
 def condor_control(SubmitDir, Module, Samples, Collections, Channels, Systematics, controls_ = [""], option="", forPlotting=False, doParallel=True):
     internal_option= {"List": "-l", "Submit": "-s", "Resubmit": "-r", "Add": "-a", "Merge": "-a", "ForceAdd": "-f", "ForceMerge": "-f"}
