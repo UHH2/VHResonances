@@ -84,7 +84,7 @@ def newNumber(year,sample,ConfigFile,syst):
             newNumber = 330
         if any(x in sample for x in ["MC_DY_HT100to200_2016"]):
             newNumber = 300
-        if any(x in sample for x in ["MC_DY_inv_PtZ_50To100", "MC_DY_inv_PtZ_100To250", "MC_DY_inv_PtZ_250To400", "MC_DY_inv_PtZ_400To650", "MC_DY_inv_PtZ_650ToInf", "MC_DY_inv_HT_100To200", "MC_DY_inv_HT_200To400", "MC_DY_inv_HT_400To600", "MC_DY_inv_HT_600To800", "MC_DY_inv_HT_800To1200", "MC_DY_inv_HT_1200To2500", "MC_DY_inv_HT_2500ToInf"]):
+        if "MC_DY_inv_PtZ" in sample:
             newNumber = 100
     if "MC_TT" in sample:
         newNumber = 40 if year=="2016" else 200 if year=="2017" else 60
@@ -123,7 +123,22 @@ def newNumber(year,sample,ConfigFile,syst):
     #     newNumber = 10 if isToReduce else 50
     #     if isFast: newNumber = 5 if isToReduce else 10
     #     changes.append(NFileLine(newNumber))
-    return str(max(1,int(newNumber/(defaulTimePerJob/TimePerJob))))
+    # return str(max(1,int(newNumber/(defaulTimePerJob/TimePerJob))))
+    return str(max(1,int(newNumber/(defaulTimePerJob/1))))
+
+def DoControl(controls, control_, channel, sample):
+    check = False
+    if all(not control in control_ for control in controls):
+        check = True
+    if "invisible" in channel and "MC_DY" in sample and not "MC_DY_inv" in sample:
+        check = True
+    if "invisible" in channel and "PtZ" in sample and not "2016" in sample:
+        check = True
+    if "invisible" in channel and "HT" in sample and "2016" in sample:
+        check = True
+    if not "invisible" in channel and "MC_DY_inv" in sample:
+        check = True
+    return check
 
 @timeit
 def CreateConfigFiles(year, samples, all_samples, collections, channels, systematics, controls, original_dir, SubmitDir, ConfigFile, Path_SFRAME, lumi):
@@ -147,7 +162,9 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     if ("Muon" in sample and not "muon" in channel) : continue
                     if ("MET" in sample and not "invisible" in channel) : continue
 
-                    if all(not control in collection+channel+syst+sample for control in controls):
+                    # if all(not control in collection+channel+syst+sample for control in controls):
+                    #     continue
+                    if DoControl(controls, collection+channel+syst+sample, channel, sample):
                         continue
                     filename = outdir+"_"+sample+".xml"
                     a = os.system("cp "+original_dir+"config/"+ConfigFile+" "+path+filename)

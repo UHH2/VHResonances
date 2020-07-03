@@ -142,6 +142,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   MB["isHOTVR"]           = string2bool(ctx.get("isHOTVR"));
   MB["muonchannel"]       = string2bool(ctx.get("muonchannel"));
   MB["electronchannel"]   = string2bool(ctx.get("electronchannel"));
+  MB["invisiblechannel"]   = string2bool(ctx.get("invisiblechannel"));
   MS["SysType_PU"]        = ctx.get("SysType_PU");
   MB["lumisel"]           = string2bool(ctx.get("lumisel"));
   MB["mclumiweight"]      = string2bool(ctx.get("mclumiweight"));
@@ -151,8 +152,9 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   MB["tauid"]             = string2bool(ctx.get("tauid"));
   MB["metfilters"]        = string2bool(ctx.get("metfilters"));
 
-  if (MB["isPuppi"] == MB["isCHS"] && MB["isPuppi"] == MB["isHOTVR"]) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one jet collection.");
-  if (MB["muonchannel"] == MB["electronchannel"]) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one lepton channel.");
+  if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one jet collection.");
+  // if (MB["muonchannel"] == MB["electronchannel"] && MB["muonchannel"] == MB["invisiblechannel"] &&  MB["electronchannel"] == MB["invisiblechannel"]) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one lepton channel.");
+  if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one lepton channel.");
 
   MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": "");
 
@@ -220,11 +222,19 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
     NLeptonSel.reset(new NElectronSelection(min_leptons)); // min_leptons=2
     NoLeptonSel.reset(new NMuonSelection(1));
   }
+  if (MB["invisiblechannel"]) {
+    NLeptonSel.reset(new NElectronSelection(0,0));
+    NoLeptonSel.reset(new NMuonSelection(1));
+  }
 
   DeltaRDiLepton_selection.reset(new DeltaRDiLepton(min_DR_dilep, max_DR_dilep, MS["leptons"]));
   JetDiLeptonPhiAngularSel.reset(new JetDiLeptonPhiAngularSelection(min_dilep_pt, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, MS["leptons"], h_topjets));
   VetoLeptonSel.reset(new VetoSelection(NoLeptonSel));
 
+  if (MB["invisiblechannel"]) {
+      DeltaRDiLepton_selection.reset(new AndSelection(ctx));
+      JetDiLeptonPhiAngularSel.reset(new AndSelection(ctx));
+  }
 }
 
 
