@@ -153,7 +153,6 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   MB["metfilters"]        = string2bool(ctx.get("metfilters"));
 
   if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one jet collection.");
-  // if (MB["muonchannel"] == MB["electronchannel"] && MB["muonchannel"] == MB["invisiblechannel"] &&  MB["electronchannel"] == MB["invisiblechannel"]) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one lepton channel.");
   if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one lepton channel.");
 
   MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": "");

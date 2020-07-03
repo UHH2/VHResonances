@@ -123,8 +123,8 @@ def newNumber(year,sample,ConfigFile,syst):
     #     newNumber = 10 if isToReduce else 50
     #     if isFast: newNumber = 5 if isToReduce else 10
     #     changes.append(NFileLine(newNumber))
-    # return str(max(1,int(newNumber/(defaulTimePerJob/TimePerJob))))
-    return str(max(1,int(newNumber/(defaulTimePerJob/1))))
+    return str(max(1,int(newNumber/(defaulTimePerJob/TimePerJob))))
+    # return str(max(1,int(newNumber/(defaulTimePerJob/1))))
 
 def DoControl(controls, control_, channel, sample):
     check = False
@@ -162,8 +162,6 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     if ("Muon" in sample and not "muon" in channel) : continue
                     if ("MET" in sample and not "invisible" in channel) : continue
 
-                    # if all(not control in collection+channel+syst+sample for control in controls):
-                    #     continue
                     if DoControl(controls, collection+channel+syst+sample, channel, sample):
                         continue
                     filename = outdir+"_"+sample+".xml"
