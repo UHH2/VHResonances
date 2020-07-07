@@ -174,7 +174,9 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   // Set up selections
 
   const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta));
-  const ElectronId eleId = AndId<Electron>(ElectronID_Fall17_loose, PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+  // const ElectronId eleId = AndId<Electron>(ElectronID_Fall17_loose, PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+  const ElectronId eleId = AndId<Electron>(ElectronTagID(Electron::cutBasedElectronID_Fall17_94X_V2_loose), PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+  // cutBasedElectronID_Summer16_80X_V1_loose
 
   const JetId jetId = AndId<Jet> (JetPFID(JETwp), PtEtaCut(min_jet_pt, min_lepton_eta));
   const TopJetId topjetId = AndId<TopJet> (JetPFID(JETwp), PtEtaCut(min_topjet_pt, min_lepton_eta), NoLeptonInJet("all", eleId, muoId, MB["isHOTVR"]? 0.8: -1));
@@ -254,7 +256,7 @@ bool PreselectionModule::process(uhh2::Event& event) {
 
   if(event.isRealData && MB["lumisel"]) if(!lumi_selection->passes(event)) return false;
 
-  //  MCLumiWeight, MCPileupReweight, GenLevelJetMatch, FinalStateMatching
+  //  MCLumiWeight, MCPileupReweight, GenLevelJetMatch, FinalStateMatching, NLO corrections
   for(auto & m : weightsmodules) m->process(event);
 
   double weight_pu = 1;
