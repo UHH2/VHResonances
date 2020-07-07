@@ -343,6 +343,7 @@ NLOCorrections::NLOCorrections(uhh2::Context& ctx) {
   file_ = new TFile((folder_+"lindert_qcd_nnlo_sf.root").c_str());
   for (const std::string& proc: {"eej", "evj", "vvj"}) LoadHisto(file_, proc+"_qcd_nnlo", proc);
   file_->Close();
+
 }
 
 
@@ -354,7 +355,7 @@ double NLOCorrections::GetPartonObjectPt(uhh2::Event& event, ParticleID objID) {
 
 bool NLOCorrections::process(uhh2::Event& event){
   // Sample dependant corrections
-  if (!is_Wjets && !is_Zjets && event.isRealData) return true;
+  if ((!is_Wjets && !is_Zjets) || event.isRealData) return true;
 
   double objpt = uhh2::infinity, theory_weight = 1.0;
   std::string process = "";
@@ -388,6 +389,5 @@ bool NLOCorrections::process(uhh2::Event& event){
   }
 
   event.weight *= theory_weight;
-
   return true;
 }
