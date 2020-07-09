@@ -1,6 +1,6 @@
 # Note on SF.
 
-BTag SFs:
+**BTag SFs**:
 - BTag ScaleFactors added from:
   - 2016: https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation2016Legacy subjet_DeepCSV_2016LegacySF_V1.csv
   - 2017: https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation94X subjet_DeepCSV_94XSF_V4_B_F.csv
@@ -9,7 +9,7 @@ BTag SFs:
 - BTag Efficiencies calculated within the framework.
 
 
-Muon SFs:
+**Muon SFs**:
 - IDs:
   - 2016: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2016LegacyRereco
   - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2017
@@ -21,7 +21,7 @@ Muon SFs:
   - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2018 
 
 
-Electron SFs:
+**Electron SFs**:
 - IDs:
   - 2016: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations (Fall17v2)
   - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations (Fall17v2)
