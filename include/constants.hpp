@@ -52,24 +52,27 @@ const bool do_QCD_NNLO = false;
 const std::unordered_map<std::string, std::map<std::string, std::pair<int, int>>>
 Trigger_run_validity = {
   { "2016", {
-    { "HLT_Mu50_v*", std::pair(272760, 284044) }, // 272007
-    { "HLT_TkMu50_v*", std::pair(274954, 284044) },
-    { "HLT_Ele27_WPTight_Gsf_v*", std::pair(272760, 284044) }, // 273158
+    { "HLT_Mu50_v*",                      std::pair(272760, 284044) }, // 272007
+    { "HLT_TkMu50_v*",                    std::pair(274954, 284044) },
+    { "HLT_Ele27_WPTight_Gsf_v*",         std::pair(272760, 284044) }, // 273158
     { "HLT_Ele115_CaloIdVT_GsfTrkIdT_v*", std::pair(272760, 284044) }, // 273158, 284044
+    { "HLT_Photon175_v*",                 std::pair(272760, 284044) }, // 273158, 284044
   }},
   { "2017", {
-    { "HLT_Mu50_v*", std::pair(296070, 306460) }, // 297020, 306462
-    { "HLT_OldMu100_v*", std::pair(299368, 306460) }, //306462 // 299370
-    { "HLT_TkMu100_v*", std::pair(299368, 306460) }, // 306462
-    { "HLT_Ele35_WPTight_Gsf_v*", std::pair(296070, 306460)}, // 297050, 306460
+    { "HLT_Mu50_v*",                      std::pair(296070, 306460) }, // 297020, 306462
+    { "HLT_OldMu100_v*",                  std::pair(299368, 306460) }, //306462 // 299370
+    { "HLT_TkMu100_v*",                   std::pair(299368, 306460) }, // 306462
+    { "HLT_Ele35_WPTight_Gsf_v*",         std::pair(296070, 306460)}, // 297050, 306460
     { "HLT_Ele115_CaloIdVT_GsfTrkIdT_v*", std::pair(299368, 306460)},
+    { "HLT_Photon200_v*",                 std::pair(299368, 306460) }, // 273158, 284044
   }},
   { "2018", {
-    { "HLT_Mu50_v*", std::pair(315252, 325175) }, // 315252, 325273
-    { "HLT_OldMu100_v*", std::pair(315252, 325175) }, // 315252, 325273
-    { "HLT_TkMu100_v*", std::pair(315252, 325175) }, // 315252, 325273
-    { "HLT_Ele32_WPTight_Gsf_v*", std::pair(315252, 325175) }, // 315257, 325172
+    { "HLT_Mu50_v*",                      std::pair(315252, 325175) }, // 315252, 325273
+    { "HLT_OldMu100_v*",                  std::pair(315252, 325175) }, // 315252, 325273
+    { "HLT_TkMu100_v*",                   std::pair(315252, 325175) }, // 315252, 325273
+    { "HLT_Ele32_WPTight_Gsf_v*",         std::pair(315252, 325175) }, // 315257, 325172
     { "HLT_Ele115_CaloIdVT_GsfTrkIdT_v*", std::pair(315252, 325175)}, // 315257,325172
+    { "HLT_Photon200_v*",                 std::pair(315252, 325175) }, // 273158, 284044
   }},
 };
 
@@ -100,6 +103,63 @@ lumi_map = {
     { "uncertainty",  1.8},
   }},
 };
+
+
+const std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::string> > > >
+ScaleFactors_map = {
+  { "2016", {
+    { "Muon_HighPtID", {
+      { "file",   {"Muon_ID_SF_2016_RunBCDEF.root","Muon_ID_SF_2016_RunGH.root"}},
+      { "histo",  {"NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt","NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt"}},
+      { "runs",   {"BCDEF","GH"}},
+    }},
+    { "Muon_TrkHighPtID", {//TODO add explaintion
+      { "file",   {"Muon_ID_SF_2016_RunBCDEF.root","Muon_ID_SF_2016_RunGH.root"}},
+      { "histo",  {"NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt","NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt"}},
+      { "runs",   {"BCDEF","GH"}},
+    }},
+    { "Muon_Trigger", {
+      { "file",   {"Muon_Trigger_SF_2016_RunBCDEF.root","Muon_Trigger_SF_2016_RunGH.root"}},
+      { "histo",  {"Mu50_OR_TkMu50_PtEtaBins/abseta_pt_ratio","Mu50_OR_TkMu50_PtEtaBins/abseta_pt_ratio"}},
+      { "runs",   {"BCDEF","GH"}},
+    }},
+  }},
+  { "2017", {
+    { "Muon_HighPtID", {
+      { "file",   {"Muon_ID_SF_2017_RunBCDEF.root"}},
+      { "histo",  {"NUM_HighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta"}},
+      { "runs",   {"BCDEF"}},
+    }},
+    { "Muon_TrkHighPtID", {
+      { "file",   {"Muon_ID_SF_2017_RunBCDEF.root"}},
+      { "histo",  {"NUM_TrkHighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta"}},
+      { "runs",   {"BCDEF"}},
+    }},
+    { "Muon_Trigger", {
+      { "file",   {"Muon_Trigger_SF_2017_RunBCDEF.root"}},
+      { "histo",  {"Mu50_PtEtaBins/abseta_pt_ratio"}},
+      { "runs",   {"BCDEF"}},
+    }},
+  }},
+  { "2018", {
+    { "Muon_HighPtID", {
+      { "file",   {"Muon_ID_SF_2018_RunABCD.root"}},
+      { "histo",  {"NUM_HighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta"}},
+      { "runs",   {"ABCD"}},
+    }},
+    { "Muon_TrkHighPtID", {
+      { "file",   {"Muon_ID_SF_2018_RunABCD.root"}},
+      { "histo",  {"NUM_TrkHighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta"}},
+      { "runs",   {"ABCD"}},
+    }},
+    { "Muon_Trigger", {
+      { "file",   {"Muon_Trigger_SF_2018_BeforeMuonHLTUpdate.root", "Muon_Trigger_SF_2018_AfterMuonHLTUpdate.root"}},
+      { "histo",  {"Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/abseta_pt_ratio", "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/abseta_pt_ratio"}},
+      { "runs",   {"A","ABCD"}}, // run < 316361 in the middle of RunA)
+    }},
+  }},
+};
+
 
 const std::unordered_map<std::string, float> xsec_ref = { {"btag_DeepBoosted_H4qvsQCD", 0.001}, {"btag_DeepBoosted_H4qvsQCDptdep", 0.001}, {"default_value", 0.001}};
 
