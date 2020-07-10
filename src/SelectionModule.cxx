@@ -68,7 +68,7 @@ protected:
 
   // Define variables
   std::string NameModule = "SelectionModule";
-  std::vector<std::string> histogram_tags = {"Preselection", "ScaleFactors", "NLOCorrections", "Trigger", "ZprimeReco", "ZprimeSelection", "PTMassCut"};
+  std::vector<std::string> histogram_tags = {"Preselection", "Trigger", "MuonScale", "ZprimeReco", "ZprimeSelection", "PTMassCut", "ScaleFactors"};
   std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "weight_pu", "weight_pu_up", "weight_pu_down", "HDecay", "ZDecay", "ZprimeDecay", "weight_btag","weight_btag_up", "weight_btag_down"};
 
   std::unordered_map<std::string, std::string> MS;
@@ -85,9 +85,9 @@ protected:
   std::unique_ptr<Selection> PTMassCut_selection;
   std::unique_ptr<AnalysisModule> ZprimeCandidateReconstruction_module;
   std::unique_ptr<AnalysisModule> CollectionProducer_module;
-  std::unique_ptr<AnalysisModule> NLOCorrections_module;
   std::unordered_map<std::string, std::unique_ptr<Selection>> Trigger_selection;
   std::unordered_map<std::string, std::unique_ptr<AnalysisModule>> ScaleFactors_module;
+  std::unique_ptr<AnalysisModule> MuonScaleVariations_module;
 
 };
 
@@ -186,11 +186,10 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
   }
 
   //Scale factors
+  MuonScaleVariations_module.reset(new MuonScaleVariations(ctx));
+
   ScaleFactors_module["BTag"].reset(new MCBTagScaleFactor(ctx, BTag_algo, BTag_wp, MS["topjetLabel"], "nominal", "lt"));
-  // ScaleFactors_module["BTag"].reset(new MCBTagScaleFactor(ctx, BTag_algo, BTag_wp, MS["topjetLabel"]));
-
-
-  NLOCorrections_module.reset(new NLOCorrections(ctx));
+  ScaleFactors_module["SFs"].reset(new ScaleFactorsManager(ctx));
 
   ZprimeCandidateReconstruction_module.reset(new ZprimeCandidateReconstruction(ctx, min_dilep_pt, min_DR_dilep, max_DR_dilep, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, MS["leptons"], MS["topjetLabel"]));
   CollectionProducer_module.reset(new CollectionProducer<ZprimeCandidate>( ctx, "ZprimeCandidate", "ZprimeCandidate", (ZprimeCandidate_ID)ZprimeCandidateID(h_ZprimeCandidates)));
@@ -215,13 +214,6 @@ bool SelectionModule::process(uhh2::Event& event) {
 
   fill_histograms(event, "Preselection");
 
-
-  for (auto& el : ScaleFactors_module) el.second->process(event);
-  fill_histograms(event, "ScaleFactors");
-
-  NLOCorrections_module->process(event);
-  fill_histograms(event, "NLOCorrections");
-
   bool pass_triggers_OR = false;
 
   for (auto& el : Trigger_selection) {
@@ -232,6 +224,9 @@ bool SelectionModule::process(uhh2::Event& event) {
   if (!pass_triggers_OR) return false;
 
   fill_histograms(event, "Trigger");
+
+  MuonScaleVariations_module->process(event);
+  fill_histograms(event, "MuonScale");
 
   ZprimeCandidateReconstruction_module->process(event);
   fill_histograms(event, "ZprimeReco");
@@ -248,6 +243,9 @@ bool SelectionModule::process(uhh2::Event& event) {
 
   if(!PTMassCut_selection->passes(event)) return false;
   fill_histograms(event, "PTMassCut");
+
+  for (auto& el : ScaleFactors_module) el.second->process(event);
+  fill_histograms(event, "ScaleFactors");
 
   export_weights(event);
 
