@@ -105,59 +105,33 @@ lumi_map = {
 };
 
 
-const std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::string> > > >
-ScaleFactors_map = {
+const std::unordered_map<std::string, std::unordered_map<std::string, std::pair<std::string, std::string > > >
+ScaleFactors_map = {//std::pair(filename,histname)
   { "2016", {
-    { "Muon_HighPtID", {
-      { "file",   {"Muon_ID_SF_2016_RunBCDEF.root","Muon_ID_SF_2016_RunGH.root"}},
-      { "histo",  {"NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt","NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt"}},
-      { "runs",   {"BCDEF","GH"}},
-    }},
-    { "Muon_TrkHighPtID", {//TODO add explaintion
-      { "file",   {"Muon_ID_SF_2016_RunBCDEF.root","Muon_ID_SF_2016_RunGH.root"}},
-      { "histo",  {"NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt","NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt"}},
-      { "runs",   {"BCDEF","GH"}},
-    }},
-    { "Muon_Trigger", {
-      { "file",   {"Muon_Trigger_SF_2016_RunBCDEF.root","Muon_Trigger_SF_2016_RunGH.root"}},
-      { "histo",  {"Mu50_OR_TkMu50_PtEtaBins/abseta_pt_ratio","Mu50_OR_TkMu50_PtEtaBins/abseta_pt_ratio"}},
-      { "runs",   {"BCDEF","GH"}},
-    }},
+    { "Muon_Tracking",        std::pair("Muon_Tracking_SF_2016", "Tracking_SF")},
+    { "Muon_Reconstruction",  std::pair("Muon_Reconstruction_SF_2016", "Reconstruction_SF")},
+    { "Muon_HighPtID",        std::pair("Muon_ID_SF_2016_RunBCDEFGH", "NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt")},
+    { "Muon_TrkHighPtID",     std::pair("Muon_ID_SF_2016_TrkHighPt", "scalefactor")},
+    { "Muon_Trigger",         std::pair("Muon_Trigger_SF_2016_RunBCDEFGH", "Mu50_OR_TkMu50_PtEtaBins/abseta_pt_ratio")},
+    { "Electron_LooseID",     std::pair("Electron_ID_SF_2016_loose", "EGamma_SF2D")},
   }},
   { "2017", {
-    { "Muon_HighPtID", {
-      { "file",   {"Muon_ID_SF_2017_RunBCDEF.root"}},
-      { "histo",  {"NUM_HighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta"}},
-      { "runs",   {"BCDEF"}},
-    }},
-    { "Muon_TrkHighPtID", {
-      { "file",   {"Muon_ID_SF_2017_RunBCDEF.root"}},
-      { "histo",  {"NUM_TrkHighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta"}},
-      { "runs",   {"BCDEF"}},
-    }},
-    { "Muon_Trigger", {
-      { "file",   {"Muon_Trigger_SF_2017_RunBCDEF.root"}},
-      { "histo",  {"Mu50_PtEtaBins/abseta_pt_ratio"}},
-      { "runs",   {"BCDEF"}},
-    }},
+    { "Muon_Tracking",        std::pair("Muon_Tracking_SF_2017", "Tracking_SF")},
+    { "Muon_Reconstruction",  std::pair("Muon_Reconstruction_SF_2017", "Reconstruction_SF")},
+    { "Muon_HighPtID",        std::pair("Muon_ID_SF_2017_RunBCDEF", "NUM_HighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta")},
+    { "Muon_TrkHighPtID",     std::pair("Muon_ID_SF_2017_RunBCDEF", "NUM_TrkHighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta")},
+    { "Muon_Trigger",         std::pair("Muon_Trigger_SF_2017_RunBCDEF", "Mu50_PtEtaBins/abseta_pt_ratio")},
+    { "Electron_LooseID",     std::pair("Electron_ID_SF_2017_loose", "EGamma_SF2D")},
   }},
   { "2018", {
-    { "Muon_HighPtID", {
-      { "file",   {"Muon_ID_SF_2018_RunABCD.root"}},
-      { "histo",  {"NUM_HighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta"}},
-      { "runs",   {"ABCD"}},
-    }},
-    { "Muon_TrkHighPtID", {
-      { "file",   {"Muon_ID_SF_2018_RunABCD.root"}},
-      { "histo",  {"NUM_TrkHighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta"}},
-      { "runs",   {"ABCD"}},
-    }},
-    { "Muon_Trigger", {
-      { "file",   {"Muon_Trigger_SF_2018_BeforeMuonHLTUpdate.root", "Muon_Trigger_SF_2018_AfterMuonHLTUpdate.root"}},
-      { "histo",  {"Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/abseta_pt_ratio", "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/abseta_pt_ratio"}},
-      { "runs",   {"A","ABCD"}}, // run < 316361 in the middle of RunA)
-    }},
+    { "Muon_Tracking",        std::pair("Muon_Tracking_SF_2018", "Tracking_SF")},
+    { "Muon_Reconstruction",  std::pair("Muon_Reconstruction_SF_2018", "Reconstruction_SF")},
+    { "Muon_HighPtID",        std::pair("Muon_ID_SF_2018_RunABCD", "NUM_HighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta")},
+    { "Muon_TrkHighPtID",     std::pair("Muon_ID_SF_2018_RunABCD", "NUM_TrkHighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta")},
+    { "Muon_Trigger",         std::pair("Muon_Trigger_SF_2018", "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/abseta_pt_ratio")},
+    { "Electron_LooseID",     std::pair("Electron_ID_SF_2018_loose", "EGamma_SF2D")},
   }},
+
 };
 
 
