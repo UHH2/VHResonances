@@ -5,11 +5,13 @@
 
 #include "UHH2/common/include/JetIds.h"
 #include "UHH2/common/include/PrintingModules.h"
+#include "UHH2/common/include/MCWeight.h"
 
+#include "UHH2/VHResonances/include/Utils.hpp"
 #include "UHH2/VHResonances/include/ModuleBase.h"
 #include "UHH2/VHResonances/include/ZprimeCandidate.h"
 #include "UHH2/VHResonances/include/HiggsToWWSelections.h"
-#include "UHH2/VHResonances/include/Utils.hpp"
+#include "UHH2/VHResonances/include/GeneralizedEndpoint.hpp"
 
 class FinalStateMatching: public uhh2::AnalysisModule {
 public:
@@ -82,7 +84,7 @@ protected:
 
 };
 
-// Apply Theory weights
+// Apply Theory weights //TODO make multiple inheritance
 class NLOCorrections : public ScaleFactorsFromHistos {
 
 public:
@@ -92,5 +94,37 @@ public:
 
 private:
   bool is_Wjets, is_Zjets, is_DY, is_Znn, is2017;
+
+};
+
+
+
+
+// Generic Class for Applying SFs
+class ScaleFactorsManager : public uhh2::AnalysisModule {
+
+public:
+  explicit ScaleFactorsManager(uhh2::Context & ctx);
+  virtual bool process(uhh2::Event&) override;
+
+protected:
+  uhh2::Event::Handle< std::vector<ZprimeCandidate> > h_ZprimeCandidates_;
+  std::unordered_map<std::string, std::unique_ptr<MCMuonScaleFactor> > SFs_muo;
+  std::unordered_map<std::string, std::unique_ptr<MCElecScaleFactor> > SFs_ele;
+
+};
+
+
+
+// Generic Class for Applying Muon Scale Variations
+class MuonScaleVariations : public uhh2::AnalysisModule {
+
+public:
+  explicit MuonScaleVariations(uhh2::Context & ctx);
+  virtual bool process(uhh2::Event&) override;
+
+private:
+  int mode;
+  std::unique_ptr<GeneralizedEndpoint> GE;
 
 };

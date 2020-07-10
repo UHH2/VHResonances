@@ -22,7 +22,7 @@ class VariablesBase(GenericPath):
         self.signal             = "MC_ZprimeToZH"
         self.Collections        = ["Puppi"]
         self.Channels           = ["muon", "electron", "invisible"]
-        self.Systematics        = ["nominal", "JER_up", "JER_down", "JEC_up", "JEC_down"]
+        self.Systematics        = ["nominal", "JER_up", "JER_down", "JEC_up", "JEC_down", "MuonScale_up", "MuonScale_down"]
         self.Systematics_Scale  = ["PU_up", "PU_down"]
         self.years              = ["2016", "2017", "2018"]
 
