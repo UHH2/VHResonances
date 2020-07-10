@@ -2,6 +2,7 @@
 #include "UHH2/core/include/Utils.h"
 #include "UHH2/common/include/Utils.h"
 #include "UHH2/common/include/MuonIds.h"
+#include "UHH2/common/include/MCWeight.h"
 #include "UHH2/VHResonances/include/constants.hpp"
 #include "UHH2/VHResonances/include/HiggsToWWModules.h"
 #include <UHH2/VHResonances/include/ZprimeCandidate.h>
@@ -115,6 +116,7 @@ bool ZprimeCandidateReconstruction::process(Event& event){
   const auto & jets = event.get(h_topjets);
 
   vector<Particle> leptons;
+  leptons.clear();
   if (lepton == "muons") leptons.assign(event.muons->begin(), event.muons->end());
   else if (lepton == "electrons") leptons.assign(event.electrons->begin(), event.electrons->end());
   else throw logic_error("ZprimeCandidateReconstruction: Impossible case");
@@ -135,11 +137,11 @@ bool ZprimeCandidateReconstruction::process(Event& event){
     Particle lep1 = leptons.at(i);
     for (unsigned int j = i+1; j < leptons.size(); j++) {
       Particle lep2 = leptons.at(j);
+      bool MuonID1=false, MuonID2=false;
       if (lepton == "muons") {
-        bool TrkhighID1, TrkhighID2;
-        TrkhighID1 = MuonID(Muon::CutBasedIdGlobalHighPt)(event.muons->at(i), event);
-        TrkhighID2 = MuonID(Muon::CutBasedIdGlobalHighPt)(event.muons->at(j), event);
-        if (!TrkhighID1 && !TrkhighID2) continue;
+        MuonID1 = MuonID(Muon::CutBasedIdGlobalHighPt)(event.muons->at(i), event);
+        MuonID2 = MuonID(Muon::CutBasedIdGlobalHighPt)(event.muons->at(j), event);
+        if (!MuonID1 && !MuonID2) continue;
       }
       auto DR = uhh2::deltaR(lep1, lep2);
       auto diLep = lep1.v4() + lep2.v4();
@@ -154,8 +156,10 @@ bool ZprimeCandidateReconstruction::process(Event& event){
             candidate.set_Z(diLep);
             candidate.set_H(jet);
             candidate.set_jets_leptonic({lep1,lep2});
-            candidate.set_discriminators("chi2",   chi2);
-            candidate.set_discriminators("subjets",jet.subjets().size());
+            candidate.set_discriminators("MuonID1", MuonID1? (float)i: -1);
+            candidate.set_discriminators("MuonID2", MuonID2? (float)j: -1);
+            candidate.set_discriminators("chi2", chi2);
+            candidate.set_discriminators("subjets", jet.subjets().size());
             candidate.set_discriminators("btag_DeepCSV_loose",  (double)MultiBTagSubJetID(Btag_map["DeepCSV_loose"])(jet, event));
             candidate.set_discriminators("btag_DeepCSV_medium", (double)MultiBTagSubJetID(Btag_map["DeepCSV_medium"])(jet, event));
             candidate.set_discriminators("btag_DeepCSV_tight",  (double)MultiBTagSubJetID(Btag_map["DeepCSV_tight"])(jet, event));
@@ -389,5 +393,103 @@ bool NLOCorrections::process(uhh2::Event& event){
   }
 
   event.weight *= theory_weight;
+  return true;
+}
+
+/*
+# ##     ##    ###    ##    ##    ###     ######   ######## ########
+# ###   ###   ## ##   ###   ##   ## ##   ##    ##  ##       ##     ##
+# #### ####  ##   ##  ####  ##  ##   ##  ##        ##       ##     ##
+# ## ### ## ##     ## ## ## ## ##     ## ##   #### ######   ########
+# ##     ## ######### ##  #### ######### ##    ##  ##       ##   ##
+# ##     ## ##     ## ##   ### ##     ## ##    ##  ##       ##    ##
+# ##     ## ##     ## ##    ## ##     ##  ######   ######## ##     ##
+*/
+
+/*
+& &&     &&    &&&    &&    &&    &&&     &&&&&&   &&&&&&&& &&&&&&&&
+& &&&   &&&   && &&   &&&   &&   && &&   &&    &&  &&       &&     &&
+& &&&& &&&&  &&   &&  &&&&  &&  &&   &&  &&        &&       &&     &&
+& && &&& && &&     && && && && &&     && &&   &&&& &&&&&&   &&&&&&&&
+& &&     && &&&&&&&&& &&  &&&& &&&&&&&&& &&    &&  &&       &&   &&
+& &&     && &&     && &&   &&& &&     && &&    &&  &&       &&    &&
+& &&     && &&     && &&    && &&     &&  &&&&&&   &&&&&&&& &&     &&
+*/
+
+
+
+ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx) {
+
+  if(ctx.get("dataset_type") != "MC") return;
+  std::string year = ctx.get("year");
+  bool muonchannel = string2bool(ctx.get("muonchannel"));
+  bool electronchannel = string2bool(ctx.get("electronchannel"));
+
+  h_ZprimeCandidates_ = ctx.declare_event_output<vector<ZprimeCandidate>>("ZprimeCandidate");
+
+  double sys = 0.;
+  // https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonReferenceSelectionAndCalibrationsRun2#Special_systematic_uncertainties
+  for (auto& sf : ScaleFactors_map.at(year)) {
+    if (muonchannel && sf.first.find("Muon") != std::string::npos ) {
+      std::string fname = "VHResonances/Analysis/ScaleFactors/Muons/"+sf.second.first+".root";
+      std::string weight_postfix = "";
+      if (sf.first.find("ID") != std::string::npos || sf.first.find("Tracking") != std::string::npos){
+        sys = 0.;
+        weight_postfix = sf.first.find("ID") != std::string::npos ? "id":"tracking";
+      } else if (sf.first.find("Trigger") != std::string::npos) {
+        sys = 2.;
+        weight_postfix = "trigger";
+      } else if (sf.first.find("Reconstruction") != std::string::npos) {
+        sys = 0.;
+        weight_postfix = "reco";
+      } else throw invalid_argument("In ScaleFactorsManager.cxx: No implementation for "+sf.first);
+      SFs_muo[sf.first].reset(new MCMuonScaleFactor(ctx, fname, sf.second.second, sys, weight_postfix));
+    }
+    if (electronchannel && sf.first.find("Electron") != std::string::npos ) {
+      std::string fname = "VHResonances/Analysis/ScaleFactors/Electons/"+sf.second.first+".root";
+      SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys));// No Flat uncertainty so far
+    }
+  }
+
+  for (auto& sf : SFs_muo) cout << sf.first<<endl; //TODO
+  for (auto& sf : SFs_ele) cout << sf.first<<endl; //TODO
+
+}
+
+
+bool ScaleFactorsManager::process(uhh2::Event& event){
+  if(event.get(h_ZprimeCandidates_).size() < 1 || event.isRealData) return true;;
+  auto cand = event.get(h_ZprimeCandidates_).at(0);
+  if (cand.leptons().at(0).pt() < cand.leptons().at(1).pt()) throw std::runtime_error("In ScaleFactorsManager.cxx: leptons not ordered in pt");
+  SFs_muo["Muon_Trigger"]->process_onemuon(event,0);
+  for(const auto & muid: {0, 1}){
+    if (cand.discriminator("MuonID"+std::to_string(muid+1))>=0) SFs_muo["Muon_HighPtID"]->process_onemuon(event,muid);
+    else SFs_muo["Muon_TrkHighPtID"]->process_onemuon(event,muid);
+    SFs_muo["Muon_Tracking"]->process_onemuon(event,muid);
+    SFs_muo["Muon_Reconstruction"]->process_onemuon(event,muid);
+  }
+  return true;
+}
+
+
+//MuonScaleVariations
+
+MuonScaleVariations::MuonScaleVariations(uhh2::Context & ctx) {
+  if(ctx.get("dataset_type") != "MC") return;
+  if(!string2bool(ctx.get("muonchannel"))) return;
+  std::string syst = ctx.get("MuonScaleVariations","nominal");
+  if (syst=="nominal") mode = 0;
+  else if (syst=="up") mode = 1;
+  else if (syst=="down") mode = 2;
+  GE.reset(new (GeneralizedEndpoint));
+}
+
+bool MuonScaleVariations::process(uhh2::Event& event) {
+  for(auto & muon: *event.muons){
+    double newpt = GE->GeneralizedEndpointPt(muon.pt(), muon.charge(), muon.eta(), muon.phi(), mode);
+    LorentzVector muon_v4_corrected = muon.v4() * (newpt/muon.pt());
+    muon.set_v4(muon_v4_corrected);
+  }
+  sort_by_pt<Muon>(*event.muons);
   return true;
 }

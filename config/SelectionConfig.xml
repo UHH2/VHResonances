@@ -11,11 +11,14 @@
 <!ENTITY isPuppi                    "true">  <!--false/true -->
 <!ENTITY isCHS                      "true">  <!--false/true -->
 <!ENTITY isHOTVR                    "true">  <!--false/true -->
-<!ENTITY muonchannel                "true">  <!--true/false -->
-<!ENTITY electronchannel            "true">  <!--true/false -->
+<!ENTITY muonchannel                "false">  <!--true/false -->
+<!ENTITY electronchannel            "false">  <!--true/false -->
+<!ENTITY invisiblechannel           "false">  <!--true/false -->
 
+<!-- Systematics -->
 <!ENTITY MCBtagEfficiencies         "defaultValue">
 <!ENTITY BTagCalibration            "defaultValue">
+<!ENTITY MuonScaleVariations        "defaultValue">
 
 <!-- MC Samples 2016 -->
 <!ENTITY MC_ZprimeToZH_M600_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2016.xml">
@@ -265,18 +268,20 @@
     event weight assigned by MCLumiWeight is InputData.Lumi / Cycle.TargetLumi. -->
     <Item Name="use_sframe_weight"          Value="false"/>
 
-
     <Item Name="year"                       Value="&YEAR;"/>
 
-    <!-- Systematic uncertainties -->
+    <!-- Channels -->
     <Item Name="isPuppi"                    Value="&isPuppi;"/>
     <Item Name="isCHS"                      Value="&isCHS;"/>
     <Item Name="isHOTVR"                    Value="&isHOTVR;"/>
     <Item Name="muonchannel"                Value="&muonchannel;"/>
     <Item Name="electronchannel"            Value="&electronchannel;"/>
+    <Item Name="invisiblechannel"           Value="&invisiblechannel;"/>
 
+    <!-- Systematics -->
     <Item Name="MCBtagEfficiencies"         Value="&MCBtagEfficiencies;"/>
     <Item Name="BTagCalibration"            Value="&BTagCalibration;"/>
+    <Item Name="MuonScaleVariations"        Value="&MuonScaleVariations;"/>
 
     <!-- the class name of the AnalysisModule subclasses to run: -->
     <Item Name="AnalysisModule"             Value="SelectionModule"/>

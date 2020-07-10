@@ -105,7 +105,7 @@ class PlotBTagEfficiencies(ModuleRunnerBase):
 
     def SaveRootFiles(self):
         for year in self.years:
-            file_ = ROOT.TFile(self.outdir+"SF_"+year+".root", "RECREATE")
+            file_ = ROOT.TFile(self.outdir.replace("OtherPlots","ScaleFactors")+"SF_"+year+".root", "RECREATE")
             for flavor in self.Flavours:
                 self.histos[year+self.lepton+self.defaultCut+flavor].Write(self.histoname+flavor+"Eff")
             file_.Close()
