@@ -108,7 +108,9 @@ class ModuleRunner(ModuleRunnerBase):
         if all(not control in control_ for control in self.controls):
             check = True
         if "invisible" in channel and "MC_DY" in sample and not "MC_DY_inv" in sample:
-            check = True
+            check = not "MC_DY_201" in sample
+        # if "invisible" in channel and "MC_DY" in sample and (not "MC_DY_inv" in sample or not "MC_DY_201" in sample ):
+            # check = True
         if "invisible" in channel and "PtZ" in sample and not "2016" in sample:
             check = True
         if "invisible" in channel and "HT" in sample and "2016" in sample:
@@ -306,8 +308,9 @@ class ModuleRunner(ModuleRunnerBase):
                         filePrefix = self.PrefixrootFile+mode+"."
                         commonpath = self.ModuleStorage+"/"+middlePath
                         xml = commonpath+sample+".xml"
-                        if "muonchannel" in xml and "SingleElectron" in xml: continue
-                        if "electronchannel" in xml and "SingleMuon" in xml: continue
+                        if "SingleElectron" in xml and not "electronchannel" in xml: continue
+                        if "SingleMuon" in xml and not "muonchannel" in xml : continue
+                        if "MET" in xml and not "invisiblechannel" in xml : continue
                         with open(xml) as out:
                             lines = out.readlines()
                             if len(lines)==0:
@@ -343,7 +346,7 @@ class ModuleRunner(ModuleRunnerBase):
                 if "probably not closed, trying to recover" in l: mylist.append(l.split()[3])
         print len(mylist)
         # if not check: os.system("rm -fr "+errname)
-        # self.ReRunList(mylist)
+        self.ReRunList(mylist)
 
     @timeit
     def ReRunList(self, mylist=[]):

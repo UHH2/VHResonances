@@ -94,6 +94,20 @@ class ModuleRunnerBase(VariablesBase):
                 loop_over = self.Samples_dict_[x]
                 if (year=="2016" and x=="MC_TTbar"): loop_over = ["MC_TTbar"]
                 if (year!="2016" and (x=="MC_WW" or x=="MC_WZ" or x=="MC_ZZ") ): loop_over = self.Samples_dict_[x+"_incl"]
+                if (year=="2016" and x=="MC_DY"):
+                    loop_over=[]
+                    for entry in self.Samples_dict_[x]:
+                        print "entry " + entry
+                        # if not "MC_DY_inv_HT" and not "MC_DY_HT" in entry:
+                        if "MC_DY" in entry and not "MC_DY_inv_PtZ" in entry:
+                            continue
+                        loop_over.append(entry)
+                if (year!="2016" and x=="MC_DY"):
+                    loop_over=[]
+                    for entry in self.Samples_dict_[x]:
+                        if "MC_DY" in entry and not "MC_DY_HT_inv" in entry:
+                            continue
+                        loop_over.append(entry)
                 self.Samples_dict.setdefault(year, {}).setdefault(x+"_"+year, [el+"_"+year for el in loop_over] )
             for x in ["DATA_SingleElectron","DATA_SingleMuon", "DATA_MET"]:
                 self.Samples_dict[year][x+"_"+year] = [el for el in self.Samples_dict[year][x+"_"+year] if any("Run"+crl in el for crl in self.RunControls[year])]
