@@ -195,7 +195,7 @@ void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuf
   book_TH1F("deltaR_ele2"+histSuffix,"#Delta R(ele2,"+axisSuffix+")",40, 0, 8.0);
   book_TH1F("deltaphi_ele2"+histSuffix,"#Delta#phi(ele2,"+axisSuffix+")",50,0,M_PI);
   book_TH1F("deltaphi_MET"+histSuffix,"#Delta#phi(E_{T}^{miss},"+axisSuffix+")",50,0,M_PI);
-  book_TH1F("deltaR_MET"+histSuffix,"#Delta#R(E_{T}^{miss},"+axisSuffix+")",50,0,M_PI);
+  book_TH1F("deltaR_MET"+histSuffix,"#Delta R(E_{T}^{miss},"+axisSuffix+")",50,0,M_PI);
   book_TH1F("jetArea"+histSuffix,"jetArea^{"+axisSuffix+"}",150,0,15);
   book_TH1F("jetArea_pt200_300"+histSuffix,"jetArea^{"+axisSuffix+",pt(200,300)}",150,0,15);
   book_TH1F("jetArea_pt300_400"+histSuffix,"jetArea^{"+axisSuffix+",pt(300,400)}",150,0,15);

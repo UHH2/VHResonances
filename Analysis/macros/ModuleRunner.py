@@ -346,7 +346,7 @@ class ModuleRunner(ModuleRunnerBase):
                 if "probably not closed, trying to recover" in l: mylist.append(l.split()[3])
         print len(mylist)
         # if not check: os.system("rm -fr "+errname)
-        self.ReRunList(mylist)
+        # self.ReRunList(mylist)
 
     @timeit
     def ReRunList(self, mylist=[]):
