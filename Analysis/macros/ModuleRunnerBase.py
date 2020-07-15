@@ -88,6 +88,7 @@ class VariablesBase(GenericPath):
         self.SubSamples_Year_Dict = {}
         self.Processes_Year_Dict = {}
 
+        ''' This part is a bit arbitrary. The idea is to catch all the combinations for different years'''
         for year in self.years:
             for subsample in sorted(self.Generic_SubSamples_Dict_):
                 loop_over = self.Generic_SubSamples_Dict_[subsample]
