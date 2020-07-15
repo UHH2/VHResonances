@@ -97,8 +97,6 @@ class ModuleRunnerBase(VariablesBase):
                 if (year=="2016" and x=="MC_DY"):
                     loop_over=[]
                     for entry in self.Samples_dict_[x]:
-                        print "entry " + entry
-                        # if not "MC_DY_inv_HT" and not "MC_DY_HT" in entry:
                         if "MC_DY" in entry and not "MC_DY_inv_PtZ" in entry:
                             continue
                         loop_over.append(entry)
