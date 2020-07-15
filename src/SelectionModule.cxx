@@ -102,7 +102,6 @@ void SelectionModule::PrintInputs() {
 }
 
 void SelectionModule::book_handles(uhh2::Context& ctx) {
-  string tag;
   for(const auto & tag : weight_tags) {
     if (!MB["is_mc"] && tag.find("weight_pu")!=std::string::npos) continue;
     book_WFolder(tag+"_in",  new Event::Handle< float >, (tag.find("btag")!=std::string::npos)? ctx.get_handle< float >(tag) : ctx.declare_event_input< float >(tag));
@@ -189,7 +188,7 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
   MuonScaleVariations_module.reset(new MuonScaleVariations(ctx));
 
   ScaleFactors_module["BTag"].reset(new MCBTagScaleFactor(ctx, BTag_algo, BTag_wp, MS["topjetLabel"], "nominal", "lt"));
-  ScaleFactors_module["SFs"].reset(new ScaleFactorsManager(ctx));
+  ScaleFactors_module["SFs"].reset(new ScaleFactorsManager(ctx, h_ZprimeCandidates));
 
   ZprimeCandidateReconstruction_module.reset(new ZprimeCandidateReconstruction(ctx, min_dilep_pt, min_DR_dilep, max_DR_dilep, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, MS["leptons"], MS["topjetLabel"]));
   CollectionProducer_module.reset(new CollectionProducer<ZprimeCandidate>( ctx, "ZprimeCandidate", "ZprimeCandidate", (ZprimeCandidate_ID)ZprimeCandidateID(h_ZprimeCandidates)));

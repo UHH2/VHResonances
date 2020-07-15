@@ -104,13 +104,15 @@ private:
 class ScaleFactorsManager : public uhh2::AnalysisModule {
 
 public:
-  explicit ScaleFactorsManager(uhh2::Context & ctx);
+  explicit ScaleFactorsManager(uhh2::Context & ctx, const uhh2::Event::Handle<std::vector<ZprimeCandidate> >&);
   virtual bool process(uhh2::Event&) override;
 
 protected:
   uhh2::Event::Handle< std::vector<ZprimeCandidate> > h_ZprimeCandidates_;
   std::unordered_map<std::string, std::unique_ptr<MCMuonScaleFactor> > SFs_muo;
   std::unordered_map<std::string, std::unique_ptr<MCElecScaleFactor> > SFs_ele;
+  bool muonchannel;
+  bool electronchannel;
 
 };
 

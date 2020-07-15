@@ -418,14 +418,12 @@ bool NLOCorrections::process(uhh2::Event& event){
 
 
 
-ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx) {
+ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle<vector<ZprimeCandidate> > & h_ZprimeCandidates): h_ZprimeCandidates_(h_ZprimeCandidates){
 
   if(ctx.get("dataset_type") != "MC") return;
   std::string year = ctx.get("year");
-  bool muonchannel = string2bool(ctx.get("muonchannel"));
-  bool electronchannel = string2bool(ctx.get("electronchannel"));
-
-  h_ZprimeCandidates_ = ctx.declare_event_output<vector<ZprimeCandidate>>("ZprimeCandidate");
+  muonchannel = string2bool(ctx.get("muonchannel"));
+  electronchannel = string2bool(ctx.get("electronchannel"));
 
   double sys = 0.;
   // https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonReferenceSelectionAndCalibrationsRun2#Special_systematic_uncertainties
@@ -446,8 +444,8 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx) {
       SFs_muo[sf.first].reset(new MCMuonScaleFactor(ctx, fname, sf.second.second, sys, weight_postfix));
     }
     if (electronchannel && sf.first.find("Electron") != std::string::npos ) {
-      std::string fname = "VHResonances/Analysis/ScaleFactors/Electons/"+sf.second.first+".root";
-      SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys));// No Flat uncertainty so far
+      std::string fname = "VHResonances/Analysis/ScaleFactors/Electrons/"+sf.second.first+".root";
+      SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys, "id"));// No Flat uncertainty so far
     }
   }
 
@@ -458,16 +456,21 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx) {
 
 
 bool ScaleFactorsManager::process(uhh2::Event& event){
-  if(event.get(h_ZprimeCandidates_).size() < 1 || event.isRealData) return true;;
+  if(event.get(h_ZprimeCandidates_).size() < 1 || event.isRealData) return true;
+
   auto cand = event.get(h_ZprimeCandidates_).at(0);
   if (cand.leptons().at(0).pt() < cand.leptons().at(1).pt()) throw std::runtime_error("In ScaleFactorsManager.cxx: leptons not ordered in pt");
-  SFs_muo["Muon_Trigger"]->process_onemuon(event,0);
-  for(const auto & muid: {0, 1}){
-    if (cand.discriminator("MuonID"+std::to_string(muid+1))>=0) SFs_muo["Muon_HighPtID"]->process_onemuon(event,muid);
-    else SFs_muo["Muon_TrkHighPtID"]->process_onemuon(event,muid);
-    SFs_muo["Muon_Tracking"]->process_onemuon(event,muid);
-    SFs_muo["Muon_Reconstruction"]->process_onemuon(event,muid);
+  if (muonchannel) {
+    SFs_muo["Muon_Trigger"]->process_onemuon(event,0);
+    for(const auto & muid: {0, 1}){
+      if (cand.discriminator("MuonID"+std::to_string(muid+1))>=0) SFs_muo["Muon_HighPtID"]->process_onemuon(event,muid);
+      else SFs_muo["Muon_TrkHighPtID"]->process_onemuon(event,muid);
+      SFs_muo["Muon_Tracking"]->process_onemuon(event,muid);
+      SFs_muo["Muon_Reconstruction"]->process_onemuon(event,muid);
+    }
   }
+  if (electronchannel) SFs_ele["Electron_LooseID"]->process(event);
+
   return true;
 }
 
@@ -485,6 +488,7 @@ MuonScaleVariations::MuonScaleVariations(uhh2::Context & ctx) {
 }
 
 bool MuonScaleVariations::process(uhh2::Event& event) {
+  if(event.isRealData) return true;
   for(auto & muon: *event.muons){
     double newpt = GE->GeneralizedEndpointPt(muon.pt(), muon.charge(), muon.eta(), muon.phi(), mode);
     LorentzVector muon_v4_corrected = muon.v4() * (newpt/muon.pt());
