@@ -74,6 +74,9 @@ class ModuleRunner(ModuleRunnerBase):
         os.chdir(self.Path_ANALYSIS+"Analysis")
         os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/obj")
         os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/OtherPlots")
+        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/ScaleFactors/Electrons")
+        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/ScaleFactors/Muons")
+        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/ScaleFactors/BTag")
         process = subprocess.Popen("make -j 20", shell=True)
         process.wait()
 
@@ -88,55 +91,51 @@ class ModuleRunner(ModuleRunnerBase):
         self.Collections = Collections if Collections else self.Collections
         self.Channels = Channels if Channels else self.Channels
         self.Systematics = Systematics if Systematics else self.Systematics
-        # if "SignalRegion" in self.Module:
-        #     self.Samples = np.array(self.Samples)
-        #     mask = np.array([self.signal in x for x in self.Samples])
-        #     temp = self.Samples[mask]
-        #     self.Samples = list(self.Samples[~mask]) + [self.signal+"Tobb"+x[len(self.signal):] for x in temp] + [self.signal+"ToWW"+x[len(self.signal):] for x in temp] + [self.signal+"_extra"+x[len(self.signal):] for x in temp]
-        # else:
-        #     self.Samples = self.Samples
-        # if self.Module == "SF":
-        #     # self.Samples = [sample for sample in self.Samples if "DATA" in sample or "MC_TT" in sample]
-        #     self.Samples = [sample for sample in self.Samples if "MC_TT" in sample]
+        if "Preselection" in self.Module:
+            self.Systematics = filter(lambda x: not "Muon" in x, self.Systematics)
         if "Test" in self.Module or "GenericCleaning" in self.Module or "VariableRStudies" in self.Module:
             self.Collections = ["All"]
         if ( "GenericCleaning" in self.Module or "Test" in self.Module or "NeuralNetwork" in self.Module or "VariableRStudies" in self.Module ):
             self.Channels = ["lepton"]
         print "\n****************************************\t","\n \tModule Name: \t", self.Module, "\n****************************************\t", "\nRunning \t", self.ConfigFile, "\nUsing \t \t", self.ModuleFile, "\nSamples:\t", len(self.Samples), self.Samples, "\n", self.Channels, "\n", self.Systematics, "\n", self.Collections
 
-    def DoControl(self, control_, channel, sample):
+    def SmartLoop(self,*argv):
+        return list(itertools.product(self.Collections, self.Channels, self.Systematics,*argv))
+
+    def DoControl(self, control_, channel, sample): #Implement the same in CreateConfigFiles
+        ''' This part is a bit arbitrary. The idea is to catch all the combinations for different years and channels'''
         check = False
         if all(not control in control_ for control in self.controls):
             check = True
         if "invisible" in channel and "MC_DY" in sample and not "MC_DY_inv" in sample:
-            check = True
+            check = not "MC_DY_201" in sample
         if "invisible" in channel and "PtZ" in sample and not "2016" in sample:
             check = True
         if "invisible" in channel and "HT" in sample and "2016" in sample:
             check = True
-        if not "invisible" in channel and "MC_DY_inv" in sample:
+        if "invisible" in channel and self.signal in sample and not "_inv" in sample:
             check = True
+        if not "invisible" in channel and "_inv" in sample:
+            check = True
+        if "electron"  in channel and "DATA" in sample and not "SingleElectron" in sample: check = True
+        if "muon"      in channel and "DATA" in sample and not "SingleMuon" in sample: check = True
+        if "invisible" in channel and "DATA" in sample and not "MET" in sample: check = True
         return check
 
     def DeleteWorkdirs(self):
         for path in [self.Path_STORAGE+self.year+"/",self.SubmitDir,self.Path_SFRAME]:
-            for collection in self.Collections:
-                for channel in self.Channels:
-                    for syst in self.Systematics:
-                        for sample in self.Samples:
-                            if self.DoControl(collection+channel+syst+sample, channel, sample):
-                                continue
-                            cmd = "rm -fr "+path+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/*"+sample+"*"
-                            # print cmd
-                            a = os.system(cmd)
+            for collection, channel, syst, sample in self.SmartLoop(self.Samples):
+                if self.DoControl(collection+channel+syst+sample, channel, sample):
+                    continue
+                cmd = "rm -fr "+path+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/*"+sample+"*"
+                # print cmd
+                a = os.system(cmd)
 
     def CreateConfigFiles(self):
-        for collection in self.Collections:
-                for channel in self.Channels:
-                    for syst in self.Systematics:
-                        if self.DoControl(self.year+collection+channel+syst, channel, ""):
-                            continue
-        		a = os.system("rm -fr " +self.SubmitDir+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/")
+        for collection, channel, syst in self.SmartLoop():
+            if self.DoControl(self.year+collection+channel+syst, channel, ""):
+                continue
+            a = os.system("rm -fr " +self.SubmitDir+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/")
         CreateConfigFiles(self.year, self.Samples, self.AllSamples, self.Collections, self.Channels, self.Systematics, self.controls, self.Path_ANALYSIS, self.SubmitDir+self.Module+"/", self.ConfigFile, self.Path_SFRAME, self.lumi_pb)
 
     def CondorControl(self,option="", forPlotting=False):
@@ -149,32 +148,28 @@ class ModuleRunner(ModuleRunnerBase):
     def SecureMerge(self, mergeCategory=False, forPlotting=True):
         extraText = "_noTree" if forPlotting else ""
         list_processes = []
-        Samples = self.Processes_Dict if mergeCategory else self.Samples
-        for collection in self.Collections:
-            for channel in self.Channels:
-                for syst in self.Systematics:
-                    middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                    for sample in Samples:
-                        if self.DoControl(collection+channel+syst+sample, channel, sample):
-                            continue
-                        mode = "MC" if "MC" in sample else "DATA"
-                        commonpath = self.ModuleStorage+"/"+middlePath
-                        filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_Dict[sample]]
-                        newFile    = commonpath+self.PrefixrootFile+mode+"."+sample+extraText
-                        newFile   += "_merge.root" if mergeCategory else ".root"
-                        if mergeCategory:
-                            if len(filespath)<=1 or self.signal in filespath : continue
-                            if forPlotting:
-                                list_processes.append(["hadd", "-f", "-T", newFile]+filespath)
-                            else:
-                                list_processes.append(["hadd", "-f", newFile]+ filespath)
-                        else:
-                            list_ = glob(filespath+"/*root")
-                            if len(list_)==1 and forPlotting :
-                                list_processes.append(["hadd", "-f", "-T", newFile, list_[0]])
-                            else:
-                                # list_processes.append([self.Path_ANALYSIS+"Analysis/python/MergeLargeRootFiles.py", str(forPlotting), filespath, newFile])
-                                list_processes.append(["hadd", "-f", "-T", newFile]+list_)
+        for collection, channel, syst, sample in self.SmartLoop(self.Processes_Dict if mergeCategory else self.Samples):
+            middlePath = collection+"/"+channel+"channel/"+syst+"/"
+            if self.DoControl(collection+channel+syst+sample, channel, sample):
+                continue
+            mode = "MC" if "MC" in sample else "DATA"
+            commonpath = self.ModuleStorage+"/"+middlePath
+            filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_dict[sample] if not self.DoControl(collection+channel+syst+name_, channel, name_)]
+            newFile    = commonpath+self.PrefixrootFile+mode+"."+sample+extraText
+            newFile   += "_merge.root" if mergeCategory else ".root"
+            if mergeCategory:
+                if len(filespath)<=1 or self.signal in filespath : continue
+                if forPlotting:
+                    list_processes.append(["hadd", "-f", "-T", newFile]+filespath)
+                else:
+                    list_processes.append(["hadd", "-f", newFile]+ filespath)
+            else:
+                list_ = glob(filespath+"/*root")
+                if len(list_)==1 and forPlotting :
+                    list_processes.append(["hadd", "-f", "-T", newFile, list_[0]])
+                else:
+                    # list_processes.append([self.Path_ANALYSIS+"Analysis/python/MergeLargeRootFiles.py", str(forPlotting), filespath, newFile])
+                    list_processes.append(["hadd", "-f", "-T", newFile]+list_)
         for i in list_processes:
             print i[0:5], "+ others" if len(i)>5 else ""
         print "Number of processes", len(list_processes)
@@ -183,68 +178,61 @@ class ModuleRunner(ModuleRunnerBase):
     @timeit
     def StoreModuleOutput(self, process="Move"):
         list_processes = []
-        for collection in self.Collections:
-            for channel in self.Channels:
-                for syst in self.Systematics:
-                    middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                    commonpath = self.Path_SFRAME+self.Module+"/"+middlePath
-                    newPath = self.ModuleStorage+"/"+middlePath
-                    a = os.system("mkdir -p "+newPath)
-                    for x in glob(commonpath+"*"):
-                        list_processes.append(["mv", x, newPath] if process=="Move" else ["cp", "-r", x, newPath])
+        for collection, channel, syst in self.SmartLoop():
+            middlePath = collection+"/"+channel+"channel/"+syst+"/"
+            commonpath = self.Path_SFRAME+self.Module+"/"+middlePath
+            newPath = self.ModuleStorage+"/"+middlePath
+            a = os.system("mkdir -p "+newPath)
+            for x in glob(commonpath+"*"):
+                list_processes.append(["mv", x, newPath] if process=="Move" else ["cp", "-r", x, newPath])
         print len(list_processes)
         parallelise(list_processes, 20)
 
     @timeit
     def CreateXml(self):
-        for collection in self.Collections:
-            for channel in self.Channels:
-                for syst in self.Systematics:
-                    middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                    for sample_ in self.Processes_Dict:
-                        if self.DoControl(collection+channel+sample_, channel, sample_):
-                            continue
-                        decays = [""]
-                        # if self.Module == "SignalRegion" and self.signal in sample_:
-                        #     decays = ["ToWW","Tobb","_extra"]
-                        for decay in decays:
-                            sample = sample_.replace(self.signal,self.signal+decay)
-                            # print sample
-                            mode = "MC" if "MC" in sample else "DATA"
-                            filePrefix = self.PrefixrootFile+mode+"."
-                            commonpath = self.ModuleStorage+"/"+middlePath
-                            out = open(commonpath+sample+".xml", 'w')
-                            # print commonpath+sample+".xml"
-                            nComment = 0
-                            for dir in self.Samples_Dict[sample] if not self.signal in sample and self.Samples != self.Processes_Dict else [sample]:
-                                print "Search in", commonpath+"workdir_"+self.Module+"_"+dir+"/*root"
-                                for f_ in glob(commonpath+"workdir_"+self.Module+"_"+dir+"/*root"):
-                                    try:
-                                        ntuple = ROOT.TFile(str(f_))
-                                        AnalysisTree = ntuple.Get("AnalysisTree")
-                                        isToWrite =  AnalysisTree.GetEntriesFast() > 0
-                                        ntuple.Close()
-                                    except Exception as e:
-                                        isToWrite = False
-                                    if not isToWrite: nComment += 1
-                                    extraText1 = "" if isToWrite else "<!-- "
-                                    extraText2 = "" if isToWrite else " -->"
-                                    out.write(extraText1+'<In FileName="'+f_+'" Lumi="0.0"/>'+extraText2+'\n')
-                        out.write('<!-- File Commented: '+str(nComment)+' -->\n')
-                        out.close()
+        for collection, channel, syst,sample_ in self.SmartLoop(self.Processes_Dict):
+            middlePath = collection+"/"+channel+"channel/"+syst+"/"
+            if self.DoControl(collection+channel+sample_, channel, sample_):
+                continue
+            decays = [""]
+            # if self.Module == "SignalRegion" and self.signal in sample_:
+            #     decays = ["ToWW","Tobb","_extra"]
+            for decay in decays:
+                sample = sample_.replace(self.signal,self.signal+decay)
+                # print sample
+                mode = "MC" if "MC" in sample else "DATA"
+                filePrefix = self.PrefixrootFile+mode+"."
+                commonpath = self.ModuleStorage+"/"+middlePath
+                out = open(commonpath+sample+".xml", 'w')
+                # print commonpath+sample+".xml"
+                nComment = 0
+                for dir in self.Samples_Dict[sample] if not self.signal in sample and self.Samples != self.Processes_Dict else [sample]:
+                    print "Search in", commonpath+"workdir_"+self.Module+"_"+dir+"/*root"
+                    for f_ in glob(commonpath+"workdir_"+self.Module+"_"+dir+"/*root"):
+                        try:
+                            ntuple = ROOT.TFile(str(f_))
+                            AnalysisTree = ntuple.Get("AnalysisTree")
+                            isToWrite =  AnalysisTree.GetEntriesFast() > 0
+                            ntuple.Close()
+                        except Exception as e:
+                            isToWrite = False
+                        if not isToWrite: nComment += 1
+                        extraText1 = "" if isToWrite else "<!-- "
+                        extraText2 = "" if isToWrite else " -->"
+                        out.write(extraText1+'<In FileName="'+f_+'" Lumi="0.0"/>'+extraText2+'\n')
+            out.write('<!-- File Commented: '+str(nComment)+' -->\n')
+            out.close()
 
     @timeit
     def MakePlots(self):
         cwd = os.getcwd()
         os.chdir(self.Path_SPlotter)
-        for collection in self.Collections:
-            for channel in self.Channels:
-                for syst in self.Systematics:
-                    if self.DoControl(self.year+collection+channel+syst, channel, ""):
-                        continue
-                    a = os.system("mkdir -p "+self.Path_STORAGE+self.year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/Plots")
-                    process = subprocess.Popen("Plots -f Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+self.year+".steer", shell=True)
-                    process.wait()
+        for collection, channel, syst in self.SmartLoop():
+            if self.DoControl(self.year+collection+channel+syst, channel, ""):
+                continue
+            a = os.system("mkdir -p "+self.Path_STORAGE+self.year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/Plots")
+            process = subprocess.Popen("Plots -f Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+self.year+".steer", shell=True)
+            process.wait()
         os.chdir(cwd)
 
     def MakeRunII(self, Collections=[], Channels=[], Systematics=[], doPlots=False):
@@ -253,22 +241,20 @@ class ModuleRunner(ModuleRunnerBase):
         list_processes_plots = []
         for module in ["Preselection","Selection","SignalRegion", "LeptonIDStudies"]:
             self.SetModule(module, Collections=Collections, Channels=Channels, Systematics=Systematics)
-            for collection in self.Collections:
-                for channel in self.Channels:
-                    for syst in self.Systematics:
-                        if self.DoControl(module+collection+channel+syst, channel, ""):
-                            continue
-                        path_RunII = self.Path_STORAGE+year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/"
-                        a = os.system("mkdir -p "+path_RunII+"Plots")
-                        if self.Module=="SignalRegion":
-                            list_processes_plots.append(["Plots", "-f", "Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+year+".steer" ])
-                        for sample in self.Processes_Dict:
-                            mode = "MC" if "MC" in sample else "DATA"
-                            filespath = path_RunII+self.PrefixrootFile+mode+"."+sample+"_noTree.root"
-                            command = ["hadd", "-f", "-T", filespath.replace(self.year,year)]
-                            for histo in glob(filespath.replace("RunII","201*").replace(self.year,"201*")):
-                                command.append(histo)
-                            list_processes.append(command)
+            for collection, channel, syst in self.SmartLoop():
+                if self.DoControl(module+collection+channel+syst, channel, ""):
+                    continue
+                path_RunII = self.Path_STORAGE+year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/"
+                a = os.system("mkdir -p "+path_RunII+"Plots")
+                if self.Module=="SignalRegion":
+                    list_processes_plots.append(["Plots", "-f", "Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+year+".steer" ])
+                for sample in self.Processes_Dict:
+                    mode = "MC" if "MC" in sample else "DATA"
+                    filespath = path_RunII+self.PrefixrootFile+mode+"."+sample+"_noTree.root"
+                    command = ["hadd", "-f", "-T", filespath.replace(self.year,year)]
+                    for histo in glob(filespath.replace("RunII","201*").replace(self.year,"201*")):
+                        command.append(histo)
+                    list_processes.append(command)
         # for i in list_processes:
         #     print i
         print "Number of processes", len(list_processes)
@@ -295,48 +281,44 @@ class ModuleRunner(ModuleRunnerBase):
                 sys.stderr = f_err
                 self.CreateXml()
                 sys.stderr = orig_stderr
-        for collection in self.Collections:
-            for channel in self.Channels:
-                for syst in self.Systematics:
-                    middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                    for sample_ in self.Processes_Dict:
-                        if self.DoControl(collection+channel+sample_, channel, sample_):
-                            continue
-                        sample = sample_.replace(self.signal,self.signal)
-                        mode = "MC" if "MC" in sample else "DATA"
-                        filePrefix = self.PrefixrootFile+mode+"."
-                        commonpath = self.ModuleStorage+"/"+middlePath
-                        xml = commonpath+sample+".xml"
-                        if "muonchannel" in xml and "SingleElectron" in xml: continue
-                        if "electronchannel" in xml and "SingleMuon" in xml: continue
-                        with open(xml) as out:
-                            lines = out.readlines()
-                            if len(lines)==0:
-                                print "Empty xml:", xml
-                            elif len(lines)==1:
-                                if "File Commented" in lines[0]:
-                                    print "No files found in:", xml
-                                else:
-                                    print "Unexpected error:", xml
-                            else:
-                                ncomment = -1
-                                if "File Commented" in lines[-1]: ncomment = int(lines[-1].split()[3])
-                                else: print "Unexpected error:", xml
-                                if ncomment>0 and ncomment==(len(lines)-1):
-                                    print "Found files ",ncomment,"out of ",len(lines)-1," in:", xml
-                    for sample_ in self.SubSamples_Dict:
-                        if self.DoControl(collection+channel+sample_, channel, sample_):
-                            continue
-                        sample = sample_.replace(self.signal,self.signal)
-                        mode = "MC" if "MC" in sample else "DATA"
-                        filePrefix = self.PrefixrootFile+mode+"."
-                        path = self.Path_ANALYSIS+"/config/SubmittedJobs/"+self.year+"/"+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"
-                        for err in glob(path+sample+"_*.e*"):
-                            num = err.replace(path,"").split(".")[0].replace(sample+"_","")
-                            list_toCheck.append(sample)
-                            # print err
-                            # for x in glob(path+sample+".e*"+num):
-                            #     print "\t", x
+        for collection, channel, syst in self.SmartLoop():
+            for sample_ in self.Processes_Dict:
+                middlePath = collection+"/"+channel+"channel/"+syst+"/"
+                if self.DoControl(collection+channel+sample_, channel, sample_):
+                    continue
+                sample = sample_.replace(self.signal,self.signal)
+                mode = "MC" if "MC" in sample else "DATA"
+                filePrefix = self.PrefixrootFile+mode+"."
+                commonpath = self.ModuleStorage+"/"+middlePath
+                xml = commonpath+sample+".xml"
+                with open(xml) as out:
+                    lines = out.readlines()
+                    if len(lines)==0:
+                        print "Empty xml:", xml
+                    elif len(lines)==1:
+                        if "File Commented" in lines[0]:
+                            print "No files found in:", xml
+                        else:
+                            print "Unexpected error:", xml
+                    else:
+                        ncomment = -1
+                        if "File Commented" in lines[-1]: ncomment = int(lines[-1].split()[3])
+                        else: print "Unexpected error:", xml
+                        if ncomment>0 and ncomment==(len(lines)-1):
+                            print "Found files ",ncomment,"out of ",len(lines)-1," in:", xml
+            for sample_ in self.SubSamples_Dict:
+                if self.DoControl(collection+channel+sample_, channel, sample_):
+                    continue
+                sample = sample_.replace(self.signal,self.signal)
+                mode = "MC" if "MC" in sample else "DATA"
+                filePrefix = self.PrefixrootFile+mode+"."
+                path = self.Path_ANALYSIS+"/config/SubmittedJobs/"+self.year+"/"+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"
+                for err in glob(path+sample+"_*.e*"):
+                    num = err.replace(path,"").split(".")[0].replace(sample+"_","")
+                    list_toCheck.append(sample)
+                    # print err
+                    # for x in glob(path+sample+".e*"+num):
+                    #     print "\t", x
         print set(list_toCheck)
         mylist = []
         with open(errname, 'r') as f_err:
@@ -344,7 +326,7 @@ class ModuleRunner(ModuleRunnerBase):
                 if "probably not closed, trying to recover" in l: mylist.append(l.split()[3])
         print len(mylist)
         # if not check: os.system("rm -fr "+errname)
-        # self.ReRunList(mylist)
+        self.ReRunList(mylist)
 
     @timeit
     def ReRunList(self, mylist=[]):
@@ -378,7 +360,6 @@ class ModuleRunner(ModuleRunnerBase):
 
     @timeit
     def HowToSpeedCondor(self):
-        Samples = self.Samples
         timeList = {}
         nFileList = {}
         checks = ["*.o*","*.l*","NF"]
@@ -389,50 +370,49 @@ class ModuleRunner(ModuleRunnerBase):
             # if ".l*" in check: rt = "Disk (KB)"
             if "NF" in check: rt = "FileName"
             allmax = 0
-            for collection in self.Collections:
-                for channel in self.Channels:
-                    for syst in self.Systematics:
-                        middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                        for sample in Samples:
-                            if self.DoControl(collection+channel+sample, channel, sample):
-                                continue
-                            path = self.SubmitDir+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"+sample+check
-                            if "NF" in check: path = self.SubmitDir+self.Module+"/"+middlePath+"/workdir_"+self.Module+"_"+sample+"/"+sample+"*"
-                            val = []
-                            for el in glob(path):
-                                with open(el, "U") as file:
-                                    lines = file.readlines()
-                                    if "NF" in check:
-                                        sec =0
-                                    for line in lines:
-                                        if not rt in line: continue
-                                        if ".l" in check:
-                                            # print line.split()[3], line
-                                            sec = float(line.split()[3])
-                                        elif "NF" in check:
-                                            sec +=1
-                                        else:
-                                            sec = float(line.split()[10])
-                                        if not "NF" in check:
-                                            val.append(sec)
-                                if "NF" in check:
-                                    val.append(sec)
-                            if len(val)==0 :
-                                continue
-                            if len(glob(path))==0: continue
-                            max_ = np.amax(np.array(val))
-                            min_ = np.amin(np.array(val))
-                            std_ = np.std(np.array(val))
-                            if (max_>(0*3600) and max_<(200*3600) and ".o" in check):
-                                print check, "\t", collection, "\t", channel[:4], "\t", syst, "\t", sample, " "*(30-len(sample)), round(max_/3600,2), "\t", round(min_/3600,2), "\t", round(std_*100/max_,2)
-                                timeList.setdefault(sample,[]).append(max_)
-                            elif (".l" in check and max_>(1*1024)):
-                                print check, "\t", collection, "\t", channel[:4], "\t", syst, "\t", sample, " "*(30-len(sample)), round(max_/1024,2), "\t", round(min_/1024,2), "\t", round(std_*100/max_,2)
-                            elif ("NF" in check):
-                                print check, "\t", collection, "\t", channel[:4], "\t", syst, "\t", sample, " "*(30-len(sample)), round(max_,2), "\t", round(min_,2), "\t", round(std_*100/max_,2), "\t", len(val), "\t", np.sum(val)
-                                nFileList.setdefault(sample,[]).append(max_)
-                            allmax = np.amax(np.array([allmax,max_]))
-                            allstd = np.std(np.array([allmax,max_]))
+            for collection, channel, syst,sample in self.SmartLoop(self.Samples):
+                middlePath = collection+"/"+channel+"channel/"+syst+"/"
+                if self.DoControl(collection+channel+sample, channel, sample):
+                    continue
+                path = self.SubmitDir+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"+sample+check
+                if "NF" in check: path = self.SubmitDir+self.Module+"/"+middlePath+"/workdir_"+self.Module+"_"+sample+"/"+sample+"*"
+                val = []
+                for el in glob(path):
+                    with open(el, "U") as file:
+                        lines = file.readlines()
+                        if "NF" in check:
+                            sec =0
+                        for line in lines:
+                            if not rt in line: continue
+                            if ".l" in check:
+                                # print line.split()[3], line
+                                sec = float(line.split()[3])
+                            elif "NF" in check:
+                                sec +=1
+                            else:
+                                sec = float(line.split()[10])
+                            if not "NF" in check:
+                                val.append(sec)
+                    if "NF" in check:
+                        val.append(sec)
+                if len(val)==0 :
+                    continue
+                if len(glob(path))==0: continue
+                max_ = np.amax(np.array(val))
+                min_ = np.amin(np.array(val))
+                std_ = np.std(np.array(val))
+                if (max_>(0*3600) and max_<(200*3600) and ".o" in check):
+                    print check, "\t", collection, "\t", channel[:4], "\t", syst, "\t", sample, " "*(30-len(sample)), round(max_/3600,2), "\t", round(min_/3600,2), "\t", round(std_*100/max_,2)
+                    timeList.setdefault(sample,[]).append(max_)
+                elif (".l" in check and max_>(1*1024)):
+                    print check, "\t", collection, "\t", channel[:4], "\t", syst, "\t", sample, " "*(30-len(sample)), round(max_/1024,2), "\t", round(min_/1024,2), "\t", round(std_*100/max_,2)
+                elif ("NF" in check):
+                    print check, "\t", collection, "\t", channel[:4], "\t", syst, "\t", sample, " "*(30-len(sample)), round(max_,2), "\t", round(min_,2), "\t", round(std_*100/max_,2), "\t", len(val), "\t", np.sum(val)
+                    nFileList.setdefault(sample,[]).append(max_)
+                if (".l" in check and max_>(1*1024)):
+                    print check, "\t", collection, "\t", channel[:4], "\t", syst, "\t", sample, " "*(30-len(sample)), round(max_/1024,2), "\t", round(min_/1024,2), "\t", round(std_*100/max_,2)
+                allmax = np.amax(np.array([allmax,max_]))
+                allstd = np.std(np.array([allmax,max_]))
             print check, allmax/3600, allstd*100/allmax
         for x in timeList:
             print x, " "*(30-len(x)), np.amax(np.array(timeList[x]))/3600, np.amin(np.array(timeList[x]))/3600, np.std(np.array(timeList[x]))/3600, 3.*np.amax(np.array(nFileList[x]))/(np.amax(np.array(timeList[x]))/3600)
