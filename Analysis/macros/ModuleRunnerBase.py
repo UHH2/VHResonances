@@ -23,21 +23,21 @@ class VariablesBase(GenericPath):
     def __init__(self):
         GenericPath.__init__(self)
         self.PrefixrootFile     = "uhh2.AnalysisModuleRunner."
-        self.signal             = "MC_ZprimeToZH"
         self.Collections        = ["Puppi"]
         self.Channels           = ["muon", "electron", "invisible"]
         self.Systematics        = ["nominal", "JER_up", "JER_down", "JEC_up", "JEC_down", "MuonScale_up", "MuonScale_down"]
         self.Systematics_Scale  = ["PU_up", "PU_down"]
-        self.years              = ["2016", "2017", "2018"]
+        self.signal             = "MC_ZprimeToZH"
+        self.MassPoints         = [600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]
+        self.SignalSamples      = [self.signal+"_"+str(mass) for mass in self.MassPoints]
+        self.RunPeriods_Dict    = {"2016": ["B", "C", "D", "E", "F", "G", "H"],
+                                   "2017": ["B", "C", "D", "E", "F"],
+                                   "2018": ["A", "B", "C", "D"]
+                                   }
+        self.years              = self.RunPeriods_Dict.keys()
+        self.AllRunPeriods      = list(set(itertools.chain.from_iterable(self.RunPeriods_Dict.values())))
 
-        self.SignalSamples  = ["MC_ZprimeToZH_M600", "MC_ZprimeToZH_M800", "MC_ZprimeToZH_M1000", "MC_ZprimeToZH_M1200", "MC_ZprimeToZH_M1400", "MC_ZprimeToZH_M1600", "MC_ZprimeToZH_M1800", "MC_ZprimeToZH_M2000", "MC_ZprimeToZH_M2500", "MC_ZprimeToZH_M3000", "MC_ZprimeToZH_M3500", "MC_ZprimeToZH_M4000", "MC_ZprimeToZH_M4500", "MC_ZprimeToZH_M5000", "MC_ZprimeToZH_M5500", "MC_ZprimeToZH_M6000", "MC_ZprimeToZH_M7000", "MC_ZprimeToZH_M8000" ]
-
-        self.RunControls    = { "2016": ["B", "C", "D", "E", "F", "G", "H"],
-                                "2017": ["B", "C", "D", "E", "F"],
-                                "2018": ["A", "B", "C", "D"],
-                                }
-
-        self.Samples_dict_ = {# TODO MC_DY_HT70to100
+        self.SubSamples_Dict    = {# TODO MC_DY_HT70to100
             "MC_DY"                 : ["MC_DY_HT100to200", "MC_DY_HT200to400", "MC_DY_HT400to600", "MC_DY_HT600to800", "MC_DY_HT800to1200", "MC_DY_HT1200to2500", "MC_DY_HT2500toInf", "MC_DY_inv_PtZ_50To100", "MC_DY_inv_PtZ_100To250", "MC_DY_inv_PtZ_250To400", "MC_DY_inv_PtZ_400To650", "MC_DY_inv_PtZ_650ToInf", "MC_DY_inv_HT_100To200", "MC_DY_inv_HT_200To400", "MC_DY_inv_HT_400To600", "MC_DY_inv_HT_600To800", "MC_DY_inv_HT_800To1200", "MC_DY_inv_HT_1200To2500", "MC_DY_inv_HT_2500ToInf"],
             "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],
             "MC_WW_incl"            : ["MC_WW"],
@@ -46,9 +46,9 @@ class VariablesBase(GenericPath):
             "MC_WW"                 : ["MC_WWTo4Q", "MC_WWToLNuQQ", "MC_WWTo2L2Nu"],
             "MC_WZ"                 : ["MC_WZToLNu2Q", "MC_WZTo2Q2Nu", "MC_WZTo2L2Q", "MC_WZTo1L3Nu", "MC_WZTo3LNu"],
             "MC_ZZ"                 : ["MC_ZZTo4Q", "MC_ZZTo2Q2Nu", "MC_ZZTo2L2Q", "MC_ZZTo2L2Nu", "MC_ZZTo4L"],
-            "DATA_SingleElectron"   : ["DATA_SingleElectron_RunA", "DATA_SingleElectron_RunB", "DATA_SingleElectron_RunC", "DATA_SingleElectron_RunD", "DATA_SingleElectron_RunE", "DATA_SingleElectron_RunF", "DATA_SingleElectron_RunG", "DATA_SingleElectron_RunH" ],
-            "DATA_SingleMuon"       : ["DATA_SingleMuon_RunA", "DATA_SingleMuon_RunB", "DATA_SingleMuon_RunC", "DATA_SingleMuon_RunD", "DATA_SingleMuon_RunE", "DATA_SingleMuon_RunF", "DATA_SingleMuon_RunG", "DATA_SingleMuon_RunH" ],
-            "DATA_MET"              : ["DATA_MET_RunA", "DATA_MET_RunB", "DATA_MET_RunC", "DATA_MET_RunD", "DATA_MET_RunE", "DATA_MET_RunF", "DATA_MET_RunG", "DATA_MET_RunH"],
+            "DATA_SingleElectron"   : ["DATA_SingleElectron_Run"+str(run) for run in self.AllRunPeriods],
+            "DATA_SingleMuon"       : ["DATA_SingleMuon_Run"+str(run) for run in self.AllRunPeriods],
+            "DATA_MET"              : ["DATA_MET_Run"+str(run) for run in self.AllRunPeriods],
             self.signal             : self.SignalSamples,
             }
 
@@ -80,14 +80,14 @@ class VariablesBase(GenericPath):
         self.Samples_original = {}
         self.Samples_Category = {}
 
-        for year in self.RunControls:
-            for x in self.Samples_dict_:
-                loop_over = self.Samples_dict_[x]
+        for year in self.RunPeriods_Dict:
+            for x in self.SubSamples_Dict:
+                loop_over = self.SubSamples_Dict[x]
                 if (year=="2016" and x=="MC_TTbar"): loop_over = ["MC_TTbar"]
-                if (year!="2016" and (x=="MC_WW" or x=="MC_WZ" or x=="MC_ZZ") ): loop_over = self.Samples_dict_[x+"_incl"]
+                if (year!="2016" and (x=="MC_WW" or x=="MC_WZ" or x=="MC_ZZ") ): loop_over = self.SubSamples_Dict[x+"_incl"]
                 self.Samples_dict.setdefault(year, {}).setdefault(x+"_"+year, [el+"_"+year for el in loop_over] )
             for x in ["DATA_SingleElectron","DATA_SingleMuon", "DATA_MET"]:
-                self.Samples_dict[year][x+"_"+year] = [el for el in self.Samples_dict[year][x+"_"+year] if any("Run"+crl in el for crl in self.RunControls[year])]
+                self.Samples_dict[year][x+"_"+year] = [el for el in self.Samples_dict[year][x+"_"+year] if any("Run"+crl in el for crl in self.RunPeriods_Dict[year])]
             self.Samples_original.setdefault(year, list(dict.fromkeys([el for list_ in self.Samples_dict[year].values() for el in list_])))
             self.Samples_Category.setdefault(year, self.Samples_dict[year].keys())
             self.Samples_Category[year].remove(self.signal+"_"+year)
