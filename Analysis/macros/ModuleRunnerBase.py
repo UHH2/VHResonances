@@ -1,8 +1,7 @@
 import os
 import sys
 import itertools
-sys.path.append("../python")
-from Utils import *
+
 
 class GenericPath:
     ''' Class containter for paths '''
@@ -32,7 +31,7 @@ class VariablesBase(GenericPath):
         self.Systematics_Scale  = ["PU_up", "PU_down"]
         self.signal             = "MC_ZprimeToZH"
         self.MassPoints         = [600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]
-        self.SignalSamples      = [self.signal+"_"+str(mass) for mass in self.MassPoints]
+        self.SignalSamples      = [self.signal+"_M"+str(mass) for mass in self.MassPoints]
         self.RunPeriods_Dict    = {"2016": ["B", "C", "D", "E", "F", "G", "H"],
                                    "2017": ["B", "C", "D", "E", "F"],
                                    "2018": ["A", "B", "C", "D"]
@@ -40,7 +39,8 @@ class VariablesBase(GenericPath):
         self.years              = sorted(self.RunPeriods_Dict.keys())
         self.AllRunPeriods      = list(set(itertools.chain.from_iterable(self.RunPeriods_Dict.values())))
 
-        self.SubSamples_Dict    = {# TODO MC_DY_HT70to100
+        # TODO MC_DY_HT70to100
+        self.Generic_SubSamples_Dict_ = {
             "MC_DY"                 : [proc+subsample for proc in ["MC_DY_HT", "MC_DY_inv_HT"] for subsample in ["100to200", "200to400", "400to600", "600to800", "800to1200", "1200to2500", "2500toInf",]] + ["MC_DY_inv_PtZ_"+subsample for subsample in ["50to100", "100to250", "250to400", "400to650", "650toInf"]],
             "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],
             "MC_WW_incl"            : ["MC_WW"],
@@ -89,34 +89,24 @@ class VariablesBase(GenericPath):
         self.Processes_Year_Dict = {}
 
         for year in self.years:
-            for subsample in sorted(self.SubSamples_Dict):
-                loop_over = self.SubSamples_Dict[subsample]
+            for subsample in sorted(self.Generic_SubSamples_Dict_):
+                loop_over = self.Generic_SubSamples_Dict_[subsample]
                 if (year=="2016" and subsample=="MC_DY"): loop_over = filter(lambda subsample: not "inv" in subsample or "PtZ" in subsample ,loop_over)
                 if (year!="2016" and subsample=="MC_DY"): loop_over = filter(lambda subsample: not "PtZ" in subsample ,loop_over)
                 if (year=="2016" and subsample=="MC_TTbar"): loop_over = ["MC_TTbar"]
-                if (year!="2016" and (subsample=="MC_WW" or subsample=="MC_WZ" or subsample=="MC_ZZ") ): loop_over = self.SubSamples_Dict[subsample+"_incl"]
+                if (year!="2016" and (subsample=="MC_WW" or subsample=="MC_WZ" or subsample=="MC_ZZ") ): loop_over = self.Generic_SubSamples_Dict_[subsample+"_incl"]
                 if "DATA" in subsample: loop_over = [subsample+"_Run"+str(run) for run in self.RunPeriods_Dict[year]]
-                self.Samples_Year_Dict.setdefault(year, {}).setdefault(subsample+"_"+year, [el+"_"+year for el in loop_over] )
+                self.Samples_Year_Dict.setdefault(year, {}).setdefault(subsample+"_"+year, [el+"_"+year for el in sorted(loop_over)] )
                 self.Processes_Year_Dict.setdefault(year, []).append(subsample+"_"+year)
             self.Processes_Year_Dict[year].remove(self.signal+"_"+year)
             self.Processes_Year_Dict[year].extend(self.Samples_Year_Dict[year][self.signal+"_"+year])
-            self.SubSamples_Year_Dict.setdefault(year, list(dict.fromkeys([el for list_ in self.Samples_Year_Dict[year].values() for el in list_])))
+            self.SubSamples_Year_Dict.setdefault(year, sorted(list(dict.fromkeys([el for list_ in self.Samples_Year_Dict[year].values() for el in list_]))))
 
         # List of all sub sample for all years and all processes
         self.AllSubSamples_List = sorted(list(set(itertools.chain.from_iterable(self.SubSamples_Year_Dict.values()))))
 
         # List of all processes for all years
         self.AllProcesses_List = sorted(list(set(itertools.chain.from_iterable(self.Processes_Year_Dict.values()))))
-
-
-        print "Samples_Year_Dict"
-        prettydic(self.Samples_Year_Dict)
-        print "SubSamples_Year_Dict"
-        prettydic(self.SubSamples_Year_Dict)
-        print "Processes_Year_Dict"
-        prettydic(self.Processes_Year_Dict)
-        print "AllProcesses_List", self.AllProcesses_List
-        print "AllSubSamples_List", self.AllSubSamples_List
 
 
 
@@ -129,7 +119,9 @@ class ModuleRunnerBase(VariablesBase):
         self.lumi_fb  = round(float(self.lumi_map[year]["lumi_fb"]),1)
         self.lumi_pb  = int(self.lumi_map[self.year]["lumi_pb"])
         self.lumi_sys = round(float(self.lumi_map[year]["uncertainty"]),1)
-
+        self.Samples_Dict    = self.Samples_Year_Dict[self.year]
+        self.SubSamples_Dict = self.SubSamples_Year_Dict[self.year]
+        self.Processes_Dict  = self.Processes_Year_Dict[self.year]
 
     def defineDirectories(self):
         self.Path_SFRAME        = self.Path_SFRAME+self.year+"/"
