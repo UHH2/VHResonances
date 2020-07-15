@@ -36,7 +36,7 @@ class ModuleRunner(ModuleRunnerBase):
                     else:
                         if len(kwargs[arg])>1: return kwargs[arg]
                         else: return defaultList
-                for year in LoopOver("years", self.Samples_dict.keys()+["RunII"]):
+                for year in LoopOver("years", self.Samples_Year_Dict.keys()+["RunII"]):
                     for collection in LoopOver("Collections", self.Collections):
                         for channel in LoopOver("Channels", self.Channels):
                             for histFolder in LoopOver("histFolders", kwargs["histFolders"]):
@@ -53,16 +53,16 @@ class ModuleRunner(ModuleRunnerBase):
                 process.wait()
         os.chdir(cwd)
     def defineModules(self):
-        self.ModuleSamples_dict  = {"Test"               : {"sample": self.Samples_original[self.year], "all": self.Samples_NamesAll},
-                                    "GenericCleaning"    : {"sample": self.Samples_original[self.year], "all": self.Samples_NamesAll},
-                                    "ProbeNN"            : {"sample": self.Samples_Category[self.year], "all": self.Samples_CategoryAll},
-                                    "NeuralNetwork"      : {"sample": self.Samples_Category[self.year], "all": self.Samples_CategoryAll},
-                                    "Preselection"       : {"sample": self.Samples_original[self.year], "all": self.Samples_NamesAll},
-                                    "Selection"          : {"sample": self.Samples_Category[self.year], "all": self.Samples_CategoryAll},
-                                    "SignalRegion"       : {"sample": self.Samples_Category[self.year], "all": self.Samples_CategoryAll},
-                                    "SF"                 : {"sample": self.Samples_original[self.year], "all": self.Samples_NamesAll},
-                                    "LeptonIDStudies"    : {"sample": self.Samples_original[self.year], "all": self.Samples_NamesAll},
-                                    "VariableRStudies"   : {"sample": [x for x in self.Samples_original[self.year] if not "DATA".lower() in x.lower()], "all": self.Samples_NamesAll},
+        self.ModuleSamples_dict  = {"Test"               : {"sample": self.SubSamples_Year_Dict[self.year], "all": self.AllSubSamples_List},
+                                    "GenericCleaning"    : {"sample": self.SubSamples_Year_Dict[self.year], "all": self.AllSubSamples_List},
+                                    "ProbeNN"            : {"sample": self.Processes_Year_Dict[self.year], "all": self.AllProcesses_List},
+                                    "NeuralNetwork"      : {"sample": self.Processes_Year_Dict[self.year], "all": self.AllProcesses_List},
+                                    "Preselection"       : {"sample": self.SubSamples_Year_Dict[self.year], "all": self.AllSubSamples_List},
+                                    "Selection"          : {"sample": self.Processes_Year_Dict[self.year], "all": self.AllProcesses_List},
+                                    "SignalRegion"       : {"sample": self.Processes_Year_Dict[self.year], "all": self.AllProcesses_List},
+                                    "SF"                 : {"sample": self.SubSamples_Year_Dict[self.year], "all": self.AllSubSamples_List},
+                                    "LeptonIDStudies"    : {"sample": self.SubSamples_Year_Dict[self.year], "all": self.AllSubSamples_List},
+                                    "VariableRStudies"   : {"sample": [x for x in self.SubSamples_Year_Dict[self.year] if not "DATA".lower() in x.lower()], "all": self.AllSubSamples_List},
                                     }
 
     def CompileModules(self):
@@ -148,7 +148,7 @@ class ModuleRunner(ModuleRunnerBase):
     def SecureMerge(self, mergeCategory=False, forPlotting=True):
         extraText = "_noTree" if forPlotting else ""
         list_processes = []
-        Samples = self.Samples_Category[self.year] if mergeCategory else self.Samples
+        Samples = self.Processes_Year_Dict[self.year] if mergeCategory else self.Samples
         for collection in self.Collections:
             for channel in self.Channels:
                 for syst in self.Systematics:
@@ -158,7 +158,7 @@ class ModuleRunner(ModuleRunnerBase):
                             continue
                         mode = "MC" if "MC" in sample else "DATA"
                         commonpath = self.ModuleStorage+"/"+middlePath
-                        filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_dict[self.year][sample]]
+                        filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_Year_Dict[self.year][sample]]
                         newFile    = commonpath+self.PrefixrootFile+mode+"."+sample+extraText
                         newFile   += "_merge.root" if mergeCategory else ".root"
                         if mergeCategory:
@@ -200,7 +200,7 @@ class ModuleRunner(ModuleRunnerBase):
             for channel in self.Channels:
                 for syst in self.Systematics:
                     middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                    for sample_ in self.Samples_Category[self.year]:
+                    for sample_ in self.Processes_Year_Dict[self.year]:
                         if self.DoControl(collection+channel+sample_, channel, sample_):
                             continue
                         decays = [""]
@@ -215,7 +215,7 @@ class ModuleRunner(ModuleRunnerBase):
                             out = open(commonpath+sample+".xml", 'w')
                             # print commonpath+sample+".xml"
                             nComment = 0
-                            for dir in self.Samples_dict[self.year][sample] if not self.signal in sample and self.Samples != self.Samples_Category[self.year] else [sample]:
+                            for dir in self.Samples_Year_Dict[self.year][sample] if not self.signal in sample and self.Samples != self.Processes_Year_Dict[self.year] else [sample]:
                                 print "Search in", commonpath+"workdir_"+self.Module+"_"+dir+"/*root"
                                 for f_ in glob(commonpath+"workdir_"+self.Module+"_"+dir+"/*root"):
                                     try:
@@ -261,7 +261,7 @@ class ModuleRunner(ModuleRunnerBase):
                         a = os.system("mkdir -p "+path_RunII+"Plots")
                         if self.Module=="SignalRegion":
                             list_processes_plots.append(["Plots", "-f", "Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+year+".steer" ])
-                        for sample in self.Samples_Category[self.year]:
+                        for sample in self.Processes_Year_Dict[self.year]:
                             mode = "MC" if "MC" in sample else "DATA"
                             filespath = path_RunII+self.PrefixrootFile+mode+"."+sample+"_noTree.root"
                             command = ["hadd", "-f", "-T", filespath.replace(self.year,year)]
@@ -298,7 +298,7 @@ class ModuleRunner(ModuleRunnerBase):
             for channel in self.Channels:
                 for syst in self.Systematics:
                     middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                    for sample_ in self.Samples_Category[self.year]:
+                    for sample_ in self.Processes_Year_Dict[self.year]:
                         if self.DoControl(collection+channel+sample_, channel, sample_):
                             continue
                         sample = sample_.replace(self.signal,self.signal)
@@ -323,7 +323,7 @@ class ModuleRunner(ModuleRunnerBase):
                                 else: print "Unexpected error:", xml
                                 if ncomment>0 and ncomment==(len(lines)-1):
                                     print "Found files ",ncomment,"out of ",len(lines)-1," in:", xml
-                    for sample_ in self.Samples_original[self.year]:
+                    for sample_ in self.SubSamples_Year_Dict[self.year]:
                         if self.DoControl(collection+channel+sample_, channel, sample_):
                             continue
                         sample = sample_.replace(self.signal,self.signal)
