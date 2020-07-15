@@ -1,7 +1,8 @@
 import os
 import sys
 import itertools
-
+sys.path.append("../python")
+from Utils import *
 
 class GenericPath:
     ''' Class containter for paths '''
@@ -40,7 +41,7 @@ class VariablesBase(GenericPath):
         self.AllRunPeriods      = list(set(itertools.chain.from_iterable(self.RunPeriods_Dict.values())))
 
         self.SubSamples_Dict    = {# TODO MC_DY_HT70to100
-            "MC_DY"                 : ["MC_DY_HT100to200", "MC_DY_HT200to400", "MC_DY_HT400to600", "MC_DY_HT600to800", "MC_DY_HT800to1200", "MC_DY_HT1200to2500", "MC_DY_HT2500toInf", "MC_DY_inv_PtZ_50To100", "MC_DY_inv_PtZ_100To250", "MC_DY_inv_PtZ_250To400", "MC_DY_inv_PtZ_400To650", "MC_DY_inv_PtZ_650ToInf", "MC_DY_inv_HT_100To200", "MC_DY_inv_HT_200To400", "MC_DY_inv_HT_400To600", "MC_DY_inv_HT_600To800", "MC_DY_inv_HT_800To1200", "MC_DY_inv_HT_1200To2500", "MC_DY_inv_HT_2500ToInf"],
+            "MC_DY"                 : [proc+subsample for proc in ["MC_DY_HT", "MC_DY_inv_HT"] for subsample in ["100to200", "200to400", "400to600", "600to800", "800to1200", "1200to2500", "2500toInf",]] + ["MC_DY_inv_PtZ_"+subsample for subsample in ["50to100", "100to250", "250to400", "400to650", "650toInf"]],
             "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],
             "MC_WW_incl"            : ["MC_WW"],
             "MC_WZ_incl"            : ["MC_WZ"],
@@ -90,6 +91,8 @@ class VariablesBase(GenericPath):
         for year in self.years:
             for subsample in sorted(self.SubSamples_Dict):
                 loop_over = self.SubSamples_Dict[subsample]
+                if (year=="2016" and subsample=="MC_DY"): loop_over = filter(lambda subsample: not "inv" in subsample or "PtZ" in subsample ,loop_over)
+                if (year!="2016" and subsample=="MC_DY"): loop_over = filter(lambda subsample: not "PtZ" in subsample ,loop_over)
                 if (year=="2016" and subsample=="MC_TTbar"): loop_over = ["MC_TTbar"]
                 if (year!="2016" and (subsample=="MC_WW" or subsample=="MC_WZ" or subsample=="MC_ZZ") ): loop_over = self.SubSamples_Dict[subsample+"_incl"]
                 if "DATA" in subsample: loop_over = [subsample+"_Run"+str(run) for run in self.RunPeriods_Dict[year]]
@@ -105,6 +108,15 @@ class VariablesBase(GenericPath):
         # List of all processes for all years
         self.AllProcesses_List = sorted(list(set(itertools.chain.from_iterable(self.Processes_Year_Dict.values()))))
 
+
+        print "Samples_Year_Dict"
+        prettydic(self.Samples_Year_Dict)
+        print "SubSamples_Year_Dict"
+        prettydic(self.SubSamples_Year_Dict)
+        print "Processes_Year_Dict"
+        prettydic(self.Processes_Year_Dict)
+        print "AllProcesses_List", self.AllProcesses_List
+        print "AllSubSamples_List", self.AllSubSamples_List
 
 
 
