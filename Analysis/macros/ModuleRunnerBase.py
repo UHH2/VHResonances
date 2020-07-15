@@ -2,6 +2,7 @@ import os
 import sys
 import itertools
 
+
 class GenericPath:
     ''' Class containter for paths '''
     def __init__(self):
@@ -35,7 +36,7 @@ class VariablesBase(GenericPath):
                                    "2017": ["B", "C", "D", "E", "F"],
                                    "2018": ["A", "B", "C", "D"]
                                    }
-        self.years              = self.RunPeriods_Dict.keys()
+        self.years              = sorted(self.RunPeriods_Dict.keys())
         self.AllRunPeriods      = list(set(itertools.chain.from_iterable(self.RunPeriods_Dict.values())))
 
         self.SubSamples_Dict    = {# TODO MC_DY_HT70to100
@@ -86,29 +87,23 @@ class VariablesBase(GenericPath):
         self.SubSamples_Year_Dict = {}
         self.Processes_Year_Dict = {}
 
-        for year in self.RunPeriods_Dict:
-            for x in self.SubSamples_Dict:
-                loop_over = self.SubSamples_Dict[x]
-                if (year=="2016" and x=="MC_TTbar"): loop_over = ["MC_TTbar"]
-                if (year!="2016" and (x=="MC_WW" or x=="MC_WZ" or x=="MC_ZZ") ): loop_over = self.SubSamples_Dict[x+"_incl"]
-                self.Samples_Year_Dict.setdefault(year, {}).setdefault(x+"_"+year, [el+"_"+year for el in loop_over] )
-            for x in ["DATA_SingleElectron","DATA_SingleMuon", "DATA_MET"]:
-                self.Samples_Year_Dict[year][x+"_"+year] = [el for el in self.Samples_Year_Dict[year][x+"_"+year] if any("Run"+crl in el for crl in self.RunPeriods_Dict[year])]
-            self.SubSamples_Year_Dict.setdefault(year, list(dict.fromkeys([el for list_ in self.Samples_Year_Dict[year].values() for el in list_])))
-            self.Processes_Year_Dict.setdefault(year, self.Samples_Year_Dict[year].keys())
+        for year in self.years:
+            for subsample in sorted(self.SubSamples_Dict):
+                loop_over = self.SubSamples_Dict[subsample]
+                if (year=="2016" and subsample=="MC_TTbar"): loop_over = ["MC_TTbar"]
+                if (year!="2016" and (subsample=="MC_WW" or subsample=="MC_WZ" or subsample=="MC_ZZ") ): loop_over = self.SubSamples_Dict[subsample+"_incl"]
+                if "DATA" in subsample: loop_over = [subsample+"_Run"+str(run) for run in self.RunPeriods_Dict[year]]
+                self.Samples_Year_Dict.setdefault(year, {}).setdefault(subsample+"_"+year, [el+"_"+year for el in loop_over] )
+                self.Processes_Year_Dict.setdefault(year, []).append(subsample+"_"+year)
             self.Processes_Year_Dict[year].remove(self.signal+"_"+year)
             self.Processes_Year_Dict[year].extend(self.Samples_Year_Dict[year][self.signal+"_"+year])
+            self.SubSamples_Year_Dict.setdefault(year, list(dict.fromkeys([el for list_ in self.Samples_Year_Dict[year].values() for el in list_])))
 
         # List of all sub sample for all years and all processes
-        self.AllSubSamples_List = []
-        for x in self.SubSamples_Year_Dict:
-            self.AllSubSamples_List.extend(self.SubSamples_Year_Dict[x])
+        self.AllSubSamples_List = sorted(list(set(itertools.chain.from_iterable(self.SubSamples_Year_Dict.values()))))
 
         # List of all processes for all years
-        self.AllProcesses_List = []
-        for x in self.Processes_Year_Dict:
-            self.AllProcesses_List.extend(self.Processes_Year_Dict[x])
-
+        self.AllProcesses_List = sorted(list(set(itertools.chain.from_iterable(self.Processes_Year_Dict.values()))))
 
 
 
