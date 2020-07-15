@@ -2,6 +2,7 @@ import os
 import sys
 
 class GenericPath:
+    ''' Class containter for paths '''
     def __init__(self):
         self.user = os.environ["USER"]
         self.cmssw_base = os.environ["CMSSW_BASE"]
@@ -15,7 +16,10 @@ class GenericPath:
     def Get(self, source):
         return getattr(self,source)
 
+
+
 class VariablesBase(GenericPath):
+    ''' Class containter for list of objects '''
     def __init__(self):
         GenericPath.__init__(self)
         self.PrefixrootFile     = "uhh2.AnalysisModuleRunner."
@@ -49,6 +53,7 @@ class VariablesBase(GenericPath):
             }
 
         self.ExtractVariableFromConstants()
+        self.defineSamples()
 
     def ExtractVariableFromConstants(self):
         with open(self.Path_ANALYSIS+"include/constants.hpp") as f_:
@@ -69,20 +74,6 @@ class VariablesBase(GenericPath):
                             line = f_.readline()
                 line = f_.readline()
 
-class ModuleRunnerBase(VariablesBase):
-    def __init__(self,year="2016"):
-        VariablesBase.__init__(self)
-        self.year = year
-        self.defineDirectories()
-        self.lumi_fb  = round(float(self.lumi_map[year]["lumi_fb"]),1)
-        self.lumi_pb  = int(self.lumi_map[self.year]["lumi_pb"])
-        self.lumi_sys = round(float(self.lumi_map[year]["uncertainty"]),1)
-        # prettydic(self.__dict__)
-        self.defineSamples()
-    def defineDirectories(self):
-        self.Path_SFRAME        = self.Path_SFRAME+self.year+"/"
-        self.ConfigDir          = self.Path_ANALYSIS+"config/"
-        self.SubmitDir          = self.ConfigDir+"SubmittedJobs/"+self.year+"/"
     def defineSamples(self):
 
         self.Samples_dict = {}
@@ -109,3 +100,23 @@ class ModuleRunnerBase(VariablesBase):
         self.Samples_CategoryAll = []
         for x in self.Samples_Category:
             self.Samples_CategoryAll.extend(self.Samples_Category[x])
+
+
+
+
+
+class ModuleRunnerBase(VariablesBase):
+    ''' Class containter for list of objects for particular year '''
+    def __init__(self,year="2016"):
+        VariablesBase.__init__(self)
+        self.year = year
+        self.defineDirectories()
+        self.lumi_fb  = round(float(self.lumi_map[year]["lumi_fb"]),1)
+        self.lumi_pb  = int(self.lumi_map[self.year]["lumi_pb"])
+        self.lumi_sys = round(float(self.lumi_map[year]["uncertainty"]),1)
+
+
+    def defineDirectories(self):
+        self.Path_SFRAME        = self.Path_SFRAME+self.year+"/"
+        self.ConfigDir          = self.Path_ANALYSIS+"config/"
+        self.SubmitDir          = self.ConfigDir+"SubmittedJobs/"+self.year+"/"
