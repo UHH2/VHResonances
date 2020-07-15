@@ -4,7 +4,7 @@ import itertools
 
 
 class GenericPath:
-    ''' Class containter for paths '''
+    ''' Class container for paths '''
     def __init__(self):
         self.user = os.environ["USER"]
         self.cmssw_base = os.environ["CMSSW_BASE"]
@@ -21,7 +21,7 @@ class GenericPath:
 
 
 class VariablesBase(GenericPath):
-    ''' Class containter for list of objects '''
+    ''' Class container for list of objects '''
     def __init__(self):
         GenericPath.__init__(self)
         self.PrefixrootFile     = "uhh2.AnalysisModuleRunner."
@@ -31,7 +31,7 @@ class VariablesBase(GenericPath):
         self.Systematics_Scale  = ["PU_up", "PU_down"]
         self.signal             = "MC_ZprimeToZH"
         self.MassPoints         = [600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]
-        self.SignalSamples      = [self.signal+"_M"+str(mass) for mass in self.MassPoints]
+        self.SignalSamples      = [self.signal+mode+"_M"+str(mass) for mass in self.MassPoints for mode in ["","_inv"]]
         self.RunPeriods_Dict    = {"2016": ["B", "C", "D", "E", "F", "G", "H"],
                                    "2017": ["B", "C", "D", "E", "F"],
                                    "2018": ["A", "B", "C", "D"]
@@ -112,7 +112,7 @@ class VariablesBase(GenericPath):
 
 
 class ModuleRunnerBase(VariablesBase):
-    ''' Class containter for list of objects for particular year '''
+    ''' Class container for list of objects for particular year '''
     def __init__(self,year="2016"):
         VariablesBase.__init__(self)
         self.year = year
