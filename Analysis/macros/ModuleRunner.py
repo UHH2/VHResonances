@@ -154,7 +154,7 @@ class ModuleRunner(ModuleRunnerBase):
                 continue
             mode = "MC" if "MC" in sample else "DATA"
             commonpath = self.ModuleStorage+"/"+middlePath
-            filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_dict[sample] if not self.DoControl(collection+channel+syst+name_, channel, name_)]
+            filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_Dict[sample] if not self.DoControl(collection+channel+syst+name_, channel, name_)]
             newFile    = commonpath+self.PrefixrootFile+mode+"."+sample+extraText
             newFile   += "_merge.root" if mergeCategory else ".root"
             if mergeCategory:
@@ -211,6 +211,7 @@ class ModuleRunner(ModuleRunnerBase):
                     for f_ in glob(commonpath+"workdir_"+self.Module+"_"+dir+"/*root"):
                         try:
                             ntuple = ROOT.TFile(str(f_))
+                            if ntuple.IsZombie(): sys.stderr.write("TFile::Init:0: RuntimeWarning: file "+f_+" probably not closed, trying to recover")
                             AnalysisTree = ntuple.Get("AnalysisTree")
                             isToWrite =  AnalysisTree.GetEntriesFast() > 0
                             ntuple.Close()
