@@ -157,9 +157,10 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
   MB["isHOTVR"]           = string2bool(ctx.get("isHOTVR"));
   MB["muonchannel"]       = string2bool(ctx.get("muonchannel"));
   MB["electronchannel"]   = string2bool(ctx.get("electronchannel"));
+  MB["invisiblechannel"]   = string2bool(ctx.get("invisiblechannel"));
 
-  if (MB["isPuppi"] == MB["isCHS"] && MB["isPuppi"] == MB["isHOTVR"]) throw std::runtime_error("In SelectionModule.cxx: Choose exactly one jet collection.");
-  if (MB["muonchannel"] == MB["electronchannel"]) throw std::runtime_error("In SelectionModule.cxx: Choose exactly one lepton channel.");
+  if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In SelectionModule.cxx: Choose exactly one jet collection.");
+  if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In SelectionModule.cxx: Choose exactly one lepton channel.");
 
   MS["jetLabel"]    = MB["isCHS"]? "jets":    (MB["isPuppi"]? "jetsAk4Puppi": (MB["isHOTVR"]? "jetsAk4Puppi": ""));
   MS["topjetLabel"] = MB["isCHS"]? "topjets": (MB["isPuppi"]? "toppuppijets": (MB["isHOTVR"]? "hotvrPuppi": ""));
