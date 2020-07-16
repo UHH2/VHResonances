@@ -18,14 +18,14 @@ YearVars["lumi_file"]           = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/c
                                    "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2018/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.root",
                                    }
 
-YearVars["MCBtagEfficiencies"]  = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/SF_2016.root",
-                                   "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/SF_2017.root",
-                                   "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/SF_2018.root",
+YearVars["MCBtagEfficiencies"]  = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_2016.root",
+                                   "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_2017.root",
+                                   "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_2018.root",
                                    }
 
-YearVars["BTagCalibration"]     = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/subjet_DeepCSV_102XSF_V1.csv",
-                                   "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/subjet_DeepCSV_2016LegacySF_V1.csv",
-                                   "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/BTag/subjet_DeepCSV_94XSF_V4_B_F.csv",
+YearVars["BTagCalibration"]     = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_102XSF_V1.csv",
+                                   "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_2016LegacySF_V1.csv",
+                                   "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_94XSF_V4_B_F.csv",
                                    }
 
 # YearVars["BTagCalibration"]     = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2016/DeepCSV_2016LegacySF_WP_V1.csv",
@@ -48,6 +48,12 @@ def newNumber(year,sample,ConfigFile,syst):
                 newNumber = 200
             if any(x in sample for x in ["DATA_SingleElectron_RunB"]):
                 newNumber = 180
+            if any(x in sample for x in ["DATA_MET_RunB","DATA_MET_RunC"]):
+                newNumber = 310
+            if any(x in sample for x in ["DATA_MET_RunD_2016","DATA_MET_RunF_2016"]):
+                newNumber = 180
+            if any(x in sample for x in ["DATA_MET_RunE_2016","DATA_MET_RunG_2016", "DATA_MET_RunH_2016"]):
+                newNumber = 220
         if year=="2017":
             newNumber = 340
             if any(x in sample for x in ["DATA_SingleMuon_RunF"]):
@@ -84,8 +90,12 @@ def newNumber(year,sample,ConfigFile,syst):
             newNumber = 330
         if any(x in sample for x in ["MC_DY_HT100to200_2016"]):
             newNumber = 300
-        if "MC_DY_inv_PtZ" in sample:
+        if any(x in sample for x in ["MC_DY_inv_PtZ_250To400_2016", "MC_DY_inv_PtZ_400To650_2016", "MC_DY_inv_PtZ_650ToInf_2016"]):
             newNumber = 100
+        if any(x in sample for x in ["MC_DY_inv_PtZ_100To250_2016"]):
+            newNumber = 185
+        if any(x in sample for x in ["MC_DY_inv_PtZ_50To100_2016"]):
+            newNumber = 305
     if "MC_TT" in sample:
         newNumber = 40 if year=="2016" else 200 if year=="2017" else 60
     if "MC_W" in sample:
@@ -126,18 +136,25 @@ def newNumber(year,sample,ConfigFile,syst):
     return str(max(1,int(newNumber/(defaulTimePerJob/TimePerJob))))
     # return str(max(1,int(newNumber/(defaulTimePerJob/1))))
 
-def DoControl(controls, control_, channel, sample):
+
+def DoControl(controls, control_, channel, sample): #Implement the same in ModuleRunner
+    ''' This part is a bit arbitrary. The idea is to catch all the combinations for different years and channels'''
     check = False
     if all(not control in control_ for control in controls):
         check = True
     if "invisible" in channel and "MC_DY" in sample and not "MC_DY_inv" in sample:
-        check = True
+        check = not "MC_DY_201" in sample
     if "invisible" in channel and "PtZ" in sample and not "2016" in sample:
         check = True
     if "invisible" in channel and "HT" in sample and "2016" in sample:
         check = True
-    if not "invisible" in channel and "MC_DY_inv" in sample:
+    if "invisible" in channel and "MC_ZprimeToZH" in sample and not "_inv" in sample:
         check = True
+    if not "invisible" in channel and "_inv" in sample:
+        check = True
+    if "electron"  in channel and "DATA" in sample and not "SingleElectron" in sample: check = True
+    if "muon"      in channel and "DATA" in sample and not "SingleMuon" in sample: check = True
+    if "invisible" in channel and "DATA" in sample and not "MET" in sample: check = True
     return check
 
 @timeit
@@ -149,19 +166,17 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                 global TimePerJob; global defaulTimePerJob; defaulTimePerJob = 3.
                 TimePerJob = int(ConfigSGE.attributes['TIME'].value) if ConfigSGE.hasAttribute('TIME') else defaulTimePerJob
     outdir = ConfigFile[0:ConfigFile.find("Config")]
+
     for collection in collections:
         for channel in channels:
             for syst in systematics:
+                if ("Muon" in syst and not "muon" in channel): continue
                 folders = collection+"/"+channel+"channel/"+syst+"/"
                 a = os.system("mkdir -p "+Path_SFRAME+outdir+"/"+folders)
                 path = SubmitDir+folders
                 if not os.path.exists(path):
                     os.makedirs(path)
                 for sample in samples:
-                    if ("Electron" in sample and not "electron" in channel) : continue
-                    if ("Muon" in sample and not "muon" in channel) : continue
-                    if ("MET" in sample and not "invisible" in channel) : continue
-
                     if DoControl(controls, collection+channel+syst+sample, channel, sample):
                         continue
                     filename = outdir+"_"+sample+".xml"
@@ -199,7 +214,7 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     changes.append(["<ConfigParse", 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile,syst)+'"'])
                     changes.append(["<!ENTITY", "OUTDIR", outdir , outdir+"/"+folders])
                     if "Selection" in ConfigFile: # TODO How does this need to change with the invisiblechannel?
-                        changes.append(["<!ENTITY", "SYSTEM", "Preselection/All/leptonchannel/nominal/" , "Preselection/"+folders])
+                        changes.append(["<!ENTITY", "SYSTEM", "Preselection/All/leptonchannel/nominal/" , "Preselection/"+folders.replace("MuonScale_up","nominal").replace("MuonScale_down","nominal")])
                     if "SignalRegion" in ConfigFile:
                         changes.append(["<!ENTITY", "SYSTEM", "Selection/All/leptonchannel/nominal/" , "Selection/"+folders])
                     if "Puppi" in collection:
@@ -228,4 +243,6 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     for syst_ in ["JER","JEC"]:
                         if syst_.lower() in syst.lower():
                             changes.append(["<!ENTITY", syst_.lower()+"smear_direction", '"nominal"', '"'+syst.lower().replace(syst_.lower()+"_","")+'"' ])
+                    if "MuonScale" in syst:
+                        changes.append(["<!ENTITY", "MuonScaleVariations", '"nominal"', '"'+syst.replace("MuonScale_","")+'"' ])
                     change_lines(path, filename, [el[0:2] for el in changes ], [el[2:3] for el in changes ], [el[3:4] for el in changes ])

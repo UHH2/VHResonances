@@ -22,7 +22,7 @@ def main():
     file1.Close()
     file2.Close()
 
-    hdir = "Mu50_OR_TkMu50_PtEtaBins"
+    hdir  = "Mu50_OR_TkMu50_PtEtaBins/"
     hname = "abseta_pt_ratio"
     file1 = ROOT.TFile(dir+"Muon_Trigger_SF_2016_RunBCDEF.root")
     file2 = ROOT.TFile(dir+"Muon_Trigger_SF_2016_RunGH.root")
@@ -40,11 +40,12 @@ def main():
     file1.Close()
     file2.Close()
 
-    hname = "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/abseta_pt_ratio"
+    hdir  = "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/"
+    hname = "abseta_pt_ratio"
     file1 = ROOT.TFile(dir+"Muon_Trigger_SF_2018_BeforeMuonHLTUpdate.root")
     file2 = ROOT.TFile(dir+"Muon_Trigger_SF_2018_AfterMuonHLTUpdate.root")
-    h1 = file1.Get(hname)
-    h2 = file2.Get(hname)
+    h1 = file1.Get(hdir+hname)
+    h2 = file2.Get(hdir+hname)
     Lumi1 = 8.950818835
     Lumi2 = 59.832475339 - Lumi1
     h1.Scale(Lumi1)
@@ -52,6 +53,8 @@ def main():
     h1.Add(h2)
     h1.Scale(1./(Lumi1+Lumi2))
     file_ = ROOT.TFile(dir+"Muon_Trigger_SF_2018.root", "RECREATE")
+    ROOT.gDirectory.mkdir(hdir)
+    file_.cd(hdir)
     h1.Write(hname)
     file_.Close()
     file1.Close()
