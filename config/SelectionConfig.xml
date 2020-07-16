@@ -112,12 +112,15 @@
 <!-- Data Samples -->
 <!ENTITY DATA_SingleMuon_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_2016.xml">
 <!ENTITY DATA_SingleElectron_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/DATA_SingleElectron_2016.xml">
+<!ENTITY DATA_MET_2016              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/DATA_MET_2016.xml">
 
 <!ENTITY DATA_SingleMuon_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_2017.xml">
 <!ENTITY DATA_SingleElectron_2017   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/DATA_SingleElectron_2017.xml">
+<!ENTITY DATA_MET_2017              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/DATA_MET_2017.xml">
 
 <!ENTITY DATA_SingleMuon_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_2018.xml">
 <!ENTITY DATA_SingleElectron_2018   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/DATA_SingleElectron_2018.xml">
+<!ENTITY DATA_MET_2018              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/DATA_MET_2018.xml">
 
 ]>
 
@@ -224,13 +227,15 @@
 
     <InputData Type="DATA"  Version="DATA_SingleMuon_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="DATA"  Version="DATA_SingleElectron_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_2016"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2016;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <InputData Type="DATA"  Version="DATA_SingleMuon_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="DATA"  Version="DATA_SingleElectron_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_2017"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2016;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <InputData Type="DATA"  Version="DATA_SingleMuon_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="DATA"  Version="DATA_SingleElectron_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-
+    <InputData Type="DATA"  Version="DATA_MET_2018"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2018;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <UserConfig>
       <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
