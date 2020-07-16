@@ -213,10 +213,12 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     changes.append(["<ConfigSGE", "Workdir", "workdir_"+outdir, "workdir_"+outdir+"_"+sample])
                     changes.append(["<ConfigParse", 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile,syst)+'"'])
                     changes.append(["<!ENTITY", "OUTDIR", outdir , outdir+"/"+folders])
-                    if "Selection" in ConfigFile: # TODO How does this need to change with the invisiblechannel?
+                    if "Selection" in ConfigFile:
                         changes.append(["<!ENTITY", "SYSTEM", "Preselection/All/leptonchannel/nominal/" , "Preselection/"+folders.replace("MuonScale_up","nominal").replace("MuonScale_down","nominal")])
+                        changes.append(["<!ENTITY", "SYSTEM", "Preselection/All/invisiblechannel/nominal/" , "Preselection/"+folders.replace("MuonScale_up","nominal").replace("MuonScale_down","nominal")])
                     if "SignalRegion" in ConfigFile:
                         changes.append(["<!ENTITY", "SYSTEM", "Selection/All/leptonchannel/nominal/" , "Selection/"+folders])
+                        changes.append(["<!ENTITY", "SYSTEM", "Selection/All/invisiblechannel/nominal/" , "Selection/"+folders]) # Probably like this
                     if "Puppi" in collection:
                         changes.append(["<!ENTITY", "isCHS",    '"true"', '"false"'])
                         changes.append(["<!ENTITY", "isHOTVR",  '"true"', '"false"'])
