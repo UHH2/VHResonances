@@ -218,7 +218,7 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                         changes.append(["<!ENTITY", "SYSTEM", "Preselection/All/invisiblechannel/nominal/" , "Preselection/"+folders.replace("MuonScale_up","nominal").replace("MuonScale_down","nominal")])
                     if "SignalRegion" in ConfigFile:
                         changes.append(["<!ENTITY", "SYSTEM", "Selection/All/leptonchannel/nominal/" , "Selection/"+folders])
-                        changes.append(["<!ENTITY", "SYSTEM", "Selection/All/invisiblechannel/nominal/" , "Selection/"+folders]) # Probably like this
+                        changes.append(["<!ENTITY", "SYSTEM", "Selection/All/invisiblechannel/nominal/" , "Selection/"+folders])
                     if "Puppi" in collection:
                         changes.append(["<!ENTITY", "isCHS",    '"true"', '"false"'])
                         changes.append(["<!ENTITY", "isHOTVR",  '"true"', '"false"'])
