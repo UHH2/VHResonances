@@ -21,12 +21,39 @@
   - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2017
   - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2018
 
+- Reco:
+  - A conservative systematic is set for PT > 300 GeV. It is recommended to add systematic uncertainties of 0.5% (PT < 300 GeV) or 1% (PT > 300 GeV).
+  - Same for 2016, 2017 and 2018
+  - More details here https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonReferenceSelectionAndCalibrationsRun2#Special_systematic_uncertainties
+
+- Tracking:
+  - An additional P-dependent systematic uncertainty to account for reconstruction with HighPt ID is used
+  - Same for 2016, 2017 and 2018
+  - More details here https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonReferenceSelectionAndCalibrationsRun2#Special_systematic_uncertainties
 
 **Electron SFs**:
 - IDs:
   - 2016: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations (Fall17v2)
   - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations (Fall17v2)
   - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations (Fall17v2)
+
+- Trigger:
+  - 2016: Relative to HLT_Ele27_WPTight_Gsf OR HLT_Photon175 OR HLT_Ele115_CaloIdVT_GsfTrkIdT
+  - 2017: Relative to HLT_Ele35_WPTight_Gsf OR HLT_Photon200 OR HLT_Ele115_CaloIdVT_GsfTrkIdT
+  - 2018: Relative to HLT_Ele32_WPTight_Gsf OR HLT_Photon200 OR HLT_Ele115_CaloIdVT_GsfTrkIdT
+  - Take from Alberto's Analysis. Corresponding to what stated in https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgHLTScaleFactorMeasurements.
+  - Relative to HEEPV70ID.
+
+- Reco:
+  - 2016: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations
+  - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations
+  - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations
+
+- HLT:
+  - 1% unc applyed for 2017 as described in https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgammaRunIIRecommendations
+  - No effect on 2016 and 2018
+
+
 
 
 

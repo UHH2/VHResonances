@@ -120,6 +120,7 @@ class ModuleRunner(ModuleRunnerBase):
         if "electron"  in channel and "DATA" in sample and not "SingleElectron" in sample: check = True
         if "muon"      in channel and "DATA" in sample and not "SingleMuon" in sample: check = True
         if "invisible" in channel and "DATA" in sample and not "MET" in sample: check = True
+        if not "muon"  in channel and "MuonScale" in control_: check = True
         return check
 
     def DeleteWorkdirs(self):
