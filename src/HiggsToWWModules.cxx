@@ -275,13 +275,13 @@ bool BlindData::process(Event & event){
 
 
 /*
-#  ######   ######     ###    ##       ########    ########    ###     ######  ########  #######  ########   ######
-# ##    ## ##    ##   ## ##   ##       ##          ##         ## ##   ##    ##    ##    ##     ## ##     ## ##    ##
-# ##       ##        ##   ##  ##       ##          ##        ##   ##  ##          ##    ##     ## ##     ## ##
-#  ######  ##       ##     ## ##       ######      ######   ##     ## ##          ##    ##     ## ########   ######
-#       ## ##       ######### ##       ##          ##       ######### ##          ##    ##     ## ##   ##         ##
-# ##    ## ##    ## ##     ## ##       ##          ##       ##     ## ##    ##    ##    ##     ## ##    ##  ##    ##
-#  ######   ######  ##     ## ######## ########    ##       ##     ##  ######     ##     #######  ##     ##  ######
+&  &&&&&&   &&&&&&     &&#    &&       &&&&&&&&    &&&&&&&&    &&#     &&&&&&  &&&&&&&&  &&&&&&#  &&&&&&&&   &&&&&&
+& &&    && &&    &&   && &&   &&       &&          &&         && &&   &&    &&    &&    &&     && &&     && &&    &&
+& &&       &&        &&   &&  &&       &&          &&        &&   &&  &&          &&    &&     && &&     && &&
+&  &&&&&&  &&       &&     && &&       &&&&&&      &&&&&&   &&     && &&          &&    &&     && &&&&&&&&   &&&&&&
+&       && &&       &&&&&&&&# &&       &&          &&       &&&&&&&&# &&          &&    &&     && &&   &&         &&
+& &&    && &&    && &&     && &&       &&          &&       &&     && &&    &&    &&    &&     && &&    &&  &&    &&
+&  &&&&&&   &&&&&&  &&     && &&&&&&&& &&&&&&&&    &&       &&     &&  &&&&&&     &&     &&&&&&#  &&     &&  &&&&&&
 */
 
 // Generic Class for Applying SFs
@@ -306,13 +306,13 @@ double ScaleFactorsFromHistos::Evaluator(std::string hname, double var) {
 
 
 /*
-# ######## ##     ## ########  #######  ########  ##    ##     ######  ########
-#    ##    ##     ## ##       ##     ## ##     ##  ##  ##     ##    ## ##
-#    ##    ##     ## ##       ##     ## ##     ##   ####      ##       ##
-#    ##    ######### ######   ##     ## ########     ##        ######  ######
-#    ##    ##     ## ##       ##     ## ##   ##      ##             ## ##
-#    ##    ##     ## ##       ##     ## ##    ##     ##       ##    ## ##
-#    ##    ##     ## ########  #######  ##     ##    ##        ######  ##
+& &&&&&&&& &&     && &&&&&&&&  &&&&&&#  &&&&&&&&  &&    &&     &&&&&&  &&&&&&&&
+&    &&    &&     && &&       &&     && &&     &&  &&  &&     &&    && &&
+&    &&    &&     && &&       &&     && &&     &&   &&&&      &&       &&
+&    &&    &&&&&&&&# &&&&&&   &&     && &&&&&&&&     &&        &&&&&&  &&&&&&
+&    &&    &&     && &&       &&     && &&   &&      &&             && &&
+&    &&    &&     && &&       &&     && &&    &&     &&       &&    && &&
+&    &&    &&     && &&&&&&&&  &&&&&&#  &&     &&    &&        &&&&&&  &&
 */
 
 
@@ -326,8 +326,8 @@ NLOCorrections::NLOCorrections(uhh2::Context& ctx) {
 
   //TODO it's arbitrary.
   is_Wjets  = FindInString("MC_WJets",dataset_version);
-  is_DY     = FindInString("MC_DY",dataset_version);
-  is_Znn    = FindInString("MC_Znunu",dataset_version);
+  is_Znn    = FindInString("MC_DY_inv",dataset_version);
+  is_DY     = FindInString("MC_DY",dataset_version) && !is_Znn;
   is_Zjets  = is_DY || is_Znn;
 
   std::string folder_ = ctx.get("NLOCorrections"); //TODO better name
@@ -396,15 +396,6 @@ bool NLOCorrections::process(uhh2::Event& event){
   return true;
 }
 
-/*
-# ##     ##    ###    ##    ##    ###     ######   ######## ########
-# ###   ###   ## ##   ###   ##   ## ##   ##    ##  ##       ##     ##
-# #### ####  ##   ##  ####  ##  ##   ##  ##        ##       ##     ##
-# ## ### ## ##     ## ## ## ## ##     ## ##   #### ######   ########
-# ##     ## ######### ##  #### ######### ##    ##  ##       ##   ##
-# ##     ## ##     ## ##   ### ##     ## ##    ##  ##       ##    ##
-# ##     ## ##     ## ##    ## ##     ##  ######   ######## ##     ##
-*/
 
 /*
 & &&     &&    &&&    &&    &&    &&&     &&&&&&   &&&&&&&& &&&&&&&&
@@ -425,12 +416,12 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
   muonchannel = string2bool(ctx.get("muonchannel"));
   electronchannel = string2bool(ctx.get("electronchannel"));
 
-  double sys = 0.;
   // https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonReferenceSelectionAndCalibrationsRun2#Special_systematic_uncertainties
   for (auto& sf : ScaleFactors_map.at(year)) {
+    double sys = 0.;
+    std::string weight_postfix = "";
     if (muonchannel && sf.first.find("Muon") != std::string::npos ) {
       std::string fname = "VHResonances/Analysis/ScaleFactors/Muons/"+sf.second.first+".root";
-      std::string weight_postfix = "";
       if (sf.first.find("ID") != std::string::npos || sf.first.find("Tracking") != std::string::npos){
         sys = 0.;
         weight_postfix = sf.first.find("ID") != std::string::npos ? "id":"tracking";
@@ -445,7 +436,18 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
     }
     if (electronchannel && sf.first.find("Electron") != std::string::npos ) {
       std::string fname = "VHResonances/Analysis/ScaleFactors/Electrons/"+sf.second.first+".root";
-      SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys, "id"));// No Flat uncertainty so far
+      if (sf.first.find("ID") != std::string::npos){
+        sys = 0.;
+        weight_postfix = "id";
+      } else if (sf.first.find("Trigger") != std::string::npos) {
+        sys = 0.;
+        weight_postfix = "trigger";
+      } else if (sf.first.find("Reconstruction") != std::string::npos) {
+        sys = 0.;
+        weight_postfix = "reco";
+      } else throw invalid_argument("In ScaleFactorsManager.cxx: No implementation for "+sf.first);
+      if (FindInString("2017",year)) sys += 1.0;
+      SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys, weight_postfix));
     }
   }
 
@@ -469,7 +471,11 @@ bool ScaleFactorsManager::process(uhh2::Event& event){
       SFs_muo["Muon_Reconstruction"]->process_onemuon(event,muid);
     }
   }
-  if (electronchannel) SFs_ele["Electron_LooseID"]->process(event);
+  if (electronchannel) {
+    SFs_ele["Electron_LooseID"]->process(event);
+    SFs_ele["Electron_Reconstruction"]->process(event);
+    SFs_ele["Electron_Trigger"]->process(event);
+  }
 
   return true;
 }
