@@ -29,9 +29,10 @@ class VariablesBase(GenericPath):
         self.Channels           = ["muon", "electron", "invisible"]
         self.Systematics        = ["nominal", "JER_up", "JER_down", "JEC_up", "JEC_down", "MuonScale_up", "MuonScale_down"]
         self.Systematics_Scale  = ["PU_up", "PU_down"]
-        self.signal             = "MC_ZprimeToZH"
+        self.Signal             = "MC_ZprimeToZH"
+        self.MainBkg            = "MC_DY"
         self.MassPoints         = [600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]
-        self.SignalSamples      = [self.signal+mode+"_M"+str(mass) for mass in self.MassPoints for mode in ["","_inv"]]
+        self.SignalSamples      = [self.Signal+mode+"_M"+str(mass) for mass in self.MassPoints for mode in ["","_inv"]]
         self.RunPeriods_Dict    = {"2016": ["B", "C", "D", "E", "F", "G", "H"],
                                    "2017": ["B", "C", "D", "E", "F"],
                                    "2018": ["A", "B", "C", "D"]
@@ -52,7 +53,7 @@ class VariablesBase(GenericPath):
             "DATA_SingleElectron"   : ["DATA_SingleElectron_Run"+str(run) for run in self.AllRunPeriods],
             "DATA_SingleMuon"       : ["DATA_SingleMuon_Run"+str(run) for run in self.AllRunPeriods],
             "DATA_MET"              : ["DATA_MET_Run"+str(run) for run in self.AllRunPeriods],
-            self.signal             : self.SignalSamples,
+            self.Signal             : self.SignalSamples,
             }
 
         self.ExtractVariableFromConstants()
@@ -99,8 +100,8 @@ class VariablesBase(GenericPath):
                 if "DATA" in subsample: loop_over = [subsample+"_Run"+str(run) for run in self.RunPeriods_Dict[year]]
                 self.Samples_Year_Dict.setdefault(year, {}).setdefault(subsample+"_"+year, [el+"_"+year for el in sorted(loop_over)] )
                 self.Processes_Year_Dict.setdefault(year, []).append(subsample+"_"+year)
-            self.Processes_Year_Dict[year].remove(self.signal+"_"+year)
-            self.Processes_Year_Dict[year].extend(self.Samples_Year_Dict[year][self.signal+"_"+year])
+            self.Processes_Year_Dict[year].remove(self.Signal+"_"+year)
+            self.Processes_Year_Dict[year].extend(self.Samples_Year_Dict[year][self.Signal+"_"+year])
             self.SubSamples_Year_Dict.setdefault(year, sorted(list(dict.fromkeys([el for list_ in self.Samples_Year_Dict[year].values() for el in list_]))))
 
         # List of all sub sample for all years and all processes
