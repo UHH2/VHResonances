@@ -181,7 +181,9 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
   MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": "");
   for (auto& t : Trigger_run_validity.at(MS["year"])) {
     if (MB["muonchannel"] && t.first.find("Mu")==std::string::npos ) continue;
+    if (MB["muonchannel"] &&  t.first.find("NoMu")!=std::string::npos ) continue;
     if (MB["electronchannel"] && t.first.find("Ele")==std::string::npos ) continue;
+    if (MB["invisiblechannel"] && t.first.find("MET")==std::string::npos ) continue;
     Trigger_selection[t.first].reset(new TriggerSelection( t.first ));
   }
 
