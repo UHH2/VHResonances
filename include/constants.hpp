@@ -56,13 +56,13 @@ Trigger_run_validity = {
     { "HLT_TkMu50_v*",                    std::pair(274954, 284044) },
     { "HLT_Ele27_WPTight_Gsf_v*",         std::pair(272760, 284044) }, // 273158
     { "HLT_Ele115_CaloIdVT_GsfTrkIdT_v*", std::pair(272760, 284044) }, // 273158, 284044
-    { "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v*", std::pair(274954, 284044) },                    // most restrivtive numbers
-    { "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(274954, 284044) },                    // most restrivtive numbers
-    { "HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(274954, 284044) }, // most restrivtive numbers
-    { "HLT_PFMET110_PFMHT110_IDTight_v*",         std::pair(274954, 284044) },                    // most restrivtive numbers
-    { "HLT_PFMET120_PFMHT120_IDTight_v*",         std::pair(274954, 284044) },                    // most restrivtive numbers
-    { "HLT_PFMET170_NotCleaned_v*",               std::pair(274954, 284044) },                    // most restrivtive numbers
-    { "HLT_PFMET170_HBHECleaned*",                std::pair(274954, 284044) },                    // most restrivtive numbers
+    { "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v*", std::pair(274954, 284044) },                    // most restrictive numbers
+    { "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(274954, 284044) },                    // most restrictive numbers
+    { "HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(274954, 284044) }, // most restrictive numbers
+    { "HLT_PFMET110_PFMHT110_IDTight_v*",         std::pair(274954, 284044) },                    // most restrictive numbers
+    { "HLT_PFMET120_PFMHT120_IDTight_v*",         std::pair(274954, 284044) },                    // most restrictive numbers
+    { "HLT_PFMET170_NotCleaned_v*",               std::pair(274954, 284044) },                    // most restrictive numbers
+    { "HLT_PFMET170_HBHECleaned*",                std::pair(274954, 284044) },                    // most restrictive numbers
     { "HLT_Photon175_v*",                         std::pair(272760, 284044) }, // 273158, 284044
   }},
   { "2017", {
@@ -71,23 +71,23 @@ Trigger_run_validity = {
     { "HLT_TkMu100_v*",                   std::pair(299368, 306460) }, // 306462
     { "HLT_Ele35_WPTight_Gsf_v*",         std::pair(296070, 306460)}, // 297050, 306460
     { "HLT_Ele115_CaloIdVT_GsfTrkIdT_v*", std::pair(299368, 306460)},
-    { "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v*", std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight_v*", std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight_v*", std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(299368, 306460) }, // most restrivtive numbers
-    { "HLT_PFMET110_PFMHT110_IDTight_v*",         std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMET120_PFMHT120_IDTight_v*",         std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMET130_PFMHT130_IDTight_v*",         std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMET140_PFMHT140_IDTight_v*",         std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMETTypeOne110_PFMHT110_IDTight_v*",  std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMETTypeOne120_PFMHT120_IDTight_v*",  std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMETTypeOne130_PFMHT130_IDTight_v*",  std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMETTypeOne140_PFMHT140_IDTight_v*",  std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMET200_NotCleaned_v*",               std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMET200_HBHECleaned_v*",              std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMET200_HBHE_BeamHaloCleaned_v*",     std::pair(299368, 306460) },                    // most restrivtive numbers
-    { "HLT_PFMET250_HBHECleaned*",                std::pair(299368, 306460) },                    // most restrivtive numbers
+    { "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v*", std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight_v*", std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight_v*", std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(299368, 306460) }, // most restrictive numbers
+    { "HLT_PFMET110_PFMHT110_IDTight_v*",         std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMET120_PFMHT120_IDTight_v*",         std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMET130_PFMHT130_IDTight_v*",         std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMET140_PFMHT140_IDTight_v*",         std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMETTypeOne110_PFMHT110_IDTight_v*",  std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMETTypeOne120_PFMHT120_IDTight_v*",  std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMETTypeOne130_PFMHT130_IDTight_v*",  std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMETTypeOne140_PFMHT140_IDTight_v*",  std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMET200_NotCleaned_v*",               std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMET200_HBHECleaned_v*",              std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMET200_HBHE_BeamHaloCleaned_v*",     std::pair(299368, 306460) },                    // most restrictive numbers
+    { "HLT_PFMET250_HBHECleaned*",                std::pair(299368, 306460) },                    // most restrictive numbers
     { "HLT_Photon200_v*",                         std::pair(299368, 306460) }, // 273158, 284044
   }},
   { "2018", {
@@ -96,23 +96,23 @@ Trigger_run_validity = {
     { "HLT_TkMu100_v*",                   std::pair(315252, 325175) }, // 315252, 325273
     { "HLT_Ele32_WPTight_Gsf_v*",         std::pair(315252, 325175) }, // 315257, 325172
     { "HLT_Ele115_CaloIdVT_GsfTrkIdT_v*", std::pair(315252, 325175)}, // 315257,325172
-    { "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v*", std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight_v*", std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight_v*", std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(315252, 325175) }, // most restrivtive numbers
-    { "HLT_PFMET110_PFMHT110_IDTight_v*",         std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMET120_PFMHT120_IDTight_v*",         std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMET130_PFMHT130_IDTight_v*",         std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMET140_PFMHT140_IDTight_v*",         std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMETTypeOne110_PFMHT110_IDTight_v*",  std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMETTypeOne120_PFMHT120_IDTight_v*",  std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMETTypeOne130_PFMHT130_IDTight_v*",  std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMETTypeOne140_PFMHT140_IDTight_v*",  std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMET200_NotCleaned_v*",               std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMET200_HBHECleaned_v*",              std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMET200_HBHE_BeamHaloCleaned_v*",     std::pair(315252, 325175) },                    // most restrivtive numbers
-    { "HLT_PFMET250_HBHECleaned*",                std::pair(315252, 325175) },                    // most restrivtive numbers
+    { "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v*", std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight_v*", std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight_v*", std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", std::pair(315252, 325175) }, // most restrictive numbers
+    { "HLT_PFMET110_PFMHT110_IDTight_v*",         std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMET120_PFMHT120_IDTight_v*",         std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMET130_PFMHT130_IDTight_v*",         std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMET140_PFMHT140_IDTight_v*",         std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMETTypeOne110_PFMHT110_IDTight_v*",  std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMETTypeOne120_PFMHT120_IDTight_v*",  std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMETTypeOne130_PFMHT130_IDTight_v*",  std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMETTypeOne140_PFMHT140_IDTight_v*",  std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMET200_NotCleaned_v*",               std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMET200_HBHECleaned_v*",              std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMET200_HBHE_BeamHaloCleaned_v*",     std::pair(315252, 325175) },                    // most restrictive numbers
+    { "HLT_PFMET250_HBHECleaned*",                std::pair(315252, 325175) },                    // most restrictive numbers
     { "HLT_Photon200_v*",                 std::pair(315252, 325175) }, // 273158, 325175
   }},
 };
