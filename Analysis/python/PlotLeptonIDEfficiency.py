@@ -1,9 +1,9 @@
 from Utils import *
 
-import tdrstyle_all
-tdrstyle_all.writeExtraText = True
-tdrstyle_all.extraText  = "Simulation"
-tdrstyle_all.extraText2 = "Work in progress"
+import tdrstyle_all as TDR
+TDR.writeExtraText = True
+TDR.extraText  = "Simulation"
+TDR.extraText2 = "Work in progress"
 
 '''
 Module to study LeptonID Efficiency
@@ -46,10 +46,11 @@ colors = {"ele_ID_kincut":                  (ROOT.kBlack,ROOT.kDot),
 
 }
 
-class PlotLeptonIDEfficiency(ModuleRunnerBase):
+class PlotLeptonIDEfficiency(VariablesBase):
     def __init__(self,year="2016", collection="Puppi", channel="muonchannel", isDR=True):
-        ModuleRunnerBase.__init__(self,year if year!="RunII" else "2018")
-        if year=="RunII" : self.year = year
+        VariablesBase.__init__(self)
+        self.year       = year
+        TDR.lumi_13TeV  = str(round(float(self.lumi_map[self.year]["lumi_fb"]),1))+" fb^{-1}"
         self.outdir     = self.Path_ANALYSIS+"Analysis/OtherPlots/LeptonID/"
         self.RefID      = "ID_kincut"
         self.HistType   = "LeptonID"
@@ -116,7 +117,6 @@ class PlotLeptonIDEfficiency(ModuleRunnerBase):
                 self.histos[sample+ID].Divide(h_den)
 
     def ResetCanvas(self, name):
-        tdrstyle_all.lumi_13TeV  = str(self.lumi_fb)+" fb^{-1}"
         self.canv = tdrCanvas(name, self.Xaxis_min, self.Xaxis_max, self.Yaxis_min, self.Yaxis_max, self.nameXaxis,self.nameYaxis)
         self.leg = tdrLeg(0.40,0.70,0.95,0.89, 0.025, 42, ROOT.kBlack)
         self.leg.SetNColumns(2 if "simple" in name else 3)
@@ -162,14 +162,13 @@ def main():
     channels = ["muonchannel", "electronchannel"]
     # years = ["2016"]
     # channels = ["muonchannel"]
-    for year in years:
-        for channel in channels:
-            for isDR in [True,False]:
-            # for isDR in [True]:
-                PlotSyst = PlotLeptonIDEfficiency(year=year, channel=channel, isDR=isDR)
-                PlotSyst.LoadHistos()
-                PlotSyst.NormHistos()
-                PlotSyst.PlotHistos()
+
+    for year,channel,isDR in list(itertools.product(years, channels, [True,False])):
+    # for year,channel,isDR in list(itertools.product(years, channels, [True])):
+        PlotSyst = PlotLeptonIDEfficiency(year=year, channel=channel, isDR=isDR)
+        PlotSyst.LoadHistos()
+        PlotSyst.NormHistos()
+        PlotSyst.PlotHistos()
 
 
 if __name__ == '__main__':
