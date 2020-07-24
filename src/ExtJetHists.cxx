@@ -195,6 +195,8 @@ void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuf
   book_TH1F("deltaR_ele2"+histSuffix,"#Delta R(ele2,"+axisSuffix+")",40, 0, 8.0);
   book_TH1F("deltaphi_ele2"+histSuffix,"#Delta#phi(ele2,"+axisSuffix+")",50,0,M_PI);
   book_TH1F("deltaphi_MET"+histSuffix,"#Delta#phi(E_{T}^{miss},"+axisSuffix+")",50,0,M_PI);
+  book_TH1F("ptMET_ptJet_sine"+histSuffix,"2 p_{T}(MET)*p_{T}(jet)*sin(#Delta(#phi)/(p_{T}(MET) + p_{T}(Jet))), scalar, ("+axisSuffix+")",40, 0, 8.0);
+  book_TH1F("ptMET_ptJet_sine_vect"+histSuffix,"2 p_{T}(MET)*p_{T}(jet)*sin(#Delta(#phi)/(p_{T}(MET) + p_{T}(Jet))), vectorial, ("+axisSuffix+")",40, 0, 8.0);
   book_TH1F("jetArea"+histSuffix,"jetArea^{"+axisSuffix+"}",150,0,15);
   book_TH1F("jetArea_pt200_300"+histSuffix,"jetArea^{"+axisSuffix+",pt(200,300)}",150,0,15);
   book_TH1F("jetArea_pt300_400"+histSuffix,"jetArea^{"+axisSuffix+",pt(300,400)}",150,0,15);
@@ -301,6 +303,8 @@ void ExtJetHists::fill_jetHist<Jet>(const Event & event, const string& histSuffi
     }
   }
   fill_H1("deltaphi_MET"+histSuffix, deltaPhi(jet, event.met->v4()), weight);
+  fill_H1("ptMET_ptJet_sine"+histSuffix, 2*event.met->pt()*jet.pt()*sin(deltaPhi(jet,event.met->v4()))/(event.met->pt()+jet.pt()),weight);
+  fill_H1("ptMET_ptJet_sine_vect"+histSuffix, 2*event.met->pt()*jet.pt()*sin(deltaPhi(jet,event.met->v4()))/((event.met->v4()+jet.v4()).pt()),weight);
   fill_H1("jetArea"+histSuffix, jet.jetArea(), weight);
   if (jet.pt()>200 || jet.pt()<300) fill_H1("jetArea_pt200_300"+histSuffix,jet.jetArea(), weight);
   if (jet.pt()>300 || jet.pt()<400) fill_H1("jetArea_pt300_400"+histSuffix,jet.jetArea(), weight);
