@@ -91,6 +91,7 @@ class ModuleRunner(ModuleRunnerBase):
         self.Collections = Collections if Collections else self.Collections
         self.Channels = Channels if Channels else self.Channels
         self.Systematics = Systematics if Systematics else self.Systematics
+        # TODO We run MuonScale Systematics later. Think if we want to do it earlier
         if "Preselection" in self.Module:
             self.Systematics = filter(lambda x: not "Muon" in x, self.Systematics)
         if "Test" in self.Module or "GenericCleaning" in self.Module or "VariableRStudies" in self.Module:
@@ -113,7 +114,7 @@ class ModuleRunner(ModuleRunnerBase):
             check = True
         if "invisible" in channel and "HT" in sample and "2016" in sample:
             check = True
-        if "invisible" in channel and self.signal in sample and not "_inv" in sample:
+        if "invisible" in channel and self.Signal in sample and not "_inv" in sample:
             check = True
         if not "invisible" in channel and "_inv" in sample:
             check = True
@@ -155,11 +156,11 @@ class ModuleRunner(ModuleRunnerBase):
                 continue
             mode = "MC" if "MC" in sample else "DATA"
             commonpath = self.ModuleStorage+"/"+middlePath
-            filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_Dict[sample] if not self.DoControl(collection+channel+syst+name_, channel, name_)]
+            filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.Signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_Dict[sample] if not self.DoControl(collection+channel+syst+name_, channel, name_)]
             newFile    = commonpath+self.PrefixrootFile+mode+"."+sample+extraText
             newFile   += "_merge.root" if mergeCategory else ".root"
             if mergeCategory:
-                if len(filespath)<=1 or self.signal in filespath : continue
+                if len(filespath)<=1 or self.Signal in filespath : continue
                 if forPlotting:
                     list_processes.append(["hadd", "-f", "-T", newFile]+filespath)
                 else:
@@ -191,37 +192,30 @@ class ModuleRunner(ModuleRunnerBase):
 
     @timeit
     def CreateXml(self):
-        for collection, channel, syst,sample_ in self.SmartLoop(self.Processes_Dict):
+        for collection, channel, syst,sample in self.SmartLoop(self.Processes_Dict):
             middlePath = collection+"/"+channel+"channel/"+syst+"/"
-            if self.DoControl(collection+channel+sample_, channel, sample_):
+            if self.DoControl(collection+channel+syst+sample, channel, sample):
                 continue
-            decays = [""]
-            # if self.Module == "SignalRegion" and self.signal in sample_:
-            #     decays = ["ToWW","Tobb","_extra"]
-            for decay in decays:
-                sample = sample_.replace(self.signal,self.signal+decay)
-                # print sample
-                mode = "MC" if "MC" in sample else "DATA"
-                filePrefix = self.PrefixrootFile+mode+"."
-                commonpath = self.ModuleStorage+"/"+middlePath
-                out = open(commonpath+sample+".xml", 'w')
-                # print commonpath+sample+".xml"
-                nComment = 0
-                for dir in self.Samples_Dict[sample] if not self.signal in sample and self.Samples != self.Processes_Dict else [sample]:
-                    print "Search in", commonpath+"workdir_"+self.Module+"_"+dir+"/*root"
-                    for f_ in glob(commonpath+"workdir_"+self.Module+"_"+dir+"/*root"):
-                        try:
-                            ntuple = ROOT.TFile(str(f_))
-                            if ntuple.IsZombie(): sys.stderr.write("TFile::Init:0: RuntimeWarning: file "+f_+" probably not closed, trying to recover")
-                            AnalysisTree = ntuple.Get("AnalysisTree")
-                            isToWrite =  AnalysisTree.GetEntriesFast() > 0
-                            ntuple.Close()
-                        except Exception as e:
-                            isToWrite = False
-                        if not isToWrite: nComment += 1
-                        extraText1 = "" if isToWrite else "<!-- "
-                        extraText2 = "" if isToWrite else " -->"
-                        out.write(extraText1+'<In FileName="'+f_+'" Lumi="0.0"/>'+extraText2+'\n')
+            mode = "MC" if "MC" in sample else "DATA"
+            filePrefix = self.PrefixrootFile+mode+"."
+            commonpath = self.ModuleStorage+"/"+middlePath
+            out = open(commonpath+sample+".xml", 'w')
+            nComment = 0
+            for dir in self.Samples_Dict[sample] if not self.Signal in sample and self.Samples != self.Processes_Dict else [sample]:
+                print "Search in", commonpath+"workdir_"+self.Module+"_"+dir+"/*root"
+                for f_ in glob(commonpath+"workdir_"+self.Module+"_"+dir+"/*root"):
+                    try:
+                        ntuple = ROOT.TFile(str(f_))
+                        if ntuple.IsZombie(): sys.stderr.write("TFile::Init:0: RuntimeWarning: file "+f_+" probably not closed, trying to recover")
+                        AnalysisTree = ntuple.Get("AnalysisTree")
+                        isToWrite =  AnalysisTree.GetEntriesFast() > 0
+                        ntuple.Close()
+                    except Exception as e:
+                        isToWrite = False
+                    if not isToWrite: nComment += 1
+                    extraText1 = "" if isToWrite else "<!-- "
+                    extraText2 = "" if isToWrite else " -->"
+                    out.write(extraText1+'<In FileName="'+f_+'" Lumi="0.0"/>'+extraText2+'\n')
             out.write('<!-- File Commented: '+str(nComment)+' -->\n')
             out.close()
 
@@ -230,7 +224,7 @@ class ModuleRunner(ModuleRunnerBase):
         cwd = os.getcwd()
         os.chdir(self.Path_SPlotter)
         for collection, channel, syst in self.SmartLoop():
-            if self.DoControl(self.year+collection+channel+syst, channel, ""):
+            if self.DoControl(self.year+collection+syst+channel, channel, ""):
                 continue
             a = os.system("mkdir -p "+self.Path_STORAGE+self.year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/Plots")
             process = subprocess.Popen("Plots -f Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+self.year+".steer", shell=True)
@@ -284,11 +278,10 @@ class ModuleRunner(ModuleRunnerBase):
                 self.CreateXml()
                 sys.stderr = orig_stderr
         for collection, channel, syst in self.SmartLoop():
-            for sample_ in self.Processes_Dict:
+            for sample in self.Processes_Dict:
                 middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                if self.DoControl(collection+channel+sample_, channel, sample_):
+                if self.DoControl(collection+channel+syst+sample, channel, sample):
                     continue
-                sample = sample_.replace(self.signal,self.signal)
                 mode = "MC" if "MC" in sample else "DATA"
                 filePrefix = self.PrefixrootFile+mode+"."
                 commonpath = self.ModuleStorage+"/"+middlePath
@@ -308,10 +301,9 @@ class ModuleRunner(ModuleRunnerBase):
                         else: print "Unexpected error:", xml
                         if ncomment>0 and ncomment==(len(lines)-1):
                             print "Found files ",ncomment,"out of ",len(lines)-1," in:", xml
-            for sample_ in self.SubSamples_Dict:
-                if self.DoControl(collection+channel+sample_, channel, sample_):
+            for sample in self.SubSamples_Dict:
+                if self.DoControl(collection+channel+syst+sample, channel, sample):
                     continue
-                sample = sample_.replace(self.signal,self.signal)
                 mode = "MC" if "MC" in sample else "DATA"
                 filePrefix = self.PrefixrootFile+mode+"."
                 path = self.Path_ANALYSIS+"/config/SubmittedJobs/"+self.year+"/"+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"
@@ -327,7 +319,6 @@ class ModuleRunner(ModuleRunnerBase):
             for l in f_err.readlines():
                 if "probably not closed, trying to recover" in l: mylist.append(l.split()[3])
         print len(mylist)
-        # if not check: os.system("rm -fr "+errname)
         self.ReRunList(mylist)
 
     @timeit
@@ -374,7 +365,7 @@ class ModuleRunner(ModuleRunnerBase):
             allmax = 0
             for collection, channel, syst,sample in self.SmartLoop(self.Samples):
                 middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                if self.DoControl(collection+channel+sample, channel, sample):
+                if self.DoControl(collection+channel+syst+sample, channel, sample):
                     continue
                 path = self.SubmitDir+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"+sample+check
                 if "NF" in check: path = self.SubmitDir+self.Module+"/"+middlePath+"/workdir_"+self.Module+"_"+sample+"/"+sample+"*"
