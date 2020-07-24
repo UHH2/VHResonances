@@ -1,12 +1,26 @@
 from Utils import *
 
-import tdrstyle_all
-tdrstyle_all.writeExtraText = False
-tdrstyle_all.extraText = ""
+import tdrstyle_all as TDR
+TDR.writeExtraText = False
 
+'''
+Module for visualization of NLO Corrections
 
-# qcd_ewk = QCD * EWK
-# qcd_ewk = QCD * EWK
+- EWK corrections are available for W+jets, Z+jets, gamma+jets samples in the "merged_kfactors_*.root" files under the name "kfactor_monojet_ewk"
+- QCD NLO corrections are available for W+jets, Z+jets, gamma+jets in the same files under the name "kfactor_monojet_qcd". Those are calculated for 2016 samples.
+- 2017 version of QCD NLO corrections are available for Z+jets (ll + nunu cases) in the "kfac_*_filter" files.
+- QCD NNLO corrections are in the "lindert_qcd_nnlo_sf" file with the following convention:
+    - eej -> Z(ll) +jets
+    - vvj -> Z(nunu) +jets
+    - evj -> W +jets
+    - aj -> gamma +jets
+- QCD NNLO corrections need to be applied on top of EWK corrections for NLO samples and on top of EWK + QCD NLO corrections for LO samples.
+- According to Andreas "I do not apply the NNLO corrections. I have not seen any evidence that they actually improve data/MC agreement. I do not trust them."
+- For W+Jets @LO for 2017 and 2018: wjet_dress_monojet or wjet_dress_inclusive in "2017_gen_v_pt_qcd_sf.root"
+- In the "merged_kfactors_*.root" file, for Z and W + jets, the qcd_ewk histograms are also present: qcd_ewk = QCD * EWK
+- taken from https://github.com/bu-cms/bucoffea/tree/master/bucoffea/data/sf/theory
+- relative to those studies https://arxiv.org/abs/1705.04664
+'''
 
 class PlotNLOCorrections(VariablesBase):
     def __init__(self):
@@ -65,8 +79,7 @@ class PlotNLOCorrections(VariablesBase):
         file_.Close()
 
     def ResetCanvas(self, name="all"):
-        self.canv = tdrCanvas(name, self.Xaxis_min[name], self.Xaxis_max[name], self.Yaxis_min[name],
-                              self.Yaxis_max[name], self.nameXaxis, self.nameYaxis, iPeriod=0)
+        self.canv = tdrCanvas(name, self.Xaxis_min[name], self.Xaxis_max[name], self.Yaxis_min[name], self.Yaxis_max[name], self.nameXaxis, self.nameYaxis, iPeriod=0)
         self.leg = tdrLeg(0.40, 0.70, 0.95, 0.89, 0.025, 42, ROOT.kBlack)
         if "all" == name:
             self.leg.SetNColumns(2)
