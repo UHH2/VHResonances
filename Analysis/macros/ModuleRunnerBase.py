@@ -118,9 +118,9 @@ class ModuleRunnerBase(VariablesBase):
         VariablesBase.__init__(self)
         self.year = year
         self.defineDirectories()
-        self.lumi_fb  = round(float(self.lumi_map[year]["lumi_fb"]),1)
+        self.lumi_fb  = round(float(self.lumi_map[self.year]["lumi_fb"]),1)
         self.lumi_pb  = int(self.lumi_map[self.year]["lumi_pb"])
-        self.lumi_sys = round(float(self.lumi_map[year]["uncertainty"]),1)
+        self.lumi_sys = round(float(self.lumi_map[self.year]["uncertainty"]),1)
         self.Samples_Dict    = self.Samples_Year_Dict[self.year]
         self.SubSamples_Dict = self.SubSamples_Year_Dict[self.year]
         self.Processes_Dict  = self.Processes_Year_Dict[self.year]

@@ -1,12 +1,22 @@
 from Utils import *
-
-import tdrstyle_all
-tdrstyle_all.writeExtraText = True
-tdrstyle_all.extraText  = "Work in progress"
+from array import array
+import tdrstyle_all as TDR
+TDR.writeExtraText = True
+TDR.extraText  = "Simulation"
+TDR.extraText2 = "Work in progress"
 
 ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/common/include/JetHists.h"')
 
-from array import array
+
+'''
+Module to study BTag Efficiencies
+- Need the Preselection output as input
+- Needed for Selection module
+- SFs stored as default in ScaleFactors folder. Be carefull since they would override the previous version.
+- Runs automatically for all years and channels.
+- Default collection is Puppi.
+'''
+#TODO invisible channel not implemented
 
 colors = {"2016":       ROOT.kGreen+1,
           "2017":       ROOT.kRed+1,
@@ -17,10 +27,10 @@ colors = {"2016":       ROOT.kGreen+1,
 
 }
 
-class PlotBTagEfficiencies(ModuleRunnerBase):
+class PlotBTagEfficiencies(VariablesBase):
     def __init__(self):
         VariablesBase.__init__(self)
-        tdrstyle_all.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
+        TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
         self.outdir     = self.Path_ANALYSIS+"Analysis/OtherPlots/BTag/"
         self.nameXaxis  = "p_{T} [GeV]"
         self.nameYaxis  = "Efficiency"
@@ -41,35 +51,31 @@ class PlotBTagEfficiencies(ModuleRunnerBase):
 
     def LoadHistos(self):
         for year in self.years:
+            # Load MC_DY histos
             for channel in self.Channels:
+                if "invisible" in channel: continue
                 filename = self.Path_STORAGE+year+"/Preselection/Puppi/"+channel+"channel/nominal/uhh2.AnalysisModuleRunner.MC.MC_DY_"+year+"_noTree_merge.root"
                 file_ = ROOT.TFile(filename)
-                for cut in self.Cuts:
-                    for flavor in self.Flavours:
-                        for mode in self.Modes:
-                            hname = year+channel+cut+flavor+mode
-                            self.histos[hname] = file_.Get(self.histoname.replace("MC","")+"_"+cut+"/"+self.histoname+flavor+mode).Clone(hname)
-                            self.histos[hname].SetDirectory(0)
+                for cut,flavor,mode in list(itertools.product(self.Cuts, self.Flavours, self.Modes)):
+                    hname = year+channel+cut+flavor+mode
+                    self.histos[hname] = file_.Get(self.histoname.replace("MC","")+"_"+cut+"/"+self.histoname+flavor+mode).Clone(hname)
+                    self.histos[hname].SetDirectory(0)
+                    # Merge all the channels
+                    hname_lep = hname.replace(channel,self.lepton)
+                    if hname_lep in self.histos:
+                        self.histos[hname_lep].Add(self.histos[hname])
+                    else:
+                        self.histos[hname_lep] = self.histos[hname].Clone(hname_lep)
+                        self.histos[hname_lep].SetDirectory(0)
                 file_.Close()
-            for channel in self.Channels:
-                for cut in self.Cuts:
-                    for flavor in self.Flavours:
-                        for mode in self.Modes:
-                            hname = year+channel+cut+flavor+mode
-                            hname_lep = hname.replace(channel,self.lepton)
-                            if hname_lep in self.histos:
-                                self.histos[hname_lep].Add(self.histos[hname])
-                            else:
-                                self.histos[hname_lep] = self.histos[hname].Clone(hname_lep)
-                                self.histos[hname_lep].SetDirectory(0)
+            # Calculate MC_DY efficiencies
             for channel in self.Channels+[self.lepton]:
-                for cut in self.Cuts:
-                    for flavor in self.Flavours:
+                if "invisible" in channel: continue
+                for cut,flavor in list(itertools.product(self.Cuts, self.Flavours)):
                         hname = year+channel+cut+flavor
                         self.histos[hname] = self.histos[hname+"Passing"].Clone(hname)
                         self.histos[hname].Divide(self.histos[hname+"Total"])
                         self.histos[hname].SetDirectory(0)
-
 
     def ResetCanvas(self, name="canv"):
         self.canv = tdrCanvas(name, self.Xaxis_min, self.Xaxis_max, self.Yaxis_min if name=="FlavB" else 0, self.Yaxis_max, self.nameXaxis,self.nameYaxis)
@@ -90,6 +96,7 @@ class PlotBTagEfficiencies(ModuleRunnerBase):
             self.ResetCanvas(flavor)
             for year in self.years:
                 for channel in self.Channels+[self.lepton]:
+                    if "invisible" in channel: continue
                     hname = year+channel+self.defaultCut+flavor
                     self.histos[hname+"pt"] = ROOT.TH1D(hname+"pt",hname+"pt", ROOT.BTagMCEffBinsPt.size()-1,array('d',list(ROOT.BTagMCEffBinsPt)))
                     for x in range(1,self.histos[hname+"pt"].GetNbinsX()+1):
@@ -109,9 +116,6 @@ class PlotBTagEfficiencies(ModuleRunnerBase):
             for flavor in self.Flavours:
                 self.histos[year+self.lepton+self.defaultCut+flavor].Write(self.histoname+flavor+"Eff")
             file_.Close()
-
-
-
 
 
 def main():
