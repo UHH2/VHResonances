@@ -1,4 +1,4 @@
-DeepCSV;OperatingPoint, measurementType, sysType, jetFlavor, etaMin, etaMax, ptMin, ptMax, discrMin, discrMax, formula 
+DeepCSV; OP,measurement,sysType,jetFlavour,etaMin,etaMax,ptMin,ptMax,discrMin,discrMax,formula
 0,lt,central,0,-2.5,2.5,30,120,0,1,"0.98635"
 0,lt,up,0,-2.5,2.5,30,120,0,1,"1.00041"
 0,lt,down,0,-2.5,2.5,30,120,0,1,"0.97229"
