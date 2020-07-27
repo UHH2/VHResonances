@@ -34,3 +34,27 @@ def timeit(method):
                   (method.__name__, (te - ts))
         return result
     return timed
+
+
+def DoControl(controls, control_, channel, sample):
+    ''' This part is a bit arbitrary. The idea is to catch all the combinations for different years and channels'''
+    check = False
+    if all(not control in control_ for control in controls):
+        check = True
+    if "invisible" in channel and "MC_DY" in sample and not "MC_DY_inv" in sample:
+        check = not "MC_DY_201" in sample
+    if "invisible" in channel and "PtZ" in sample and not "2016" in sample:
+        check = True
+    if "invisible" in channel and "HT" in sample and "2016" in sample:
+        check = True
+    if "invisible" in channel and "MC_ZprimeToZH" in sample and not "_inv" in sample:
+        check = True
+    if not "invisible" in channel and "_inv" in sample:
+        check = True
+    if "electron"  in channel and "DATA" in sample and not "SingleElectron" in sample: check = True
+    if "muon"      in channel and "DATA" in sample and not "SingleMuon" in sample: check = True
+    if "invisible" in channel and "DATA" in sample and not "MET" in sample: check = True
+    if not "muon"  in channel and "MuonScale" in control_: check = True
+    if not "muon"  in channel and "tracking" in control_: check = True
+    if not "muon"  in channel and "reco" in control_: check = True
+    return check

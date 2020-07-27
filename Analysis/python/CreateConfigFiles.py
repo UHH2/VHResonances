@@ -23,9 +23,9 @@ YearVars["MCBtagEfficiencies"]  = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/V
                                    "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_2018.root",
                                    }
 
-YearVars["BTagCalibration"]     = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_102XSF_V1.csv",
-                                   "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_2016LegacySF_V1.csv",
-                                   "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_94XSF_V4_B_F.csv",
+YearVars["BTagCalibration"]     = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_2016LegacySF_V1.csv",
+                                   "2017": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_94XSF_V4_B_F_v2.csv",
+                                   "2018": os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_102XSF_V1.csv",
                                    }
 
 # YearVars["BTagCalibration"]     = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/common/data/2016/DeepCSV_2016LegacySF_WP_V1.csv",
@@ -136,27 +136,6 @@ def newNumber(year,sample,ConfigFile,syst):
     return str(max(1,int(newNumber/(defaulTimePerJob/TimePerJob))))
     # return str(max(1,int(newNumber/(defaulTimePerJob/1))))
 
-
-def DoControl(controls, control_, channel, sample): #Implement the same in ModuleRunner
-    ''' This part is a bit arbitrary. The idea is to catch all the combinations for different years and channels'''
-    check = False
-    if all(not control in control_ for control in controls):
-        check = True
-    if "invisible" in channel and "MC_DY" in sample and not "MC_DY_inv" in sample:
-        check = not "MC_DY_201" in sample
-    if "invisible" in channel and "PtZ" in sample and not "2016" in sample:
-        check = True
-    if "invisible" in channel and "HT" in sample and "2016" in sample:
-        check = True
-    if "invisible" in channel and "MC_ZprimeToZH" in sample and not "_inv" in sample:
-        check = True
-    if not "invisible" in channel and "_inv" in sample:
-        check = True
-    if "electron"  in channel and "DATA" in sample and not "SingleElectron" in sample: check = True
-    if "muon"      in channel and "DATA" in sample and not "SingleMuon" in sample: check = True
-    if "invisible" in channel and "DATA" in sample and not "MET" in sample: check = True
-    if not "muon"  in channel and "MuonScale" in control_: check = True
-    return check
 
 @timeit
 def CreateConfigFiles(year, samples, all_samples, collections, channels, systematics, controls, original_dir, SubmitDir, ConfigFile, Path_SFRAME, lumi):
