@@ -128,6 +128,17 @@
 <!ENTITY MC_DY_inv_PtZ_650toInf_2016    SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MC_DYJetsToNuNu_PtZ-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_Summer16_v2.xml">
 <!-- <!ENTITY MC_DY_inv_PtZ_650toInf_ext1_2016 SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MC_DYJetsToNuNu_PtZ-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_Summer16_ext1_v2.xml"> -->
 
+<!ENTITY MC_DY_inv_HT100to200_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-100To200_13TeV-madgraph_Summer16_v2.xml">
+<!-- <!ENTITY MC_DY_inv_HT100to200_ext1_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-100To200_13TeV-madgraph_Summer16_v2.xml"> -->
+<!ENTITY MC_DY_inv_HT200To400_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-200To400_13TeV-madgraph_Summer16_v2.xml">
+<!ENTITY MC_DY_inv_HT400To600_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-400To600_13TeV-madgraph_Summer16_ext1_v2.xml">
+<!-- <!ENTITY MC_DY_inv_HT400To600_ext1_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-400To600_13TeV-madgraph_Summer16_ext1_v2.xml"> -->
+<!ENTITY MC_DY_inv_HT600To800_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-600To800_13TeV-madgraph_Summer16_v1.xml">
+<!ENTITY MC_DY_inv_HT800To1200_2016     SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-800To1200_13TeV-madgraph_Summer16_v1.xml">
+<!ENTITY MC_DY_inv_HT1200To2500_2016    SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-1200To2500_13TeV-madgraph_Summer16_v1.xml">
+<!-- <!ENTITY MC_DY_inv_HT1200To2500_ext1_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-1200To2500_13TeV-madgraph_Summer16_ext1_v1.xml"> -->
+<!ENTITY MC_DY_inv_HT2500ToInf_2016     SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-2500ToInf_13TeV-madgraph_Summer16_v2.xml">
+
 <!-- MC Samples 2017 -->
 
 <!ENTITY MC_ZprimeToZH_M600_2017        SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/ZprimeToZH/ZprimeToZHToZlepHinc_narrow_M-600_TuneCP5_13TeV-madgraph-pythia8_Fall17_v1.xml">
@@ -401,14 +412,24 @@
     <InputData Type="MC"    Version="MC_ZZTo2L2Nu_2016"             Lumi="102104344.0"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZTo2L2Nu_2016;             <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZZTo4L_2016"                Lumi="82102796.18"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZTo4L_2016;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_DY_inv_PtZ_50to100_2016"    Lumi="92259.62368"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_50to100_2016;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_DY_inv_PtZ_100to250_2016"   Lumi="967232.3749"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_100to250_2016;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_DY_inv_PtZ_250to400_2016"   Lumi="9830156.702"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_250to400_2016;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_DY_inv_PtZ_400to650_2016"   Lumi="3772728.905"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_400to650_2016;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
-    <!-- <InputData Type="MC"    Version="MC_DY_inv_PtZ_400to650_ext1_2016"   Lumi="3772323.16"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_400to650_ext1_2016;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
-    <InputData Type="MC"    Version="MC_DY_inv_PtZ_650toInf_2016"   Lumi="39270161.29"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_650toInf_2016;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
-    <!-- <InputData Type="MC"    Version="MC_DY_inv_PtZ_650toInf_ext1_2016"   Lumi="39347926.27"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_650toInf_ext1_2016;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
+    <InputData Type="MC"    Version="MC_DY_inv_PtZ_50to100_2016"    Lumi="92259.62368"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_50to100_2016;   <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_inv_PtZ_100to250_2016"   Lumi="967232.3749"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_100to250_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_inv_PtZ_250to400_2016"   Lumi="9830156.702"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_250to400_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_inv_PtZ_400to650_2016"   Lumi="3772728.905"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_400to650_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <!-- <InputData Type="MC"    Version="MC_DY_inv_PtZ_400to650_ext1_2016"   Lumi="3772323.16"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_400to650_ext1_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
+    <InputData Type="MC"    Version="MC_DY_inv_PtZ_650toInf_2016"   Lumi="39270161.29"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_650toInf_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <!-- <InputData Type="MC"    Version="MC_DY_inv_PtZ_650toInf_ext1_2016"   Lumi="39347926.27"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_PtZ_650toInf_ext1_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
 
+    <InputData Type="MC"    Version="MC_DY_inv_HT100to200_2016"     Lumi="17257.625"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_HT100to200_2016;      <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <!-- <InputData Type="MC"    Version="MC_DY_inv_HT100to200_ext1_2016"   Lumi="62587.30263"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_HT100to200_ext1_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
+    <InputData Type="MC"    Version="MC_DY_inv_HT200To400_2016"     Lumi="56003.52197"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_HT200To400_2016;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_inv_HT400To600_2016"     Lumi="77886.18321"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_HT400To600_2016;    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <!-- <InputData Type="MC"    Version="MC_DY_inv_HT400To600_ext1_2016"   Lumi="669578.626"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_HT400To600_ext1_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
+    <InputData Type="MC"    Version="MC_DY_inv_HT600To800_2016"     Lumi="1775345.443"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_HT600To800_2016;   <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_inv_HT800To1200_2016"    Lumi="1515458.799"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_HT800To1200_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_inv_HT1200To2500_2016"   Lumi="1077300.292"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_HT1200To2500_2016; <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <!-- <InputData Type="MC"    Version="MC_DY_inv_HT1200To2500_ext1_2016"   Lumi="419699.7085"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_HT1200To2500_ext1_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData> -->
+    <InputData Type="MC"    Version="MC_DY_inv_HT2500ToInf_2016"    Lumi="77890384.62"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_inv_HT2500ToInf_2016;  <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
     <!-- MC 2017 -->
 
