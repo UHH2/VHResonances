@@ -1,4 +1,5 @@
 from Utils import *
+from array import array
 
 
 # h1*Lumi1+h2*Lumi2/(Lumi1+Lumi2)
@@ -59,6 +60,38 @@ def main():
     file_.Close()
     file1.Close()
     file2.Close()
+
+    dir = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/Electrons/"
+    for year in ["2016", "2017", "2018"]:
+        fname = "Electron_Trigger_SF_"+year+"_original.root"
+        hname  = "SF_TH2F"
+        file1 = ROOT.TFile(dir+fname)
+        h1 = file1.Get(hname+"_Barrel")
+        h2 = file1.Get(hname+"_EndCap")
+        eta_bins = [-2.5,-1.44,0,1.44,2.5]
+        pt_bins = [0]+[x for x in range(50,70,5)]+[x for x in range(70,250,10)]+[250,300,500,2000]
+        hist = ROOT.TH2D(hname,hname,len(eta_bins)-1,array('d',eta_bins), len(pt_bins)-1, array('d',pt_bins))
+        for eta in range(hist.GetNbinsX()+1):
+            eta_bin = hist.GetXaxis().GetBinCenter(eta)
+            for pt in range(hist.GetNbinsY()+1):
+                pt_bin = hist.GetYaxis().GetBinCenter(pt)
+                h1_cont = h1.GetBinContent(h1.GetXaxis().FindBin(eta_bin),h1.GetYaxis().FindBin(pt_bin))
+                h2_cont = h2.GetBinContent(h2.GetXaxis().FindBin(eta_bin),h2.GetYaxis().FindBin(pt_bin))
+                if (h1_cont>0 and h2_cont>0):
+                    raise RuntimeError("Both histos share same bin. Not expected.")
+                elif (h1_cont>0):
+                    hist.SetBinContent(eta,pt,h1_cont)
+                    hist.SetBinError(eta,pt,h1.GetBinError(h1.GetXaxis().FindBin(eta_bin),h1.GetYaxis().FindBin(pt_bin)))
+                elif (h2_cont>0):
+                    hist.SetBinContent(eta,pt,h2_cont)
+                    hist.SetBinError(eta,pt,h2.GetBinError(h1.GetXaxis().FindBin(eta_bin),h1.GetYaxis().FindBin(pt_bin)))
+                else:
+                    hist.SetBinContent(eta,pt,1)
+                    hist.SetBinError(eta,pt,0)
+        file_ = ROOT.TFile(dir+fname.replace("_original",""), "RECREATE")
+        hist.Write(hname)
+        file_.Close()
+        file1.Close()
 
 
 

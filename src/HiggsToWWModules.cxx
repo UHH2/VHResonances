@@ -275,13 +275,13 @@ bool BlindData::process(Event & event){
 
 
 /*
-&  &&&&&&   &&&&&&     &&#    &&       &&&&&&&&    &&&&&&&&    &&#     &&&&&&  &&&&&&&&  &&&&&&#  &&&&&&&&   &&&&&&
+&  &&&&&&   &&&&&&     &&&    &&       &&&&&&&&    &&&&&&&&    &&&     &&&&&&  &&&&&&&&  &&&&&&&  &&&&&&&&   &&&&&&
 & &&    && &&    &&   && &&   &&       &&          &&         && &&   &&    &&    &&    &&     && &&     && &&    &&
 & &&       &&        &&   &&  &&       &&          &&        &&   &&  &&          &&    &&     && &&     && &&
 &  &&&&&&  &&       &&     && &&       &&&&&&      &&&&&&   &&     && &&          &&    &&     && &&&&&&&&   &&&&&&
-&       && &&       &&&&&&&&# &&       &&          &&       &&&&&&&&# &&          &&    &&     && &&   &&         &&
+&       && &&       &&&&&&&&& &&       &&          &&       &&&&&&&&& &&          &&    &&     && &&   &&         &&
 & &&    && &&    && &&     && &&       &&          &&       &&     && &&    &&    &&    &&     && &&    &&  &&    &&
-&  &&&&&&   &&&&&&  &&     && &&&&&&&& &&&&&&&&    &&       &&     &&  &&&&&&     &&     &&&&&&#  &&     &&  &&&&&&
+&  &&&&&&   &&&&&&  &&     && &&&&&&&& &&&&&&&&    &&       &&     &&  &&&&&&     &&     &&&&&&&  &&     &&  &&&&&&
 */
 
 // Generic Class for Applying SFs
@@ -306,13 +306,13 @@ double ScaleFactorsFromHistos::Evaluator(std::string hname, double var) {
 
 
 /*
-& &&&&&&&& &&     && &&&&&&&&  &&&&&&#  &&&&&&&&  &&    &&     &&&&&&  &&&&&&&&
+& &&&&&&&& &&     && &&&&&&&&  &&&&&&&  &&&&&&&&  &&    &&     &&&&&&  &&&&&&&&
 &    &&    &&     && &&       &&     && &&     &&  &&  &&     &&    && &&
 &    &&    &&     && &&       &&     && &&     &&   &&&&      &&       &&
-&    &&    &&&&&&&&# &&&&&&   &&     && &&&&&&&&     &&        &&&&&&  &&&&&&
+&    &&    &&&&&&&&& &&&&&&   &&     && &&&&&&&&     &&        &&&&&&  &&&&&&
 &    &&    &&     && &&       &&     && &&   &&      &&             && &&
 &    &&    &&     && &&       &&     && &&    &&     &&       &&    && &&
-&    &&    &&     && &&&&&&&&  &&&&&&#  &&     &&    &&        &&&&&&  &&
+&    &&    &&     && &&&&&&&&  &&&&&&&  &&     &&    &&        &&&&&&  &&
 */
 
 
@@ -447,7 +447,7 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
         weight_postfix = "reco";
       } else throw invalid_argument("In ScaleFactorsManager.cxx: No implementation for "+sf.first);
       if (FindInString("2017",year)) sys += 1.0;
-      SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys, weight_postfix));
+      SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys, weight_postfix, "nominal", "electrons", sf.second.second));
     }
   }
 
@@ -474,14 +474,25 @@ bool ScaleFactorsManager::process(uhh2::Event& event){
   if (electronchannel) {
     SFs_ele["Electron_LooseID"]->process(event);
     SFs_ele["Electron_Reconstruction"]->process(event);
+    cout << "Electron_Trigger start" << endl;
     SFs_ele["Electron_Trigger"]->process(event);
+    cout << "Electron_Trigger end" << endl;
   }
 
   return true;
 }
 
 
-//MuonScaleVariations
+/*
+&&     && &&     &&  &&&&&&&  &&    &&  &&&&&&   &&&&&&     &&&    &&       &&&&&&&&
+&&&   &&& &&     && &&     && &&&   && &&    && &&    &&   && &&   &&       &&
+&&&& &&&& &&     && &&     && &&&&  && &&       &&        &&   &&  &&       &&
+&& &&& && &&     && &&     && && && &&  &&&&&&  &&       &&     && &&       &&&&&&
+&&     && &&     && &&     && &&  &&&&       && &&       &&&&&&&&& &&       &&
+&&     && &&     && &&     && &&   &&& &&    && &&    && &&     && &&       &&
+&&     &&  &&&&&&&   &&&&&&&  &&    &&  &&&&&&   &&&&&&  &&     && &&&&&&&& &&&&&&&&
+*/
+
 
 MuonScaleVariations::MuonScaleVariations(uhh2::Context & ctx) {
   if(ctx.get("dataset_type") != "MC") return;
