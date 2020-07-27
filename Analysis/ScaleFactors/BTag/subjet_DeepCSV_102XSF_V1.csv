@@ -1,4 +1,4 @@
-DeepCSV;OperatingPoint, measurementType, sysType, jetFlavor, etaMin, etaMax, ptMin, ptMax, discrMin, discrMax, formula 
+DeepCSV; OperatingPoint,measurementType,sysType,jetFlavour,etaMin,etaMax,ptMin,ptMax,discrMin,discrMax,formula
 0,lt,central,0,-2.5,2.5,30,120,0,1,"0.9293"
 0,lt,up,0,-2.5,2.5,30,120,0,1,"0.99586"
 0,lt,down,0,-2.5,2.5,30,120,0,1,"0.86269"
@@ -47,9 +47,9 @@ DeepCSV;OperatingPoint, measurementType, sysType, jetFlavor, etaMin, etaMax, ptM
 1,lt,central,1,-2.5,2.5,240,450,0,1,"0.93914"
 1,lt,up,1,-2.5,2.5,240,450,0,1,"1.18015"
 1,lt,down,1,-2.5,2.5,240,450,0,1,"0.69758"
-0, incl, central, 2, 0, 2.4, 20, 1000, 0, 1, "1.40572-0.00106955*x+2.22422e-06*x*x-1.39402e-09*x*x*x"
-0, incl, down, 2, 0, 2.4, 20, 1000, 0, 1, "1.29484-0.000973708*x+2.1709e-06*x*x-1.39083e-09*x*x*x"
-0, incl, up, 2, 0, 2.4, 20, 1000, 0, 1, "1.51704-0.00116494*x+2.27407e-06*x*x-1.3954e-09*x*x*x
-1, incl, central, 2, 0, 2.4, 20, 1000, 0, 1, "1.36065-0.00080014*x+9.06839e-07*x*x"
-1, incl, down, 2, 0, 2.4, 20, 1000, 0, 1, "1.13696-0.000642036*x+7.46288e-07*x*x"
-1, incl, up, 2, 0, 2.4, 20, 1000, 0, 1, "1.58492-0.000960727*x+1.07126e-06*x*x"
+0, incl, central, 2, 0, 2.4, 20, 1000, 0, 1, "1.40572-0.00106955*x+2.22422e-06*x*x-1.39402e-09*x*x*x" 
+0, incl, down, 2, 0, 2.4, 20, 1000, 0, 1, "1.29484-0.000973708*x+2.1709e-06*x*x-1.39083e-09*x*x*x" 
+0, incl, up, 2, 0, 2.4, 20, 1000, 0, 1, "1.51704-0.00116494*x+2.27407e-06*x*x-1.3954e-09*x*x*x" 
+1, incl, central, 2, 0, 2.4, 20, 1000, 0, 1, "1.36065-0.00080014*x+9.06839e-07*x*x" 
+1, incl, down, 2, 0, 2.4, 20, 1000, 0, 1, "1.13696-0.000642036*x+7.46288e-07*x*x" 
+1, incl, up, 2, 0, 2.4, 20, 1000, 0, 1, "1.58492-0.000960727*x+1.07126e-06*x*x" 
