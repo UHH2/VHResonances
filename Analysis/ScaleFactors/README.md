@@ -41,7 +41,7 @@
   - 2016: Relative to HLT_Ele27_WPTight_Gsf OR HLT_Photon175 OR HLT_Ele115_CaloIdVT_GsfTrkIdT
   - 2017: Relative to HLT_Ele35_WPTight_Gsf OR HLT_Photon200 OR HLT_Ele115_CaloIdVT_GsfTrkIdT
   - 2018: Relative to HLT_Ele32_WPTight_Gsf OR HLT_Photon200 OR HLT_Ele115_CaloIdVT_GsfTrkIdT
-  - Take from Alberto's Analysis. Corresponding to what stated in https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgHLTScaleFactorMeasurements.
+  - Take from https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgHLTScaleFactorMeasurements via email. Merged 2 regions
   - Relative to HEEPV70ID.
 
 - Reco:
