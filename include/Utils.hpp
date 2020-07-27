@@ -13,3 +13,5 @@ bool isHadronic(int pdgId);
 bool DoubleDecay(int pdgId1, int pdgId2, Decay decay);
 
 bool FindInString(const std::string& search, const std::string& str);
+
+int FindInVector(const std::vector<std::string>& vec, const std::string& el);

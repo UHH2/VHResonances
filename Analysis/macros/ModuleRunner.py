@@ -103,31 +103,10 @@ class ModuleRunner(ModuleRunnerBase):
     def SmartLoop(self,*argv):
         return list(itertools.product(self.Collections, self.Channels, self.Systematics,*argv))
 
-    def DoControl(self, control_, channel, sample): #Implement the same in CreateConfigFiles
-        ''' This part is a bit arbitrary. The idea is to catch all the combinations for different years and channels'''
-        check = False
-        if all(not control in control_ for control in self.controls):
-            check = True
-        if "invisible" in channel and "MC_DY" in sample and not "MC_DY_inv" in sample:
-            check = not "MC_DY_201" in sample
-        if "invisible" in channel and "PtZ" in sample and not "2016" in sample:
-            check = True
-        if "invisible" in channel and "HT" in sample and "2016" in sample:
-            check = True
-        if "invisible" in channel and self.Signal in sample and not "_inv" in sample:
-            check = True
-        if not "invisible" in channel and "_inv" in sample:
-            check = True
-        if "electron"  in channel and "DATA" in sample and not "SingleElectron" in sample: check = True
-        if "muon"      in channel and "DATA" in sample and not "SingleMuon" in sample: check = True
-        if "invisible" in channel and "DATA" in sample and not "MET" in sample: check = True
-        if not "muon"  in channel and "MuonScale" in control_: check = True
-        return check
-
     def DeleteWorkdirs(self):
         for path in [self.Path_STORAGE+self.year+"/",self.SubmitDir,self.Path_SFRAME]:
             for collection, channel, syst, sample in self.SmartLoop(self.Samples):
-                if self.DoControl(collection+channel+syst+sample, channel, sample):
+                if DoControl(self.controls,collection+channel+syst+sample, channel, sample):
                     continue
                 cmd = "rm -fr "+path+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/*"+sample+"*"
                 # print cmd
@@ -135,7 +114,7 @@ class ModuleRunner(ModuleRunnerBase):
 
     def CreateConfigFiles(self):
         for collection, channel, syst in self.SmartLoop():
-            if self.DoControl(self.year+collection+channel+syst, channel, ""):
+            if DoControl(self.controls,self.year+collection+channel+syst, channel, ""):
                 continue
             a = os.system("rm -fr " +self.SubmitDir+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/")
         CreateConfigFiles(self.year, self.Samples, self.AllSamples, self.Collections, self.Channels, self.Systematics, self.controls, self.Path_ANALYSIS, self.SubmitDir+self.Module+"/", self.ConfigFile, self.Path_SFRAME, self.lumi_pb)
@@ -152,11 +131,11 @@ class ModuleRunner(ModuleRunnerBase):
         list_processes = []
         for collection, channel, syst, sample in self.SmartLoop(self.Processes_Dict if mergeCategory else self.Samples):
             middlePath = collection+"/"+channel+"channel/"+syst+"/"
-            if self.DoControl(collection+channel+syst+sample, channel, sample):
+            if DoControl(self.controls,collection+channel+syst+sample, channel, sample):
                 continue
             mode = "MC" if "MC" in sample else "DATA"
             commonpath = self.ModuleStorage+"/"+middlePath
-            filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.Signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_Dict[sample] if not self.DoControl(collection+channel+syst+name_, channel, name_)]
+            filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.Signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_Dict[sample] if notDoControl(self.controls,collection+channel+syst+name_, channel, name_)]
             newFile    = commonpath+self.PrefixrootFile+mode+"."+sample+extraText
             newFile   += "_merge.root" if mergeCategory else ".root"
             if mergeCategory:
@@ -194,7 +173,7 @@ class ModuleRunner(ModuleRunnerBase):
     def CreateXml(self):
         for collection, channel, syst,sample in self.SmartLoop(self.Processes_Dict):
             middlePath = collection+"/"+channel+"channel/"+syst+"/"
-            if self.DoControl(collection+channel+syst+sample, channel, sample):
+            if DoControl(self.controls,collection+channel+syst+sample, channel, sample):
                 continue
             mode = "MC" if "MC" in sample else "DATA"
             filePrefix = self.PrefixrootFile+mode+"."
@@ -224,7 +203,7 @@ class ModuleRunner(ModuleRunnerBase):
         cwd = os.getcwd()
         os.chdir(self.Path_SPlotter)
         for collection, channel, syst in self.SmartLoop():
-            if self.DoControl(self.year+collection+syst+channel, channel, ""):
+            if DoControl(self.controls,self.year+collection+syst+channel, channel, ""):
                 continue
             a = os.system("mkdir -p "+self.Path_STORAGE+self.year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/Plots")
             process = subprocess.Popen("Plots -f Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+self.year+".steer", shell=True)
@@ -238,7 +217,7 @@ class ModuleRunner(ModuleRunnerBase):
         for module in ["Preselection","Selection","SignalRegion", "LeptonIDStudies"]:
             self.SetModule(module, Collections=Collections, Channels=Channels, Systematics=Systematics)
             for collection, channel, syst in self.SmartLoop():
-                if self.DoControl(module+collection+channel+syst, channel, ""):
+                if DoControl(self.controls,module+collection+channel+syst, channel, ""):
                     continue
                 path_RunII = self.Path_STORAGE+year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/"
                 a = os.system("mkdir -p "+path_RunII+"Plots")
@@ -280,7 +259,7 @@ class ModuleRunner(ModuleRunnerBase):
         for collection, channel, syst in self.SmartLoop():
             for sample in self.Processes_Dict:
                 middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                if self.DoControl(collection+channel+syst+sample, channel, sample):
+                if DoControl(self.controls,collection+channel+syst+sample, channel, sample):
                     continue
                 mode = "MC" if "MC" in sample else "DATA"
                 filePrefix = self.PrefixrootFile+mode+"."
@@ -299,10 +278,10 @@ class ModuleRunner(ModuleRunnerBase):
                         ncomment = -1
                         if "File Commented" in lines[-1]: ncomment = int(lines[-1].split()[3])
                         else: print "Unexpected error:", xml
-                        if ncomment>0 and ncomment==(len(lines)-1):
+                        if ncomment>0 and ncomment==(len(lines)-1) and self.Module!="SignalRegion":
                             print "Found files ",ncomment,"out of ",len(lines)-1," in:", xml
             for sample in self.SubSamples_Dict:
-                if self.DoControl(collection+channel+syst+sample, channel, sample):
+                if DoControl(self.controls,collection+channel+syst+sample, channel, sample):
                     continue
                 mode = "MC" if "MC" in sample else "DATA"
                 filePrefix = self.PrefixrootFile+mode+"."
@@ -365,7 +344,7 @@ class ModuleRunner(ModuleRunnerBase):
             allmax = 0
             for collection, channel, syst,sample in self.SmartLoop(self.Samples):
                 middlePath = collection+"/"+channel+"channel/"+syst+"/"
-                if self.DoControl(collection+channel+syst+sample, channel, sample):
+                if DoControl(self.controls, collection+channel+syst+sample, channel, sample):
                     continue
                 path = self.SubmitDir+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"+sample+check
                 if "NF" in check: path = self.SubmitDir+self.Module+"/"+middlePath+"/workdir_"+self.Module+"_"+sample+"/"+sample+"*"
