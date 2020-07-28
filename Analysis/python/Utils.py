@@ -1,4 +1,4 @@
-import time, sys, os, functools, ROOT
+import time, sys, os, functools, argparse, ROOT
 
 sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros/")
 from ModuleRunnerBase import *
@@ -58,3 +58,13 @@ def DoControl(controls, control_, channel, sample):
     if not "muon"  in channel and "tracking" in control_: check = True
     if not "muon"  in channel and "reco" in control_: check = True
     return check
+
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--years',          action='append', dest="years",          default=[])
+    parser.add_argument('--Collections',    action='append', dest="Collections",    default=[])
+    parser.add_argument('--Channels',       action='append', dest="Channels",       default=[])
+    parser.add_argument('--histFolders',    action='append', dest="histFolders",    default=[])
+    return parser.parse_args()

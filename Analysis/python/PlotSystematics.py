@@ -1,158 +1,155 @@
-import sys,os, time
-import numpy as np
+from Utils import *
 
-from fileManipulation import *
-from parallelise import *
-from tdrstyle_all import *
+import tdrstyle_all as TDR
+TDR.writeExtraText = True
+TDR.extraText  = "Simulation"
+TDR.extraText2 = "Work in progress"
 
-sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros")
-from ModuleRunner import *
+'''
+Module to plot Systematics
 
-ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/VHResonances/include/constants.hpp"')
-ROOT.gROOT.SetBatch(ROOT.kTRUE)
-ROOT.gStyle.SetOptStat(0)
+- Need the Selection or SignalRegion output as input
+- Specify in the steer file which years, channels and histFolders you want to run over.
 
-class PlotSystematics(ModuleRunnerBase):
-    def __init__(self,year, studies = "nominal", histFolders=[], module="SignalRegion"):
-        ModuleRunnerBase.__init__(self,year)
-        self.histFolders = histFolders
+'''
+# TODO invisible channel not fully implemented yet
+# TODO fix yaxis
+
+
+class PlotSystematics(VariablesBase):
+    def __init__(self,year, studies = "nominal", histFolders=[], module="SignalRegion", Channels="", Collections=""):
+        VariablesBase.__init__(self)
+        self.year = year
+        TDR.lumi_13TeV  = str(round(float(self.lumi_map[self.year]["lumi_fb"]),1))+" fb^{-1}"
         self.module = module
+        self.histFolders = histFolders
+        if self.module=="SignalRegion": self.histFolders = [x+"_SR" for x in self.histFolders]
+        if Channels!="": self.Channels = Channels
+        if Collections!="": self.Collections = Collections
         self.histos = {}
-        self.rebin = 25
-        self.x_name = {"pt_jet":"p_{T}^{jet} (GeV)", "Zprime_mass_rebin2":"M_{Z'} (GeV)"}
+        self.x_name = {"pt_jet":"p_{T}^{jet} (GeV)", "Zprime_mass_rebin30":"M_{Z'} (GeV)"}
         self.y_name = "Events"
-        self.color = {"nominal":    ROOT.kBlack,
-                      "JER_up":     ROOT.kRed+1,
-                      "JER_down":   ROOT.kRed,
-                      "JEC_up":     ROOT.kGreen+2,
-                      "JEC_down":   ROOT.kGreen+1,
-                      "PU_up":      ROOT.kBlue+1,
-                      "PU_down":    ROOT.kAzure+10,
-                      }
+        self.color  = {"nominal":           ROOT.kBlack,
+                       "JER_up":            ROOT.kRed+1,
+                       "JER_down":          ROOT.kRed,
+                       "JEC_up":            ROOT.kGreen+2,
+                       "JEC_down":          ROOT.kGreen+1,
+                       "MuonScale_up":      ROOT.kBlue+1,
+                       "MuonScale_down":    ROOT.kAzure+10,
+                       "pu_up":             ROOT.kViolet-3,
+                       "pu_down":           ROOT.kMagenta+1,
+                       "btag_up":           ROOT.kRed+1,
+                       "btag_down":         ROOT.kRed,
+                       "prefiring_up":      ROOT.kCyan+2,
+                       "prefiring_down":    ROOT.kCyan+1,
+                       "id_up":             ROOT.kOrange+1,
+                       "id_down":           ROOT.kOrange,
+                       "tracking_up":       ROOT.kOrange+3,
+                       "tracking_down":     ROOT.kOrange+4,
+                       "trigger_up":        ROOT.kGreen+2,
+                       "trigger_down":      ROOT.kGreen+1,
+                       "reco_up":           ROOT.kBlue+1,
+                       "reco_down":         ROOT.kAzure+10,
+
+                       }
         self.HistType = {"Preselection": "nTopJet", "Selection": "ZprimeCandidate", "SignalRegion": "ZprimeCandidate"}
-        self.HistName = {"Preselection": "pt_jet",  "Selection": "Zprime_mass_rebin2",  "SignalRegion": "Zprime_mass_rebin2"}
+        self.HistName = {"Preselection": "pt_jet",  "Selection": "Zprime_mass_rebin30",  "SignalRegion": "Zprime_mass_rebin30"}
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/Systematics/"
         os.system("mkdir -p "+self.outdir)
+
     def LoadHistos(self):
-        for collection in self.Collections:
-            self.histos.setdefault(collection,{})
-            for channel in self.Channels:
-                self.histos[collection].setdefault(channel, {})
-                commonpath = self.Path_STORAGE+self.year+"/"+self.module+"/"+collection+"/"+channel+"channel/"
-                # print commonpath
-                for syst in self.Systematics+self.Systematics_Scale:
-                    if "PU" in syst and self.module!="SignalRegion": continue
-                    isNominalFolder = syst in self.Systematics_Scale
-                    isNominalSyst = syst=="nominal";
-                    self.histos[collection][channel].setdefault(syst, {})
-                    for sample in self.Samples_Category[self.year if self.year!="RunII" else "2016"]:
-                        if sample =="MC_WW_2018": continue # TODO
-                        if sample =="MC_WW_incl_2018": continue # TODO
-                        sample = sample.replace("2016",self.year)
-                        if "muon" in channel and "SingleElectron" in sample: continue
-                        if "electron" in channel and "SingleMuon" in sample: continue
-                        mode = "MC" if "MC" in sample else "DATA"
-                        filename = commonpath+syst+"/"+self.PrefixrootFile+mode+"."+sample+"_noTree.root"
-                        if isNominalFolder: filename = filename.replace(syst,"nominal")
-                        file_ = ROOT.TFile(filename)
-                        self.histos[collection][channel][syst].setdefault(sample, {})
-                        for histFolder in self.histFolders:
-                            hname = self.HistType[self.module]
-                            if isNominalFolder: hname  += "_"+syst
-                            if isNominalFolder: hname += histFolder+"/"+self.HistName[self.module]
-                            else: hname += "_"+histFolder+"/"+self.HistName[self.module] # TODO += "_"+histFolder
-                            # print filename, hname
-                            h_ = file_.Get(hname)
-                            h_.SetDirectory(0)
-                            if self.HistName[self.module]=="Zprime_mass_rebin2":
-                                h_.Rebin(self.rebin)
-                            if self.signal in sample:
-                                h_.Scale(ROOT.xsec_ref.at("default_value"))
-                            # if syst!="nominal":
-                            #     h_.Divide(self.histos[collection][channel]["nominal"][sample][histFolder])
-                            #     h_.Scale(10000)
-                            self.histos[collection][channel][syst][sample][histFolder] = h_
-                        file_.Close()
+        for collection, channel, syst, sample in list(itertools.product(self.Collections, self.Channels, self.Systematics+self.Systematics_Scale, self.Processes_Year_Dict[self.year if self.year!="RunII" else "2016"])):
+            isNominalFolder = syst in self.Systematics_Scale
+
+            if DoControl([""], collection+channel+syst+sample, channel, sample): continue
+            if "invisible" in channel: continue #TODO
+            if isNominalFolder and self.module!="SignalRegion": continue
+
+            commonpath = self.Path_STORAGE+self.year+"/"+self.module+"/"+collection+"/"+channel+"/"
+
+            sample = sample.replace("2016",self.year)
+            mode = "MC" if "MC" in sample else "DATA"
+            filename = commonpath+syst+"/"+self.PrefixrootFile+mode+"."+sample+"_noTree.root"
+            if isNominalFolder: filename = filename.replace(syst,"nominal")
+            file_ = ROOT.TFile(filename)
+            for histFolder in self.histFolders:
+                hname = self.HistType[self.module]
+                if isNominalFolder: hname  += "_"+syst.lower()
+                hname += "_"+histFolder+"/"+self.HistName[self.module]
+                h_ = file_.Get(hname)
+                h_.SetDirectory(0)
+                if self.Signal in sample:
+                    h_.Scale(ROOT.xsec_ref.at("default_value"))
+                self.histos.setdefault(collection,{}).setdefault(channel, {}).setdefault(syst, {}).setdefault(sample, {})[histFolder] = h_
+            file_.Close()
+
     def PlotHistos(self):
         self.LoadHistos()
-        for histFolder in self.histFolders:
-            for collection in self.Collections:
-                for channel in self.Channels:
-                    for sample in self.Samples_Category[self.year if self.year!="RunII" else "2016"]:
-                        if sample =="MC_WW_2018": continue # TODO
-                        if sample =="MC_WW_incl_2018": continue # TODO
-                        sample = sample.replace("2016",self.year)
-                        if "muon" in channel and "SingleElectron" in sample: continue
-                        if "electron" in channel and "SingleMuon" in sample: continue
-                        mode = "MC" if "MC" in sample else "DATA"
-                        if self.signal in sample:
-                            mean = float(sample.replace("MC_ZprimeToZH_M", "").replace("_"+self.year,""))
-                            sigma = 5*(mean*0.02+20.)
-                            ymax = 2
-                        else:
-                            mean = 2000
-                            sigma = 2000
-                            ymax = 250
-                        ymin = 0.01
-                        ymax *= self.lumi_fb/round(float(self.lumi_map["RunII"]["lumi_fb"]),1)
-                        if self.HistName[self.module]=="pt_jet":
-                            # ymin = 5000
-                            ymax = 5
-                            mean /= 2
-                            sigma *= 2
-                        # mean = 500
-                        # sigma = 500
-                        # ymin = 5000
-                        # ymax = 200000
-                        # mean = 500
-                        # sigma = 500
-                        canv = tdrCanvas("canv_"+self.year+self.module+collection+channel+sample+histFolder, mean-sigma, mean+sigma, ymin, ymax, self.x_name[self.HistName[self.module]],self.y_name)
-                        leg = tdrLeg(0.70,0.70,0.89,0.89, 0.030, 42, ROOT.kBlack);
-                        # canv.SetLogy(True)
-                        for syst in self.Systematics+self.Systematics_Scale:
-                            if "PU" in syst and self.module!="SignalRegion": continue
-                            # if syst == "JEC_down": continue
-                            # if "PU" in syst: continue
-                            # if "JEC" in syst: continue
-                            # if "JER" in syst: continue
-                            isNominalFolder = syst in self.Systematics_Scale
-                            isNominalSyst = syst=="nominal"
-                            tdrDraw(self.histos[collection][channel][syst][sample][histFolder], "", ROOT.kDot, self.color[syst], 1, self.color[syst], 0, self.color[syst])
-                            leg.AddEntry(self.histos[collection][channel][syst][sample][histFolder], syst, "l")
-                        leg.Draw("same")
-                        canv.SaveAs(self.outdir+"Syst_"+self.year+"_"+self.module+"_"+collection+"_"+channel+"channel_"+sample+"_"+histFolder+".pdf")
+        for histFolder, collection, channel, sample in list(itertools.product(self.histFolders, self.Collections, self.Channels, self.Processes_Year_Dict[self.year if self.year!="RunII" else "2016"])):
+            sample = sample.replace("2016",self.year)
+            if DoControl([""], histFolder+collection+channel+sample, channel, sample): continue
+            if "invisible" in channel: continue #TODO
 
-
-        # # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "NN", "NN_1","NN_2", "CNN", "tau42"]
-        # # self.histFolders = ["btag_DeepBoosted_H4qvsQCD"]
-        # self.histFolders = ["btag_DeepBoosted_H4qvsQCDptdep"]
-        # self.histFolders=["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDptdep_x3", "btag_DeepBoosted_H4qvsQCDptdep_x2x3", "btag_DeepBoosted_H4qvsQCDptdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x3", "btag_DeepBoosted_H4qvsQCDmassdep2_x3", "btag_DeepBoosted_H4qvsQCDmassdep_x2x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x2"]
-        # self.histFolders=["btag_DeepBoosted_H4qvsQCDp02",]
-        # # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDpt1000", "btag_DeepBoosted_H4qvsQCDpt1000p2", "btag_DeepBoosted_H4qvsQCDpt1000p02"]
-        # # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02"]
-        # # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDptdep", "btag_DeepBoosted_H4qvsQCDp02"]
-        # self.years = ["2016", "2017", "2018", "RunII"]
-        # self.channels = ["muonchannel", "electronchannel"]
-        # self.collections = ["Puppi"]
-        # # self.years = ["2016"]
-        # # self.channels = ["muonchannel"]
-        # # self.mode = "CB"
-        # # self.mode = "Exp_3"
-        # self.mode = "Exp_2"
-        # self.ResetLists()
+            mode = "MC" if "MC" in sample else "DATA"
+            if self.Signal in sample:
+                mean = float(sample.replace("MC_ZprimeToZH_M", "").replace("_"+self.year,""))
+                sigma = 5*(mean*0.02+20.)
+                ymax = 3
+            else:
+                mean = 2000
+                sigma = 2000
+                ymax = 15000 if self.module!="SignalRegion" else 500
+            ymin = 0.01
+            ymax *= round(float(self.lumi_map[self.year]["lumi_fb"])/float(self.lumi_map["RunII"]["lumi_fb"]),1)
+            if self.HistName[self.module]=="pt_jet":
+                # ymin = 5000
+                ymax = 5
+                mean /= 2
+                sigma *= 2
+            # mean = 500
+            # sigma = 500
+            # ymin = 5000
+            # ymax = 200000
+            # mean = 500
+            # sigma = 500
+            for listSyst in [self.Systematics,self.Systematics_Scale]:
+                isNominalFolder = listSyst==self.Systematics_Scale
+                extraText = "_scale" if isNominalFolder else "_shape"
+                canv = tdrCanvas("canv_"+self.year+self.module+collection+channel+sample+histFolder+extraText, mean-sigma, mean+sigma, ymin, ymax, self.x_name[self.HistName[self.module]],self.y_name)
+                leg = tdrLeg(0.70,0.40,0.89,0.89, 0.030, 42, ROOT.kBlack);
+                # canv.SetLogy(True)
+                isNominalFolder = listSyst==self.Systematics_Scale
+                for syst in listSyst:
+                    if syst=="nominal": continue
+                    if DoControl([""], syst, channel, sample): continue
+                    if isNominalFolder and self.module!="SignalRegion": continue
+                    tdrDraw(self.histos[collection][channel][syst][sample][histFolder], "hist", ROOT.kDot, self.color[syst], 1, self.color[syst], 0, self.color[syst])
+                    leg.AddEntry(self.histos[collection][channel][syst][sample][histFolder], syst, "l")
+                syst = "nominal"
+                tdrDraw(self.histos[collection][channel][syst][sample][histFolder], "hist", ROOT.kDot, self.color[syst], 1, self.color[syst], 0, self.color[syst])
+                leg.AddEntry(self.histos[collection][channel][syst][sample][histFolder], syst, "l")
+                leg.Draw("same")
+                canv.SaveAs(self.outdir+"Syst_"+self.year+"_"+self.module+"_"+collection+"_"+channel+"_"+sample+"_"+histFolder+extraText+".pdf")
 
 
 
 
 
 if __name__ == '__main__':
+    args = parse_arguments()
+    years       = args.years
+    histFolders = args.histFolders
+    Channels    = args.Channels
+    Collections = args.Collections
+
     studies = "nominal"
-    module = "Selection"
-    # module = "SignalRegion"
-    years = ["2016","2017","2018", "RunII"]
-    years = ["2016"]
-    # histFolders=["btag_DeepBoosted_H4qvsQCDmassdep_x3_SR"]
-    histFolders=["PTMassCut"]
+    # module = "Selection"
+    module = "SignalRegion"
+    # years = ["2016","2017","2018", "RunII"]
+    # years = ["RunII"]
+    # histFolders=["PTMassCut"]
+    # histFolders=["btag_DeepBoosted_H4qvsQCDmassdep_x3"]
+
     for year in years:
-        PlotSyst = PlotSystematics(year=year, studies=studies, histFolders=histFolders, module=module)
+        PlotSyst = PlotSystematics(year=year, studies=studies, histFolders=histFolders, module=module, Channels=Channels, Collections=Collections)
         PlotSyst.PlotHistos()

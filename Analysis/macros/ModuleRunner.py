@@ -20,37 +20,35 @@ class ModuleRunner(ModuleRunnerBase):
         self.CompileModules()
         self.controls = controls
     def RunCommand(self,command="", isPython=False, **kwargs):
+
+        def LoopOver(arg, defaultList):
+            if not arg in kwargs: return [""]
+            return kwargs[arg] if kwargs[arg]!=["all"] else defaultList
+
         cwd = os.getcwd()
         os.chdir(self.Path_ANALYSIS+"Analysis")
         list_processes = []
         list_logfiles = []
         print "RunCommand:", command
-        if isPython:
-            process = subprocess.Popen("python python/"+command+".py", shell=True)
-            process.wait()
+        if len(kwargs)>0:
+            i = 0
+            for year in LoopOver("years", self.Samples_Year_Dict.keys()+["RunII"]):
+                for collection in LoopOver("Collections", self.Collections):
+                    for channel in LoopOver("Channels", self.Channels):
+                        for histFolder in LoopOver("histFolders", [""]):
+                            if isPython: list_processes.append(["python", "python/"+command+".py", "--histFolders="+histFolder,"--Channels="+channel+"channel" if channel!="" else "--Channels="+channel,"--Collections="+collection,"--years="+year])
+                            else: list_processes.append(["./"+command,histFolder,channel+"channel" if channel!="" else channel,collection,year])
+                            list_logfiles.append("log_"+str(i)+".txt")
+                            i +=1
+            for i in list_processes:
+                print i
+            # print "Number of processes", len(list_processes)
+            parallelise(list_processes, 20,list_logfiles)
+            # parallelise(list_processes, 20)
         else:
-            if len(kwargs)>0:
-                i = 0
-                def LoopOver(arg, defaultList):
-                    if not arg in kwargs: return [""]
-                    else:
-                        if len(kwargs[arg])>1: return kwargs[arg]
-                        else: return defaultList
-                for year in LoopOver("years", self.Samples_Year_Dict.keys()+["RunII"]):
-                    for collection in LoopOver("Collections", self.Collections):
-                        for channel in LoopOver("Channels", self.Channels):
-                            for histFolder in LoopOver("histFolders", kwargs["histFolders"]):
-                                list_processes.append(["./"+command,histFolder,channel+"channel" if channel!="" else channel,collection,year])
-                                list_logfiles.append("log_"+str(i)+".txt")
-                                i +=1
-                for i in list_processes:
-                    print i
-                # print "Number of processes", len(list_processes)
-                # parallelise(list_processes, 20,list_logfiles)
-                parallelise(list_processes, 20)
-            else:
-                process = subprocess.Popen("./"+command, shell=True)
-                process.wait()
+            if isPython: process = subprocess.Popen("python python/"+command+".py", shell=True)
+            else: process = subprocess.Popen("./"+command, shell=True)
+            process.wait()
         os.chdir(cwd)
 
     def defineModules(self):
@@ -214,7 +212,7 @@ class ModuleRunner(ModuleRunnerBase):
         year = "RunII"
         list_processes = []
         list_processes_plots = []
-        for module in ["Preselection","Selection","SignalRegion", "LeptonIDStudies"]:
+        for module in ["Preselection","Selection","SignalRegion", "LeptonIDStudies","SF"]:
             self.SetModule(module, Collections=Collections, Channels=Channels, Systematics=Systematics)
             for collection, channel, syst in self.SmartLoop():
                 if DoControl(self.controls,module+collection+channel+syst, channel, ""):
@@ -227,7 +225,7 @@ class ModuleRunner(ModuleRunnerBase):
                     mode = "MC" if "MC" in sample else "DATA"
                     filespath = path_RunII+self.PrefixrootFile+mode+"."+sample+"_noTree.root"
                     command = ["hadd", "-f", "-T", filespath.replace(self.year,year)]
-                    for histo in glob(filespath.replace("RunII","201*").replace(self.year,"201*")):
+                    for histo in glob(filespath.replace("RunII","201*").replace(self.year,"201*").replace("_noTree","*")):
                         command.append(histo)
                     list_processes.append(command)
         # for i in list_processes:
