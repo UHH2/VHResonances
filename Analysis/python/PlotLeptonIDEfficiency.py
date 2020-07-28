@@ -6,7 +6,7 @@ TDR.extraText  = "Simulation"
 TDR.extraText2 = "Work in progress"
 
 '''
-Module to study LeptonID Efficiency
+Module to plot LeptonID Efficiency
 
 - Need the LeptonIDStudiesModule output as input
 - Specify in the main function which years and channels you want to run over.
@@ -158,13 +158,17 @@ class PlotLeptonIDEfficiency(VariablesBase):
 
 
 def main():
-    years = ["2016","2017","2018", "RunII"]
-    channels = ["muonchannel", "electronchannel"]
-    # years = ["2016"]
-    # channels = ["muonchannel"]
+    args = parse_arguments()
+    years    = args.years
+    Channels = args.Channels
 
-    for year,channel,isDR in list(itertools.product(years, channels, [True,False])):
-    # for year,channel,isDR in list(itertools.product(years, channels, [True])):
+    # years = ["2016","2017","2018", "RunII"]
+    # Channels = ["muonchannel", "electronchannel"]
+    # years = ["2016"]
+    # Channels = ["muonchannel"]
+
+    for year,channel,isDR in list(itertools.product(years, Channels, [True,False])):
+    # for year,channel,isDR in list(itertools.product(years, Channels, [True])):
         PlotSyst = PlotLeptonIDEfficiency(year=year, channel=channel, isDR=isDR)
         PlotSyst.LoadHistos()
         PlotSyst.NormHistos()

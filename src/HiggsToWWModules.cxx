@@ -474,9 +474,7 @@ bool ScaleFactorsManager::process(uhh2::Event& event){
   if (electronchannel) {
     SFs_ele["Electron_LooseID"]->process(event);
     SFs_ele["Electron_Reconstruction"]->process(event);
-    cout << "Electron_Trigger start" << endl;
     SFs_ele["Electron_Trigger"]->process(event);
-    cout << "Electron_Trigger end" << endl;
   }
 
   return true;
