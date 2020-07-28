@@ -120,14 +120,6 @@
 <!ENTITY MC_ZZTo2L2Nu_2016              SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2016v3/MC_ZZTo2L2Nu.xml">
 <!ENTITY MC_ZZTo4L_2016                 SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2016v3/MC_ZZTo4L.xml">
 
-<!ENTITY MC_DY_inv_PtZ_50to100_2016     SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MC_DYJetsToNuNu_PtZ-50To100_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_Summer16_v2.xml">
-<!ENTITY MC_DY_inv_PtZ_100to250_2016    SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MC_DYJetsToNuNu_PtZ-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_Summer16_ext_v2.xml">
-<!ENTITY MC_DY_inv_PtZ_250to400_2016    SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MC_DYJetsToNuNu_PtZ-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_Summer16_ext_v2.xml">
-<!ENTITY MC_DY_inv_PtZ_400to650_2016    SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MC_DYJetsToNuNu_PtZ-400To650_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_Summer16_v2.xml">
-<!-- <!ENTITY MC_DY_inv_PtZ_400to650_ext1_2016 SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MC_DYJetsToNuNu_PtZ-400To650_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_Summer16_ext1_v2.xml"> -->
-<!ENTITY MC_DY_inv_PtZ_650toInf_2016    SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MC_DYJetsToNuNu_PtZ-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_Summer16_v2.xml">
-<!-- <!ENTITY MC_DY_inv_PtZ_650toInf_ext1_2016 SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/MC_DYJetsToNuNu_PtZ-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_Summer16_ext1_v2.xml"> -->
-
 <!ENTITY MC_DY_inv_HT100to200_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-100To200_13TeV-madgraph_Summer16_v2.xml">
 <!-- <!ENTITY MC_DY_inv_HT100to200_ext1_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-100To200_13TeV-madgraph_Summer16_v2.xml"> -->
 <!ENTITY MC_DY_inv_HT200To400_2016      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZJetsToNuNu_HT-200To400_13TeV-madgraph_Summer16_v2.xml">
