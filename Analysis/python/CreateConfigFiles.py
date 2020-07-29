@@ -90,12 +90,6 @@ def newNumber(year,sample,ConfigFile,syst):
             newNumber = 330
         if any(x in sample for x in ["MC_DY_HT100to200_2016"]):
             newNumber = 300
-        if any(x in sample for x in ["MC_DY_inv_PtZ_250To400_2016", "MC_DY_inv_PtZ_400To650_2016", "MC_DY_inv_PtZ_650ToInf_2016"]):
-            newNumber = 100
-        if any(x in sample for x in ["MC_DY_inv_PtZ_100To250_2016"]):
-            newNumber = 185
-        if any(x in sample for x in ["MC_DY_inv_PtZ_50To100_2016"]):
-            newNumber = 305
     if "MC_TT" in sample:
         newNumber = 40 if year=="2016" else 200 if year=="2017" else 60
     if "MC_W" in sample:
@@ -109,6 +103,8 @@ def newNumber(year,sample,ConfigFile,syst):
         if any(x in sample for x in ["MC_WW_2018"]):
             newNumber = 900
         if any(x in sample for x in ["MC_WZTo2L2Q_2016"]):
+            newNumber = 40
+        if any(x in sample for x in ["MC_WJetsToLNu"]):
             newNumber = 40
     if "MC_ZZ" in sample:
         newNumber = 250
