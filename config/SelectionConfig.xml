@@ -67,6 +67,7 @@
 <!ENTITY MC_WW_2016                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_WW_2016.xml">
 <!ENTITY MC_WZ_2016                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_WZ_2016.xml">
 <!ENTITY MC_ZZ_2016                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZZ_2016.xml">
+<!ENTITY MC_WJets_2016                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_WJets_2016.xml">
 
 
 <!-- MC Samples 2017 -->
@@ -116,6 +117,7 @@
 <!ENTITY MC_WW_2017                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_WW_2017.xml">
 <!ENTITY MC_WZ_2017                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_WZ_2017.xml">
 <!ENTITY MC_ZZ_2017                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZZ_2017.xml">
+<!ENTITY MC_WJets_2017                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_WJets_2017.xml">
 
 
 <!-- MC Samples 2018 -->
@@ -165,6 +167,7 @@
 <!ENTITY MC_WW_2018                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_WW_2018.xml">
 <!ENTITY MC_WZ_2018                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_WZ_2018.xml">
 <!ENTITY MC_ZZ_2018                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZZ_2018.xml">
+<!ENTITY MC_WJets_2018                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_WJets_2018.xml">
 
 <!-- Data Samples -->
 <!ENTITY DATA_SingleMuon_2016           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_2016.xml">
@@ -240,6 +243,7 @@
     <InputData Type="MC"    Version="MC_WW_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2016;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_WZ_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2016;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZZ_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2016;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WJets_2016"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2016;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <!-- MC 2017 -->
     <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2017"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2017;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
@@ -288,6 +292,7 @@
     <InputData Type="MC"    Version="MC_WW_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2017;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_WZ_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2017;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZZ_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2017;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WJets_2017"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2017;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <!-- MC 2018 -->
     <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2018"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2018;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
@@ -336,6 +341,7 @@
     <InputData Type="MC"    Version="MC_WW_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2018;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_WZ_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2018;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZZ_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2018;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WJets_2018"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2018;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <!-- Data -->
 
