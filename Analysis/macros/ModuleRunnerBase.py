@@ -42,7 +42,7 @@ class VariablesBase(GenericPath):
 
         # TODO MC_DY_HT70to100
         self.Generic_SubSamples_Dict_ = {
-            "MC_DY"                 : [proc+subsample for proc in ["MC_DY_HT", "MC_DY_inv_HT"] for subsample in ["100to200", "200to400", "400to600", "600to800", "800to1200", "1200to2500", "2500toInf",]] + ["MC_DY_inv_PtZ_"+subsample for subsample in ["50to100", "100to250", "250to400", "400to650", "650toInf"]],
+            "MC_DY"                 : [proc+subsample for proc in ["MC_DY_HT", "MC_DY_inv_HT"] for subsample in ["100to200", "200to400", "400to600", "600to800", "800to1200", "1200to2500", "2500toInf",]],
             "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],
             "MC_WW_incl"            : ["MC_WW"],
             "MC_WZ_incl"            : ["MC_WZ"],
@@ -50,6 +50,7 @@ class VariablesBase(GenericPath):
             "MC_WW"                 : ["MC_WWTo4Q", "MC_WWToLNuQQ", "MC_WWTo2L2Nu"],
             "MC_WZ"                 : ["MC_WZToLNu2Q", "MC_WZTo2Q2Nu", "MC_WZTo2L2Q", "MC_WZTo1L3Nu", "MC_WZTo3LNu"],
             "MC_ZZ"                 : ["MC_ZZTo4Q", "MC_ZZTo2Q2Nu", "MC_ZZTo2L2Q", "MC_ZZTo2L2Nu", "MC_ZZTo4L"],
+            "MC_WJets"              : [proc+subsample for proc in ["MC_WJetsToLNu_HT"] for subsample in ["70To100", "100To200", "200To400", "400To600", "600To800", "800To1200", "1200To2500", "2500ToInf",]],
             "DATA_SingleElectron"   : ["DATA_SingleElectron_Run"+str(run) for run in self.AllRunPeriods],
             "DATA_SingleMuon"       : ["DATA_SingleMuon_Run"+str(run) for run in self.AllRunPeriods],
             "DATA_MET"              : ["DATA_MET_Run"+str(run) for run in self.AllRunPeriods],
@@ -93,8 +94,6 @@ class VariablesBase(GenericPath):
         for year in self.years:
             for subsample in sorted(self.Generic_SubSamples_Dict_):
                 loop_over = self.Generic_SubSamples_Dict_[subsample]
-                if (year=="2016" and subsample=="MC_DY"): loop_over = filter(lambda subsample: not "inv" in subsample or "PtZ" in subsample ,loop_over)
-                if (year!="2016" and subsample=="MC_DY"): loop_over = filter(lambda subsample: not "PtZ" in subsample ,loop_over)
                 if (year=="2016" and subsample=="MC_TTbar"): loop_over = ["MC_TTbar"]
                 if (year!="2016" and (subsample=="MC_WW" or subsample=="MC_WZ" or subsample=="MC_ZZ") ): loop_over = self.Generic_SubSamples_Dict_[subsample+"_incl"]
                 if "DATA" in subsample: loop_over = [subsample+"_Run"+str(run) for run in self.RunPeriods_Dict[year]]
