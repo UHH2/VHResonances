@@ -67,7 +67,7 @@ protected:
 
   // Define variables
   std::string NameModule = "PreselectionModule";
-  std::vector<std::string> histogram_tags = { "nocuts", "weights", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
+  std::vector<std::string> histogram_tags = { "nocuts", "weights", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
@@ -290,6 +290,11 @@ bool PreselectionModule::process(uhh2::Event& event) {
 
   if(!NBoostedJetSel->passes(event)) return false;
   fill_histograms(event, "NBoostedJet");
+
+  if (MB["invisiblechannel"]) {
+   if(event.met->pt()<min_MET_pt) return false;
+ }
+ fill_histograms(event, "METCut");
 
   if(!DeltaRDiLepton_selection->passes(event)) return false;
   fill_histograms(event, "DeltaRDiLepton");
