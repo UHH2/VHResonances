@@ -29,6 +29,19 @@ private:
 };
 
 
+
+class DeltaPhiMET: public uhh2::Selection {
+public:
+  DeltaPhiMET(float Dphi_min_, bool is_invisiblechannel_, const uhh2::Event::Handle<std::vector<TopJet> > & topjetcollection_);
+  virtual bool passes(const uhh2::Event& event) override;
+private:
+  float Dphi_min;
+  bool is_invisiblechannel;
+  uhh2::Event::Handle<std::vector<TopJet> > topjetcollection;
+};
+
+
+
 typedef std::function<bool (const ZprimeCandidate &, const uhh2::Event &)> ZprimeCandidate_ID;
 
 class ZprimeCandidateID {

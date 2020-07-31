@@ -63,6 +63,24 @@ bool DeltaRDiLepton::passes(const Event& event){
   return false;
 }
 
+// Performs a cut on Delta phi between the MET and all jets for the invisble channel.
+DeltaPhiMET::DeltaPhiMET (float Dphi_min_, bool is_invisiblechannel_, const Event::Handle<vector<TopJet> > & topjetcollection_): Dphi_min(Dphi_min_), is_invisiblechannel(is_invisiblechannel_), topjetcollection(topjetcollection_) { };
+
+bool DeltaPhiMET::passes(const Event& event){
+
+  if (!is_invisiblechannel) return true;
+
+  const auto & jets = event.get(topjetcollection); // or h_jets?
+
+  for(const auto & jet: jets){
+    auto Dphi = deltaPhi(event.met->v4(), jet);
+    if (Dphi > min_Dphi_MET) return true;
+  }
+
+  return false;
+}
+
+
 
 ZprimeCandidateID::ZprimeCandidateID (const Event::Handle<vector<ZprimeCandidate> > & h_ZprimeCandidates_ ): h_ZprimeCandidates(h_ZprimeCandidates_){}
 
