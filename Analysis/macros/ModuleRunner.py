@@ -133,7 +133,7 @@ class ModuleRunner(ModuleRunnerBase):
                 continue
             mode = "MC" if "MC" in sample else "DATA"
             commonpath = self.ModuleStorage+"/"+middlePath
-            filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.Signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_Dict[sample] if notDoControl(self.controls,collection+channel+syst+name_, channel, name_)]
+            filespath  = commonpath+"workdir_"+self.Module+"_"+sample+"/" if not mergeCategory or self.Signal in sample else [commonpath+self.PrefixrootFile+mode+"."+name_+extraText+".root" for name_ in self.Samples_Dict[sample] if not DoControl(self.controls,collection+channel+syst+name_, channel, name_)]
             newFile    = commonpath+self.PrefixrootFile+mode+"."+sample+extraText
             newFile   += "_merge.root" if mergeCategory else ".root"
             if mergeCategory:
