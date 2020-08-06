@@ -1,346 +1,299 @@
-import os, ROOT, glob
-from math import sqrt, log
-from numpy import arange
-from array import array
-from tdrstyle_all import *
 from Utils import *
 
-ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/VHResonances/include/constants.hpp"')
-ROOT.gROOT.SetBatch(ROOT.kTRUE)
-ROOT.gStyle.SetOptStat(0)
+import tdrstyle_all as TDR
+TDR.writeExtraText = True
+TDR.extraText  = "Simulation"
+TDR.extraText2 = "Work in progress"
 
-PlotFolder = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/OtherPlots/"
+'''
+Module to study optimal pt-dependent cut
 
-color = {600:  400,
-         800:  416,
-         1000: 432,
-         1200: 500,
-         1400: 616,
-         1600: 632,
-         1800: 600,
-         2000: 616,
-         2500: 632,
-         3000: 632,
-         3500: 632,
-         4000: 750,
-         4500: 800,
-         5000: 820,
-         5500: 840,
-         6000: 860,
-         7000: 880,
-         8000: 900,
-         }
+- Need the Selection output as input
+- The StoreVars function is time consuming (~20 min for everything). Run it only once
+- Default collection is Puppi.
+- Efficiency as function of DeltaR or pt. Choose option
+- ID_kincut as reference to calculate efficiency
 
-@timeit
-def GetDeepBoostedvsPT():
-    # imax = 100
-    imax = 1000
-    # imax = -1
-    canv_PTSelection = tdrCanvas("canv_PTSelection", 200, 5000, 0.01, 7000, "pT","event")
-    # canv_PTSelection.SetLogy()
+'''
+# TODO invisible channel not fully implemented yet
 
-    DeepBoostedvsPT_DY = ROOT.TH2F("DeepBoostedvsPT_DY", "", 101,0,1.01, 50,0,5000)
-    DeepBoostedvsPT_DY.SetDirectory(0)
-    for f_DY_name in glob.glob("/nfs/dust/cms/user/amalara//WorkingArea/File//Analysis/2016/Selection/Puppi/muonchannel/nominal/workdir_Selection_MC_DY_2016/uhh2.AnalysisModuleRunner.MC.MC_DY_2016_*"):
-        print f_DY_name
-        f_DY = ROOT.TFile(f_DY_name)
-        t_DY = f_DY.Get("AnalysisTree")
-        i_ = 0
-        for ev in t_DY:
-            i_+=1
-            if i_>imax and imax>0: break
-            for zp in ev.ZprimeCandidate:
-                jet = zp.H()
-                a = DeepBoostedvsPT_DY.Fill(jet.btag_DeepBoosted_H4qvsQCD(), jet.pt(),ev.weight_GLP)
-    canv_DY = tdrCanvas("canv_DY", 0, 1.1, 200, 5000, "DeepBoosted","pT")
-    canv_DY.SetRightMargin(0.15)
-    canv_DY.SetLogz()
-    DeepBoostedvsPT_DY.Draw("colz")
-    canv_DY.SaveAs(PlotFolder+"DeepBoostedvsPT_DY.pdf")
+import numpy as np
+import pandas as pd
+from math import sqrt, log, pow
+from array import array
+
+def PtToMass(pt):
+    return pt*2
+
+def MassToPt(mass):
+    return mass/2
+
+def PtToMass2(pt):
+    return (pt-22.5)/0.36
+
+def MassToPt2(mass):
+    return mass*0.36 +22.5
+
+def PtDependentCut(pt):
+    return 5.08*1e-03+2.72*1e07*pow(PtToMass(pt),-3)
+
+def PtDependentCut2(pt):
+    return 5.08*1e-03+2.72*1e07*pow(PtToMass2(pt),-3)
+
+def MassDependentCut(mass):
+    return 5.08*1e-03+2.72*1e07*pow(mass,-3)
 
 
-    DeepBoostedvsPT = ROOT.TH2F("DeepBoostedvsPT", "", 101,0,1.01, 50,0,5000)
-    DeepBoostedvsPT.SetDirectory(0)
-    DeepBoosted = ROOT.TH1F("DeepBoosted", "", 101,0,1.01)
-    PTSelection = ROOT.TH1F("PTSelection", "", 50,0,5000)
-    h_pts = []
-    DeepBoostedvsPT_all = {}
-    for mass in ROOT.MassPoints:
-        massName = str(int(mass))
-        DeepBoostedvsPT_all[massName] = ROOT.TH2F("DeepBoostedvsPT"+massName, "", 101,0,1.01, 50,0,5000)
-        DeepBoostedvsPT_all[massName].SetDirectory(0)
-        print mass
-        # if mass <3000: continue
-        f = ROOT.TFile("/nfs/dust/cms/user/amalara//WorkingArea/File//Analysis/2016/Selection/Puppi/muonchannel/nominal/workdir_Selection_MC_ZprimeToZH_M"+massName+"_2016/uhh2.AnalysisModuleRunner.MC.MC_ZprimeToZH_M"+massName+"_2016_0.root")
-        t = f.Get("AnalysisTree")
-        h_pt = ROOT.TH1F("PTSelection"+massName, "; pT; events", 50, 0, 5000)
-        h_pt.SetDirectory(0)
-        h_pts.append(h_pt)
-        i_ = 0
-        for ev in t:
-            i_+=1
-            if i_>imax and imax>0: break
-            for zp in ev.ZprimeCandidate:
-                jet = zp.H()
-                a = DeepBoostedvsPT.Fill(jet.btag_DeepBoosted_H4qvsQCD(), jet.pt(),ev.weight_GLP)
-                a = DeepBoostedvsPT_all[massName].Fill(jet.btag_DeepBoosted_H4qvsQCD(), jet.pt(),ev.weight_GLP)
-                a = DeepBoosted.Fill(jet.btag_DeepBoosted_H4qvsQCD(), ev.weight_GLP)
-                a = PTSelection.Fill(jet.pt(), ev.weight_GLP)
-                a = h_pt.Fill(jet.pt(), ev.weight_GLP)
-        # h_pt.Draw("same")
-        tdrDraw(h_pt, "p same", ROOT.kFullDotLarge, color[mass], 1, color[mass], 0, color[mass])
+colors = {"2016":       ROOT.kGreen+1,
+          "2017":       ROOT.kRed+1,
+          "2018":       ROOT.kOrange+1,
+          "all":        ROOT.kBlue+1,
+          "lepton":     ROOT.kFullCircle,
+          "muon":       ROOT.kFullTriangleDown,
+          "electron":   ROOT.kFullTriangleUp,
+}
+
+class TaggerCutStudy(VariablesBase):
+    def __init__(self):
+        VariablesBase.__init__(self)
+        TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
+        self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/TaggerCutStudy/"
+        self.fName = "Variables"
+        self.Samples = filter(lambda x: self.MainBkg in x or self.Signal in x, self.Processes_Year_Dict["2016"])
+        self.Ybins = sorted([x for x in np.arange(0.1,1,0.005)]+[x for x in np.arange(0.001,0.1,0.0005)])
+        self.Xbins = sorted([self.MassPoints[i] - (self.MassPoints[i]-self.MassPoints[i-1])/2 for i in range(1,len(self.MassPoints))]+[500,8500])
+
+        os.system("mkdir -p "+self.outdir)
+
+    @timeit # circa 40 minutes
+    def StoreVars(self):
+        vars = {}
+        for year, channel, sample in list(itertools.product(self.years, self.Channels, self.Samples)):
+            sample = sample.replace("2016",year)
+            if DoControl([""], year+channel+sample, channel, sample): continue
+            if "invisible" in channel: continue #TODO
+            print year,channel,sample
+            for filename in glob.glob(self.Path_STORAGE+year+"/Selection/Puppi/"+channel+"channel/nominal/workdir_Selection_"+sample+"/*.root"):
+                f_ = ROOT.TFile(filename)
+                t_ = f_.Get("AnalysisTree")
+                for ev in t_:
+                    if ev.ZprimeCandidate.size()!=1 :
+                        print "Unexpected number of ZprimeCandidate."
+                        continue
+                    for zp in ev.ZprimeCandidate:
+                        jet = zp.H()
+                        vars.setdefault("year",[]).append(year)
+                        vars.setdefault("channel",[]).append(channel)
+                        vars.setdefault("sample",[]).append(sample)
+                        vars.setdefault("weight_GLP",[]).append(ev.weight_GLP)
+                        vars.setdefault("jet_pt",[]).append(jet.pt())
+                        vars.setdefault("jet_DB",[]).append(jet.btag_DeepBoosted_H4qvsQCD())
+                        vars.setdefault("Zprime_mass",[]).append(zp.Zprime_mass())
+        df = pd.DataFrame(data=vars)
+        df.to_pickle(self.outdir+self.fName+".pkl")
 
 
-    PTSelection.Draw("same")
-    # tdrDraw(PTSelection, "hist same", ROOT.kFullDotLarge, ROOT.kBlack, 1, ROOT.kBlack, 0, ROOT.kBlack)
-    canv_PTSelection.SaveAs(PlotFolder+"PTSelection.pdf")
+    def LoadVars(self):
+        self.df = pd.read_pickle(self.outdir+self.fName+".pkl")
 
-    canv = tdrCanvas("canv", 0, 1.1, 200, 5000, "DeepBoosted","pT")
-    canv.SetRightMargin(0.15)
-    canv.SetLogz()
-    DeepBoostedvsPT.Draw("colz")
-    canv.SaveAs(PlotFolder+"DeepBoostedvsPT.pdf")
-    canv_DeepBoosted = tdrCanvas("canv_DeepBoosted", 0, 1.1, 0, 10000, "DeepBoosted","event")
-    DeepBoosted.Draw("")
-    canv_DeepBoosted.SaveAs(PlotFolder+"DeepBoosted.pdf")
-    File_DeepBoosted = ROOT.TFile.Open(PlotFolder+"DeepBoosted.root" ,"RECREATE")
-    File_DeepBoosted.cd()
-    DeepBoostedvsPT_DY.Write()
-    DeepBoostedvsPT.Write()
-    for name in DeepBoostedvsPT_all:
-        DeepBoostedvsPT_all[name].Write()
-    File_DeepBoosted.Close()
-    return (DeepBoostedvsPT_DY,DeepBoostedvsPT,DeepBoostedvsPT_all)
+    def LoadHistos(self, var):
+        file_ = ROOT.TFile(self.outdir+"Histos.root", "OPEN")
+        self.histos = {}
+        for year, channel in list(itertools.product(self.years+["all"], self.Channels+["lepton"])):
+            if "invisible" in channel: continue #TODO
+            histoname = var+year+channel+self.Signal
+            histoname = histoname.replace("all","").replace("lepton","")
+            self.histos[year+channel+self.Signal] = file_.Get(histoname)
+            if year == "all": histoname = histoname.replace(self.Signal,self.MainBkg)
+            else: histoname = histoname.replace(self.Signal,self.MainBkg+"_"+year)
+            self.histos[year+channel+self.MainBkg] = file_.Get(histoname)
+            if not self.histos[year+channel+self.Signal]: continue
+            self.histos[year+channel+self.Signal].Scale(0.1)
+            self.histos[year+channel+self.Signal].RebinX(30)
+            self.histos[year+channel+self.MainBkg].RebinX(30)
+            self.histos[year+channel+self.Signal].SetDirectory(0)
+            self.histos[year+channel+self.MainBkg].SetDirectory(0)
+        file_.Close()
 
-@timeit
-def SensitivityScan():
-    File_DeepBoosted = ROOT.TFile.Open(PlotFolder+"DeepBoosted.root" ,"READ")
-    h_bkg = File_DeepBoosted.Get("DeepBoostedvsPT_DY")
-    h_sig = File_DeepBoosted.Get("DeepBoostedvsPT")
-    h_sig_all = {}
-    for mass in ROOT.MassPoints:
-        massName = str(int(mass))
-        h_sig_all[massName] = File_DeepBoosted.Get("DeepBoostedvsPT"+massName)
-    max = -1
-    bin_max = -1
-    bin_max_y = -1
-    for x in range(1,h_sig.GetNbinsX()):
-        s = h_sig.Integral(x,h_sig.GetNbinsX(),1,h_sig.GetNbinsY())
-        b = h_bkg.Integral(x,h_bkg.GetNbinsX(),1,h_bkg.GetNbinsY())
-        if b==0: continue
-        # sig = s/sqrt(b);
-        sig = sqrt(2*((s+b)*log(1+s/b)-s));
-        # return isfinite(sig)? sig : 0;
-        if sig>max:
-            max = sig
-            bin_max = x
-        # print "x", x, h_sig.GetXaxis().GetBinCenter(x), "s", s, "b", b, "s%", s/h_sig.Integral(), "b%", b/h_bkg.Integral(), "sig", sig, "max", max
-    print bin_max, bin_max_y, h_sig.GetXaxis().GetBinCenter(bin_max), h_sig.GetYaxis().GetBinCenter(bin_max_y), max, h_sig.Integral(x,h_sig.GetNbinsX(),1,h_sig.GetNbinsY())/h_sig.Integral(), h_bkg.Integral(x,h_bkg.GetNbinsX(),1,h_bkg.GetNbinsY())/h_bkg.Integral()
-    for name in sorted(h_sig_all.keys()):
-        hs = h_sig_all[name]
-        max = -1
-        bin_max = -1
-        bin_max_y = -1
-        max_all = -1
-        bin_max_all = -1
-        bin_max_y_all = -1
-        max_1000 = -1
-        bin_max_1000 = -1
-        bin_max_y_1000 = -1
-        for y in range(1,hs.GetNbinsY()):
-            for x in range(1,hs.GetNbinsX()):
-                s = hs.Integral(x,hs.GetNbinsX(),y,hs.GetNbinsY())
-                b = h_bkg.Integral(x,h_bkg.GetNbinsX(),y,h_bkg.GetNbinsY())
-                if b==0: continue
-                # sig = s/sqrt(b);
-                sig = sqrt(2*((s+b)*log(1+s/b)-s));
-                # return isfinite(sig)? sig : 0;
-                if sig>max:
-                    max = sig
-                    bin_max =  hs.GetXaxis().GetBinCenter(x)
-                    bin_max_y = hs.GetYaxis().GetBinCenter(y)
-        for x in range(1,hs.GetNbinsX()):
-            s = hs.Integral(x,hs.GetNbinsX(),1,hs.GetNbinsY())
-            b = h_bkg.Integral(x,h_bkg.GetNbinsX(),1,h_bkg.GetNbinsY())
-            if b==0: continue
-            # sig = s/sqrt(b);
-            sig = sqrt(2*((s+b)*log(1+s/b)-s));
-            # return isfinite(sig)? sig : 0;
-            if sig>max_all:
-                max_all = sig
-                bin_max_all = hs.GetXaxis().GetBinCenter(x)
-                bin_max_y_all = hs.GetYaxis().GetBinCenter(1)
-        for x in range(1,hs.GetNbinsX()):
-            s = hs.Integral(x,hs.GetNbinsX(),hs.GetYaxis().FindBin(1000),hs.GetNbinsY())
-            b = h_bkg.Integral(x,h_bkg.GetNbinsX(),h_bkg.GetYaxis().FindBin(1000),h_bkg.GetNbinsY())
-            if b==0: continue
-            # sig = s/sqrt(b);
-            sig = sqrt(2*((s+b)*log(1+s/b)-s));
-            # return isfinite(sig)? sig : 0;
-            if sig>max_1000:
-                max_1000 = sig
-                bin_max_1000 = hs.GetXaxis().GetBinCenter(x)
-                bin_max_y_1000 = 1000
-        print name, "\t", bin_max, "\t", bin_max_y, "\t", round(max,2), "\t", bin_max_1000, "\t", bin_max_y_1000, "\t", round(max_1000,2), "\t", bin_max_all, "\t", bin_max_y_all, "\t", round(max_all,2), "\t",
-        s = hs.Integral(hs.GetXaxis().FindBin(0.2),hs.GetNbinsX(),hs.GetYaxis().FindBin(1000),hs.GetNbinsY())
-        b = h_bkg.Integral(h_bkg.GetXaxis().FindBin(0.2),h_bkg.GetNbinsX(),h_bkg.GetYaxis().FindBin(1000),h_bkg.GetNbinsY())
-        if b==0: continue
-        sig_my = sqrt(2*((s+b)*log(1+s/b)-s));
-        print sig_my, "\t", s, "\t", b,
-        s = hs.Integral(hs.GetXaxis().FindBin(0.02),hs.GetNbinsX(),hs.GetYaxis().FindBin(1000),hs.GetNbinsY())
-        b = h_bkg.Integral(h_bkg.GetXaxis().FindBin(0.02),h_bkg.GetNbinsX(),h_bkg.GetYaxis().FindBin(1000),h_bkg.GetNbinsY())
-        if b==0: continue
-        sig_my = sqrt(2*((s+b)*log(1+s/b)-s));
-        print sig_my, "\t", s, "\t", b
+    @timeit # circa 20 minutes
+    def PlotVar(self):
+        self.LoadVars()
+        def CreateHisto(var,name):
+            cut_min, cut_max, cut_bins = (0.,1.,2000)
+            pt_min, pt_max, pt_bins = (0,5000,1000)
+            mass_min, mass_max, mass_bins = (0,10000,1000)
+            if var == "PT":   hist = ROOT.TH2D(name, name, pt_bins, pt_min, pt_max, cut_bins, cut_min, cut_max)
+            if var == "Mass": hist = ROOT.TH2D(name, name, mass_bins, mass_min, mass_max, cut_bins, cut_min, cut_max)
+            hist.SetDirectory(0)
+            return hist
 
+        histos = {}
+        for var in ["PT", "Mass"]:
+            for s_ in [self.MainBkg, self.Signal]:
+                name = var+s_
+                histos[name] = CreateHisto(var,name)
+            for year, channel in list(itertools.product(self.years, self.Channels)):
+                if "invisible" in channel: continue #TODO
+                name = var+year+channel+self.Signal
+                histos[name] = CreateHisto(var,name)
 
-@timeit
-def Plot2DVar(folder,var):
-    canv_Plot2DVar = tdrCanvas("canv_Plot2DVar", 200, 5000, 0.01, 7000, "pT","event")
-    canv_Plot2DVar.SetLogz()
-    canv_Plot2DVar.SetRightMargin(0.15)
+        for year, channel, sample in list(itertools.product(self.years, self.Channels, self.Samples)):
+            sample = sample.replace("2016",year)
+            if DoControl([""], year+channel+sample, channel, sample): continue
+            if "invisible" in channel: continue #TODO
+            print year, channel, sample
 
-    isFirst = True
-    hs = []
-    for mass in ROOT.MassPoints:
-        massName = str(int(mass))
-        print mass,
-        # if mass >5000: continue
-        f = ROOT.TFile("/nfs/dust/cms/user/amalara//WorkingArea/File//Analysis/2016/Preselection/Puppi/muonchannel/nominal/uhh2.AnalysisModuleRunner.MC.MC_ZprimeToZH_M"+massName+"_2016_noTree.root")
-        h = f.Get(folder+"/"+var)
-        print h.Integral()
-        h.SetDirectory(0)
-        hs.append(h)
-        if isFirst:
-            h2D = h
-            isFirst = False
-        else:
-            h2D.Add(h)
+            for var in ["PT", "Mass"]:
+                name = var+year+channel+sample
+                histos[name] = CreateHisto(var,name)
+                histos[name].SetDirectory(0)
 
+            for ind, entry in self.df[(self.df["year"]==year) & (self.df["channel"]==channel) & (self.df["sample"]==sample)].iterrows():
+                pt, mass, DB, w = (entry["jet_pt"],entry["Zprime_mass"],entry["jet_DB"],entry["weight_GLP"])
+                for var in ["PT", "Mass"]:
+                    x_val = pt if var=="PT" else mass
+                    histos[var+year+channel+sample].Fill(x_val, DB, w)
+                    for s_ in [self.MainBkg, self.Signal]:
+                        if s_ in sample: histos[var+s_].Fill(x_val, DB, w)
+                    if self.Signal in sample:
+                        histos[var+year+channel+self.Signal].Fill(x_val, DB, w)
 
-    h2D.Draw("colz")
-    canv_Plot2DVar.SaveAs(PlotFolder+"Plot2DVar_"+folder+"_"+var+".pdf")
+        file_ = ROOT.TFile(self.outdir+"Histos.root", "RECREATE")
+        for name, histo in histos.items():
+            if "PT" in name:   canv = tdrCanvas("canv"+name, 200, 5000,  0, 1.1, "p_T (GeV)", "DeepBoosted")
+            if "Mass" in name: canv = tdrCanvas("canv"+name, 500, 10000, 0, 1.1, "M (GeV)",   "DeepBoosted")
+            canv.SetRightMargin(0.15)
+            canv.SetLogy()
+            canv.SetLogz()
+            histo.Draw("colz")
+            canv.SaveAs(self.outdir+name+".pdf")
+            histo.Write(name)
+        file_.Close()
 
+    @timeit
+    def SensitivityScan(self, var="PT"):
+        self.LoadVars()
+        self.LoadHistos(var)
 
-@timeit
-def SensitivityScan2D():
-    doFast = True
-    doFast = False
-    imax = -1
-    # imax = 20000
-    path = "/nfs/dust/cms/user/amalara//WorkingArea/File//Analysis/2016/Selection/Puppi/muonchannel/nominal/"
+        significance = {}
+        pt_max       = {}
+        DB_cut       = {}
+        err          = {}
+        err2         = {}
+        histo = ROOT.TH2D("SensitivityScan","SensitivityScan",len(self.Xbins)-1,array('d',self.Xbins), len(self.Ybins)-1, array('d',self.Ybins))
+        x_min = 0
+        x_max = 3000 if var=="PT" else 8500
+        canv = tdrCanvas("canv", x_min, x_max, 0.0001, 10, var,"DeepBoosted")
+        canv.SetLogy()
+        canv.SetTickx(1)
+        canv.SetTicky(1)
+        leg = tdrLeg(0.40,0.70,0.95,0.89, 0.025, 42, ROOT.kBlack)
+        leg.SetNColumns(3)
+        dic_gr = {}
+        for year, channel in list(itertools.product(self.years+["all"], self.Channels+["lepton"])):
+            if "invisible" in channel: continue #TODO
+            print year, channel
+            h_sig = self.histos[year+channel+self.Signal]
+            h_bkg = self.histos[year+channel+self.MainBkg]
+            if not h_sig or not h_bkg: continue
+            for xbin in range(1,h_sig.GetNbinsX()+1):
+                mass = h_sig.GetXaxis().GetBinCenter(xbin)
+                mean = MassToPt(mass) if var=="PT" else mass
+                sigma = 1*(mean*0.02+20.) # TODO taken from fits
+                xbin_lo = h_sig.GetXaxis().FindBin(mean-sigma)
+                xbin_hi = h_sig.GetXaxis().FindBin(mean+sigma)
+                y_var = "jet_pt" if var=="PT" else "Zprime_mass"
+                name = year+channel+str(mass)
+                significance.setdefault(name,[])
+                pt_max.setdefault(name,[])
+                DB_cut.setdefault(name,[])
+                err.setdefault(name,[])
+                err2.setdefault(name,[])
+                for ybin in range(1,h_sig.GetNbinsY()+1):
+                    y = h_sig.GetYaxis().GetBinCenter(ybin)
+                    s = h_sig.Integral(xbin_lo,xbin_hi,ybin,h_sig.GetNbinsY())
+                    b = h_bkg.Integral(xbin_lo,xbin_hi,ybin,h_sig.GetNbinsY())
+                    sig = sqrt(2*((s+b)*log(1+s/b)-s)) if b>0 else sqrt(s)
+                    significance[name].append(sig)
+                    pt_max[name].append(mean)
+                    DB_cut[name].append(y)
+                    if year=="all" and channel=="lepton":
+                        histo.SetBinContent(histo.GetXaxis().FindBin(mass),histo.GetYaxis().FindBin(y),sig)
+                significance[name] = np.array(significance[name])
+                pt_max[name] = np.array(pt_max[name])
+                DB_cut[name] = np.array(DB_cut[name])
+                index = np.abs(significance[name] - significance[name].max()).argmin()
+                index_var = np.abs(significance[name] - significance[name].max()+significance[name].std()).argmin()
+                err[name] = abs(DB_cut[name][index]-DB_cut[name][index_var])/sqrt(12)
+                significance[name] = significance[name][index]
+                pt_max[name] = pt_max[name][index]
+                DB_cut[name] = DB_cut[name][index]
+                if year!="all" and channel!="lepton":
+                    err2[name].append(DB_cut[name])
 
-    extraText = "_Total" if doFast else ""
-    bins = arange(0,1,0.001)
-    histo2D = ROOT.TH2D("btag_DeepBoosted_H4qvsQCD","btag_DeepBoosted_H4qvsQCD",ROOT.MassPoints.size(),array('d',list(ROOT.MassPoints)+[9000]), len(bins)-1, array('d',bins))
-    # for x in range(histo2D.GetNbinsX()+1):
-    #     print x, histo2D.GetXaxis().GetBinCenter(x)
-    # for x in range(histo2D.GetNbinsY()):
-    #     print x, histo2D.GetYaxis().GetBinCenter(x)
+            filtered_pt_max = []
+            filtered_DB_cut = []
+            filtered_err = []
+            all_pt_max = []
+            all_DB_cut = []
+            all_err = []
+            for xbin in range(1,h_sig.GetNbinsX()+1):
+                mass = h_sig.GetXaxis().GetBinCenter(xbin)
+                name = year+channel+str(mass)
+                all_err.append(err[name])
+                all_pt_max.append(pt_max[name])
+                all_DB_cut.append(DB_cut[name])
+                if mass<600 or mass>6000: continue
+                filtered_pt_max.append(pt_max[name])
+                filtered_DB_cut.append(DB_cut[name])
+                if year=="all" and channel=="lepton":
+                    values = [err2[x][0] for x in err2 if str(mass) in x and err2[x]]
+                    values = list(filter(lambda x: x-np.mean(values)<2*np.std(values) and x>1e-04, values))
+                    filtered_err.append((np.max(values)-np.min(values))/2)
+            gr = ROOT.TGraph(len(all_DB_cut), array('d',all_pt_max), array('d',all_DB_cut))
+            # gr = ROOT.TGraphErrors(len(all_DB_cut), array('d',all_pt_max), array('d',all_DB_cut), array('d',np.zeros(len(all_DB_cut))), array('d',all_err));
+            dic_gr[year+channel] = gr
+            # tdrDraw(gr, "P",  colors[channel], colors[year], 2, colors[year], 1000, colors[year])
 
+            if year=="all" and channel=="lepton":
+                # gr_forfit = ROOT.TGraph(len(filtered_DB_cut), array('d',filtered_pt_max), array('d',filtered_DB_cut))
+                gr_forfit = ROOT.TGraphErrors(len(filtered_DB_cut), array('d',filtered_pt_max), array('d',filtered_DB_cut), array('d',np.zeros(len(filtered_DB_cut))), array('d',filtered_err))
+                dic_gr[year+channel+"fit"] = gr_forfit
+                func_ref = ROOT.TF1("1/x3","[0]+[1]*TMath::Power(x,-3)",x_min, x_max)
+                funcs = {}
+                funcs["1/x3"] = ROOT.TF1("1/x3","[0]+[1]*TMath::Power(x,-3)",x_min, x_max)
+                funcs["1/x3"].SetLineColor(ROOT.kBlue+1)
+                funcs["1/x2x3"] = ROOT.TF1("1/x2x3","[0]+[1]*TMath::Power(x,-2)+[2]*TMath::Power(x,-3)",x_min, x_max)
+                funcs["1/x2x3"].SetLineColor(ROOT.kOrange+1)
+                funcs["1/x1x3"] = ROOT.TF1("1/x1x3","[0]+[1]*TMath::Power(x,-1)+[2]*TMath::Power(x,-3)",x_min, x_max)
+                funcs["1/x1x3"].SetLineColor(ROOT.kViolet+1)
+                if var=="Mass":
+                    func_ref = ROOT.TF1("1/x3","[0]+[1]*TMath::Power(x/2,-3)",600,8000)
+                func_ref.SetParameters(5.08*1e-03,2.72*1e07)
+                ROOT.gStyle.SetOptFit(0)
+                for func in funcs:
+                    gr_forfit.Fit(funcs[func],"RQ")
+                    print "#"*50, "\n", func, "\n", funcs[func].GetParameter(0), "\n", funcs[func].GetParameter(1), "\n", funcs[func].GetParameter(2), "\n", "#"*50
+                    funcs[func].Draw("same")
+                tdrDraw(gr_forfit, "P",  colors[channel], ROOT.kBlack, 2, ROOT.kBlack, 1000, ROOT.kBlack)
+                # tdrDraw(gr_forfit, "P",  colors[channel], colors[year], 2, colors[year], 1000, colors[year])
+                func_ref.Draw("same")
+            # leg.AddEntry(gr, year+"_"+channel, "lp")
+        canv.SaveAs(self.outdir+"YVs"+var+".pdf")
+        canv = tdrCanvas("canv_Significance", 0, 1.1, x_min, x_max, "DeepBoosted","pT")
+        canv.SetRightMargin(0.15)
+        canv.SetLogy()
+        histo.Draw("colz")
+        canv.SaveAs(self.outdir+"Significance"+var+".pdf")
+        canv.SaveAs(self.outdir+"Significance"+var+".root")
 
-    file_bkg = ROOT.TFile(path+"uhh2.AnalysisModuleRunner.MC.MC_DY_2016_noTree.root")
-    h_bkg = file_bkg.Get("ZprimeCandidate_PTMassCut/H_btag_DeepBoosted_H4qvsQCD")
-    DeepBoosted_bkg = ROOT.TH2D("DeepBoosted_bkg","DeepBoosted_bkg", 500, 0, 5000, 1000, -0.01,1.01,)
-    if not doFast:
-        for n_bkg in glob.glob(path+"workdir_Selection_MC_DY_2016/uhh2.AnalysisModuleRunner.MC.MC_DY_2016_*"):
-            print n_bkg
-            f_bkg = ROOT.TFile(n_bkg)
-            t_bkg = f_bkg.Get("AnalysisTree")
-            i_ = 0
-            for ev in t_bkg:
-                i_+=1
-                if i_>imax and imax>0: break
-                for zp in ev.ZprimeCandidate:
-                    a = DeepBoosted_bkg.Fill(zp.Zprime_mass(), zp.H().btag_DeepBoosted_H4qvsQCD(), ev.weight_GLP)
-
-    if not doFast:
-        canv2D_bkg = tdrCanvas("canv2D_bkg", 600, 10000, 0.01, 1, "M_{Z'}", "cut")
-        canv2D_bkg.SetLogz(1)
-        DeepBoosted_bkg.SetContour(200)
-        DeepBoosted_bkg.GetZaxis().SetRangeUser(0.001, 300)
-        canv2D_bkg.SetRightMargin(0.15)
-        DeepBoosted_bkg.Draw("colz")
-        canv2D_bkg.SaveAs(PlotFolder+"SensitivityScan2D_DY"+extraText+".pdf")
-        canv2D_bkg.SetLogy(1)
-        canv2D_bkg.SaveAs(PlotFolder+"SensitivityScan2D_DY"+extraText+"_log.pdf")
-
-
-    DeepBoosted_sig_all = ROOT.TH2D("DeepBoosted_sig_All","DeepBoosted_sig_All", 1000, 0, 10000, 1000, -0.01,1.01)
-    for mass in ROOT.MassPoints:
-        massName = str(int(mass))
-        sigma = mass*0.02+20.
-        print mass, sigma
-        f_sig = ROOT.TFile(path+"workdir_Selection_MC_ZprimeToZH_M"+massName+"_2016/uhh2.AnalysisModuleRunner.MC.MC_ZprimeToZH_M"+massName+"_2016_0.root")
-        hs = f_sig.Get("ZprimeCandidate_PTMassCut/H_btag_DeepBoosted_H4qvsQCD")
-        t_sig = f_sig.Get("AnalysisTree")
-        DeepBoosted_sig = ROOT.TH2D("DeepBoosted_sig"+massName,"DeepBoosted_sig"+massName, 1000, 0, 10000, 1000, -0.01,1.01)
-        if not doFast:
-            i_ = 0
-            for ev in t_sig:
-                i_+=1
-                if i_>imax and imax>0: break
-                for zp in ev.ZprimeCandidate:
-                    a = DeepBoosted_sig.Fill(zp.Zprime_mass(), zp.H().btag_DeepBoosted_H4qvsQCD(), ev.weight_GLP)
-                    a = DeepBoosted_sig_all.Fill(zp.Zprime_mass(), zp.H().btag_DeepBoosted_H4qvsQCD(), ev.weight_GLP)
-        if not doFast:
-            canv2D_sig = tdrCanvas("canv2D_sig"+massName, 600, 10000, 0.01, 1, "M_{Z'}", "cut")
-            canv2D_sig.SetLogz(1)
-            DeepBoosted_sig.SetContour(200)
-            DeepBoosted_sig.GetZaxis().SetRangeUser(0.001, 300)
-            canv2D_sig.SetRightMargin(0.15)
-            DeepBoosted_sig.Draw("colz")
-            canv2D_sig.SaveAs(PlotFolder+"SensitivityScan2D_M"+massName+extraText+".pdf")
-            canv2D_sig.SetLogy(1)
-            canv2D_sig.SaveAs(PlotFolder+"SensitivityScan2D_M"+massName+extraText+"_log.pdf")
-        for cut in bins:
-            if doFast:
-                s = hs.Integral(hs.GetXaxis().FindBin(cut),hs.GetNbinsX())
-                b = h_bkg.Integral(h_bkg.GetXaxis().FindBin(cut),h_bkg.GetNbinsX())
-            else:
-                s = DeepBoosted_sig.Integral(DeepBoosted_sig.GetXaxis().FindBin(mass-3*sigma),DeepBoosted_sig.GetXaxis().FindBin(mass+3*sigma), DeepBoosted_sig.GetYaxis().FindBin(cut),DeepBoosted_sig.GetNbinsY())
-                b = DeepBoosted_bkg.Integral(DeepBoosted_bkg.GetXaxis().FindBin(mass-3*sigma),DeepBoosted_bkg.GetXaxis().FindBin(mass+3*sigma), DeepBoosted_bkg.GetYaxis().FindBin(cut),DeepBoosted_bkg.GetNbinsY())
-            if b==0:
-                sig = 0
-            else:
-                # sig = s/sqrt(b)
-                sig = sqrt(2*((s+b)*log(1+s/b)-s))
-            # print mass, cut, sig, DeepBoosted_sig.Integral(), DeepBoosted_bkg.Integral()
-            histo2D.Fill(mass,cut,round(sig,1))
-    if not doFast:
-        canv2D_sig_all = tdrCanvas("canv2D_sig_all", 600, 10000, 0.01, 1, "M_{Z'}", "cut")
-        canv2D_sig_all.SetLogz(1)
-        DeepBoosted_sig_all.SetContour(200)
-        DeepBoosted_sig_all.GetZaxis().SetRangeUser(0.001, 300)
-        canv2D_sig_all.SetRightMargin(0.15)
-        DeepBoosted_sig_all.Draw("colz")
-        canv2D_sig_all.SaveAs(PlotFolder+"SensitivityScan2D_Sig_all"+extraText+".pdf")
-        canv2D_sig_all.SetLogy(1)
-        canv2D_sig_all.SaveAs(PlotFolder+"SensitivityScan2D_Sig_all"+extraText+"_log.pdf")
-    canv2D = tdrCanvas("btag_DeepBoosted_H4qvsQCD", 600, 10000, 0.01, 1, "M_{Z'}", "cut")
-    histo2D.SetContour(200)
-    if not doFast:
-        histo2D.GetZaxis().SetRangeUser(50, 300)
-    canv2D.SetRightMargin(0.15)
-    histo2D.Draw("colz")
-    canv2D.SaveAs(PlotFolder+"SensitivityScan2D"+extraText+".pdf")
-    canv2D.SetLogy(1)
-    canv2D.SaveAs(PlotFolder+"SensitivityScan2D"+extraText+"_log.pdf")
-    canv_projx = tdrCanvas("btag_DeepBoosted_H4qvsQCD_projx", 0, 1, 0.01, 100, "M_{Z'}", "cut")
-    histo2D.ProjectionX("_px",0,-1,"e").Draw()
-    canv_projy = tdrCanvas("btag_DeepBoosted_H4qvsQCD_projy", 0, 1, 0.01, 100, "M_{Z'}", "cut")
-    histo2D.ProjectionY("_py",0,-1,"e").Draw()
-    canv_projx.SaveAs(PlotFolder+"SensitivityScan2D_projX"+extraText+".pdf")
-    canv_projy.SaveAs(PlotFolder+"SensitivityScan2D_projY"+extraText+".pdf")
 
 def main():
-    GetDeepBoostedvsPT()
-    # SensitivityScan()
-    # SensitivityScan2D()
-    # Plot2DVar("nTopJet_DeltaRDiLepton","jetptvsdeltaphi_dilep_jet")
-    # Plot2DVar("nTopJet_JetDiLeptonPhiAngular","jetptvsdeltaphi_dilep_jet")
-    # Plot2DVar("nTopJet_DeltaRDiLepton","jetptvsdeltaphi_dilep_1")
-    # Plot2DVar("nTopJet_JetDiLeptonPhiAngular","jetptvsdeltaphi_dilep_1")
+    TCS = TaggerCutStudy()
+    # TCS.StoreVars()
+    # TCS.PlotVar()
+    TCS.SensitivityScan("Mass")
+    TCS.SensitivityScan("PT")
 
 if __name__ == '__main__':
     main()

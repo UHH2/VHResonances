@@ -1,13 +1,16 @@
-import time, sys, os, functools, argparse, ROOT
+import time, sys, os, glob
+import functools, argparse
 
 sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros/")
 from ModuleRunnerBase import *
 
+from tdrstyle_all import *
+
+import ROOT
 ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/VHResonances/include/constants.hpp"')
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.gStyle.SetOptStat(0)
-
-from tdrstyle_all import *
+ROOT.gStyle.SetOptFit(0)
 
 def prettydic(d, indent=8):
     space = max([0]+[len(str(x)) for x in d])+2
