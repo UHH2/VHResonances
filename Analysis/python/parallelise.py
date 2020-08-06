@@ -1,8 +1,5 @@
-import sys
-import os
-import time
+import sys, os, time, glob
 import subprocess
-from glob import glob
 import multiprocessing as mp
 
 from Utils import *
@@ -75,4 +72,4 @@ def parallelise(list_processes, MaxProcess=10, list_logfiles=[], cwd=None):
     file.close()
   if not condition:
     # os.remove("log.txt")
-    a = map(os.remove, glob("log_*.txt"))
+    a = map(os.remove, glob.glob("log_*.txt"))
