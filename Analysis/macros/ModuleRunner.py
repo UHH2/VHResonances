@@ -1,6 +1,3 @@
-from glob import glob
-import numpy as np
-
 from ModuleRunnerBase import *
 sys.path.append("../python")
 from Utils import *
@@ -143,7 +140,7 @@ class ModuleRunner(ModuleRunnerBase):
                 else:
                     list_processes.append(["hadd", "-f", newFile]+ filespath)
             else:
-                list_ = glob(filespath+"/*root")
+                list_ = glob.glob(filespath+"/*root")
                 if len(list_)==1 and forPlotting :
                     list_processes.append(["hadd", "-f", "-T", newFile, list_[0]])
                 else:
@@ -162,7 +159,7 @@ class ModuleRunner(ModuleRunnerBase):
             commonpath = self.Path_SFRAME+self.Module+"/"+middlePath
             newPath = self.ModuleStorage+"/"+middlePath
             a = os.system("mkdir -p "+newPath)
-            for x in glob(commonpath+"*"):
+            for x in glob.glob(commonpath+"*"):
                 list_processes.append(["mv", x, newPath] if process=="Move" else ["cp", "-r", x, newPath])
         print len(list_processes)
         parallelise(list_processes, 20)
@@ -180,7 +177,7 @@ class ModuleRunner(ModuleRunnerBase):
             nComment = 0
             for dir in self.Samples_Dict[sample] if not self.Signal in sample and self.Samples != self.Processes_Dict else [sample]:
                 print "Search in", commonpath+"workdir_"+self.Module+"_"+dir+"/*root"
-                for f_ in glob(commonpath+"workdir_"+self.Module+"_"+dir+"/*root"):
+                for f_ in glob.glob(commonpath+"workdir_"+self.Module+"_"+dir+"/*root"):
                     try:
                         ntuple = ROOT.TFile(str(f_))
                         if ntuple.IsZombie(): sys.stderr.write("TFile::Init:0: RuntimeWarning: file "+f_+" probably not closed, trying to recover")
@@ -225,7 +222,7 @@ class ModuleRunner(ModuleRunnerBase):
                     mode = "MC" if "MC" in sample else "DATA"
                     filespath = path_RunII+self.PrefixrootFile+mode+"."+sample+"_noTree.root"
                     command = ["hadd", "-f", "-T", filespath.replace(self.year,year)]
-                    for histo in glob(filespath.replace("RunII","201*").replace(self.year,"201*").replace("_noTree","*")):
+                    for histo in glob.glob(filespath.replace("RunII","201*").replace(self.year,"201*").replace("_noTree","*")):
                         command.append(histo)
                     list_processes.append(command)
         # for i in list_processes:
@@ -284,12 +281,9 @@ class ModuleRunner(ModuleRunnerBase):
                 mode = "MC" if "MC" in sample else "DATA"
                 filePrefix = self.PrefixrootFile+mode+"."
                 path = self.Path_ANALYSIS+"/config/SubmittedJobs/"+self.year+"/"+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"
-                for err in glob(path+sample+"_*.e*"):
+                for err in glob.glob(path+sample+"_*.e*"):
                     num = err.replace(path,"").split(".")[0].replace(sample+"_","")
                     list_toCheck.append(sample)
-                    # print err
-                    # for x in glob(path+sample+".e*"+num):
-                    #     print "\t", x
         print set(list_toCheck)
         mylist = []
         with open(errname, 'r') as f_err:
@@ -347,7 +341,7 @@ class ModuleRunner(ModuleRunnerBase):
                 path = self.SubmitDir+self.Module+"/"+middlePath+"workdir_"+self.Module+"_"+sample+"/Stream_"+sample+"/"+sample+check
                 if "NF" in check: path = self.SubmitDir+self.Module+"/"+middlePath+"/workdir_"+self.Module+"_"+sample+"/"+sample+"*"
                 val = []
-                for el in glob(path):
+                for el in glob.glob(path):
                     with open(el, "U") as file:
                         lines = file.readlines()
                         if "NF" in check:
@@ -367,7 +361,7 @@ class ModuleRunner(ModuleRunnerBase):
                         val.append(sec)
                 if len(val)==0 :
                     continue
-                if len(glob(path))==0: continue
+                if len(glob.glob(path))==0: continue
                 max_ = np.amax(np.array(val))
                 min_ = np.amin(np.array(val))
                 std_ = np.std(np.array(val))
