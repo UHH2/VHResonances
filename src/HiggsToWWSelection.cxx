@@ -8,7 +8,7 @@
 using namespace std;
 using namespace uhh2;
 
-JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection (float pt_min_, float phi_min_, float phi_max_, TString lepton_, const Event::Handle<vector<TopJet> > & topjetcollection_): pt_min(pt_min_), phi_min(phi_min_), phi_max(phi_max_), lepton(lepton_), topjetcollection(topjetcollection_){}
+JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection (float pt_min_, float phi_min_, float phi_max_, float min_Dphi_MET_, TString lepton_, const Event::Handle<vector<TopJet> > & topjetcollection_): pt_min(pt_min_), phi_min(phi_min_), phi_max(phi_max_), min_Dphi_MET(min_Dphi_MET_), lepton(lepton_), topjetcollection(topjetcollection_){}
 
 bool JetDiLeptonPhiAngularSelection::passes(const Event& event){
 
@@ -18,9 +18,20 @@ bool JetDiLeptonPhiAngularSelection::passes(const Event& event){
 
   if (lepton == "muons") leptons.assign(event.muons->begin(), event.muons->end());
   else if (lepton == "electrons") leptons.assign(event.electrons->begin(), event.electrons->end());
-  else throw logic_error("JetDiLeptonPhiAngularSelection: Impossible case");
+  else if (lepton != "neutrinos") throw logic_error("JetDiLeptonPhiAngularSelection: Impossible case");
 
   if(jets.size() < 1 ) throw std::runtime_error("JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection -- unexpected number of jets");
+
+  if (lepton == "neutrinos"){
+    // invisblechannel
+    for(const auto & jet: jets){
+      auto Dphi = deltaPhi(event.met->v4(), jet);
+      if (Dphi > min_Dphi_MET) return true;
+    }
+    return false;
+  }
+
+  // leptonchannel
   if(leptons.size() < min_leptons ) throw std::runtime_error("JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection -- unexpected number of leptons");
   for (unsigned int i = 0; i < leptons.size(); i++) {
     Particle lep1 = leptons.at(i);
@@ -62,24 +73,6 @@ bool DeltaRDiLepton::passes(const Event& event){
   }
   return false;
 }
-
-// Performs a cut on Delta phi between the MET and all jets for the invisble channel.
-DeltaPhiMET::DeltaPhiMET (float Dphi_min_, bool is_invisiblechannel_, const Event::Handle<vector<TopJet> > & topjetcollection_): Dphi_min(Dphi_min_), is_invisiblechannel(is_invisiblechannel_), topjetcollection(topjetcollection_) { };
-
-bool DeltaPhiMET::passes(const Event& event){
-
-  if (!is_invisiblechannel) return true;
-
-  const auto & jets = event.get(topjetcollection); // or h_jets?
-
-  for(const auto & jet: jets){
-    auto Dphi = deltaPhi(event.met->v4(), jet);
-    if (Dphi > min_Dphi_MET) return true;
-  }
-
-  return false;
-}
-
 
 
 ZprimeCandidateID::ZprimeCandidateID (const Event::Handle<vector<ZprimeCandidate> > & h_ZprimeCandidates_ ): h_ZprimeCandidates(h_ZprimeCandidates_){}

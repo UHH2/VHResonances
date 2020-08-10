@@ -9,10 +9,10 @@
 
 class JetDiLeptonPhiAngularSelection: public uhh2::Selection {
 public:
-  JetDiLeptonPhiAngularSelection(float pt_min, float phi_min, float phi_max, TString lepton, const uhh2::Event::Handle<std::vector<TopJet> > & topjetcollection );
+  JetDiLeptonPhiAngularSelection(float pt_min, float phi_min, float phi_max, float min_Dphi_MET, TString lepton, const uhh2::Event::Handle<std::vector<TopJet> > & topjetcollection );
   virtual bool passes(const uhh2::Event& event) override;
 private:
-  float pt_min, phi_min, phi_max;
+  float pt_min, phi_min, phi_max, min_Dphi_MET;
   TString lepton;
   uhh2::Event::Handle<std::vector<TopJet> > topjetcollection;
 };
@@ -26,18 +26,6 @@ public:
 private:
   float DR_min, DR_max;
   TString lepton;
-};
-
-
-
-class DeltaPhiMET: public uhh2::Selection {
-public:
-  DeltaPhiMET(float Dphi_min_, bool is_invisiblechannel_, const uhh2::Event::Handle<std::vector<TopJet> > & topjetcollection_);
-  virtual bool passes(const uhh2::Event& event) override;
-private:
-  float Dphi_min;
-  bool is_invisiblechannel;
-  uhh2::Event::Handle<std::vector<TopJet> > topjetcollection;
 };
 
 

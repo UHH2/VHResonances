@@ -67,7 +67,7 @@ protected:
 
   // Define variables
   std::string NameModule = "PreselectionModule";
-  std::vector<std::string> histogram_tags = { "nocuts", "weights", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaPhiMET", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
+  std::vector<std::string> histogram_tags = { "nocuts", "weights", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
@@ -84,7 +84,7 @@ protected:
   // Define selections
   std::shared_ptr<Selection> NBoostedJetSel;
   std::shared_ptr<VetoSelection> VetoLeptonSel;
-  std::shared_ptr<Selection> NoLeptonSel, NLeptonSel, DeltaPhiMET_selection, DeltaRDiLepton_selection, JetDiLeptonPhiAngularSel;
+  std::shared_ptr<Selection> NoLeptonSel, NLeptonSel, DeltaRDiLepton_selection, JetDiLeptonPhiAngularSel;
 
 };
 
@@ -155,7 +155,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one jet collection.");
   if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one lepton channel.");
 
-  MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": "");
+  MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": (MB["invisiblechannel"]? "neutrinos": ""));
 
   MS["jetLabel"]    = MB["isCHS"]? "jets":    (MB["isPuppi"]? "jetsAk4Puppi": (MB["isHOTVR"]? "jetsAk4Puppi": ""));
   MS["topjetLabel"] = MB["isCHS"]? "topjets": (MB["isPuppi"]? "toppuppijets": (MB["isHOTVR"]? "hotvrPuppi": ""));
@@ -229,8 +229,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   }
 
   DeltaRDiLepton_selection.reset(new DeltaRDiLepton(min_DR_dilep, max_DR_dilep, MS["leptons"]));
-  DeltaPhiMET_selection.reset(new DeltaPhiMET(min_Dphi_MET, MB["invisiblechannel"], h_topjets));
-  JetDiLeptonPhiAngularSel.reset(new JetDiLeptonPhiAngularSelection(min_dilep_pt, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, MS["leptons"], h_topjets));
+  JetDiLeptonPhiAngularSel.reset(new JetDiLeptonPhiAngularSelection(min_dilep_pt, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, min_Dphi_MET, MS["leptons"], h_topjets));
   VetoLeptonSel.reset(new VetoSelection(NoLeptonSel));
 
   if (MB["invisiblechannel"]) {
@@ -296,9 +295,6 @@ bool PreselectionModule::process(uhh2::Event& event) {
     if(event.met->pt()<min_MET_pt) return false;
   }
   fill_histograms(event, "METCut");
-
-  if(!DeltaPhiMET_selection->passes(event)) return false;
-  fill_histograms(event, "DeltaPhiMET");
 
   if(!DeltaRDiLepton_selection->passes(event)) return false;
   fill_histograms(event, "DeltaRDiLepton");
