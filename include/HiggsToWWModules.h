@@ -35,6 +35,11 @@ class ZprimeCandidateReconstruction : public uhh2::AnalysisModule {
 public:
   explicit ZprimeCandidateReconstruction(uhh2::Context& ctx, float pt_min, float DR_min, float DR_max, float phi_min, float phi_max, const std::string& lepton, const std::string& topjetcollection);
   virtual bool process(uhh2::Event&) override;
+  virtual void setDiscriminators(uhh2::Event&, ZprimeCandidate& candiate,
+    ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<double> > ZplusJet,
+    ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<double> > diLep,
+    Particle lep1, Particle lep2, bool MuonID1, bool MuonID2, TopJet jet,
+    unsigned int i, unsigned int j, std::map<TString, JetId> Btag_map);
 
 private:
 
