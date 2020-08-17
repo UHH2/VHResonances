@@ -246,27 +246,27 @@ bool ZprimeCandidateReconstruction::process(Event& event){
   }
   else { // invisiblechannel
 
-    if( (fabs(event.met->v4().M() - ZMASS) < ZWIDTH) && event.met->v4().pt()> min_MET_pt) {
+    if( event.met->v4().pt()> min_MET_pt) {  //  (fabs(event.met->v4().M() - ZMASS) < ZWIDTH) &&
 
-      ZprimeCandidate candidate;
+    ZprimeCandidate candidate;
 
-      for(const auto & jet: jets){
-        auto Dphi = deltaPhi(event.met->v4(), jet);
-        if( phi_min < Dphi  && Dphi < phi_max){
-          auto ZplusJet = event.met->v4() + jet.v4();
+    for(const auto & jet: jets){
+      auto Dphi = deltaPhi(event.met->v4(), jet);
+      if( phi_min < Dphi  && Dphi < phi_max){
+        auto ZplusJet = event.met->v4() + jet.v4();
 
-          // use empty particles for the two leptons
-          Particle emptyLep1, emptyLep2;
+        // use empty particles for the two leptons
+        Particle emptyLep1, emptyLep2;
 
-          setDiscriminators(event, candidate, ZplusJet, event.met->v4(), emptyLep1, emptyLep2, false, false, jet, 0, 0, Btag_map);
+        setDiscriminators(event, candidate, ZplusJet, event.met->v4(), emptyLep1, emptyLep2, false, false, jet, 0, 0, Btag_map);
 
-          // TODO: Delete this check at a later stage.
-          // Perform some checks to check whether the changes propagate
-          assert(candidate.Z().pt() ==  event.met->pt());
+        // TODO: Delete this check at a later stage.
+        // Perform some checks to check whether the changes propagate
+        assert(candidate.Z().pt() ==  event.met->pt());
 
-          candidates.emplace_back(candidate);
-        }
+        candidates.emplace_back(candidate);
       }
+    }
   }
 }
 
