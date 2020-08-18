@@ -233,8 +233,8 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   VetoLeptonSel.reset(new VetoSelection(NoLeptonSel));
 
   if (MB["invisiblechannel"]) {
-      DeltaRDiLepton_selection.reset(new AndSelection(ctx));
-      JetDiLeptonPhiAngularSel.reset(new AndSelection(ctx));
+    // Do not apply this selection for the invisiblechannel.
+    DeltaRDiLepton_selection.reset(new AndSelection(ctx));
   }
 }
 
