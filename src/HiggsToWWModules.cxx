@@ -121,7 +121,7 @@ void ZprimeCandidateReconstruction::setDiscriminators(Event& event, ZprimeCandid
     candidate.set_Zprime(ZplusJet);
     candidate.set_Z(diLep);
     candidate.set_H(jet);
-    if (lepton != "neutrinos") candidate.set_jets_leptonic({lep1,lep2});
+    if (lepton != "invisible") candidate.set_jets_leptonic({lep1,lep2});
     candidate.set_discriminators("MuonID1", MuonID1? (float)i: -1);
     candidate.set_discriminators("MuonID2", MuonID2? (float)j: -1);
     candidate.set_discriminators("chi2", chi2);
@@ -203,7 +203,7 @@ bool ZprimeCandidateReconstruction::process(Event& event){
   std::vector<ZprimeCandidate> candidates;
 
   if(jets.size() < 1 ) throw std::runtime_error("ZprimeCandidateReconstruction::ZprimeCandidateReconstruction -- unexpected number of jets");
-  if(leptons.size() < min_leptons and lepton != "neutrinos") throw std::runtime_error("ZprimeCandidateReconstruction::ZprimeCandidateReconstruction -- unexpected number of leptons");
+  if(leptons.size() < min_leptons && lepton != "neutrinos") throw std::runtime_error("ZprimeCandidateReconstruction::ZprimeCandidateReconstruction -- unexpected number of leptons");
 
   std::map<TString, JetId> Btag_map;
   Btag_map["DeepCSV_loose"]   = BTag(BTag::DEEPCSV, BTag::WP_LOOSE);
@@ -244,31 +244,37 @@ bool ZprimeCandidateReconstruction::process(Event& event){
       }
     }
   }
-  else { // invisiblechannel
-
-    if( event.met->v4().pt()> min_MET_pt) {  //  (fabs(event.met->v4().M() - ZMASS) < ZWIDTH) &&
-
-    ZprimeCandidate candidate;
-
-    for(const auto & jet: jets){
-      auto Dphi = deltaPhi(event.met->v4(), jet);
-      if( phi_min < Dphi  && Dphi < phi_max){
-        auto ZplusJet = event.met->v4() + jet.v4();
-
-        // use empty particles for the two leptons
-        Particle emptyLep1, emptyLep2;
-
-        setDiscriminators(event, candidate, ZplusJet, event.met->v4(), emptyLep1, emptyLep2, false, false, jet, 0, 0, Btag_map);
-
-        // TODO: Delete this check at a later stage.
-        // Perform some checks to check whether the changes propagate
-        assert(candidate.Z().pt() ==  event.met->pt());
-
-        candidates.emplace_back(candidate);
-      }
-    }
-  }
-}
+  // else { // invisiblechannel
+  //
+  //   // TODO Don't run because reconstruction is not possible as p_T of MET is needed.
+  //   // Better to use transverse masses.
+  //   // Only run it because of the ZprimeCandidate which is needed
+  //
+  //   if( event.met->pt()> min_MET_pt) {
+  //
+  //   ZprimeCandidate candidate;
+  //
+  //   for(const auto & jet: jets){
+  //     double Dphi = fabs(jet.phi() - event.met->phi());
+  //     if(Dphi > M_PI) Dphi = 2* M_PI - Dphi;
+  //
+  //     if( phi_min < Dphi  && Dphi < phi_max){
+  //       auto ZplusJet = event.met->v4() + jet.v4(); // TODO This is incorrect!
+  //
+  //       // use empty particles for the two leptons
+  //       Particle emptyLep1, emptyLep2;
+  //
+  //       setDiscriminators(event, candidate, ZplusJet, event.met->v4(), emptyLep1, emptyLep2, false, false, jet, 0, 0, Btag_map);
+  //
+  //       // TODO: Delete this check at a later stage.
+  //       // Perform some checks to check whether the changes propagate
+  //       assert(candidate.Z().pt() ==  event.met->pt());
+  //
+  //       candidates.emplace_back(candidate);
+  //      }
+  //   }
+  //  }
+  // }
 
   // Set the handle with all candidates
   event.set(h_ZprimeCandidates_, candidates);
