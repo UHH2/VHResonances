@@ -196,14 +196,14 @@ bool ZprimeCandidateReconstruction::process(Event& event){
   leptons.clear();
   if (lepton == "muons") leptons.assign(event.muons->begin(), event.muons->end());
   else if (lepton == "electrons") leptons.assign(event.electrons->begin(), event.electrons->end());
-  else if (lepton != "neutrinos")  throw logic_error("ZprimeCandidateReconstruction: Impossible case");
+  else if (lepton != "invisible")  throw logic_error("ZprimeCandidateReconstruction: Impossible case");
 
   // Declare output
 
   std::vector<ZprimeCandidate> candidates;
 
   if(jets.size() < 1 ) throw std::runtime_error("ZprimeCandidateReconstruction::ZprimeCandidateReconstruction -- unexpected number of jets");
-  if(leptons.size() < min_leptons && lepton != "neutrinos") throw std::runtime_error("ZprimeCandidateReconstruction::ZprimeCandidateReconstruction -- unexpected number of leptons");
+  if(leptons.size() < min_leptons && lepton != "invisible") throw std::runtime_error("ZprimeCandidateReconstruction::ZprimeCandidateReconstruction -- unexpected number of leptons");
 
   std::map<TString, JetId> Btag_map;
   Btag_map["DeepCSV_loose"]   = BTag(BTag::DEEPCSV, BTag::WP_LOOSE);
@@ -211,7 +211,7 @@ bool ZprimeCandidateReconstruction::process(Event& event){
   Btag_map["DeepCSV_tight"]   = BTag(BTag::DEEPCSV, BTag::WP_TIGHT);
 
 
-  if (lepton != "neutrinos"){ // electron or muonchannel
+  if (lepton != "invisible"){ // electron or muonchannel
     for (unsigned int i = 0; i < leptons.size(); i++) {
       Particle lep1 = leptons.at(i);
       for (unsigned int j = i+1; j < leptons.size(); j++) {
