@@ -37,7 +37,7 @@ public:
   virtual bool process(uhh2::Event&) override;
   virtual void setDiscriminators(uhh2::Event&, ZprimeCandidate& candiate,
     Particle lep1, Particle lep2, TopJet jet,
-    unsigned int i, unsigned int j, std::map<TString, JetId> Btag_map);
+    float i, float j, std::map<TString, JetId> Btag_map);
 
 
 private:

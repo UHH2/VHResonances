@@ -113,15 +113,22 @@ ZprimeCandidateReconstruction::ZprimeCandidateReconstruction(Context& ctx, float
 // Note: diLep refers to the two leptons or the MET
 void ZprimeCandidateReconstruction::setDiscriminators(Event& event, ZprimeCandidate& candidate,
   Particle lep1, Particle lep2, TopJet jet,
-  unsigned int i, unsigned int j, std::map<TString, JetId> Btag_map){
+  float i, float j, std::map<TString, JetId> Btag_map){
+
+    auto diLep = lep1.v4() + lep2.v4();
+
+    if (lepton == "invisible"){
+      diLep = event.met->v4();
+    }
+    auto ZplusJet = diLep + jet.v4();
 
     double chi2 = TMath::Power(((jet.softdropmass()-HMASS)/HWIDTH),2)+ TMath::Power(((diLep.M()-ZMASS)/ZWIDTH),2);
     candidate.set_Zprime(ZplusJet);
     candidate.set_Z(diLep);
     candidate.set_H(jet);
     if (lepton != "invisible") candidate.set_jets_leptonic({lep1,lep2});
-    candidate.set_discriminators("MuonID1", MuonID1? (float)i: -1);
-    candidate.set_discriminators("MuonID2", MuonID2? (float)j: -1);
+    candidate.set_discriminators("MuonID1", i);
+    candidate.set_discriminators("MuonID2", j);
     candidate.set_discriminators("chi2", chi2);
     candidate.set_discriminators("subjets", jet.subjets().size());
     candidate.set_discriminators("btag_DeepCSV_loose",  (double)MultiBTagSubJetID(Btag_map["DeepCSV_loose"])(jet, event));
@@ -227,14 +234,9 @@ bool ZprimeCandidateReconstruction::process(Event& event){
           for(const auto & jet: jets){
             auto Dphi = deltaPhi(diLep, jet);
             if( phi_min < Dphi  && Dphi< phi_max){
-              auto ZplusJet = diLep + jet.v4();
               ZprimeCandidate candidate;
 
-              setDiscriminators(event, candidate, ZplusJet, diLep, lep1, lep2 , MuonID1, MuonID2, jet,i, j, Btag_map);
-
-              // TODO: Delete this check at a later stage.
-              // Perform some checks to check whether the changes propagate
-              assert(candidate.Z().pt() == diLep.Pt());
+              setDiscriminators(event, candidate, lep1, lep2, jet, MuonID1? (float)i: -1, MuonID2? (float)j: -1, Btag_map);
 
               candidates.emplace_back(candidate);
           }
@@ -243,37 +245,29 @@ bool ZprimeCandidateReconstruction::process(Event& event){
       }
     }
   }
-    // else { // invisiblechannel
-    //
-    //   // TODO Don't run because reconstruction is not possible as p_T of MET is needed.
-    //   // Better to use transverse masses.
-    //   // Only run it because of the ZprimeCandidate which is needed
-    //
-    //   if( event.met->pt()> min_MET_pt) {
-    //
-    //   ZprimeCandidate candidate;
-    //
-    //   for(const auto & jet: jets){
-    //     double Dphi = fabs(jet.phi() - event.met->phi());
-    //     if(Dphi > M_PI) Dphi = 2* M_PI - Dphi;
-    //
-    //     if( phi_min < Dphi  && Dphi < phi_max){
-    //       auto ZplusJet = event.met->v4() + jet.v4(); // TODO This is incorrect!
-    //
-    //       // use empty particles for the two leptons
-    //       Particle emptyLep1, emptyLep2;
-    //
-    //       setDiscriminators(event, candidate, ZplusJet, event.met->v4(), emptyLep1, emptyLep2, false, false, jet, 0, 0, Btag_map);
-    //
-    //       // TODO: Delete this check at a later stage.
-    //       // Perform some checks to check whether the changes propagate
-    //       assert(candidate.Z().pt() ==  event.met->pt());
-    //
-    //       candidates.emplace_back(candidate);
-    //      }
-    //   }
-    //  }
-    // }
+  else { // invisiblechannel
+
+    // Better to use transverse masses.
+    // Only run it because of the ZprimeCandidate which is needed
+
+    if( event.met->pt()> min_MET_pt) {
+
+    ZprimeCandidate candidate;
+
+    for(const auto & jet: jets){
+      double Dphi = fabs(jet.phi() - event.met->phi());
+      if(Dphi > M_PI) Dphi = 2* M_PI - Dphi;
+       if( phi_min < Dphi  && Dphi < phi_max){
+
+        // use empty particles for the two leptons
+        Particle emptyLep1, emptyLep2;
+
+        setDiscriminators(event, candidate, emptyLep1, emptyLep2, jet, -1, -1 , Btag_map);
+        candidates.emplace_back(candidate);
+       }
+    }
+   }
+  }
 
   // Set the handle with all candidates
   event.set(h_ZprimeCandidates_, candidates);
