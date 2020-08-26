@@ -125,6 +125,7 @@ void ZprimeCandidateReconstruction::setDiscriminators(Event& event, ZprimeCandid
     candidate.set_Zprime(ZplusJet);
     candidate.set_Z(diLep);
     candidate.set_H(jet);
+    if (lepton == "invisible") candidate.set_Zprime_MT(sqrt(2*diLep.pt() * jet.pt() * (1-cos(deltaPhi(diLep, jet.v4())))));
     if (lepton != "invisible") candidate.set_jets_leptonic({lep1,lep2});
     candidate.set_discriminators("MuonID1", i);
     candidate.set_discriminators("MuonID2", j);
