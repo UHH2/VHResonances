@@ -8,7 +8,7 @@
 using namespace std;
 using namespace uhh2;
 
-JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection (float pt_min_, float phi_min_, float phi_max_, TString lepton_, const Event::Handle<vector<TopJet> > & topjetcollection_): pt_min(pt_min_), phi_min(phi_min_), phi_max(phi_max_), lepton(lepton_), topjetcollection(topjetcollection_){}
+JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection (float pt_min_, float phi_min_, float phi_max_, float min_Dphi_MET_, TString lepton_, const Event::Handle<vector<TopJet> > & topjetcollection_): pt_min(pt_min_), phi_min(phi_min_), phi_max(phi_max_), min_Dphi_MET(min_Dphi_MET_), lepton(lepton_), topjetcollection(topjetcollection_){}
 
 bool JetDiLeptonPhiAngularSelection::passes(const Event& event){
 
@@ -18,9 +18,20 @@ bool JetDiLeptonPhiAngularSelection::passes(const Event& event){
 
   if (lepton == "muons") leptons.assign(event.muons->begin(), event.muons->end());
   else if (lepton == "electrons") leptons.assign(event.electrons->begin(), event.electrons->end());
-  else throw logic_error("JetDiLeptonPhiAngularSelection: Impossible case");
+  else if (lepton != "invisible") throw logic_error("JetDiLeptonPhiAngularSelection: Impossible case");
 
   if(jets.size() < 1 ) throw std::runtime_error("JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection -- unexpected number of jets");
+
+  if (lepton == "invisible"){
+    // invisblechannel
+    for(const auto & jet: jets){
+      double Dphi = deltaPhi(jet, *event.met);
+      if (Dphi > min_Dphi_MET) return true;
+    }
+    return false;
+  }
+
+  // leptonchannel
   if(leptons.size() < min_leptons ) throw std::runtime_error("JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection -- unexpected number of leptons");
   for (unsigned int i = 0; i < leptons.size(); i++) {
     Particle lep1 = leptons.at(i);
