@@ -177,7 +177,7 @@ void ExtJetHists::fill_internal(const Event & event, vector<T> jets){
 
 void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuffix, double minPt, double maxPt, bool isTop){
   book_TH1F("mass"+histSuffix,"M "+axisSuffix+" [GeV/c^{2}]",100,0,300);
-  book_TH1F("mT"+histSuffix,"m_{T} "+axisSuffix+" [GeV/c^{2}]",100,0,300);
+  book_TH1F("mT"+histSuffix,"m_{T} "+axisSuffix+" [GeV/c^{2}]",100,0,1000);
   book_TH1F("pt"+histSuffix,"p_{T} "+axisSuffix+" [GeV]",50,minPt,maxPt);
   book_TH1F("eta"+histSuffix,"#eta "+axisSuffix,100,-5,5);
   book_TH1F("phi"+histSuffix,"#phi "+axisSuffix,50,-M_PI,M_PI);
@@ -194,9 +194,10 @@ void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuf
   book_TH1F("deltaphi_ele1"+histSuffix,"#Delta#phi(ele1,"+axisSuffix+")",50,0,M_PI);
   book_TH1F("deltaR_ele2"+histSuffix,"#Delta R(ele2,"+axisSuffix+")",40, 0, 8.0);
   book_TH1F("deltaphi_ele2"+histSuffix,"#Delta#phi(ele2,"+axisSuffix+")",50,0,M_PI);
-  book_TH1F("deltaphi_MET"+histSuffix,"#Delta#phi(E_{T}^{miss},"+axisSuffix+")",50,0,M_PI);
+  book_TH1F("deltaphi_jet_MET"+histSuffix,"#Delta#phi(E_{T}^{miss},"+axisSuffix+")",50,0,M_PI);
   book_TH1F("ptMET_ptJet_sine"+histSuffix,"2 p_{T}(MET)*p_{T}(jet)*sin(#Delta#phi)/(p_{T}(MET) + p_{T}(Jet)), scalar, ("+axisSuffix+")",40, 0, 8.0);
   book_TH1F("ptMET_ptJet_sine_vect"+histSuffix,"2 p_{T}(MET)*p_{T}(jet)*sin(#Delta#phi)/(p_{T}(MET) + p_{T}(Jet)), vectorial, ("+axisSuffix+")",40, 0, 8.0);
+  book_TH1F("Zprime_inv_M_T"+histSuffix, "m_T of Zprime [GeV/c^{2}] ("+axisSuffix+")", 300,  0, 3000);
   book_TH1F("jetArea"+histSuffix,"jetArea^{"+axisSuffix+"}",150,0,15);
   book_TH1F("jetArea_pt200_300"+histSuffix,"jetArea^{"+axisSuffix+",pt(200,300)}",150,0,15);
   book_TH1F("jetArea_pt300_400"+histSuffix,"jetArea^{"+axisSuffix+",pt(300,400)}",150,0,15);
@@ -302,9 +303,10 @@ void ExtJetHists::fill_jetHist<Jet>(const Event & event, const string& histSuffi
       fill_H2("jetptvsdeltaphi_dilep"+histSuffix, Dphi, jet.pt(), weight);
     }
   }
-  fill_H1("deltaphi_MET"+histSuffix, deltaPhi(jet, event.met->v4()), weight);
+  fill_H1("deltaphi_jet_MET"+histSuffix, deltaPhi(jet, *event.met), weight);
   fill_H1("ptMET_ptJet_sine"+histSuffix, 2*event.met->pt()*jet.pt()*sin(deltaPhi(jet,event.met->v4()))/(event.met->pt()+jet.pt()),weight);
   fill_H1("ptMET_ptJet_sine_vect"+histSuffix, 2*event.met->pt()*jet.pt()*sin(deltaPhi(jet,event.met->v4()))/((event.met->v4()+jet.v4()).pt()),weight);
+  fill_H1("Zprime_inv_M_T"+histSuffix, sqrt(2*event.met->pt() * jet.pt() * (1-cos(deltaphi_jet_MET))), weight);
   fill_H1("jetArea"+histSuffix, jet.jetArea(), weight);
   if (jet.pt()>200 || jet.pt()<300) fill_H1("jetArea_pt200_300"+histSuffix,jet.jetArea(), weight);
   if (jet.pt()>300 || jet.pt()<400) fill_H1("jetArea_pt300_400"+histSuffix,jet.jetArea(), weight);
