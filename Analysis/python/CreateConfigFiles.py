@@ -105,7 +105,7 @@ def newNumber(year,sample,ConfigFile,syst):
         if any(x in sample for x in ["MC_WZTo2L2Q_2016"]):
             newNumber = 40
         if any(x in sample for x in ["MC_WJets"]):
-            newNumber = 40
+            newNumber = 10
     if "MC_ZZ" in sample:
         newNumber = 250
         if any(x in sample for x in ["MC_ZZTo4Q_2016"]):
