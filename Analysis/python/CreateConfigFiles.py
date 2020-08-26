@@ -104,7 +104,7 @@ def newNumber(year,sample,ConfigFile,syst):
             newNumber = 900
         if any(x in sample for x in ["MC_WZTo2L2Q_2016"]):
             newNumber = 40
-        if any(x in sample for x in ["MC_WJetsToLNu"]):
+        if any(x in sample for x in ["MC_WJets"]):
             newNumber = 40
     if "MC_ZZ" in sample:
         newNumber = 250
@@ -118,6 +118,7 @@ def newNumber(year,sample,ConfigFile,syst):
         newNumber = 100
     if not "Preselection" in ConfigFile and not "SF" in ConfigFile and not "LeptonIDStudies" in ConfigFile:
         newNumber = 1 if "MC_DY" in sample else 1000
+        if "MC_WJets" in sample: newNumber = 10
     if syst!="nominal":
         newNumber = int(0.9*newNumber)
     if "LeptonIDStudies" in ConfigFile:
