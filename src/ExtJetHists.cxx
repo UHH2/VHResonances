@@ -303,10 +303,11 @@ void ExtJetHists::fill_jetHist<Jet>(const Event & event, const string& histSuffi
       fill_H2("jetptvsdeltaphi_dilep"+histSuffix, Dphi, jet.pt(), weight);
     }
   }
-  fill_H1("deltaphi_jet_MET"+histSuffix, deltaPhi(jet, *event.met), weight);
-  fill_H1("ptMET_ptJet_sine"+histSuffix, 2*event.met->pt()*jet.pt()*sin(deltaPhi(jet,event.met->v4()))/(event.met->pt()+jet.pt()),weight);
-  fill_H1("ptMET_ptJet_sine_vect"+histSuffix, 2*event.met->pt()*jet.pt()*sin(deltaPhi(jet,event.met->v4()))/((event.met->v4()+jet.v4()).pt()),weight);
-  fill_H1("Zprime_inv_M_T"+histSuffix, sqrt(2*event.met->pt() * jet.pt() * (1-cos(deltaphi_jet_MET))), weight);
+  double delta_phi_jet_met = deltaPhi(jet, *event.met);
+  fill_H1("deltaphi_jet_MET"+histSuffix, delta_phi_jet_met , weight);
+  fill_H1("ptMET_ptJet_sine"+histSuffix, 2*event.met->pt()*jet.pt()*sin(delta_phi_jet_met)/(event.met->pt()+jet.pt()),weight);
+  fill_H1("ptMET_ptJet_sine_vect"+histSuffix, 2*event.met->pt()*jet.pt()*sin(delta_phi_jet_met)/((event.met->v4()+jet.v4()).pt()),weight);
+  fill_H1("Zprime_inv_M_T"+histSuffix, sqrt(2*event.met->pt() * jet.pt() * (1-cos(delta_phi_jet_met))), weight);
   fill_H1("jetArea"+histSuffix, jet.jetArea(), weight);
   if (jet.pt()>200 || jet.pt()<300) fill_H1("jetArea_pt200_300"+histSuffix,jet.jetArea(), weight);
   if (jet.pt()>300 || jet.pt()<400) fill_H1("jetArea_pt300_400"+histSuffix,jet.jetArea(), weight);
