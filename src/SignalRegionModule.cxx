@@ -33,7 +33,7 @@
 #include "UHH2/VHResonances/include/ExtJetHistsWithConditions.h"
 #include "UHH2/VHResonances/include/GenMatchHists.h"
 #include "UHH2/VHResonances/include/GenLevelJetMatch.h"
-#include "UHH2/VHResonances/include/HiggsToWWSelections.h"
+#include "UHH2/VHResonances/include/HiggsToWWSelection.h"
 #include "UHH2/VHResonances/include/DiLeptonHists.h"
 #include "UHH2/VHResonances/include/HiggsToWWModules.h"
 #include "UHH2/VHResonances/include/HiggsToWWHists.h"
