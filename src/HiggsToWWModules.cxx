@@ -110,7 +110,6 @@ ZprimeCandidateReconstruction::ZprimeCandidateReconstruction(Context& ctx, float
 }
 
 // Function to set all the discriminators, depending on the channel.
-// Note: diLep refers to the two leptons or the MET
 void ZprimeCandidateReconstruction::setDiscriminators(Event& event, ZprimeCandidate& candidate,
   Particle lep1, Particle lep2, TopJet jet,
   float i, float j, std::map<TString, JetId> Btag_map){

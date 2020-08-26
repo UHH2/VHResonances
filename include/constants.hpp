@@ -22,7 +22,7 @@ const float min_topjet_pt = 200.0;
 const float min_lepton_pt = 52.0;
 const float min_lepton_eta = 2.4;
 // const float max_lepton_iso = 0.15;
-// const float min_jet_dilep_delta_phi = 2.7;;
+// const float min_jet_dilep_delta_phi = 2.7;
 const float min_MET_pt = 250.0;
 
 const float min_dilep_pt = 150;
