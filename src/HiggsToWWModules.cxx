@@ -109,9 +109,86 @@ ZprimeCandidateReconstruction::ZprimeCandidateReconstruction(Context& ctx, float
 
 }
 
+// Function to set all the discriminators, depending on the channel.
+// Note: diLep refers to the two leptons or the MET
+void ZprimeCandidateReconstruction::setDiscriminators(Event& event, ZprimeCandidate& candidate,
+  Particle lep1, Particle lep2, TopJet jet,
+  unsigned int i, unsigned int j, std::map<TString, JetId> Btag_map){
+
+    double chi2 = TMath::Power(((jet.softdropmass()-HMASS)/HWIDTH),2)+ TMath::Power(((diLep.M()-ZMASS)/ZWIDTH),2);
+    candidate.set_Zprime(ZplusJet);
+    candidate.set_Z(diLep);
+    candidate.set_H(jet);
+    if (lepton != "invisible") candidate.set_jets_leptonic({lep1,lep2});
+    candidate.set_discriminators("MuonID1", MuonID1? (float)i: -1);
+    candidate.set_discriminators("MuonID2", MuonID2? (float)j: -1);
+    candidate.set_discriminators("chi2", chi2);
+    candidate.set_discriminators("subjets", jet.subjets().size());
+    candidate.set_discriminators("btag_DeepCSV_loose",  (double)MultiBTagSubJetID(Btag_map["DeepCSV_loose"])(jet, event));
+    candidate.set_discriminators("btag_DeepCSV_medium", (double)MultiBTagSubJetID(Btag_map["DeepCSV_medium"])(jet, event));
+    candidate.set_discriminators("btag_DeepCSV_tight",  (double)MultiBTagSubJetID(Btag_map["DeepCSV_tight"])(jet, event));
+    int sj_ind = 0;
+    for(auto subjet : jet.subjets()) {
+      candidate.set_discriminators("btag_DeepCSV_loose_subjet_"+std::to_string(sj_ind),  (double)Btag_map["DeepCSV_loose"](subjet,event));
+      candidate.set_discriminators("btag_DeepCSV_medium_subjet_"+std::to_string(sj_ind), (double)Btag_map["DeepCSV_medium"](subjet,event));
+      candidate.set_discriminators("btag_DeepCSV_tight_subjet_"+std::to_string(sj_ind),  (double)Btag_map["DeepCSV_tight"](subjet,event));
+      sj_ind++;
+    }
+    candidate.set_discriminators("SDmass",    jet.softdropmass());
+    candidate.set_discriminators("tau1",      jet.tau1());
+    candidate.set_discriminators("tau2",      jet.tau2());
+    candidate.set_discriminators("tau3",      jet.tau3());
+    candidate.set_discriminators("tau4",      jet.tau4());
+    candidate.set_discriminators("tau21",     (jet.tau1()!=0) ? (jet.tau2()/jet.tau1()) : -1);
+    candidate.set_discriminators("tau31",     (jet.tau1()!=0) ? (jet.tau3()/jet.tau1()) : -1);
+    candidate.set_discriminators("tau41",     (jet.tau1()!=0) ? (jet.tau4()/jet.tau1()) : -1);
+    candidate.set_discriminators("tau32",     (jet.tau2()!=0) ? (jet.tau3()/jet.tau2()) : -1);
+    candidate.set_discriminators("tau42",     (jet.tau2()!=0) ? (jet.tau4()/jet.tau2()) : -1);
+    candidate.set_discriminators("tau43",     (jet.tau3()!=0) ? (jet.tau4()/jet.tau3()) : -1);
+    candidate.set_discriminators("NN_HWW",    jet.has_tag(TopJet::NN_HWW)   ? jet.get_tag(TopJet::NN_HWW)   : 9999);
+    candidate.set_discriminators("NN_Hbb",    jet.has_tag(TopJet::NN_Hbb)   ? jet.get_tag(TopJet::NN_Hbb)   : 9999);
+    candidate.set_discriminators("NN_QCD",    jet.has_tag(TopJet::NN_QCD)   ? jet.get_tag(TopJet::NN_QCD)   : 9999);
+    candidate.set_discriminators("NN_Top",    jet.has_tag(TopJet::NN_Top)   ? jet.get_tag(TopJet::NN_Top)   : 9999);
+    candidate.set_discriminators("NN_W",      jet.has_tag(TopJet::NN_W)     ? jet.get_tag(TopJet::NN_W)     : 9999);
+    candidate.set_discriminators("NN_Z",      jet.has_tag(TopJet::NN_Z)     ? jet.get_tag(TopJet::NN_Z)     : 9999);
+    candidate.set_discriminators("NN_HWW_1",  jet.has_tag(TopJet::NN_HWW_1) ? jet.get_tag(TopJet::NN_HWW_1) : 9999);
+    candidate.set_discriminators("NN_Hbb_1",  jet.has_tag(TopJet::NN_Hbb_1) ? jet.get_tag(TopJet::NN_Hbb_1) : 9999);
+    candidate.set_discriminators("NN_QCD_1",  jet.has_tag(TopJet::NN_QCD_1) ? jet.get_tag(TopJet::NN_QCD_1) : 9999);
+    candidate.set_discriminators("NN_Top_1",  jet.has_tag(TopJet::NN_Top_1) ? jet.get_tag(TopJet::NN_Top_1) : 9999);
+    candidate.set_discriminators("NN_W_1",    jet.has_tag(TopJet::NN_W_1)   ? jet.get_tag(TopJet::NN_W_1)   : 9999);
+    candidate.set_discriminators("NN_Z_1",    jet.has_tag(TopJet::NN_Z_1)   ? jet.get_tag(TopJet::NN_Z_1)   : 9999);
+    candidate.set_discriminators("NN_HWW_2",  jet.has_tag(TopJet::NN_HWW_2) ? jet.get_tag(TopJet::NN_HWW_2) : 9999);
+    candidate.set_discriminators("NN_Hbb_2",  jet.has_tag(TopJet::NN_Hbb_2) ? jet.get_tag(TopJet::NN_Hbb_2) : 9999);
+    candidate.set_discriminators("NN_QCD_2",  jet.has_tag(TopJet::NN_QCD_2) ? jet.get_tag(TopJet::NN_QCD_2) : 9999);
+    candidate.set_discriminators("NN_Top_2",  jet.has_tag(TopJet::NN_Top_2) ? jet.get_tag(TopJet::NN_Top_2) : 9999);
+    candidate.set_discriminators("NN_W_2",    jet.has_tag(TopJet::NN_W_2)   ? jet.get_tag(TopJet::NN_W_2)   : 9999);
+    candidate.set_discriminators("NN_Z_2",    jet.has_tag(TopJet::NN_Z_2)   ? jet.get_tag(TopJet::NN_Z_2)   : 9999);
+    candidate.set_discriminators("CNN_HWW",   jet.has_tag(TopJet::CNN_HWW)  ? jet.get_tag(TopJet::CNN_HWW)  : 9999);
+    candidate.set_discriminators("CNN_Hbb",   jet.has_tag(TopJet::CNN_Hbb)  ? jet.get_tag(TopJet::CNN_Hbb)  : 9999);
+    candidate.set_discriminators("CNN_QCD",   jet.has_tag(TopJet::CNN_QCD)  ? jet.get_tag(TopJet::CNN_QCD)  : 9999);
+    candidate.set_discriminators("CNN_Top",   jet.has_tag(TopJet::CNN_Top)  ? jet.get_tag(TopJet::CNN_Top)  : 9999);
+    candidate.set_discriminators("CNN_W",     jet.has_tag(TopJet::CNN_W)    ? jet.get_tag(TopJet::CNN_W)    : 9999);
+    candidate.set_discriminators("CNN_Z",     jet.has_tag(TopJet::CNN_Z)    ? jet.get_tag(TopJet::CNN_Z)    : 9999);
+    candidate.set_discriminators("DCL_HWW",   jet.has_tag(TopJet::DCL_HWW)  ? jet.get_tag(TopJet::DCL_HWW)  : 9999);
+    candidate.set_discriminators("DCL_Hbb",   jet.has_tag(TopJet::DCL_Hbb)  ? jet.get_tag(TopJet::DCL_Hbb)  : 9999);
+    candidate.set_discriminators("DCL_QCD",   jet.has_tag(TopJet::DCL_QCD)  ? jet.get_tag(TopJet::DCL_QCD)  : 9999);
+    candidate.set_discriminators("DCL_Top",   jet.has_tag(TopJet::DCL_Top)  ? jet.get_tag(TopJet::DCL_Top)  : 9999);
+    candidate.set_discriminators("DCL_W",     jet.has_tag(TopJet::DCL_W)    ? jet.get_tag(TopJet::DCL_W)    : 9999);
+    candidate.set_discriminators("DCL_Z",     jet.has_tag(TopJet::DCL_Z)    ? jet.get_tag(TopJet::DCL_Z)    : 9999);
+
+    candidate.set_discriminators("Match",           jet.has_tag(TopJet::Matching)       ? jet.get_tag(TopJet::Matching)       : 0);
+    candidate.set_discriminators("MatchingStatus",  jet.has_tag(TopJet::MatchingStatus) ? jet.get_tag(TopJet::MatchingStatus) : 0);
+    MYTAGSETDISCR(btag_DeepBoosted_H4qvsQCD)
+    MYTAGSETDISCR(btag_MassDecorrelatedDeepBoosted_H4qvsQCD)
+    MYTAGSETDISCR(btag_DeepBoosted_probHqqqq)
+    MYTAGSETDISCR(btag_DeepBoosted_raw_score_h)
+    MYTAGSETDISCR(btag_MassDecorrelatedDeepBoosted_probHqqqq)
+}
+
+
 
 bool ZprimeCandidateReconstruction::process(Event& event){
-  assert(event.muons || event.electrons);
+  assert(event.muons || event.electrons || event.met);
 
   const auto & jets = event.get(h_topjets);
 
@@ -119,112 +196,84 @@ bool ZprimeCandidateReconstruction::process(Event& event){
   leptons.clear();
   if (lepton == "muons") leptons.assign(event.muons->begin(), event.muons->end());
   else if (lepton == "electrons") leptons.assign(event.electrons->begin(), event.electrons->end());
-  else throw logic_error("ZprimeCandidateReconstruction: Impossible case");
+  else if (lepton != "invisible")  throw logic_error("ZprimeCandidateReconstruction: Impossible case");
 
   // Declare output
 
   std::vector<ZprimeCandidate> candidates;
 
   if(jets.size() < 1 ) throw std::runtime_error("ZprimeCandidateReconstruction::ZprimeCandidateReconstruction -- unexpected number of jets");
-  if(leptons.size() < min_leptons ) throw std::runtime_error("ZprimeCandidateReconstruction::ZprimeCandidateReconstruction -- unexpected number of leptons");
+  if(leptons.size() < min_leptons && lepton != "invisible") throw std::runtime_error("ZprimeCandidateReconstruction::ZprimeCandidateReconstruction -- unexpected number of leptons");
 
   std::map<TString, JetId> Btag_map;
   Btag_map["DeepCSV_loose"]   = BTag(BTag::DEEPCSV, BTag::WP_LOOSE);
   Btag_map["DeepCSV_medium"]  = BTag(BTag::DEEPCSV, BTag::WP_MEDIUM);
   Btag_map["DeepCSV_tight"]   = BTag(BTag::DEEPCSV, BTag::WP_TIGHT);
 
-  for (unsigned int i = 0; i < leptons.size(); i++) {
-    Particle lep1 = leptons.at(i);
-    for (unsigned int j = i+1; j < leptons.size(); j++) {
-      Particle lep2 = leptons.at(j);
-      bool MuonID1=false, MuonID2=false;
-      if (lepton == "muons") {
-        MuonID1 = MuonID(Muon::CutBasedIdGlobalHighPt)(event.muons->at(i), event);
-        MuonID2 = MuonID(Muon::CutBasedIdGlobalHighPt)(event.muons->at(j), event);
-        if (!MuonID1 && !MuonID2) continue;
-      }
-      auto DR = uhh2::deltaR(lep1, lep2);
-      auto diLep = lep1.v4() + lep2.v4();
-      if( (fabs(diLep.M() - ZMASS) < ZWIDTH) && (lep1.charge() + lep2.charge() == 0) && diLep.pt()>pt_min && DR_min < DR && DR < DR_max) {
-        for(const auto & jet: jets){
-          auto Dphi = deltaPhi(diLep, jet);
-          if( phi_min < Dphi  && Dphi< phi_max){
-            auto ZplusJet = diLep + jet.v4();
-            double chi2 = TMath::Power(((jet.softdropmass()-HMASS)/HWIDTH),2)+ TMath::Power(((diLep.M()-ZMASS)/ZWIDTH),2);
-            ZprimeCandidate candidate;
-            candidate.set_Zprime(ZplusJet);
-            candidate.set_Z(diLep);
-            candidate.set_H(jet);
-            candidate.set_jets_leptonic({lep1,lep2});
-            candidate.set_discriminators("MuonID1", MuonID1? (float)i: -1);
-            candidate.set_discriminators("MuonID2", MuonID2? (float)j: -1);
-            candidate.set_discriminators("chi2", chi2);
-            candidate.set_discriminators("subjets", jet.subjets().size());
-            candidate.set_discriminators("btag_DeepCSV_loose",  (double)MultiBTagSubJetID(Btag_map["DeepCSV_loose"])(jet, event));
-            candidate.set_discriminators("btag_DeepCSV_medium", (double)MultiBTagSubJetID(Btag_map["DeepCSV_medium"])(jet, event));
-            candidate.set_discriminators("btag_DeepCSV_tight",  (double)MultiBTagSubJetID(Btag_map["DeepCSV_tight"])(jet, event));
-            int sj_ind = 0;
-            for(auto subjet : jet.subjets()) {
-              candidate.set_discriminators("btag_DeepCSV_loose_subjet_"+std::to_string(sj_ind),  (double)Btag_map["DeepCSV_loose"](subjet,event));
-              candidate.set_discriminators("btag_DeepCSV_medium_subjet_"+std::to_string(sj_ind), (double)Btag_map["DeepCSV_medium"](subjet,event));
-              candidate.set_discriminators("btag_DeepCSV_tight_subjet_"+std::to_string(sj_ind),  (double)Btag_map["DeepCSV_tight"](subjet,event));
-              sj_ind++;
-            }
-            candidate.set_discriminators("SDmass",    jet.softdropmass());
-            candidate.set_discriminators("tau1",      jet.tau1());
-            candidate.set_discriminators("tau2",      jet.tau2());
-            candidate.set_discriminators("tau3",      jet.tau3());
-            candidate.set_discriminators("tau4",      jet.tau4());
-            candidate.set_discriminators("tau21",     (jet.tau1()!=0) ? (jet.tau2()/jet.tau1()) : -1);
-            candidate.set_discriminators("tau31",     (jet.tau1()!=0) ? (jet.tau3()/jet.tau1()) : -1);
-            candidate.set_discriminators("tau41",     (jet.tau1()!=0) ? (jet.tau4()/jet.tau1()) : -1);
-            candidate.set_discriminators("tau32",     (jet.tau2()!=0) ? (jet.tau3()/jet.tau2()) : -1);
-            candidate.set_discriminators("tau42",     (jet.tau2()!=0) ? (jet.tau4()/jet.tau2()) : -1);
-            candidate.set_discriminators("tau43",     (jet.tau3()!=0) ? (jet.tau4()/jet.tau3()) : -1);
-            candidate.set_discriminators("NN_HWW",    jet.has_tag(TopJet::NN_HWW)   ? jet.get_tag(TopJet::NN_HWW)   : 9999);
-            candidate.set_discriminators("NN_Hbb",    jet.has_tag(TopJet::NN_Hbb)   ? jet.get_tag(TopJet::NN_Hbb)   : 9999);
-            candidate.set_discriminators("NN_QCD",    jet.has_tag(TopJet::NN_QCD)   ? jet.get_tag(TopJet::NN_QCD)   : 9999);
-            candidate.set_discriminators("NN_Top",    jet.has_tag(TopJet::NN_Top)   ? jet.get_tag(TopJet::NN_Top)   : 9999);
-            candidate.set_discriminators("NN_W",      jet.has_tag(TopJet::NN_W)     ? jet.get_tag(TopJet::NN_W)     : 9999);
-            candidate.set_discriminators("NN_Z",      jet.has_tag(TopJet::NN_Z)     ? jet.get_tag(TopJet::NN_Z)     : 9999);
-            candidate.set_discriminators("NN_HWW_1",  jet.has_tag(TopJet::NN_HWW_1) ? jet.get_tag(TopJet::NN_HWW_1) : 9999);
-            candidate.set_discriminators("NN_Hbb_1",  jet.has_tag(TopJet::NN_Hbb_1) ? jet.get_tag(TopJet::NN_Hbb_1) : 9999);
-            candidate.set_discriminators("NN_QCD_1",  jet.has_tag(TopJet::NN_QCD_1) ? jet.get_tag(TopJet::NN_QCD_1) : 9999);
-            candidate.set_discriminators("NN_Top_1",  jet.has_tag(TopJet::NN_Top_1) ? jet.get_tag(TopJet::NN_Top_1) : 9999);
-            candidate.set_discriminators("NN_W_1",    jet.has_tag(TopJet::NN_W_1)   ? jet.get_tag(TopJet::NN_W_1)   : 9999);
-            candidate.set_discriminators("NN_Z_1",    jet.has_tag(TopJet::NN_Z_1)   ? jet.get_tag(TopJet::NN_Z_1)   : 9999);
-            candidate.set_discriminators("NN_HWW_2",  jet.has_tag(TopJet::NN_HWW_2) ? jet.get_tag(TopJet::NN_HWW_2) : 9999);
-            candidate.set_discriminators("NN_Hbb_2",  jet.has_tag(TopJet::NN_Hbb_2) ? jet.get_tag(TopJet::NN_Hbb_2) : 9999);
-            candidate.set_discriminators("NN_QCD_2",  jet.has_tag(TopJet::NN_QCD_2) ? jet.get_tag(TopJet::NN_QCD_2) : 9999);
-            candidate.set_discriminators("NN_Top_2",  jet.has_tag(TopJet::NN_Top_2) ? jet.get_tag(TopJet::NN_Top_2) : 9999);
-            candidate.set_discriminators("NN_W_2",    jet.has_tag(TopJet::NN_W_2)   ? jet.get_tag(TopJet::NN_W_2)   : 9999);
-            candidate.set_discriminators("NN_Z_2",    jet.has_tag(TopJet::NN_Z_2)   ? jet.get_tag(TopJet::NN_Z_2)   : 9999);
-            candidate.set_discriminators("CNN_HWW",   jet.has_tag(TopJet::CNN_HWW)  ? jet.get_tag(TopJet::CNN_HWW)  : 9999);
-            candidate.set_discriminators("CNN_Hbb",   jet.has_tag(TopJet::CNN_Hbb)  ? jet.get_tag(TopJet::CNN_Hbb)  : 9999);
-            candidate.set_discriminators("CNN_QCD",   jet.has_tag(TopJet::CNN_QCD)  ? jet.get_tag(TopJet::CNN_QCD)  : 9999);
-            candidate.set_discriminators("CNN_Top",   jet.has_tag(TopJet::CNN_Top)  ? jet.get_tag(TopJet::CNN_Top)  : 9999);
-            candidate.set_discriminators("CNN_W",     jet.has_tag(TopJet::CNN_W)    ? jet.get_tag(TopJet::CNN_W)    : 9999);
-            candidate.set_discriminators("CNN_Z",     jet.has_tag(TopJet::CNN_Z)    ? jet.get_tag(TopJet::CNN_Z)    : 9999);
-            candidate.set_discriminators("DCL_HWW",   jet.has_tag(TopJet::DCL_HWW)  ? jet.get_tag(TopJet::DCL_HWW)  : 9999);
-            candidate.set_discriminators("DCL_Hbb",   jet.has_tag(TopJet::DCL_Hbb)  ? jet.get_tag(TopJet::DCL_Hbb)  : 9999);
-            candidate.set_discriminators("DCL_QCD",   jet.has_tag(TopJet::DCL_QCD)  ? jet.get_tag(TopJet::DCL_QCD)  : 9999);
-            candidate.set_discriminators("DCL_Top",   jet.has_tag(TopJet::DCL_Top)  ? jet.get_tag(TopJet::DCL_Top)  : 9999);
-            candidate.set_discriminators("DCL_W",     jet.has_tag(TopJet::DCL_W)    ? jet.get_tag(TopJet::DCL_W)    : 9999);
-            candidate.set_discriminators("DCL_Z",     jet.has_tag(TopJet::DCL_Z)    ? jet.get_tag(TopJet::DCL_Z)    : 9999);
+  if (lepton != "invisible"){ // electron or muonchannel
+    for (unsigned int i = 0; i < leptons.size(); i++) {
+      Particle lep1 = leptons.at(i);
+      for (unsigned int j = i+1; j < leptons.size(); j++) {
+        Particle lep2 = leptons.at(j);
+        bool MuonID1=false, MuonID2=false;
+        if (lepton == "muons") {
+          MuonID1 = MuonID(Muon::CutBasedIdGlobalHighPt)(event.muons->at(i), event);
+          MuonID2 = MuonID(Muon::CutBasedIdGlobalHighPt)(event.muons->at(j), event);
+          if (!MuonID1 && !MuonID2) continue;
+        }
+        auto DR = uhh2::deltaR(lep1, lep2);
+        auto diLep = lep1.v4() + lep2.v4();
+        if( (fabs(diLep.M() - ZMASS) < ZWIDTH) && (lep1.charge() + lep2.charge() == 0) && diLep.pt()>pt_min && DR_min < DR && DR < DR_max) {
+          for(const auto & jet: jets){
+            auto Dphi = deltaPhi(diLep, jet);
+            if( phi_min < Dphi  && Dphi< phi_max){
+              auto ZplusJet = diLep + jet.v4();
+              ZprimeCandidate candidate;
 
-            candidate.set_discriminators("Match",           jet.has_tag(TopJet::Matching)       ? jet.get_tag(TopJet::Matching)       : 0);
-            candidate.set_discriminators("MatchingStatus",  jet.has_tag(TopJet::MatchingStatus) ? jet.get_tag(TopJet::MatchingStatus) : 0);
-            MYTAGSETDISCR(btag_DeepBoosted_H4qvsQCD)
-            MYTAGSETDISCR(btag_MassDecorrelatedDeepBoosted_H4qvsQCD)
-            MYTAGSETDISCR(btag_DeepBoosted_probHqqqq)
-            MYTAGSETDISCR(btag_DeepBoosted_raw_score_h)
-            MYTAGSETDISCR(btag_MassDecorrelatedDeepBoosted_probHqqqq)
-            candidates.emplace_back(candidate);
+              setDiscriminators(event, candidate, ZplusJet, diLep, lep1, lep2 , MuonID1, MuonID2, jet,i, j, Btag_map);
+
+              // TODO: Delete this check at a later stage.
+              // Perform some checks to check whether the changes propagate
+              assert(candidate.Z().pt() == diLep.Pt());
+
+              candidates.emplace_back(candidate);
+          }
           }
         }
       }
     }
   }
+    // else { // invisiblechannel
+    //
+    //   // TODO Don't run because reconstruction is not possible as p_T of MET is needed.
+    //   // Better to use transverse masses.
+    //   // Only run it because of the ZprimeCandidate which is needed
+    //
+    //   if( event.met->pt()> min_MET_pt) {
+    //
+    //   ZprimeCandidate candidate;
+    //
+    //   for(const auto & jet: jets){
+    //     double Dphi = fabs(jet.phi() - event.met->phi());
+    //     if(Dphi > M_PI) Dphi = 2* M_PI - Dphi;
+    //
+    //     if( phi_min < Dphi  && Dphi < phi_max){
+    //       auto ZplusJet = event.met->v4() + jet.v4(); // TODO This is incorrect!
+    //
+    //       // use empty particles for the two leptons
+    //       Particle emptyLep1, emptyLep2;
+    //
+    //       setDiscriminators(event, candidate, ZplusJet, event.met->v4(), emptyLep1, emptyLep2, false, false, jet, 0, 0, Btag_map);
+    //
+    //       // TODO: Delete this check at a later stage.
+    //       // Perform some checks to check whether the changes propagate
+    //       assert(candidate.Z().pt() ==  event.met->pt());
+    //
+    //       candidates.emplace_back(candidate);
+    //      }
+    //   }
+    //  }
+    // }
 
   // Set the handle with all candidates
   event.set(h_ZprimeCandidates_, candidates);
