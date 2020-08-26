@@ -251,8 +251,7 @@ bool ZprimeCandidateReconstruction::process(Event& event){
 
     if( event.met->pt()> min_MET_pt) {
       for(const auto & jet: jets){
-        double Dphi = fabs(jet.phi() - event.met->phi());
-        if(Dphi > M_PI) Dphi = 2* M_PI - Dphi;
+         double Dphi = deltaPhi(jet, *event.met);
          if( phi_min < Dphi  && Dphi < phi_max){
 
           // use empty particles for the two leptons
