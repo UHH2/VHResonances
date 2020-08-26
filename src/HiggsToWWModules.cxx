@@ -233,8 +233,8 @@ bool ZprimeCandidateReconstruction::process(Event& event){
           for(const auto & jet: jets){
             auto Dphi = deltaPhi(diLep, jet);
             if( phi_min < Dphi  && Dphi< phi_max){
-              ZprimeCandidate candidate;
 
+              ZprimeCandidate candidate;
               setDiscriminators(event, candidate, lep1, lep2, jet, MuonID1? (float)i: -1, MuonID2? (float)j: -1, Btag_map);
 
               candidates.emplace_back(candidate);
@@ -250,21 +250,20 @@ bool ZprimeCandidateReconstruction::process(Event& event){
     // Only run it because of the ZprimeCandidate which is needed
 
     if( event.met->pt()> min_MET_pt) {
+      for(const auto & jet: jets){
+        double Dphi = fabs(jet.phi() - event.met->phi());
+        if(Dphi > M_PI) Dphi = 2* M_PI - Dphi;
+         if( phi_min < Dphi  && Dphi < phi_max){
 
-    ZprimeCandidate candidate;
+          // use empty particles for the two leptons
+          Particle emptyLep1, emptyLep2;
 
-    for(const auto & jet: jets){
-      double Dphi = fabs(jet.phi() - event.met->phi());
-      if(Dphi > M_PI) Dphi = 2* M_PI - Dphi;
-       if( phi_min < Dphi  && Dphi < phi_max){
+          ZprimeCandidate candidate;
+          setDiscriminators(event, candidate, emptyLep1, emptyLep2, jet, -1, -1 , Btag_map);
 
-        // use empty particles for the two leptons
-        Particle emptyLep1, emptyLep2;
-
-        setDiscriminators(event, candidate, emptyLep1, emptyLep2, jet, -1, -1 , Btag_map);
-        candidates.emplace_back(candidate);
-       }
-    }
+          candidates.emplace_back(candidate);
+         }
+      }
    }
   }
 
