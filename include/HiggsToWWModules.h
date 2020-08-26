@@ -10,7 +10,7 @@
 #include "UHH2/VHResonances/include/Utils.hpp"
 #include "UHH2/VHResonances/include/ModuleBase.h"
 #include "UHH2/VHResonances/include/ZprimeCandidate.h"
-#include "UHH2/VHResonances/include/HiggsToWWSelections.h"
+#include "UHH2/VHResonances/include/HiggsToWWSelection.h"
 #include "UHH2/VHResonances/include/GeneralizedEndpoint.hpp"
 
 class FinalStateMatching: public uhh2::AnalysisModule {

@@ -1,6 +1,6 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/common/include/Utils.h"
-#include "UHH2/VHResonances/include/HiggsToWWSelections.h"
+#include "UHH2/VHResonances/include/HiggsToWWSelection.h"
 
 #include <stdexcept>
 #include <set>

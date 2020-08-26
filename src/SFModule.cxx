@@ -38,7 +38,7 @@
 #include "UHH2/VHResonances/include/GenericJetCleaner.h"
 #include "UHH2/VHResonances/include/HiggsToWWModules.h"
 #include "UHH2/VHResonances/include/HiggsToWWHists.h"
-#include "UHH2/VHResonances/include/HiggsToWWSelections.h"
+#include "UHH2/VHResonances/include/HiggsToWWSelection.h"
 #include "UHH2/VHResonances/include/DiLeptonHists.h"
 
 using namespace std;
