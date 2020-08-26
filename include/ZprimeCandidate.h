@@ -63,6 +63,7 @@ public:
   void set_Z(Particle x) {m_Z=x;}
   void set_H(TopJet x) {m_H=x;}
   void set_jets_leptonic(std::vector<Particle> x) {m_leptons=x;}
+  void set_Zprime_MT (double x) {m_Zprime_mass = x;}
   void set_discriminators(const std::string& key, double discr) { m_discriminators[key] = discr;}
 
 private:
