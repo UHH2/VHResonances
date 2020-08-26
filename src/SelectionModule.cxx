@@ -178,7 +178,7 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
   h_ZprimeCandidates = ctx.get_handle<std::vector<ZprimeCandidate>>("ZprimeCandidate");
   h_image = ctx.get_handle<std::vector<tensorflow::Tensor>>("Images");
 
-  MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": (MB["invisiblechannel"]? "neutrinos": ""));
+  MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": (MB["invisiblechannel"]? "invisible": ""));
   for (auto& t : Trigger_run_validity.at(MS["year"])) {
     if (MB["muonchannel"] && t.first.find("Mu")==std::string::npos ) continue;
     if (MB["muonchannel"] &&  t.first.find("NoMu")!=std::string::npos ) continue;
