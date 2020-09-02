@@ -117,7 +117,7 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   H2("nsubjet_btags_DeepCSV")->GetYaxis()->SetBinLabel(3,"medium");
   H2("nsubjet_btags_DeepCSV")->GetYaxis()->SetBinLabel(4,"tight");
 
-  book_TH1F("Zprime_ptinvmass",  "p_{T}^{ll}/"+massType+"(jet,ll)",         200, 0, 2);
+  book_TH1F("Zprime_ptinv"+massPlotName,  "p_{T}^{ll}/"+massType+"(jet,ll)",         200, 0, 2);
   book_TH1F("HT_event", "HT_event", 300, 0, 3000);
   book_TH1F("ST_event", "ST_event", 300, 0, 3000);
   book_TH1F("HT_Zprime", "HT_Zprime", 300, 0, 3000);
