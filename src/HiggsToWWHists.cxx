@@ -1,4 +1,5 @@
 #include "UHH2/core/include/Event.h"
+#include "UHH2/core/include/Utils.h"
 #include "UHH2/common/include/JetIds.h"
 #include "UHH2/VHResonances/include/HiggsToWWHists.h"
 
@@ -9,6 +10,9 @@
 using namespace std;
 using namespace uhh2;
 
+string massType = "m";
+string massPlotName = "mass";
+
 HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& condMatch_, const string & condMatchStatus_): HistsBase(ctx, dname), condMatch(condMatch_), condMatchStatus(condMatchStatus_) {
 
   h_ZprimeCandidates = ctx.get_handle<vector<ZprimeCandidate>>("ZprimeCandidate");
@@ -16,6 +20,11 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   h_ZDecay = ctx.get_handle<float>("ZDecay");
   h_ZprimeDecay = ctx.get_handle<float>("ZprimeDecay");
   string dataset_version = ctx.get("dataset_version");
+
+  if (string2bool(ctx.get("invisiblechannel"))){
+    massType =  "m_T";
+    massPlotName = "mass_transversal";
+  }
 
   // book all histograms here
   book_TH1F("sum_event_weights", "counting experiment", 1, 0.5, 1.5);
@@ -44,15 +53,15 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   for (float i = 2500; i <= 3000; i+=500) bins_Zprime_rebin1.push_back(i);
   bins_Zprime_rebin1.push_back(10000);
 
-  book_TH1F("Zprime_mass_rebin_full", "m^Zprime [GeV/c^{2}]", bins_Zprime_rebin_full.size()-1, &bins_Zprime_rebin_full[0]);
-  book_TH1F("Zprime_mass_rebin1", "m^Zprime [GeV/c^{2}]", bins_Zprime_rebin1.size()-1, &bins_Zprime_rebin1[0]);
-  book_TH1F("Zprime_mass_rebin2", "m^Zprime [GeV/c^{2}]", 10000, 0, 10000);
-  book_TH1F("Zprime_mass_rebin30","m^Zprime [GeV/c^{2}]", 330, 0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin_full", massType + "^Zprime [GeV/c^{2}]", bins_Zprime_rebin_full.size()-1, &bins_Zprime_rebin_full[0]);
+  book_TH1F("Zprime_"+massPlotName+"_rebin1", massType + "^Zprime [GeV/c^{2}]", bins_Zprime_rebin1.size()-1, &bins_Zprime_rebin1[0]);
+  book_TH1F("Zprime_"+massPlotName+"_rebin2", massType + "^Zprime [GeV/c^{2}]", 10000, 0, 10000);
+  book_TH1F("Zprime_"+massPlotName+"_rebin30",massType + "^Zprime [GeV/c^{2}]", 330, 0, 9900);
 
   for (const string & name: {"Zprime","Z","H"}) {
     // bool check = (name.compare("Zprime")) == 0;
     // book_TH1F(name+"_mass",    "m^"       +name+" [GeV/c^{2}]", check?300:40, check?0:70,check? 3000:110);
-    if (name=="Zprime")   book_TH1F(name+"_mass", "m^"+name+" [GeV/c^{2}]", 300,  0, 3000);
+    if (name=="Zprime")   book_TH1F(name+"_"+massPlotName, massType + "^"+name+" [GeV/c^{2}]", 300,  0, 3000);
     else if (name=="Z")   book_TH1F(name+"_mass", "m^"+name+" [GeV/c^{2}]", 40,  70, 110);
     else if ((name=="H")) book_TH1F(name+"_mass", "m^"+name+" [GeV/c^{2}]", 10,   0, 200);
     if ((name=="H")) book_TH1F(name+"_mass1GeV",  "m^"+name+" [GeV/c^{2}]", 200,  0, 200);
@@ -108,7 +117,7 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   H2("nsubjet_btags_DeepCSV")->GetYaxis()->SetBinLabel(3,"medium");
   H2("nsubjet_btags_DeepCSV")->GetYaxis()->SetBinLabel(4,"tight");
 
-  book_TH1F("Zprime_ptinvmass",  "p_{T}^{ll}/m(jet,ll)",         200, 0, 2);
+  book_TH1F("Zprime_ptinv"+massPlotName,  "p_{T}^{ll}/"+massType+"(jet,ll)",         200, 0, 2);
   book_TH1F("HT_event", "HT_event", 300, 0, 3000);
   book_TH1F("ST_event", "ST_event", 300, 0, 3000);
   book_TH1F("HT_Zprime", "HT_Zprime", 300, 0, 3000);
@@ -166,11 +175,11 @@ void HiggsToWWHists::fill(const Event & event){
     }
     if (condMatchStatus!="" && condMatchStatus!=matchstatus) continue;
 
-    fill_H1("Zprime_mass",            cand.Zprime_mass(),weight);
-    fill_H1("Zprime_mass_rebin_full", cand.Zprime_mass(),weight);
-    fill_H1("Zprime_mass_rebin1",     cand.Zprime_mass(),weight);
-    fill_H1("Zprime_mass_rebin2",     cand.Zprime_mass(),weight);
-    fill_H1("Zprime_mass_rebin30",    cand.Zprime_mass(),weight);
+    fill_H1("Zprime_"+massPlotName,               cand.Zprime_mass(),weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin_full", cand.Zprime_mass(),weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin1",     cand.Zprime_mass(),weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin2",     cand.Zprime_mass(),weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin30",    cand.Zprime_mass(),weight);
     fill_H1("Zprime_pt",              cand.pt(),weight);
     fill_H1("Zprime_energy",          cand.energy(),weight);
     fill_H1("Zprime_eta",             cand.eta(),weight);
@@ -219,7 +228,7 @@ void HiggsToWWHists::fill(const Event & event){
     }
     H2("nsubjet_btags_DeepCSV")->Fill(index_tag[0].c_str(), index_tag[1].c_str(), weight);
 
-    fill_H1("Zprime_ptinvmass",  cand.Z().pt()/cand.Zprime_mass(),weight);
+    fill_H1("Zprime_ptinv"+massPlotName,  cand.Z().pt()/cand.Zprime_mass(),weight);
 
     for (std::string & disc : discriminators) {
       fill_H1("H_"+disc, cand.has_discriminator(disc)? cand.discriminator(disc): 9999 ,weight);
