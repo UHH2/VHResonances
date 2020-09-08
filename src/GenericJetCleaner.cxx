@@ -5,6 +5,34 @@
 using namespace std;
 using namespace uhh2;
 
+// propagate to MET
+// apply type1 MET correction to RAW MET
+// NB: jet with substracted muon Pt should be used
+void correct_MET(const Event & event, Event::Handle<std::vector<Jet> > h_jets, double pt_thresh = 15., double eta_thresh_low=0., double eta_thresh_high=5.5){
+  // we start from raw MET
+  LorentzVector metv4= event.met->uncorr_v4();
+  for(auto & jet : event.get(h_jets)){
+    // thresholds on the corrected jets: pt > 15, EM fraction < 0.9
+    bool to_be_corrected = jet.v4().Pt() > 15.;
+    to_be_corrected = to_be_corrected && ( fabs(jet.v4().Eta())<eta_thresh_low || fabs(jet.v4().Eta())>eta_thresh_high || jet.v4().Pt() > pt_thresh );
+    to_be_corrected = to_be_corrected && (jet.neutralEmEnergyFraction()+jet.chargedEmEnergyFraction())<0.9;
+    if(to_be_corrected){
+      //slimmed MET is corrected by L1FastJet
+      auto factor_raw = jet.JEC_factor_raw();
+      auto L1factor_raw = jet.JEC_L1factor_raw();
+
+      LorentzVector L1corr =   (L1factor_raw*factor_raw)*jet.v4();            //L1 corrected jets
+      LorentzVector L123corr = jet.v4();                                      //L123 corrected jets (L23 in case of puppi)
+      metv4 -=  L123corr;
+
+      // slimmed MET is corrected by L1FastJet, for Puppi: L1factor_raw = 1 --> L1corr = raw-jet pT.
+      metv4 += L1corr;
+    }
+  }
+  event.met->set_pt(metv4.Pt());
+  event.met->set_phi(metv4.Phi());
+}
+
 void GenericJetCleaner::PrintInputs() {
   std::cout << "****************************************" << std::endl;
   std::cout << "           GenericJetCleaner            " << std::endl;
@@ -49,6 +77,8 @@ jetID(jetID_), TopjetID(TopjetID_), muoIDcleaning(muoID_), eleIDcleaning(eleID_)
   string jecVer = strings["JEC"].substr(strings["JEC"].find("_V")+2,strings["JEC"].size()-strings["JEC"].find("_V")-2);
   string sfFilename  = "JRDatabase/textFiles/"+strings["JER"]+"_MC/"+strings["JER"]+"_MC_SF_"+strings["jet_coll"]+".txt";
   string resFilename = "JRDatabase/textFiles/"+strings["JER"]+"_MC/"+strings["JER"]+"_MC_PtResolution_"+strings["jet_coll"]+".txt";
+
+  h_jets = ctx.get_handle<std::vector<Jet>>(strings["jetLabel"]);
 
   // Define containers
 
@@ -101,7 +131,9 @@ bool GenericJetCleaner::process(Event & event) {
     if (apply_run[run]){
       if ( bools["isJLC"]    && !bools["isTopJet"] && !bools["isHOTVR"] ) JLC[run]->process(event);
       if ( bools["isJEC"]    && !bools["isTopJet"]                      ) JetCorr[run]->process(event);
+      // TODO: Put CHS correct_met function from here: https://github.com/UHH2/UHH2/blob/afb65482af3e8a563d1dcfdaca269ef6cc236ab3/common/src/JetCorrections.cxx#L108
       // if ( !bools["isTopJet"] && bools["isMet"]                         ) JetCorr[run]->correct_met(event, bools["isCHS"]); // TODO class does't has the function
+      if ( !bools["isTopJet"] && bools["isMet"] && bools["isPuppi"] && bools["isJEC"] ) correct_MET(event, h_jets);
       if ( bools["isTopJEC"] &&  bools["isTopJet"] && !bools["isHOTVR"] ) TopJetCorr[run]->process(event);
       if ( bools["isTopJEC"] &&  bools["isTopJet"]                      ) TopJetSubjetCorr[run]->process(event);
     }

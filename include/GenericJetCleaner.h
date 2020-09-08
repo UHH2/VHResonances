@@ -38,6 +38,8 @@ protected:
   std::unordered_map<std::string, std::string> strings;
   std::unordered_map<std::string, bool> bools;
 
+  uhh2::Event::Handle<std::vector<Jet> > h_jets;
+
   JetId jetID;
   TopJetId TopjetID;
 
