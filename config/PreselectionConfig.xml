@@ -35,6 +35,7 @@
 <!ENTITY tauid                      "false"> <!--true/false -->
 <!ENTITY jetid                      "true">  <!--true/false -->
 <!ENTITY topjetid                   "true">  <!--true/false -->
+<!ENTITY do_metcorrection           "true">  <!--true/false -->
 
 <!--   SYSTEMatic uncertainties -->
 <!ENTITY JEC_Version                "defaultValue">
@@ -737,6 +738,7 @@
     <Item Name="tauid"                      Value="&tauid;"/>
     <Item Name="jetid"                      Value="&jetid;"/>
     <Item Name="topjetid"                   Value="&topjetid;"/>
+    <Item Name="do_metcorrection"           Value="&do_metcorrection;"/>
 
     <!-- the class name of the AnalysisModule subclasses to run: -->
     <Item Name="AnalysisModule"             Value="PreselectionModule"/>
