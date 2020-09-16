@@ -13,6 +13,7 @@
 <!ENTITY isHOTVR                    "true">  <!--false/true -->
 <!ENTITY muonchannel                "false">  <!--true/false -->
 <!ENTITY electronchannel            "false">  <!--true/false -->
+<!ENTITY invisiblechannel           "false">  <!--true/false -->
 
 
 <!-- MC Samples 2016 -->
@@ -271,6 +272,7 @@
     <Item Name="isHOTVR"                    Value="&isHOTVR;"/>
     <Item Name="muonchannel"                Value="&muonchannel;"/>
     <Item Name="electronchannel"            Value="&electronchannel;"/>
+    <Item Name="invisiblechannel"           Value="&invisiblechannel;"/>
 
     <!-- the class name of the AnalysisModule subclasses to run: -->
     <Item Name="AnalysisModule"             Value="SignalRegionModule"/>
