@@ -230,6 +230,15 @@ bool SelectionModule::process(uhh2::Event& event) {
   MuonScaleVariations_module->process(event);
   fill_histograms(event, "MuonScale");
 
+  // cut delta Phi between MET and all TopJets at min_Dphi_MET (2.0)
+  if (MB["invisiblechannel"]){
+    const auto & jets = event.get(h_topjets);
+    for(const auto & jet: jets){
+      double Dphi = fabs(deltaPhi(jet, *event.met));
+      if (Dphi < min_Dphi_MET) return false;
+    }
+  }
+
   ZprimeCandidateReconstruction_module->process(event);
   fill_histograms(event, "ZprimeReco");
 
