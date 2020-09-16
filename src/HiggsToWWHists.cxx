@@ -70,6 +70,8 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
     book_TH1F(name+"_phi",     "#phi"     +name,                50,-M_PI,M_PI);
   }
 
+  book_TH1F("delta_phi_H_Z","#Delta#phi(H,Z)",50,0,M_PI);
+
   for (std::string & disc : discriminators) {
     if (FindInString("tau", disc)) {
       book_TH1F("H_"+disc,"#"+disc+"^{H}",101,0,1.01);
@@ -199,6 +201,9 @@ void HiggsToWWHists::fill(const Event & event){
     fill_H1("H_energy",   cand.H().energy(),weight);
     fill_H1("H_eta",      cand.H().eta(),weight);
     fill_H1("H_phi",      cand.H().phi(),weight);
+
+    double delta_phi_H_Z = fabs(deltaPhi(cand.H(), cand.Z()));
+    fill_H1("delta_phi_H_Z", delta_phi_H_Z , weight);
 
     if (cand.discriminator("btag_DeepCSV_tight"))  H1("btags_DeepCSV")->Fill("tight",  weight);
     else if (cand.discriminator("btag_DeepCSV_medium")) H1("btags_DeepCSV")->Fill("medium", weight);
