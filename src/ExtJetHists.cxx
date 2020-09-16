@@ -181,6 +181,7 @@ void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuf
   book_TH1F("pt"+histSuffix,"p_{T} "+axisSuffix+" [GeV]",50,minPt,maxPt);
   book_TH1F("eta"+histSuffix,"#eta "+axisSuffix,100,-5,5);
   book_TH1F("phi"+histSuffix,"#phi "+axisSuffix,50,-M_PI,M_PI);
+  book_TH2F("etaphi"+histSuffix,";#eta#phi "+axisSuffix, 50, -5, 5,50,-3, 3);
   book_TH1F("csv"+histSuffix,"csv-disriminator "+axisSuffix,50,0,1);
   book_TH1F("DeepCSV"+histSuffix,"DeepCSV-disriminator "+axisSuffix,50,0,1);
   book_TH1F("flavor"+histSuffix,"flavor "+axisSuffix,200,-100,100);
@@ -279,6 +280,7 @@ void ExtJetHists::fill_jetHist<Jet>(const Event & event, const string& histSuffi
   fill_H1("pt"+histSuffix, jet.pt(), weight);
   fill_H1("eta"+histSuffix, jet.eta(), weight);
   fill_H1("phi"+histSuffix, jet.phi(), weight);
+  fill_H2("etaphi"+histSuffix, jet.eta(), jet.phi(), weight);
   fill_H1("csv"+histSuffix, jet.btag_combinedSecondaryVertex(), weight);
   fill_H1("DeepCSV"+histSuffix, jet.btag_DeepCSV(), weight);
   fill_H1("flavor"+histSuffix, jet.pdgId(), weight);

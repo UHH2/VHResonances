@@ -32,11 +32,39 @@ GenMatchHists::GenMatchHists(Context & ctx, const string & dname): HistsBase(ctx
     book_FamilyTree(name);
   }
 
+  book_TH1F("binningValues", "binning values", 100, 0, 3000);
+  book_TH1F("qScale", "qScale", 100, 0, 3000);
+  book_TH1F("PU_pT_hat_max", "PU p_T hat max", 100, 0, 3000);
+  book_TH1F("HT", "H_T", 100, 0, 3000);
+
 }
 
 void GenMatchHists::fill(const Event & event){
   if(!is_mc) return;
   assert(event.genparticles);
+
+  if (event.genInfo->binningValues().size() != 0){
+    fill_H1("binningValues", event.genInfo->binningValues()[0], event.weight);
+  }
+  fill_H1("qScale", event.genInfo->qScale(), event.weight);
+  fill_H1("PU_pT_hat_max", event.genInfo->PU_pT_hat_max(), event.weight);
+
+  double ht=0;
+  constexpr const int invalid_daughter = (unsigned short)(-1);
+
+  for(const auto & gp : *event.genparticles){
+      if(gp.daughter1() != invalid_daughter || gp.daughter2() != invalid_daughter) continue;
+      // if we are here, it means we have a final state particle.
+      // Add to HT in case it is a parton (quark -- including b but not top -- or gluon).
+      // Note that the exact HT definition depends on the madgraph configuration, but this
+      // should cover the most common case.
+      int id = abs(gp.pdgId());
+      if((id >= 1 && id <= 5) || (id == 21)){
+          ht += gp.pt();
+      }
+  }
+
+  fill_H1("HT", ht, event.weight);
 
   string name;
   for( auto & gp : *event.genparticles){
