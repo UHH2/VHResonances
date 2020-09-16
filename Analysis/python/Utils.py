@@ -71,3 +71,7 @@ def parse_arguments():
     parser.add_argument('--Channels',       action='append', dest="Channels",       default=[])
     parser.add_argument('--histFolders',    action='append', dest="histFolders",    default=[])
     return parser.parse_args()
+
+def PrintFormattedLine(listArgs=[], space=10):
+    for x in listArgs: print x, " "*(space-len(str(x)) if space-len(str(x))>0 else 2*space-len(str(x))),
+    print "\t"

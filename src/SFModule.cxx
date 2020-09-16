@@ -26,6 +26,7 @@
 #include "UHH2/common/include/LumiSelection.h"
 #include "UHH2/common/include/TriggerSelection.h"
 #include "UHH2/common/include/Utils.h"
+#include "UHH2/common/include/CollectionProducer.h"
 #include "UHH2/common/include/TTbarGenHists.h"
 
 #include "UHH2/VHResonances/include/ModuleBase.h"
@@ -36,9 +37,9 @@
 #include "UHH2/VHResonances/include/GenLevelJetMatch.h"
 #include "UHH2/VHResonances/include/PrintingFunctions.hpp"
 #include "UHH2/VHResonances/include/GenericJetCleaner.h"
+#include "UHH2/VHResonances/include/HiggsToWWSelection.h"
 #include "UHH2/VHResonances/include/HiggsToWWModules.h"
 #include "UHH2/VHResonances/include/HiggsToWWHists.h"
-#include "UHH2/VHResonances/include/HiggsToWWSelection.h"
 #include "UHH2/VHResonances/include/DiLeptonHists.h"
 
 using namespace std;
@@ -65,7 +66,7 @@ public:
 protected:
 
   // Define variables
-  std::vector<std::string> histogram_tags = { "nocuts", "weights", "cleaned", "NBoostedJet", "Veto", "NLeptonSel", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
+  std::vector<std::string> histogram_tags = { "nocuts", "weights", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "DeltaRDiLepton", "ZSelection"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
@@ -83,7 +84,7 @@ protected:
   // Define selections
   std::shared_ptr<Selection> NBoostedJetSel;
   std::shared_ptr<VetoSelection> VetoLeptonSel;
-  std::shared_ptr<Selection> NoLeptonSel, NLeptonSel;
+  std::shared_ptr<Selection> NoLeptonSel, NLeptonSel, DeltaRDiLepton_selection, JetDiLeptonPhiAngularSel;
 
 };
 
@@ -99,7 +100,7 @@ void SFModule::PrintInputs() {
   std::cout << "                SFModule                " << std::endl;
   std::cout << "----------------------------------------" << std::endl;
   for (auto x : MS) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << x.second << '\n';
-  for (auto x : MB)   std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << (x.second? "true" : "false") << '\n';
+  for (auto x : MB) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << BoolToString(x.second) << '\n';
   std::cout << "****************************************\n" << std::endl;
 }
 
@@ -112,12 +113,13 @@ void SFModule::book_histograms(uhh2::Context& ctx){
     mytag = "nJet_"     + tag; book_HFolder(mytag, new ExtJetHists(ctx,mytag, MS["jetLabel"]));
     mytag = "ele_"      + tag; book_HFolder(mytag, new ElectronHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "muon_"     + tag; book_HFolder(mytag, new MuonHists(ctx,mytag, MS["topjetLabel"]));
+    mytag = "diLepton_" + tag; book_HFolder(mytag, new DiLeptonHists(ctx,mytag, "", MS["topjetLabel"]));
     mytag = "TTbarGen_" + tag; book_HFolder(mytag, new TTbarGenHists(ctx,mytag));
   }
 }
 
 void SFModule::fill_histograms(uhh2::Event& event, string tag){
-  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "TTbarGen_"};
+  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "TTbarGen_"};
   for (auto& mytag : mytags) HFolder(mytag+ tag)->fill(event);
 }
 
@@ -132,8 +134,8 @@ void SFModule::fill_histograms(uhh2::Event& event, string tag){
 SFModule::SFModule(uhh2::Context& ctx){
 
   // Set up variables
-  MS["year"]           = ctx.get("year");
-  MS["SysType_PU"]     = ctx.get("SysType_PU");
+  MS["year"]             = ctx.get("year");
+  MS["SysType_PU"]       = ctx.get("SysType_PU");
   MB["is_mc"]            = ctx.get("dataset_type") == "MC";
   MB["lumisel"]          = string2bool(ctx.get("lumisel"));
   MB["mclumiweight"]     = string2bool(ctx.get("mclumiweight"));
@@ -156,6 +158,8 @@ SFModule::SFModule(uhh2::Context& ctx){
   MS["jetLabel"]    = MB["isCHS"]? "jets":    (MB["isPuppi"]? "jetsAk4Puppi": (MB["isHOTVR"]? "jetsAk4Puppi": ""));
   MS["topjetLabel"] = MB["isCHS"]? "topjets": (MB["isPuppi"]? "toppuppijets": (MB["isHOTVR"]? "hotvrPuppi": ""));
 
+  MB["do_TTgen"]    = (ctx.get("dataset_version").find("TT") != std::string::npos) && MB["is_mc"] ;
+
   JetPFID::wp JETwp = MB["isCHS"]? JetPFID::WP_TIGHT_CHS: (MB["isPuppi"]? JetPFID::WP_TIGHT_PUPPI : (MB["isHOTVR"]? JetPFID::WP_TIGHT_PUPPI : JetPFID::WP_LOOSE_CHS));
 
   h_jets = ctx.get_handle<std::vector<Jet>>(MS["jetLabel"]);
@@ -169,13 +173,11 @@ SFModule::SFModule(uhh2::Context& ctx){
 
   // Set up selections
 
-  // const MuonId muoId(AndId<Muon> (MuonID(Muon::CutBasedIdLoose), PtEtaCut(30, min_lepton_eta)));
-  // const ElectronId eleId(AndId<Electron>(ElectronID_Fall17_loose_noIso, PtEtaSCCut(min_lepton_pt, min_lepton_eta)));
-  const MuonId muoId(AndId<Muon> (MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta)));
-  const ElectronId eleId(AndId<Electron>(ElectronID_MVA_Fall17_loose_noIso, PtEtaSCCut(min_lepton_pt, min_lepton_eta)));
+  const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta));
+  const ElectronId eleId = AndId<Electron>(ElectronID_MVA_Fall17_loose_noIso, PtEtaSCCut(min_lepton_pt, min_lepton_eta));
 
-  const JetId jetId(AndId<Jet> (JetPFID(JETwp), PtEtaCut(min_jet_pt, min_lepton_eta)));
-  const TopJetId topjetId(AndId<TopJet> (JetPFID(JETwp), PtEtaCut(min_topjet_pt, min_lepton_eta), NoLeptonInJet("all", eleId, muoId, MB["isHOTVR"]? 0.8: -1)));
+  const JetId jetId = AndId<Jet> (JetPFID(JETwp), PtEtaCut(min_jet_pt, min_lepton_eta));
+  const TopJetId topjetId = AndId<TopJet> (JetPFID(JETwp), PtEtaCut(min_topjet_pt, min_lepton_eta), NoLeptonInJet("all", eleId, muoId, MB["isHOTVR"]? 0.8: -1));
 
   PrimaryVertexId pvid = StandardPrimaryVertexId(); // TODO
   modules.emplace_back(new PrimaryVertexCleaner(pvid));
@@ -219,9 +221,11 @@ SFModule::SFModule(uhh2::Context& ctx){
     NoLeptonSel.reset(new NMuonSelection(1));
   }
 
+  DeltaRDiLepton_selection.reset(new DeltaRDiLepton(min_DR_dilep, max_DR_dilep, MS["leptons"]));
+  JetDiLeptonPhiAngularSel.reset(new JetDiLeptonPhiAngularSelection(min_dilep_pt, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, min_Dphi_MET, MS["leptons"], h_topjets));
   VetoLeptonSel.reset(new VetoSelection(NoLeptonSel));
 
-  TTbarGenmodule.reset(new TTbarGenProducer(ctx));
+  if (MB["do_TTgen"]) TTbarGenmodule.reset(new TTbarGenProducer(ctx));
 
 }
 
@@ -239,7 +243,7 @@ bool SFModule::process(uhh2::Event& event) {
   if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In GenericCleaningModule.cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
 
   auto weight_gen = event.weight;
-  TTbarGenmodule->process(event);
+  if (MB["do_TTgen"]) TTbarGenmodule->process(event);
   fill_histograms(event, "nocuts");
 
   if(event.isRealData && MB["lumisel"]) if(!lumi_selection->passes(event)) return false;
@@ -278,6 +282,12 @@ bool SFModule::process(uhh2::Event& event) {
 
   if(!NBoostedJetSel->passes(event)) return false;
   fill_histograms(event, "NBoostedJet");
+
+  if(!DeltaRDiLepton_selection->passes(event)) return false;
+  fill_histograms(event, "DeltaRDiLepton");
+
+  if(!JetDiLeptonPhiAngularSel->passes(event)) return false;
+  fill_histograms(event, "ZSelection");
 
   return true;
 }

@@ -10,8 +10,6 @@
 using namespace std;
 using namespace uhh2;
 
-string massType = "m";
-string massPlotName = "mass";
 
 HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& condMatch_, const string & condMatchStatus_): HistsBase(ctx, dname), condMatch(condMatch_), condMatchStatus(condMatchStatus_) {
 
@@ -19,8 +17,8 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   h_HDecay = ctx.get_handle<float>("HDecay");
   h_ZDecay = ctx.get_handle<float>("ZDecay");
   h_ZprimeDecay = ctx.get_handle<float>("ZprimeDecay");
-  string dataset_version = ctx.get("dataset_version");
 
+  massType = "m"; massPlotName = "mass";
   if (string2bool(ctx.get("invisiblechannel"))){
     massType =  "m_T";
     massPlotName = "mass_transversal";
@@ -53,10 +51,10 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   for (float i = 2500; i <= 3000; i+=500) bins_Zprime_rebin1.push_back(i);
   bins_Zprime_rebin1.push_back(10000);
 
-  book_TH1F("Zprime_"+massPlotName+"_rebin_full", massType + "^Zprime [GeV/c^{2}]", bins_Zprime_rebin_full.size()-1, &bins_Zprime_rebin_full[0]);
-  book_TH1F("Zprime_"+massPlotName+"_rebin1", massType + "^Zprime [GeV/c^{2}]", bins_Zprime_rebin1.size()-1, &bins_Zprime_rebin1[0]);
-  book_TH1F("Zprime_"+massPlotName+"_rebin2", massType + "^Zprime [GeV/c^{2}]", 10000, 0, 10000);
-  book_TH1F("Zprime_"+massPlotName+"_rebin30",massType + "^Zprime [GeV/c^{2}]", 330, 0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin_full", massType + "^{Zprime} [GeV/c^{2}]", bins_Zprime_rebin_full.size()-1, &bins_Zprime_rebin_full[0]);
+  book_TH1F("Zprime_"+massPlotName+"_rebin1", massType + "^{Zprime} [GeV/c^{2}]", bins_Zprime_rebin1.size()-1, &bins_Zprime_rebin1[0]);
+  book_TH1F("Zprime_"+massPlotName+"_rebin2", massType + "^{Zprime} [GeV/c^{2}]", 10000, 0, 10000);
+  book_TH1F("Zprime_"+massPlotName+"_rebin30",massType + "^{Zprime} [GeV/c^{2}]", 330, 0, 9900);
 
   for (const string & name: {"Zprime","Z","H"}) {
     // bool check = (name.compare("Zprime")) == 0;
@@ -122,6 +120,10 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   book_TH1F("ST_event", "ST_event", 300, 0, 3000);
   book_TH1F("HT_Zprime", "HT_Zprime", 300, 0, 3000);
   book_TH1F("ST_Zprime", "ST_Zprime", 300, 0, 3000);
+
+  book_TH2F("ST_ZprimevsZprime"+massPlotName,      ";ST_Zprime;"+massType+"^{Zprime} [GeV/c^{2}]", 300, 0, 3000,330, 0, 9900);
+  book_TH2F("ST_ZprimevsDeepBoosted",              ";ST_Zprime;btag_DeepBoosted_H4qvsQCD", 300, 0, 3000, 30,0,1.02 );
+  book_TH2F("Zprime"+massPlotName+"vsDeepBoosted", ";"+massType+"^{Zprime} [GeV/c^{2}];btag_DeepBoosted_H4qvsQCD", 330, 0, 9900, 30,0,1.02 );
 
 }
 
@@ -203,21 +205,6 @@ void HiggsToWWHists::fill(const Event & event){
     else if (cand.discriminator("btag_DeepCSV_loose"))  H1("btags_DeepCSV")->Fill("loose",  weight);
     else H1("btags_DeepCSV")->Fill("no b-tag",  weight);
 
-
-    // int tight = 0; int medium = 0; int loose = 0; int notag = 0;
-    // for (size_t sj_ind = 0; sj_ind <  (int)cand.discriminator("subjets"); sj_ind++) {
-    //   if ((bool)cand.discriminator("btag_DeepCSV_loose_subjet_"+std::to_string(sj_ind))) tight+=1;
-    //   else if ((bool)cand.discriminator("btag_DeepCSV_medium_subjet_"+std::to_string(sj_ind))) medium+=1;
-    //   else if ((bool)cand.discriminator("btag_DeepCSV_tight_subjet_"+std::to_string(sj_ind))) loose+=1;
-    //   else notag+=1;
-    // }
-    //
-    // H2("nsubjet_btags_DeepCSV")->SetBinContent((int)cand.discriminator("subjets"), 0, notag*weight);
-    // H2("nsubjet_btags_DeepCSV")->SetBinContent((int)cand.discriminator("subjets"), 1, loose*weight);
-    // H2("nsubjet_btags_DeepCSV")->SetBinContent((int)cand.discriminator("subjets"), 2, medium*weight);
-    // H2("nsubjet_btags_DeepCSV")->SetBinContent((int)cand.discriminator("subjets"), 3, tight*weight);
-    //
-
     std::vector<std::string> index_tag(2,"no b-tag");
     for (int sj_ind = 0; sj_ind <  (int)cand.discriminator("subjets"); sj_ind++) {
       if (sj_ind>1) continue;
@@ -243,19 +230,79 @@ void HiggsToWWHists::fill(const Event & event){
     H1("H_MatchingStatus")->Fill(matchstatus.c_str(), weight);
     H2("H_MatchvsH_MatchingStatus")->Fill(match.c_str(), matchstatus.c_str(), weight);
 
-    fill_H1("HT_Zprime", cand.H().pt() ,weight);
-    fill_H1("ST_Zprime", cand.H().pt()+cand.Z().pt() ,weight);
+    double HT = cand.H().pt();
+    double ST = cand.H().pt()+cand.Z().pt();
+    fill_H1("HT_Zprime", HT, weight);
+    fill_H1("ST_Zprime", ST, weight);
+    H2("ST_ZprimevsZprime"+massPlotName)->Fill( ST, cand.Zprime_mass(), weight);
+    H2("ST_ZprimevsDeepBoosted")->Fill(ST, cand.has_discriminator("btag_DeepBoosted_H4qvsQCD")? cand.discriminator("btag_DeepBoosted_H4qvsQCD"): 9999, weight);
+    H2("Zprime"+massPlotName+"vsDeepBoosted")->Fill(cand.Zprime_mass(), cand.has_discriminator("btag_DeepBoosted_H4qvsQCD")? cand.discriminator("btag_DeepBoosted_H4qvsQCD"): 9999, weight);
   }
 
   double HT = 0;
   // vector<std::vector<TopJet>> topjets = event.get(h_topjets);
   for (const auto & jet : *event.toppuppijets ) HT += jet.pt();
-  fill_H1("HT_event", HT ,weight);
+  fill_H1("HT_event", HT, weight);
   double ST = HT;
   for (const auto & electron : *event.electrons ) ST += electron.pt();
   for (const auto & muon : *event.muons ) ST += muon.pt();
-  fill_H1("ST_event", ST ,weight);
-
+  fill_H1("ST_event", ST, weight);
 }
 
 HiggsToWWHists::~HiggsToWWHists(){}
+
+
+/*
+#  ######  #### ##     ## ########  ##       ########    ########  #######  ########      ######  ##    ##  ######  ########
+# ##    ##  ##  ###   ### ##     ## ##       ##          ##       ##     ## ##     ##    ##    ##  ##  ##  ##    ##    ##
+# ##        ##  #### #### ##     ## ##       ##          ##       ##     ## ##     ##    ##         ####   ##          ##
+#  ######   ##  ## ### ## ########  ##       ######      ######   ##     ## ########      ######     ##     ######     ##
+#       ##  ##  ##     ## ##        ##       ##          ##       ##     ## ##   ##            ##    ##          ##    ##
+# ##    ##  ##  ##     ## ##        ##       ##          ##       ##     ## ##    ##     ##    ##    ##    ##    ##    ##
+#  ######  #### ##     ## ##        ######## ########    ##        #######  ##     ##     ######     ##     ######     ##
+*/
+
+
+
+HiggsToWWHistsSlim::HiggsToWWHistsSlim(Context& ctx, const string& dname, const string& condMatch_, const string & condMatchStatus_): HistsBase(ctx, dname), condMatch(condMatch_), condMatchStatus(condMatchStatus_) {
+
+  h_ZprimeCandidates = ctx.get_handle<vector<ZprimeCandidate>>("ZprimeCandidate");
+
+  massType = "m"; massPlotName = "mass";
+  if (string2bool(ctx.get("invisiblechannel"))){
+    massType =  "m_T";
+    massPlotName = "mass_transversal";
+  }
+  // book all histograms here
+  book_TH1F("Zprime_"+massPlotName+"_rebin30",massType + "^{Zprime} [GeV/c^{2}]", 330, 0, 9900);
+
+}
+
+
+void HiggsToWWHistsSlim::fill(const Event & event){
+
+  auto weight = event.weight;
+  if (! event.is_valid(h_ZprimeCandidates)) return;
+
+  vector<ZprimeCandidate> ZprimeCandidates = event.get(h_ZprimeCandidates);
+
+  // fill the histograms.
+  std::string match, matchstatus;
+
+  for (const ZprimeCandidate & cand: ZprimeCandidates) {
+    match = cand.has_discriminator("Match")? MatchingToString(FloatToMatching(cand.discriminator("Match"))) : MatchingToString(0);
+    matchstatus = cand.has_discriminator("MatchingStatus")? MatchingStatusToString(FloatToMatching(cand.discriminator("MatchingStatus"))) : MatchingStatusToString(0);
+
+    if (condMatch!="") {
+      if (condMatch=="else") {
+        if (match!="HWWMatch" && match!="HbbMatch" && match!="HZZMatch") continue;
+      } else if (condMatch!=match) continue;
+    }
+    if (condMatchStatus!="" && condMatchStatus!=matchstatus) continue;
+    fill_H1("Zprime_"+massPlotName+"_rebin30",    cand.Zprime_mass(),weight);
+
+  }
+
+}
+
+HiggsToWWHistsSlim::~HiggsToWWHistsSlim(){}
