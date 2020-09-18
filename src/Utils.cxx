@@ -47,3 +47,5 @@ int FindInVector(const std::vector<std::string>& vec, const std::string& el) {
     if (it != vec.end()) index = distance(vec.begin(), it);
     return index;
 }
+
+const std::string MyString(const std::string & tag) {return tag;};// Needed just to deal with preprocessing macros

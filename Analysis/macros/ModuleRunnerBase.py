@@ -52,7 +52,7 @@ class VariablesBase(GenericPath):
             "MC_WW"                 : ["MC_WWTo4Q", "MC_WWToLNuQQ", "MC_WWTo2L2Nu"],
             "MC_WZ"                 : ["MC_WZToLNu2Q", "MC_WZTo2Q2Nu", "MC_WZTo2L2Q", "MC_WZTo1L3Nu", "MC_WZTo3LNu"],
             "MC_ZZ"                 : ["MC_ZZTo4Q", "MC_ZZTo2Q2Nu", "MC_ZZTo2L2Q", "MC_ZZTo2L2Nu", "MC_ZZTo4L"],
-            "MC_WJets"              : [proc+subsample for proc in ["MC_WJetsToLNu_HT"] for subsample in ["70To100", "100To200", "200To400", "400To600", "600To800", "800To1200", "1200To2500", "2500ToInf",]],
+            "MC_WJets"              : [proc+subsample for proc in ["MC_WJetsToLNu_HT"] for subsample in ["100To200", "200To400", "400To600", "600To800", "800To1200", "1200To2500", "2500ToInf",]],
             "DATA_SingleElectron"   : ["DATA_SingleElectron_Run"+str(run) for run in self.AllRunPeriods],
             "DATA_SingleMuon"       : ["DATA_SingleMuon_Run"+str(run) for run in self.AllRunPeriods],
             "DATA_MET"              : ["DATA_MET_Run"+str(run) for run in self.AllRunPeriods],

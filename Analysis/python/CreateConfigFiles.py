@@ -35,7 +35,7 @@ YearVars["BTagCalibration"]     = {"2016": os.environ["CMSSW_BASE"]+"/src/UHH2/V
 
 
 
-def newNumber(year,sample,ConfigFile,syst):
+def newNumber(year,sample,ConfigFile,syst,channel):
     newNumber = 20
     if "DATA" in sample:
         if year=="2016":
@@ -48,17 +48,15 @@ def newNumber(year,sample,ConfigFile,syst):
                 newNumber = 200
             if any(x in sample for x in ["DATA_SingleElectron_RunB"]):
                 newNumber = 180
-            if any(x in sample for x in ["DATA_MET_RunB","DATA_MET_RunC"]):
-                newNumber = 310
-            if any(x in sample for x in ["DATA_MET_RunD_2016","DATA_MET_RunF_2016"]):
-                newNumber = 180
-            if any(x in sample for x in ["DATA_MET_RunE_2016","DATA_MET_RunG_2016", "DATA_MET_RunH_2016"]):
-                newNumber = 220
+            if any(x in sample for x in ["DATA_MET_RunD", "DATA_MET_RunE", "DATA_MET_RunF", "DATA_MET_RunG", "DATA_MET_RunH"]):
+                newNumber = 170
+            if any(x in sample for x in ["DATA_MET_RunB", "DATA_MET_RunC"]):
+               newNumber = 250
         if year=="2017":
             newNumber = 340
             if any(x in sample for x in ["DATA_SingleMuon_RunF"]):
                 newNumber = 280
-            if any(x in sample for x in ["DATA_SingleElectron_RunF", "DATA_SingleMuon_RunE"]):
+            if any(x in sample for x in ["DATA_SingleElectron_RunE", "DATA_SingleMuon_RunF"]):
                 newNumber = 300
             if any(x in sample for x in ["DATA_SingleElectron_RunD"]):
                 newNumber = 390
@@ -66,10 +64,16 @@ def newNumber(year,sample,ConfigFile,syst):
                 newNumber = 430
             if any(x in sample for x in ["DATA_SingleElectron_RunB"]):
                 newNumber = 520
+            if any(x in sample for x in ["DATA_MET_RunD", "DATA_MET_RunE", "DATA_MET_RunF"]):
+               newNumber = 250
         if year=="2018":
             newNumber = 80
             if any(x in sample for x in ["DATA_SingleMuon_RunA", "DATA_SingleMuon_RunB", "DATA_SingleElectron_RunC", "DATA_SingleMuon_RunC", "DATA_SingleMuon_RunD"]):
                 newNumber = 150
+            if any(x in sample for x in ["DATA_MET_RunA", "DATA_MET_RunB", "DATA_MET_RunD"]):
+                newNumber = 100
+            if any(x in sample for x in ["DATA_MET_RunC"]):
+                newNumber = 170
     if "MC_DY" in sample:
         newNumber = 60
         if any(x in sample for x in ["MC_DY_HT600to800_2016", "MC_DY_HT800to1200_2016", "MC_DY_HT800to1200_2017", "MC_DY_HT600to800_2017"]):
@@ -90,30 +94,59 @@ def newNumber(year,sample,ConfigFile,syst):
             newNumber = 330
         if any(x in sample for x in ["MC_DY_HT100to200_2016"]):
             newNumber = 300
+        if any(x in sample for x in ["MC_DY_inv_HT400to600_2016"]):
+            newNumber = 30
+        if any(x in sample for x in ["MC_DY_inv_HT600to800_2016", "MC_DY_inv_HT800to1200_2016", "MC_DY_inv_HT400to600_2017", "MC_DY_inv_HT600to800_2017", "MC_DY_inv_HT800to1200_2017", "MC_DY_inv_HT400to600_2018", "MC_DY_inv_HT600to800_2018"]):
+            newNumber = 65
+        if any(x in sample for x in ["MC_DY_inv_HT200to400_2018"]):
+            newNumber = 88
+        if any(x in sample for x in ["MC_DY_inv_HT200to400_2017", "MC_DY_inv_HT100to200_2017", "MC_DY_inv_HT100to200_2018", "MC_DY_inv_HT200to400_2016"]):
+            newNumber = 140
+        if any(x in sample for x in ["MC_DY_inv_HT100to200_2016"]):
+            newNumber = 250
     if "MC_TT" in sample:
         newNumber = 40 if year=="2016" else 200 if year=="2017" else 60
+        if "inv" in channel:
+            if any(x in sample for x in ["MC_TTTo2L2Nu_2017","MC_TTToHadronic_2017"]):
+                newNumber = 260
+            if any(x in sample for x in ["MC_TTToSemiLeptonic_2018","MC_TTTo2L2Nu_2018"]):
+                newNumber = 120
+            if any(x in sample for x in ["MC_TTToHadronic_2018"]):
+                newNumber = 70
     if "MC_W" in sample:
         newNumber = 230
+        if any(x in sample for x in ["MC_WZTo2Q2Nu_2016"]):
+            newNumber = 200
         if any(x in sample for x in ["MC_WWTo2L2Nu_2016", "MC_WZTo1L3Nu_2016", "MC_WZTo3LNu_2016"]):
             newNumber = 300
         if any(x in sample for x in ["MC_WZ_2017"]):
-            newNumber = 700
+            newNumber = 500 if "inv" in channel else 700
         if any(x in sample for x in ["MC_WZ_2018"]):
-            newNumber = 800
+            newNumber = 500 if "inv" in channel else 800
+        if any(x in sample for x in ["MC_WW_2017"]):
+            newNumber = 500 if "inv" in channel else 300
         if any(x in sample for x in ["MC_WW_2018"]):
-            newNumber = 900
+            newNumber = 500 if "inv" in channel else 900
         if any(x in sample for x in ["MC_WZTo2L2Q_2016"]):
             newNumber = 40
         if any(x in sample for x in ["MC_WJets"]):
-            newNumber = 10
+            newNumber = 13
+        if any(x in sample for x in ["MC_WJetsToLNu_HT200To400_2018", "MC_WJetsToLNu_HT70To100_2018", "MC_WJetsToLNu_HT600To800_2016", "MC_WJetsToLNu_HT100To200_2017", "MC_WJetsToLNu_HT800To1200_2018"]):
+            newNumber = 25
+        if any(x in sample for x in ["MC_WJetsToLNu_HT1200To2500_2016", "MC_WJetsToLNu_HT2500ToInf_2016", "MC_WJetsToLNu_HT600To800_2018", "MC_WJetsToLNu_HT200To400_2016", "MC_WJetsToLNu_HT200To400_2017", "MC_WJetsToLNu_HT400To600_2016"]):
+            newNumber = 50
+        if any(x in sample for x in ["MC_WJetsToLNu_HT100To200_2016", "MC_WJetsToLNu_HT70To100_2016"]):
+            newNumber = 140
     if "MC_ZZ" in sample:
-        newNumber = 250
+        newNumber = 240
         if any(x in sample for x in ["MC_ZZTo4Q_2016"]):
-            newNumber = 150
+            newNumber = 100 if "inv" in channel else 150
         if any(x in sample for x in ["MC_ZZ_2017"]):
-            newNumber = 850
+            newNumber = 500 if "inv" in channel else 850
         if any(x in sample for x in ["MC_ZZ_2018"]):
-            newNumber = 1000
+            newNumber = 500 if "inv" in channel else 1000
+        if any(x in sample for x in ["MC_ZZTo2L2Nu_2016"]):
+            newNumber = 100 if "inv" in channel else 250
     if "MC_ZprimeToZH" in sample:
         newNumber = 100
     if not "Preselection" in ConfigFile and not "SF" in ConfigFile and not "LeptonIDStudies" in ConfigFile:
@@ -188,7 +221,7 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     changes.append(["<!ENTITY", "CMSSW_BASE", "CMSSW_BASE", os.environ["CMSSW_BASE"]])
                     change_lines(path, filename, [el[0:2] for el in changes ], [el[2:3] for el in changes ], [el[3:4] for el in changes ])
                     changes.append(["<ConfigSGE", "Workdir", "workdir_"+outdir, "workdir_"+outdir+"_"+sample])
-                    changes.append(["<ConfigParse", 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile,syst)+'"'])
+                    changes.append(["<ConfigParse", 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile,syst,channel)+'"'])
                     changes.append(["<!ENTITY", "OUTDIR", outdir , outdir+"/"+folders])
                     if "Selection" in ConfigFile:
                         changes.append(["<!ENTITY", "SYSTEM", "Preselection/All/leptonchannel/nominal/" , "Preselection/"+folders.replace("MuonScale_up","nominal").replace("MuonScale_down","nominal")])

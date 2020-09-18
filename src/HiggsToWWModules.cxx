@@ -363,7 +363,7 @@ NLOCorrections::NLOCorrections(uhh2::Context& ctx) {
 
   std::string dataset_version = ctx.get("dataset_version");
   // Corrections for 2017 and 2018 are the same. 2016 is different
-  is2017 = ! FindInString("2016", ctx.get("year"));
+  is2016 = FindInString("2016", ctx.get("year"));
 
   //TODO it's arbitrary.
   is_Wjets  = FindInString("MC_WJets",dataset_version);
@@ -401,6 +401,7 @@ double NLOCorrections::GetPartonObjectPt(uhh2::Event& event, ParticleID objID) {
 bool NLOCorrections::process(uhh2::Event& event){
   // Sample dependant corrections
   if ((!is_Wjets && !is_Zjets) || event.isRealData) return true;
+  if ((is_Wjets || is_Zjets) && !is2016) return true;//check
 
   double objpt = uhh2::infinity, theory_weight = 1.0;
   std::string process = "";
@@ -418,11 +419,11 @@ bool NLOCorrections::process(uhh2::Event& event){
   else {
     if (do_EWK) theory_weight *= Evaluator(process+"_ewk",objpt);
     if (do_QCD_NLO) {
-      if (is2017) {
+      if (!is2016) {
         if (is_DY)  process = "dy";
         if (is_Znn) process = "znn";
       }
-      theory_weight *= Evaluator(process+"_qcd"+(is2017?"_2017":""),objpt);
+      theory_weight *= Evaluator(process+"_qcd"+(is2016?"":"_2017"),objpt);
     }
   }
 

@@ -11,6 +11,28 @@ using namespace std;
 using namespace uhh2;
 
 
+#define MYSUBJETTAGLOOP(func)\
+func(btag_combinedSecondaryVertex)\
+func(btag_combinedSecondaryVertexMVA)\
+func(btag_DeepCSV)\
+func(btag_DeepFlavour_bb)\
+func(btag_DeepFlavour_b)\
+func(btag_DeepFlavour_lepb)\
+func(btag_DeepFlavour_uds)\
+func(btag_DeepFlavour_g)\
+func(btag_DeepFlavour_c)\
+func(btag_DeepJet)\
+
+#define SUBJETSBOOK(mytag)\
+isLong = MyString(#mytag).find("BoostedDoubleSecondary")!=std::string::npos;\
+book_TH1F("H_"+MyString(#mytag)+"_subjet1", MyString(#mytag)+"^{subjet1}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);\
+book_TH1F("H_"+MyString(#mytag)+"_subjet2", MyString(#mytag)+"^{subjet2}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);\
+
+#define SUBJETSFILL(mytag)\
+if (cand.H().subjets().size()>0) fill_H1("H_"+MyString(#mytag)+"_subjet1", cand.H().subjets().at(0).mytag(), weight);\
+if (cand.H().subjets().size()>1) fill_H1("H_"+MyString(#mytag)+"_subjet2", cand.H().subjets().at(1).mytag(), weight);\
+
+
 HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& condMatch_, const string & condMatchStatus_): HistsBase(ctx, dname), condMatch(condMatch_), condMatchStatus(condMatchStatus_) {
 
   h_ZprimeCandidates = ctx.get_handle<vector<ZprimeCandidate>>("ZprimeCandidate");
@@ -76,10 +98,12 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
     if (FindInString("tau", disc)) {
       book_TH1F("H_"+disc,"#"+disc+"^{H}",101,0,1.01);
       book_TH1F("H_"+disc+"_rebin","#"+disc+"^{H}",30,0,1.02);
+      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30,0,1.02 );
     }
     else if (FindInString("btag", disc) || FindInString("NN", disc) || FindInString("DCL", disc) ) {
       book_TH1F("H_"+disc, disc+"^{H}",101,0,1.01);
       book_TH1F("H_"+disc+"_rebin", disc+"^{H}",30,0,1.02);
+      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30,0,1.02 );
     }
     else if (FindInString("chi2", disc)) book_TH1F("H_"+disc, disc+"^{H}",35,0,70);
     else book_TH1F("H_"+disc, disc+"^{H} [GeV/c^{2}]",100,0,300);
@@ -125,7 +149,9 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
 
   book_TH2F("ST_ZprimevsZprime"+massPlotName,      ";ST_Zprime;"+massType+"^{Zprime} [GeV/c^{2}]", 300, 0, 3000,330, 0, 9900);
   book_TH2F("ST_ZprimevsDeepBoosted",              ";ST_Zprime;btag_DeepBoosted_H4qvsQCD", 300, 0, 3000, 30,0,1.02 );
-  book_TH2F("Zprime"+massPlotName+"vsDeepBoosted", ";"+massType+"^{Zprime} [GeV/c^{2}];btag_DeepBoosted_H4qvsQCD", 330, 0, 9900, 30,0,1.02 );
+
+  bool isLong;
+  MYSUBJETTAGLOOP(SUBJETSBOOK)
 
 }
 
@@ -226,6 +252,7 @@ void HiggsToWWHists::fill(const Event & event){
       fill_H1("H_"+disc, cand.has_discriminator(disc)? cand.discriminator(disc): 9999 ,weight);
       if (FindInString("chi2", disc) || FindInString("SDmass", disc)) continue;
       fill_H1("H_"+disc+"_rebin", cand.has_discriminator(disc)? cand.discriminator(disc): 9999 ,weight);
+      H2("Zprime"+massPlotName+"vs"+disc)->Fill(cand.Zprime_mass(), cand.has_discriminator(disc)? cand.discriminator(disc): 9999, weight);
     }
 
     fill_H1("H_NN_HWWvsQCD", (cand.has_discriminator("NN_HWW")&&cand.has_discriminator("NN_QCD"))? cand.discriminator("NN_HWW")/(cand.discriminator("NN_HWW")+cand.discriminator("NN_QCD")): 9999 ,weight);
@@ -241,7 +268,8 @@ void HiggsToWWHists::fill(const Event & event){
     fill_H1("ST_Zprime", ST, weight);
     H2("ST_ZprimevsZprime"+massPlotName)->Fill( ST, cand.Zprime_mass(), weight);
     H2("ST_ZprimevsDeepBoosted")->Fill(ST, cand.has_discriminator("btag_DeepBoosted_H4qvsQCD")? cand.discriminator("btag_DeepBoosted_H4qvsQCD"): 9999, weight);
-    H2("Zprime"+massPlotName+"vsDeepBoosted")->Fill(cand.Zprime_mass(), cand.has_discriminator("btag_DeepBoosted_H4qvsQCD")? cand.discriminator("btag_DeepBoosted_H4qvsQCD"): 9999, weight);
+
+    MYSUBJETTAGLOOP(SUBJETSFILL)
   }
 
   double HT = 0;

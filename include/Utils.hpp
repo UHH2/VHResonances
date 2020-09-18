@@ -15,3 +15,5 @@ bool DoubleDecay(int pdgId1, int pdgId2, Decay decay);
 bool FindInString(const std::string& search, const std::string& str);
 
 int FindInVector(const std::vector<std::string>& vec, const std::string& el);
+
+const std::string MyString(const std::string & tag);// Needed just to deal with preprocessing macros

@@ -84,8 +84,6 @@ func(btag_MassDecorrelatedDeepBoosted_probZqq)\
 func(btag_MassDecorrelatedDeepBoosted_probHqqqq)\
 func(btag_MassDecorrelatedDeepBoosted_probZbb)\
 
-const std::string MyString(const std::string & tag) {return tag;};
-
 #define MYTAGBOOK(mytag)\
 isLong = MyString(#mytag).find("BoostedDoubleSecondary")!=std::string::npos;\
 book_TH1F(MyString(#mytag)+histSuffix,MyString(#mytag)+"^{"+axisSuffix+"}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);\

@@ -28,6 +28,7 @@
 #include "UHH2/common/include/TriggerSelection.h"
 #include "UHH2/common/include/Utils.h"
 #include "UHH2/common/include/CollectionProducer.h"
+#include "UHH2/common/include/DetectorCleaning.h"
 
 #include "UHH2/VHResonances/include/ModuleBase.h"
 #include "UHH2/VHResonances/include/constants.hpp"
@@ -67,7 +68,7 @@ protected:
 
   // Define variables
   std::string NameModule = "PreselectionModule";
-  std::vector<std::string> histogram_tags = { "nocuts", "weights", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
+  std::vector<std::string> histogram_tags = { "nocuts", "weights", "HEM", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
@@ -85,6 +86,7 @@ protected:
   std::shared_ptr<Selection> NBoostedJetSel;
   std::shared_ptr<VetoSelection> VetoLeptonSel;
   std::shared_ptr<Selection> NoLeptonSel, NLeptonSel, DeltaRDiLepton_selection, JetDiLeptonPhiAngularSel;
+  std::unique_ptr<Selection> HEMEventCleaner_Selection;
 
 };
 
@@ -210,6 +212,11 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   if (!MB["is_mc"]) metfilters_selection->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter"); /* TODO Not recommended for MC, but do check */
   /* metfilters_selection->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter"); TODO Not recommended, under review.Separate module in ntuple_generator for 2016v2*/
 
+  //Quick fix for Detector issues
+  if (MB["invisiblechannel"]) HEMEventCleaner_Selection.reset(new HEMCleanerSelection(ctx, MS["jetLabel"], true, true, true));
+  else HEMEventCleaner_Selection.reset(new AndSelection(ctx)); // HEM important for inv channel only. DiLep selection reduces prob drastiacally
+
+
   GJC.reset( new GenericJetCleaner(ctx, MS["jetLabel"],    false, jetId, topjetId, muoId, eleId));
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
 
@@ -272,6 +279,11 @@ bool PreselectionModule::process(uhh2::Event& event) {
 
   GJC->process(event);
   GTJC->process(event);
+
+  //Effective in 2018 only.
+  // Here the assumption is that it should check for cleaned jets to avoid overlap with leptons (Tight WP recommanded).
+  if(!HEMEventCleaner_Selection->passes(event)) return false;
+  fill_histograms(event, "HEM");
 
   if(MB["metfilters"]) if(!metfilters_selection->passes(event)) return false;
 
