@@ -110,9 +110,9 @@ def newNumber(year,sample,ConfigFile,syst,channel):
             if any(x in sample for x in ["MC_TTTo2L2Nu_2017","MC_TTToHadronic_2017"]):
                 newNumber = 260
             if any(x in sample for x in ["MC_TTToSemiLeptonic_2018","MC_TTTo2L2Nu_2018"]):
-                newNumber = 120
+                newNumber = 110
             if any(x in sample for x in ["MC_TTToHadronic_2018"]):
-                newNumber = 70
+                newNumber = 60
     if "MC_W" in sample:
         newNumber = 230
         if any(x in sample for x in ["MC_WZTo2Q2Nu_2016"]):

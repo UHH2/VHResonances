@@ -197,7 +197,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
   weightsmodules.emplace_back(new GenLevelJetMatch(ctx,MS["topjetLabel"]));
   weightsmodules.emplace_back(new FinalStateMatching(ctx));
-  weightsmodules.emplace_back(new NLOCorrections(ctx));
+  //weightsmodules.emplace_back(new NLOCorrections(ctx));
 
   // https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2
   metfilters_selection.reset(new AndSelection(ctx, "metfilters"));
