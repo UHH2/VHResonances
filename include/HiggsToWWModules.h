@@ -35,10 +35,7 @@ class ZprimeCandidateReconstruction : public uhh2::AnalysisModule {
 public:
   explicit ZprimeCandidateReconstruction(uhh2::Context& ctx, float pt_min, float DR_min, float DR_max, float phi_min, float phi_max, const std::string& lepton, const std::string& topjetcollection);
   virtual bool process(uhh2::Event&) override;
-  virtual void setDiscriminators(uhh2::Event&, ZprimeCandidate& candiate,
-    Particle lep1, Particle lep2, TopJet jet,
-    float i, float j, std::map<TString, JetId> Btag_map);
-
+  virtual void setDiscriminators(uhh2::Event&, ZprimeCandidate& candiate, Particle lep1, Particle lep2, TopJet jet, float i, float j, std::map<TString, JetId> Btag_map);
 
 private:
 
@@ -97,7 +94,7 @@ public:
   double GetPartonObjectPt(uhh2::Event& event, ParticleID objID);
 
 private:
-  bool is_Wjets, is_Zjets, is_DY, is_Znn, is2017;
+  bool is_Wjets, is_Zjets, is_DY, is_Znn, is2016;
 
 };
 
