@@ -30,7 +30,8 @@ const float min_DR_dilep = 0.0;
 const float max_DR_dilep = 1.0;
 const float min_jet_dilep_delta_phi = M_PI/2;
 const float max_jet_dilep_delta_phi = M_PI;
-const float min_Dphi_MET = 2.0;
+const float min_Dphi_topjet_MET = 2.0;
+const float min_Dphi_jet_MET = 0.5;
 
 const float min_Z_pt_ZH_mass = 0.2;
 
