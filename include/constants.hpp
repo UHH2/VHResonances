@@ -30,9 +30,11 @@ const float min_DR_dilep = 0.0;
 const float max_DR_dilep = 1.0;
 const float min_jet_dilep_delta_phi = M_PI/2;
 const float max_jet_dilep_delta_phi = M_PI;
-const float min_Dphi_MET = 2.0;
+const float min_Dphi_AK8jet_MET = 2.0;
+const float min_Dphi_AK4jet_MET = 0.5;
 
 const float min_Z_pt_ZH_mass = 0.2;
+const float min_Z_pt_ZH_mass_invisible = 0.4;
 
 
 const BTag::algo BTag_algo = BTag::DEEPCSV;

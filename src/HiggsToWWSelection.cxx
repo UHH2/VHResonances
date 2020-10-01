@@ -8,7 +8,7 @@
 using namespace std;
 using namespace uhh2;
 
-JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection (float pt_min_, float phi_min_, float phi_max_, float min_Dphi_MET_, TString lepton_, const Event::Handle<vector<TopJet> > & topjetcollection_): pt_min(pt_min_), phi_min(phi_min_), phi_max(phi_max_), min_Dphi_MET(min_Dphi_MET_), lepton(lepton_), topjetcollection(topjetcollection_){}
+JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection (float pt_min_, float phi_min_, float phi_max_, float min_Dphi_jet_MET_, TString lepton_, const Event::Handle<vector<TopJet> > & topjetcollection_): pt_min(pt_min_), phi_min(phi_min_), phi_max(phi_max_), min_Dphi_jet_MET(min_Dphi_jet_MET_), lepton(lepton_), topjetcollection(topjetcollection_){}
 
 bool JetDiLeptonPhiAngularSelection::passes(const Event& event){
 
@@ -26,7 +26,7 @@ bool JetDiLeptonPhiAngularSelection::passes(const Event& event){
     // invisblechannel
     for(const auto & jet: jets){
       double Dphi = deltaPhi(jet, *event.met);
-      if (Dphi > min_Dphi_MET) return true;
+      if (Dphi > min_Dphi_jet_MET) return true;
     }
     return false;
   }
