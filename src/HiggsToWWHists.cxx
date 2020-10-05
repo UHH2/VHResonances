@@ -287,8 +287,9 @@ void HiggsToWWHists::fill(const Event & event){
 
     int nsubjet = cand.H().subjets().size();
     for (std::string & disc : discriminators_subjets) {
-      auto subjet1 = cand.H().subjets().at(0);
-      auto subjet2 = cand.H().subjets().at(1);
+      Jet subjet1, subjet2;
+      if (nsubjet>0) subjet1 = cand.H().subjets().at(0);
+      if (nsubjet>1) subjet2 = cand.H().subjets().at(1);
       double sub1=9999, sub2=0;
       if (disc=="btag_combinedSecondaryVertex") {    sub1 = nsubjet>0 ? subjet1.btag_combinedSecondaryVertex() :     9999; sub2 = nsubjet>1 ? subjet2.btag_combinedSecondaryVertex() : 0;}
       if (disc=="btag_combinedSecondaryVertexMVA") { sub1 = nsubjet>0 ? subjet1.btag_combinedSecondaryVertexMVA() :  9999; sub2 = nsubjet>1 ? subjet2.btag_combinedSecondaryVertexMVA() : 0; }
