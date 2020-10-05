@@ -199,56 +199,43 @@ inline double PtToMass2(double pt) { return (pt-22.5)/0.36;}
 inline double MassToPt2(double mass) { return mass*0.36 +22.5;}
 
 
-
-
-// const double PtDepentdentCut_value_x3 = -1000; // Fit on pt exp(x0+x3)
-// inline double PtDepentdentCut_x3(double pt)   { return 5.65e-03+1.90e+07*TMath::Power(PtToMass(pt),-3);}
+const double PtDepentdentCut_old_value_x3 = -1000; // Fit on pt exp(x0+x3)
+inline double PtDepentdentCut_old_x3(double pt)   { return 5.8e-03+1.9e+07*TMath::Power(PtToMass(pt),-3);}
 // const double PtDepentdentCut_value_x2x3 = -2000; // Fit on pt exp(x0+x2+x3)
-// inline double PtDepentdentCut_x2x3(double pt) { return 9.31e-03-1.46e+04*TMath::Power(PtToMass(pt),-2)+2.60e+07*TMath::Power(PtToMass(pt),-3);}
+// inline double PtDepentdentCut_x2x3(double pt) { return 8.6e-03-1.3e+04*TMath::Power(PtToMass(pt),-2)+2.5e+07*TMath::Power(PtToMass(pt),-3);}
 // const double PtDepentdentCut_value_x1x3 = -3000; // Fit on pt exp(x0+x1+x3)
-// inline double PtDepentdentCut_x1x3(double pt) { return 1.25e-02-1.31e+01*TMath::Power(PtToMass(pt),-1)+2.15e+07*TMath::Power(PtToMass(pt),-3);}
+// inline double PtDepentdentCut_x1x3(double pt) { return 1.1e-02-1.1e+01*TMath::Power(PtToMass(pt),-1)+2.1e+07*TMath::Power(PtToMass(pt),-3);}
+// const double PtDepentdentCut_value_x1x2 = -4000; // Fit on pt exp(x0+x1+x2)
+// inline double PtDepentdentCut_x1x2(double pt) { return 2.4e-02-6.7e+01*TMath::Power(PtToMass(pt),-1)+6.7e+04*TMath::Power(PtToMass(pt),-2);}
+// const double PtDepentdentCut_value_x2 = -5000; // Fit on pt exp(x0+x2)
+// inline double PtDepentdentCut_x2(double pt) { return 2.3e-03+2.3e04*TMath::Power(PtToMass(pt),-2);}
+// const double PtDepentdentCut_value_sqrt = -6000; // Fit on pt [0]+[2]*pow(x,[1])
+// inline double PtDepentdentCut_sqrt(double pt) { return 3.2e-03+7.8e+05*TMath::Power(PtToMass(pt),-2.5e+00);}
 
+const double MassDepentdentCut_old_value_x3 = -100; // Fit on Mass exp(x0+x3). pt = m/2
+inline double MassDepentdentCut_old_x3(double pt) { double x = PtToMass(pt); return 5.03e-03+2.7e07*TMath::Power(x,-3);}
 
-// const double MassDepentdentCut_value_x3 = -100; // Fit on Mass exp(x0+x3). pt = m/2
-// inline double MassDepentdentCut_x3(double pt) { double x = PtToMass(pt); return 5.08e-03+2.72e07*TMath::Power(x,-3);}
+const double MassDepentdentCut_value_x3 = -10;
+inline double MassDepentdentCut_x3(double pt) { double x = PtToMass(pt); return 5.03e-03+1.7e07*TMath::Power(x,-3);}
+const double MassDepentdentCut_value_x32 = -40;
+inline double MassDepentdentCut_x32(double mass) { double x = mass; return 5.03e-03+1.7e07*TMath::Power(x,-3);}
+const double MassDepentdentCut_value_x2x3 = -20;
+inline double MassDepentdentCut_x2x3(double pt) { double x = PtToMass(pt); return 2.8e-03-1.8e04*TMath::Power(x,-2)+3.8e07*TMath::Power(x,-3);}
+const double MassDepentdentCut_value_x1x3 = -30;
+inline double MassDepentdentCut_x1x3(double pt) { double x = PtToMass(pt); return 4.3e-03-9.4e+00*TMath::Power(x,-1)+2.8e+07*TMath::Power(x,-3);}
+
 // const double MassDepentdentCut2_value_x3 = -150; // Fit on Mass exp(x0+x3). Fit on pt vs m
-// inline double MassDepentdentCut2_x3(double pt) { double x = PtToMass(pt); return 5.08e-03+2.72e07*TMath::Power(x,-3);}
+// inline double MassDepentdentCut2_x3(double pt) { double x = PtToMass(pt); return 5.03e-03+2.7e07*TMath::Power(x,-3);}
 // const double MassDepentdentCut_value_x2x3 = -200; // Fit on Mass exp(x0+x2+x3). pt = m/2
-// inline double MassDepentdentCut_x2x3(double pt) { double x = PtToMass(pt); return 4.06e-03+1.15e+04*TMath::Power(x,-2)+1.83e+07*TMath::Power(x,-3);}
+// inline double MassDepentdentCut_x2x3(double pt) { double x = PtToMass(pt); return 4.3e-03+9.7e+03*TMath::Power(x,-2)+2.0e+07*TMath::Power(x,-3);}
 // const double MassDepentdentCut_value_x1x3 = -300; // Fit on Mass exp(x0+x1+x3). pt = m/2
-// inline double MassDepentdentCut_x1x3(double pt) { double x = PtToMass(pt); return 3.32e-03+5.83*TMath::Power(x,-1)+2.41e+07*TMath::Power(x,-3);}
+// inline double MassDepentdentCut_x1x3(double pt) { double x = PtToMass(pt); return 3.8e-03+4.8e+00*TMath::Power(x,-1)+2.5e+07*TMath::Power(x,-3);}
 // const double MassDepentdentCut_value_x1x2 = -400; // Fit on Mass exp(x0+x1+x2). pt = m/2
-// inline double MassDepentdentCut_x1x2(double pt) { double x = PtToMass(pt); return 6.72e-03-1.97e+01*TMath::Power(x,-1)+4.83e+04*TMath::Power(x,-2);}
-
-
-const double PtDepentdentCut_value_x3 = -1000; // Fit on pt exp(x0+x3)
-inline double PtDepentdentCut_x3(double pt)   { return 5.8e-03+1.9e+07*TMath::Power(PtToMass(pt),-3);}
-const double PtDepentdentCut_value_x2x3 = -2000; // Fit on pt exp(x0+x2+x3)
-inline double PtDepentdentCut_x2x3(double pt) { return 8.6e-03-1.3e+04*TMath::Power(PtToMass(pt),-2)+2.5e+07*TMath::Power(PtToMass(pt),-3);}
-const double PtDepentdentCut_value_x1x3 = -3000; // Fit on pt exp(x0+x1+x3)
-inline double PtDepentdentCut_x1x3(double pt) { return 1.1e-02-1.1e+01*TMath::Power(PtToMass(pt),-1)+2.1e+07*TMath::Power(PtToMass(pt),-3);}
-const double PtDepentdentCut_value_x1x2 = -4000; // Fit on pt exp(x0+x1+x2)
-inline double PtDepentdentCut_x1x2(double pt) { return 2.4e-02-6.7e+01*TMath::Power(PtToMass(pt),-1)+6.7e+04*TMath::Power(PtToMass(pt),-2);}
-const double PtDepentdentCut_value_x2 = -5000; // Fit on pt exp(x0+x2)
-inline double PtDepentdentCut_x2(double pt) { return 2.3e-03+2.3e04*TMath::Power(PtToMass(pt),-2);}
-const double PtDepentdentCut_value_sqrt = -6000; // Fit on pt [0]+[2]*pow(x,[1])
-inline double PtDepentdentCut_sqrt(double pt) { return 3.2e-03+7.8e+05*TMath::Power(PtToMass(pt),-2.5e+00);}
-
-
-const double MassDepentdentCut_value_x3 = -100; // Fit on Mass exp(x0+x3). pt = m/2
-inline double MassDepentdentCut_x3(double pt) { double x = PtToMass(pt); return 5.03e-03+2.7e07*TMath::Power(x,-3);}
-const double MassDepentdentCut2_value_x3 = -150; // Fit on Mass exp(x0+x3). Fit on pt vs m
-inline double MassDepentdentCut2_x3(double pt) { double x = PtToMass(pt); return 5.03e-03+2.7e07*TMath::Power(x,-3);}
-const double MassDepentdentCut_value_x2x3 = -200; // Fit on Mass exp(x0+x2+x3). pt = m/2
-inline double MassDepentdentCut_x2x3(double pt) { double x = PtToMass(pt); return 4.3e-03+9.7e+03*TMath::Power(x,-2)+2.0e+07*TMath::Power(x,-3);}
-const double MassDepentdentCut_value_x1x3 = -300; // Fit on Mass exp(x0+x1+x3). pt = m/2
-inline double MassDepentdentCut_x1x3(double pt) { double x = PtToMass(pt); return 3.8e-03+4.8e+00*TMath::Power(x,-1)+2.5e+07*TMath::Power(x,-3);}
-const double MassDepentdentCut_value_x1x2 = -400; // Fit on Mass exp(x0+x1+x2). pt = m/2
-inline double MassDepentdentCut_x1x2(double pt) { double x = PtToMass(pt); return 7.8e-03-2.3e+01*TMath::Power(x,-1)+5.0e+04*TMath::Power(x,-2);}
-const double MassDepentdentCut_value_x2 = -500; // Fit on Mass exp(x0+x2). pt = m/2
-inline double MassDepentdentCut_x2(double pt) { double x = PtToMass(pt); return 2.3e-03+2.3e04*TMath::Power(x,-2);}
-const double MassDepentdentCut_value_sqrt = -600; // Fit on Mass [0]+[2]*pow(x,[1]). pt = m/2
-inline double MassDepentdentCut_sqrt(double pt) { double x = PtToMass(pt); return 2.5e-03+5.6e+04*TMath::Power(x,-2.1e+00);}
+// inline double MassDepentdentCut_x1x2(double pt) { double x = PtToMass(pt); return 7.8e-03-2.3e+01*TMath::Power(x,-1)+5.0e+04*TMath::Power(x,-2);}
+// const double MassDepentdentCut_value_x2 = -500; // Fit on Mass exp(x0+x2). pt = m/2
+// inline double MassDepentdentCut_x2(double pt) { double x = PtToMass(pt); return 2.3e-03+2.3e04*TMath::Power(x,-2);}
+// const double MassDepentdentCut_value_sqrt = -600; // Fit on Mass [0]+[2]*pow(x,[1]). pt = m/2
+// inline double MassDepentdentCut_sqrt(double pt) { double x = PtToMass(pt); return 2.5e-03+5.6e+04*TMath::Power(x,-2.1e+00);}
 
 inline const char* BoolToString(bool b) { return b ? "true" : "false";}
 
@@ -357,4 +344,25 @@ inline MatchingStatus StringToMatchingStatus(const std::string & tagname) {
   if(tagname == "FullLep")          return FullLep;
   if(tagname == "SemiMatched")      return SemiMatched;
   return Unknown;
+}
+
+
+inline std::string ZprimeDecayToString(const int & tagname) {
+  if(tagname == nomatch)     return "nomatch";
+  if(tagname == Zee)         return "Zee";
+  if(tagname == Zmumu)       return "Zmumu";
+  if(tagname == Zelse)       return "Zelse";
+  if(tagname == HWW)         return "HWW";
+  if(tagname == Hbb)         return "Hbb";
+  if(tagname == Helse)       return "Helse";
+  if(tagname == ZeeHWW)      return "ZeeHWW";
+  if(tagname == ZmumuHWW)    return "ZmumuHWW";
+  if(tagname == ZelseHWW)    return "ZelseHWW";
+  if(tagname == ZeeHbb)      return "ZeeHbb";
+  if(tagname == ZmumuHbb)    return "ZmumuHbb";
+  if(tagname == ZelseHbb)    return "ZelseHbb";
+  if(tagname == ZeeHelse)    return "ZeeHelse";
+  if(tagname == ZmumuHelse)  return "ZmumuHelse";
+  if(tagname == ZelseHelse)  return "ZelseHelse";
+  return "unknown";
 }
