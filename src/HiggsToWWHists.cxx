@@ -10,116 +10,6 @@
 using namespace std;
 using namespace uhh2;
 
-
-#define MYJETTAGNNLOOP(func)\
-func(btag_BoostedDoubleSecondaryVertexAK8)\
-func(btag_BoostedDoubleSecondaryVertexCA15)\
-func(btag_DeepDoubleBvLJet_probHbb)\
-func(btag_DeepDoubleBvLJet_probQCD)\
-func(btag_DeepDoubleCvBJet_probHbb)\
-func(btag_DeepDoubleCvBJet_probHcc)\
-func(btag_DeepDoubleCvLJet_probHcc)\
-func(btag_DeepDoubleCvLJet_probQCD)\
-func(btag_MassIndependentDeepDoubleBvLJet_probHbb)\
-func(btag_MassIndependentDeepDoubleBvLJet_probQCD)\
-func(btag_MassIndependentDeepDoubleCvBJet_probHbb)\
-func(btag_MassIndependentDeepDoubleCvBJet_probHcc)\
-func(btag_MassIndependentDeepDoubleCvLJet_probHcc)\
-func(btag_MassIndependentDeepDoubleCvLJet_probQCD)\
-func(btag_DeepBoosted_TvsQCD)\
-func(btag_DeepBoosted_WvsQCD)\
-func(btag_DeepBoosted_ZvsQCD)\
-func(btag_DeepBoosted_ZbbvsQCD)\
-func(btag_DeepBoosted_HbbvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_TvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_ZHccvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_WvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_ZvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_ZbbvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_HbbvsQCD)\
-func(btag_DeepBoosted_probQCDb)\
-func(btag_DeepBoosted_probQCDbb)\
-func(btag_DeepBoosted_probQCDc)\
-func(btag_DeepBoosted_probQCDcc)\
-func(btag_DeepBoosted_probQCDothers)\
-func(btag_DeepBoosted_probTbqq)\
-func(btag_DeepBoosted_probTbcq)\
-func(btag_DeepBoosted_probTbq)\
-func(btag_DeepBoosted_probTbc)\
-func(btag_DeepBoosted_probWqq)\
-func(btag_DeepBoosted_probWcq)\
-func(btag_DeepBoosted_probZcc)\
-func(btag_DeepBoosted_probZqq)\
-func(btag_DeepBoosted_probZbb)\
-func(btag_DeepBoosted_probHbb)\
-func(btag_DeepBoosted_probHcc)\
-func(btag_DeepBoosted_raw_score_qcd)\
-func(btag_DeepBoosted_raw_score_top)\
-func(btag_DeepBoosted_raw_score_w)\
-func(btag_DeepBoosted_raw_score_z)\
-func(btag_MassDecorrelatedDeepBoosted_bbvsLight)\
-func(btag_MassDecorrelatedDeepBoosted_ccvsLight)\
-func(btag_MassDecorrelatedDeepBoosted_probHbb)\
-func(btag_MassDecorrelatedDeepBoosted_probQCDc)\
-func(btag_MassDecorrelatedDeepBoosted_probQCDbb)\
-func(btag_MassDecorrelatedDeepBoosted_probTbqq)\
-func(btag_MassDecorrelatedDeepBoosted_probTbcq)\
-func(btag_MassDecorrelatedDeepBoosted_probTbq)\
-func(btag_MassDecorrelatedDeepBoosted_probQCDothers)\
-func(btag_MassDecorrelatedDeepBoosted_probQCDb)\
-func(btag_MassDecorrelatedDeepBoosted_probTbc)\
-func(btag_MassDecorrelatedDeepBoosted_probWqq)\
-func(btag_MassDecorrelatedDeepBoosted_probQCDcc)\
-func(btag_MassDecorrelatedDeepBoosted_probHcc)\
-func(btag_MassDecorrelatedDeepBoosted_probZcc)\
-func(btag_MassDecorrelatedDeepBoosted_proWcq)\
-func(btag_MassDecorrelatedDeepBoosted_probZqq)\
-func(btag_MassDecorrelatedDeepBoosted_probZbb)\
-
-
-
-#define JETSNNBOOK(mytag)\
-book_TH1F("H_"+MyString(#mytag), MyString(#mytag)+"^{H}",101,0,1.01);\
-book_TH1F("H_"+MyString(#mytag)+"_rebin", MyString(#mytag)+"^{H}",30,0,1.02);\
-book_TH2F("Zprime"+massPlotName+"vs"+MyString(#mytag), ";"+massType+"^{Zprime} [GeV/c^{2}];"+MyString(#mytag), 330, 0, 9900, 30,0,1.02 );\
-
-#define JETSNNFILL(mytag)\
-fill_H1("H_"+MyString(#mytag), cand.H().mytag(), weight);\
-fill_H1("H_"+MyString(#mytag)+"_rebin", cand.H().mytag(), weight);\
-H2("Zprime"+massPlotName+"vs"+MyString(#mytag))->Fill(cand.Zprime_mass(), cand.H().mytag(), weight);\
-
-
-#define MYSUBJETTAGLOOP(func)\
-func(btag_combinedSecondaryVertex)\
-func(btag_combinedSecondaryVertexMVA)\
-func(btag_DeepCSV)\
-func(btag_DeepFlavour_bb)\
-func(btag_DeepFlavour_b)\
-func(btag_DeepFlavour_lepb)\
-func(btag_DeepFlavour_uds)\
-func(btag_DeepFlavour_g)\
-func(btag_DeepFlavour_c)\
-func(btag_DeepJet)\
-
-#define SUBJETSBOOK(mytag)\
-isLong = MyString(#mytag).find("combinedSecondaryVertex")!=std::string::npos;\
-book_TH1F("H_"+MyString(#mytag)+"_subjet",   MyString(#mytag)+"^{subjet}",  isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);\
-book_TH1F("H_"+MyString(#mytag)+"_subjet1",  MyString(#mytag)+"^{subjet1}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);\
-book_TH1F("H_"+MyString(#mytag)+"_subjet2",  MyString(#mytag)+"^{subjet2}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);\
-book_TH1F("H_"+MyString(#mytag)+"_subjet21", MyString(#mytag)+"^{subjet2/subjet1}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);\
-book_TH2F("H_"+MyString(#mytag)+"_subjet12", ";"+MyString(#mytag)+"^{subjet1}"+MyString(#mytag)+"^{subjet2}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01, isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);\
-
-#define SUBJETSFILL(mytag)\
-sub1 = cand.H().subjets().size()>0 ? cand.H().subjets().at(0).mytag() : 9999;\
-sub2 = cand.H().subjets().size()>1 ? cand.H().subjets().at(1).mytag() : 0;\
-fill_H1("H_"+MyString(#mytag)+"_subjet", (sub1>sub2)?sub1:sub2, weight);\
-fill_H1("H_"+MyString(#mytag)+"_subjet1", sub1, weight);\
-fill_H1("H_"+MyString(#mytag)+"_subjet2", sub2, weight);\
-fill_H1("H_"+MyString(#mytag)+"_subjet21", sub2/(sub1+sub2), weight);\
-H2("H_"+MyString(#mytag)+"_subjet12")->Fill(sub1, sub2, weight);\
-
-
 HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& condMatch_, const string & condMatchStatus_): HistsBase(ctx, dname), condMatch(condMatch_), condMatchStatus(condMatchStatus_) {
 
   h_ZprimeCandidates = ctx.get_handle<vector<ZprimeCandidate>>("ZprimeCandidate");
@@ -163,23 +53,27 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   // book_TH1F("Zprime_"+massPlotName+"_rebin_full", massType + "^{Zprime} [GeV/c^{2}]", bins_Zprime_rebin_full.size()-1, &bins_Zprime_rebin_full[0]);
   // book_TH1F("Zprime_"+massPlotName+"_rebin1", massType + "^{Zprime} [GeV/c^{2}]", bins_Zprime_rebin1.size()-1, &bins_Zprime_rebin1[0]);
   // book_TH1F("Zprime_"+massPlotName+"_rebin2", massType + "^{Zprime} [GeV/c^{2}]", 10000, 0, 10000);
-  book_TH1F("Zprime_"+massPlotName+"_rebin30",massType + "^{Zprime} [GeV/c^{2}]", 330, 0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin30",massType + "^{Zprime} [GeV/c^{2}]",  330, 0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV/c^{2}]", 100, 0,10000);
 
   for (const string & name: {"Zprime","Z","H"}) {
-    // bool check = (name.compare("Zprime")) == 0;
-    // book_TH1F(name+"_mass",    "m^"       +name+" [GeV/c^{2}]", check?300:40, check?0:70,check? 3000:110);
     if (name=="Zprime")   book_TH1F(name+"_"+massPlotName, massType + "^"+name+" [GeV/c^{2}]", 300,  0, 3000);
     else if (name=="Z")   book_TH1F(name+"_mass", "m^"+name+" [GeV/c^{2}]", 40,  70, 110);
     else if ((name=="H")) book_TH1F(name+"_mass", "m^"+name+" [GeV/c^{2}]", 10,   0, 200);
     if ((name=="H")) book_TH1F(name+"_mass1GeV",  "m^"+name+" [GeV/c^{2}]", 200,  0, 200);
-    book_TH1F(name+"_pt",      "p_{T}^"   +name+" [GeV]",       bins_Zprime_rebin_full.size()-1, &bins_Zprime_rebin_full[0]);
-    // book_TH1F(name+"_energy",  "energy^"  +name+" [GeV]",       bins_Zprime_rebin1.size()-1, &bins_Zprime_rebin1[0]);
+    book_TH1F(name+"_pt",      "p_{T}^"   +name+" [GeV]",       100,0,1000);
+    book_TH1F(name+"_energy",  "energy^"  +name+" [GeV]",       1000,0,1000);
     // book_TH1F(name+"_energy",  "energy^"  +name+" [GeV]",       1000,0,10000);
-    // book_TH1F(name+"_eta",     "#eta"     +name,                100,-5,5);
-    // book_TH1F(name+"_phi",     "#phi"     +name,                50,-M_PI,M_PI);
+    book_TH1F(name+"_eta",     "#eta"     +name,                100,-5,5);
+    book_TH1F(name+"_phi",     "#phi"     +name,                50,-M_PI,M_PI);
   }
 
-  book_TH1F("delta_phi_H_Z","#Delta#phi(H,Z)",50,0,M_PI);
+  book_TH1F("delta_eta_H_Z","#Delta#eta(H,Z)",50,0,5);
+  book_TH1F("delta_phi_H_Z","#Delta#phi(H,Z)",50,0,5);
+  book_TH1F("delta_R_H_Z","#Delta R(H,Z)",50,0,5);
+  book_TH1F("delta_R_ll","#Delta R(l,l)",50,0,5);
+  book_TH2F("delta_R_llvsZprime"+massPlotName, ";"+massType+"^{Zprime} [GeV/c^{2}];#Delta#R(l,l)", 330, 0, 9900, 50,0,5);
+  book_TH2F("PtZvsZprime"+massPlotName, ";"+massType+"^{Zprime} [GeV/c^{2}];#Delta#R(l,l)", 330, 0, 9900, 30,0,1500);
 
   for (std::string & disc : discriminators) {
     if (FindInString("tau", disc)) {
@@ -196,6 +90,11 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
     else book_TH1F("H_"+disc, disc+"^{H} [GeV/c^{2}]",100,0,300);
   }
 
+  book_TH1F("H_chitot","#chi_{TOT}",35,0,70);
+  book_TH1F("H_chitot1","#chi_{TOT}",35,0,70);
+  book_TH1F("H_chitot2","#chi_{TOT}",35,0,70);
+  book_TH1F("H_chi_H", "#chi^{H}",35,0,70);
+  book_TH1F("H_chi_Z", "#chi^{Z}",35,0,70);
   book_TH1F("H_Match","Match^{H}",17, 0, 17);
   book_TH1F("H_MatchingStatus","MatchingStatus^{H}",10, 0, 10);
   book_TH2F("H_MatchvsH_MatchingStatus",";Match^{H};MatchingStatus^{H}",17, 0, 17, 10, 0, 10);
@@ -237,15 +136,21 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   book_TH2F("ST_ZprimevsZprime"+massPlotName,      ";ST_Zprime;"+massType+"^{Zprime} [GeV/c^{2}]", 300, 0, 3000,330, 0, 9900);
   book_TH2F("ST_ZprimevsDeepBoosted",              ";ST_Zprime;btag_DeepBoosted_H4qvsQCD", 300, 0, 3000, 30,0,1.02 );
 
-  bool isLong;
-  MYSUBJETTAGLOOP(SUBJETSBOOK)
-  // MYJETTAGNNLOOP(JETSNNBOOK)
+  for (std::string & disc : discriminators_subjets) {
+    bool isLong = disc.find("combinedSecondaryVertex")!=std::string::npos;
+    book_TH1F("H_"+disc+"_subjet",       disc+"^{subjet}",  isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
+    book_TH1F("H_"+disc+"_subjet1",      disc+"^{subjet1}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
+    book_TH1F("H_"+disc+"_subjet2",      disc+"^{subjet2}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
+    book_TH1F("H_"+disc+"_subjet21",     disc+"^{subjet2/subjet1}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
+    book_TH2F("H_"+disc+"_subjet12", ";"+disc+"^{subjet1};"+disc+"^{subjet2}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01, isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
+  }
+
   for (std::string & disc : discriminators_Extra) {
     book_TH1F("H_"+disc, disc+"^{H}",101,0,1.01);
     book_TH1F("H_"+disc+"_rebin", disc+"^{H}",30,0,1.02);
     book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30,0,1.02 );
   }
-  book_TH2F("H_btag_DeepBoosted_HbbvsHcc2", ";DeepBoosted_Hbb; DeepBoosted_Hcc", 101,0,1.01, 101,0,1.01 );
+  book_TH2F("H_btag_DeepBoosted_HbbvsHcc2", ";DeepBoosted_Hbb;DeepBoosted_Hcc", 101,0,1.01, 101,0,1.01 );
 
 }
 
@@ -304,26 +209,43 @@ void HiggsToWWHists::fill(const Event & event){
     // fill_H1("Zprime_"+massPlotName+"_rebin1",     cand.Zprime_mass(),weight);
     // fill_H1("Zprime_"+massPlotName+"_rebin2",     cand.Zprime_mass(),weight);
     fill_H1("Zprime_"+massPlotName+"_rebin30",    cand.Zprime_mass(),weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin100",   cand.Zprime_mass(),weight);
     fill_H1("Zprime_pt",              cand.pt(),weight);
-    // fill_H1("Zprime_energy",          cand.energy(),weight);
-    // fill_H1("Zprime_eta",             cand.eta(),weight);
-    // fill_H1("Zprime_phi",             cand.phi(),weight);
+    fill_H1("Zprime_energy",          cand.energy(),weight);
+    fill_H1("Zprime_eta",             cand.eta(),weight);
+    fill_H1("Zprime_phi",             cand.phi(),weight);
 
     fill_H1("Z_mass",     cand.Z().v4().M(),weight);
     fill_H1("Z_pt",       cand.Z().pt(),weight);
-    // fill_H1("Z_energy",   cand.Z().energy(),weight);
-    // fill_H1("Z_eta",      cand.Z().eta(),weight);
-    // fill_H1("Z_phi",      cand.Z().phi(),weight);
+    fill_H1("Z_energy",   cand.Z().energy(),weight);
+    fill_H1("Z_eta",      cand.Z().eta(),weight);
+    fill_H1("Z_phi",      cand.Z().phi(),weight);
 
     fill_H1("H_mass",     cand.H().v4().M(),weight);
     fill_H1("H_mass1GeV", cand.H().v4().M(),weight);
     fill_H1("H_pt",       cand.H().pt(),weight);
-    // fill_H1("H_energy",   cand.H().energy(),weight);
-    // fill_H1("H_eta",      cand.H().eta(),weight);
-    // fill_H1("H_phi",      cand.H().phi(),weight);
+    fill_H1("H_energy",   cand.H().energy(),weight);
+    fill_H1("H_eta",      cand.H().eta(),weight);
+    fill_H1("H_phi",      cand.H().phi(),weight);
 
+    double delta_eta_H_Z = fabs(cand.H().eta() - cand.Z().eta());
     double delta_phi_H_Z = fabs(deltaPhi(cand.H(), cand.Z()));
-    fill_H1("delta_phi_H_Z", delta_phi_H_Z , weight);
+    double delta_R_H_Z   = deltaR(cand.H(), cand.Z());
+    double delta_R_ll = deltaR(cand.leptons()[0], cand.leptons()[1]);
+    fill_H1("delta_eta_H_Z", delta_eta_H_Z, weight);
+    fill_H1("delta_phi_H_Z", delta_phi_H_Z, weight);
+    fill_H1("delta_R_H_Z", delta_R_H_Z, weight);
+    fill_H1("delta_R_ll", delta_R_ll , weight);
+    H2("delta_R_llvsZprimemass")->Fill(cand.Zprime_mass(), delta_R_ll, weight);
+    H2("PtZvsZprimemass")->Fill(cand.Zprime_mass(), cand.Z().pt(), weight);
+
+    double chi_H = (cand.H().softdropmass()-HMASS)/HWIDTH;
+    double chi_Z = (cand.Z().v4().M()-ZMASS)/ZWIDTH;
+    fill_H1("H_chitot", chi_H +chi_Z , weight);
+    fill_H1("H_chitot1",TMath::Power(chi_H,2) +TMath::Power(chi_Z,2) , weight);
+    fill_H1("H_chitot2",TMath::Sqrt(TMath::Power(chi_H,2) +TMath::Power(chi_Z,2)) , weight);
+    fill_H1("H_chi_H", chi_H, weight);
+    fill_H1("H_chi_Z", chi_Z, weight);
 
     if (cand.discriminator("btag_DeepCSV_tight"))  H1("btags_DeepCSV")->Fill("tight",  weight);
     else if (cand.discriminator("btag_DeepCSV_medium")) H1("btags_DeepCSV")->Fill("medium", weight);
@@ -362,13 +284,32 @@ void HiggsToWWHists::fill(const Event & event){
     fill_H1("ST_Zprime", ST, weight);
     H2("ST_ZprimevsZprime"+massPlotName)->Fill( ST, cand.Zprime_mass(), weight);
     H2("ST_ZprimevsDeepBoosted")->Fill(ST, cand.has_discriminator("btag_DeepBoosted_H4qvsQCD")? cand.discriminator("btag_DeepBoosted_H4qvsQCD"): 9999, weight);
-    double sub1, sub2;
-    MYSUBJETTAGLOOP(SUBJETSFILL)
-    // MYJETTAGNNLOOP(JETSNNFILL)
+
+    int nsubjet = cand.H().subjets().size();
+    for (std::string & disc : discriminators_subjets) {
+      auto subjet1 = cand.H().subjets().at(0);
+      auto subjet2 = cand.H().subjets().at(1);
+      double sub1=9999, sub2=0;
+      if (disc=="btag_combinedSecondaryVertex") {    sub1 = nsubjet>0 ? subjet1.btag_combinedSecondaryVertex() :     9999; sub2 = nsubjet>1 ? subjet2.btag_combinedSecondaryVertex() : 0;}
+      if (disc=="btag_combinedSecondaryVertexMVA") { sub1 = nsubjet>0 ? subjet1.btag_combinedSecondaryVertexMVA() :  9999; sub2 = nsubjet>1 ? subjet2.btag_combinedSecondaryVertexMVA() : 0; }
+      if (disc=="btag_DeepJet") {                    sub1 = nsubjet>0 ? subjet1.btag_DeepJet() :                     9999; sub2 = nsubjet>1 ? subjet2.btag_DeepJet() : 0; }
+      if (disc=="btag_DeepCSV") {                    sub1 = nsubjet>0 ? subjet1.btag_DeepCSV() :                     9999; sub2 = nsubjet>1 ? subjet2.btag_DeepCSV() : 0; }
+      if (disc=="btag_DeepFlavour_bb") {             sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_bb() :              9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_bb() : 0; }
+      if (disc=="btag_DeepFlavour_b") {              sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_b() :               9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_b() : 0; }
+      if (disc=="btag_DeepFlavour_lepb") {           sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_lepb() :            9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_lepb() : 0; }
+      if (disc=="btag_DeepFlavour_uds") {            sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_uds() :             9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_uds() : 0; }
+      if (disc=="btag_DeepFlavour_g") {              sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_g() :               9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_g() : 0; }
+      if (disc=="btag_DeepFlavour_c") {              sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_c() :               9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_c() : 0; }
+      fill_H1("H_"+disc+"_subjet", (sub1>sub2)?sub1:sub2, weight);
+      fill_H1("H_"+disc+"_subjet1", sub1, weight);
+      fill_H1("H_"+disc+"_subjet2", sub2, weight);
+      fill_H1("H_"+disc+"_subjet21", sub2/(sub1+sub2), weight);
+      H2("H_"+disc+"_subjet12")->Fill(sub1, sub2, weight);
+    }
 
     for (std::string & disc : discriminators_Extra) {
       double val=0;
-      if (disc=="btag_BoostedDoubleSecondaryVertexAK8") val = cand.H().btag_BoostedDoubleSecondaryVertexAK8();
+      if (disc=="btag_BoostedDoubleSecondaryVertexAK8")  val = cand.H().btag_BoostedDoubleSecondaryVertexAK8();
       if (disc=="btag_BoostedDoubleSecondaryVertexCA15") val = cand.H().btag_BoostedDoubleSecondaryVertexCA15();
       if (disc=="btag_DeepDoubleBvLJet_probHbb") val = cand.H().btag_DeepDoubleBvLJet_probHbb();
       if (disc=="btag_DeepDoubleBvLJet_probQCD") val = cand.H().btag_DeepDoubleBvLJet_probQCD();
@@ -382,56 +323,57 @@ void HiggsToWWHists::fill(const Event & event){
       if (disc=="btag_MassIndependentDeepDoubleCvBJet_probHcc") val = cand.H().btag_MassIndependentDeepDoubleCvBJet_probHcc();
       if (disc=="btag_MassIndependentDeepDoubleCvLJet_probHcc") val = cand.H().btag_MassIndependentDeepDoubleCvLJet_probHcc();
       if (disc=="btag_MassIndependentDeepDoubleCvLJet_probQCD") val = cand.H().btag_MassIndependentDeepDoubleCvLJet_probQCD();
-      if (disc=="btag_DeepBoosted_TvsQCD") val = cand.H().btag_DeepBoosted_TvsQCD();
-      if (disc=="btag_DeepBoosted_WvsQCD") val = cand.H().btag_DeepBoosted_WvsQCD();
-      if (disc=="btag_DeepBoosted_ZvsQCD") val = cand.H().btag_DeepBoosted_ZvsQCD();
+      if (disc=="btag_DeepBoosted_TvsQCD")   val = cand.H().btag_DeepBoosted_TvsQCD();
+      if (disc=="btag_DeepBoosted_WvsQCD")   val = cand.H().btag_DeepBoosted_WvsQCD();
+      if (disc=="btag_DeepBoosted_ZvsQCD")   val = cand.H().btag_DeepBoosted_ZvsQCD();
       if (disc=="btag_DeepBoosted_ZbbvsQCD") val = cand.H().btag_DeepBoosted_ZbbvsQCD();
       if (disc=="btag_DeepBoosted_HbbvsQCD") val = cand.H().btag_DeepBoosted_HbbvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_TvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_TvsQCD();
+      if (disc=="btag_DeepBoosted_HccvsQCD") val = cand.H().btag_DeepBoosted_probHcc()/(cand.H().btag_DeepBoosted_probHcc()+cand.H().btag_DeepBoosted_probQCDb()+cand.H().btag_DeepBoosted_probQCDbb()+cand.H().btag_DeepBoosted_probQCDc()+cand.H().btag_DeepBoosted_probQCDcc()+cand.H().btag_DeepBoosted_probQCDothers());
+      if (disc=="btag_MassDecorrelatedDeepBoosted_TvsQCD")    val = cand.H().btag_MassDecorrelatedDeepBoosted_TvsQCD();
       if (disc=="btag_MassDecorrelatedDeepBoosted_ZHccvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_ZHccvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_WvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_WvsQCD();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_WvsQCD")    val = cand.H().btag_MassDecorrelatedDeepBoosted_WvsQCD();
       if (disc=="btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_ZvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_ZvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_ZbbvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_ZbbvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_HbbvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_HbbvsQCD();
-      if (disc=="btag_DeepBoosted_probQCDb") val = cand.H().btag_DeepBoosted_probQCDb();
-      if (disc=="btag_DeepBoosted_probQCDbb") val = cand.H().btag_DeepBoosted_probQCDbb();
-      if (disc=="btag_DeepBoosted_probQCDc") val = cand.H().btag_DeepBoosted_probQCDc();
-      if (disc=="btag_DeepBoosted_probQCDcc") val = cand.H().btag_DeepBoosted_probQCDcc();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_ZvsQCD")    val = cand.H().btag_MassDecorrelatedDeepBoosted_ZvsQCD();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_ZbbvsQCD")  val = cand.H().btag_MassDecorrelatedDeepBoosted_ZbbvsQCD();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_HbbvsQCD")  val = cand.H().btag_MassDecorrelatedDeepBoosted_HbbvsQCD();
+      if (disc=="btag_DeepBoosted_probQCDb")      val = cand.H().btag_DeepBoosted_probQCDb();
+      if (disc=="btag_DeepBoosted_probQCDbb")     val = cand.H().btag_DeepBoosted_probQCDbb();
+      if (disc=="btag_DeepBoosted_probQCDc")      val = cand.H().btag_DeepBoosted_probQCDc();
+      if (disc=="btag_DeepBoosted_probQCDcc")     val = cand.H().btag_DeepBoosted_probQCDcc();
       if (disc=="btag_DeepBoosted_probQCDothers") val = cand.H().btag_DeepBoosted_probQCDothers();
-      if (disc=="btag_DeepBoosted_probTbqq") val = cand.H().btag_DeepBoosted_probTbqq();
-      if (disc=="btag_DeepBoosted_probTbcq") val = cand.H().btag_DeepBoosted_probTbcq();
-      if (disc=="btag_DeepBoosted_probTbq") val = cand.H().btag_DeepBoosted_probTbq();
-      if (disc=="btag_DeepBoosted_probTbc") val = cand.H().btag_DeepBoosted_probTbc();
-      if (disc=="btag_DeepBoosted_probWqq") val = cand.H().btag_DeepBoosted_probWqq();
-      if (disc=="btag_DeepBoosted_probWcq") val = cand.H().btag_DeepBoosted_probWcq();
-      if (disc=="btag_DeepBoosted_probZcc") val = cand.H().btag_DeepBoosted_probZcc();
-      if (disc=="btag_DeepBoosted_probZqq") val = cand.H().btag_DeepBoosted_probZqq();
-      if (disc=="btag_DeepBoosted_probZbb") val = cand.H().btag_DeepBoosted_probZbb();
-      if (disc=="btag_DeepBoosted_probHbb") val = cand.H().btag_DeepBoosted_probHbb();
-      if (disc=="btag_DeepBoosted_probHcc") val = cand.H().btag_DeepBoosted_probHcc();
+      if (disc=="btag_DeepBoosted_probTbqq")      val = cand.H().btag_DeepBoosted_probTbqq();
+      if (disc=="btag_DeepBoosted_probTbcq")      val = cand.H().btag_DeepBoosted_probTbcq();
+      if (disc=="btag_DeepBoosted_probTbq")       val = cand.H().btag_DeepBoosted_probTbq();
+      if (disc=="btag_DeepBoosted_probTbc")       val = cand.H().btag_DeepBoosted_probTbc();
+      if (disc=="btag_DeepBoosted_probWqq")       val = cand.H().btag_DeepBoosted_probWqq();
+      if (disc=="btag_DeepBoosted_probWcq")       val = cand.H().btag_DeepBoosted_probWcq();
+      if (disc=="btag_DeepBoosted_probZcc")       val = cand.H().btag_DeepBoosted_probZcc();
+      if (disc=="btag_DeepBoosted_probZqq")       val = cand.H().btag_DeepBoosted_probZqq();
+      if (disc=="btag_DeepBoosted_probZbb")       val = cand.H().btag_DeepBoosted_probZbb();
+      if (disc=="btag_DeepBoosted_probHbb")       val = cand.H().btag_DeepBoosted_probHbb();
+      if (disc=="btag_DeepBoosted_probHcc")       val = cand.H().btag_DeepBoosted_probHcc();
       if (disc=="btag_DeepBoosted_raw_score_qcd") val = cand.H().btag_DeepBoosted_raw_score_qcd();
       if (disc=="btag_DeepBoosted_raw_score_top") val = cand.H().btag_DeepBoosted_raw_score_top();
-      if (disc=="btag_DeepBoosted_raw_score_w") val = cand.H().btag_DeepBoosted_raw_score_w();
-      if (disc=="btag_DeepBoosted_raw_score_z") val = cand.H().btag_DeepBoosted_raw_score_z();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_bbvsLight") val = cand.H().btag_MassDecorrelatedDeepBoosted_bbvsLight();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_ccvsLight") val = cand.H().btag_MassDecorrelatedDeepBoosted_ccvsLight();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probHbb") val = cand.H().btag_MassDecorrelatedDeepBoosted_probHbb();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDc") val = cand.H().btag_MassDecorrelatedDeepBoosted_probQCDc();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDbb") val = cand.H().btag_MassDecorrelatedDeepBoosted_probQCDbb();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probTbqq") val = cand.H().btag_MassDecorrelatedDeepBoosted_probTbqq();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probTbcq") val = cand.H().btag_MassDecorrelatedDeepBoosted_probTbcq();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probTbq") val = cand.H().btag_MassDecorrelatedDeepBoosted_probTbq();
+      if (disc=="btag_DeepBoosted_raw_score_w")   val = cand.H().btag_DeepBoosted_raw_score_w();
+      if (disc=="btag_DeepBoosted_raw_score_z")   val = cand.H().btag_DeepBoosted_raw_score_z();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_bbvsLight")     val = cand.H().btag_MassDecorrelatedDeepBoosted_bbvsLight();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_ccvsLight")     val = cand.H().btag_MassDecorrelatedDeepBoosted_ccvsLight();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probHbb")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probHbb();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDc")      val = cand.H().btag_MassDecorrelatedDeepBoosted_probQCDc();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDbb")     val = cand.H().btag_MassDecorrelatedDeepBoosted_probQCDbb();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probTbqq")      val = cand.H().btag_MassDecorrelatedDeepBoosted_probTbqq();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probTbcq")      val = cand.H().btag_MassDecorrelatedDeepBoosted_probTbcq();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probTbq")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probTbq();
       if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDothers") val = cand.H().btag_MassDecorrelatedDeepBoosted_probQCDothers();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDb") val = cand.H().btag_MassDecorrelatedDeepBoosted_probQCDb();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probTbc") val = cand.H().btag_MassDecorrelatedDeepBoosted_probTbc();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probWqq") val = cand.H().btag_MassDecorrelatedDeepBoosted_probWqq();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDcc") val = cand.H().btag_MassDecorrelatedDeepBoosted_probQCDcc();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probHcc") val = cand.H().btag_MassDecorrelatedDeepBoosted_probHcc();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probZcc") val = cand.H().btag_MassDecorrelatedDeepBoosted_probZcc();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_proWcq") val = cand.H().btag_MassDecorrelatedDeepBoosted_proWcq();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probZqq") val = cand.H().btag_MassDecorrelatedDeepBoosted_probZqq();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_probZbb") val = cand.H().btag_MassDecorrelatedDeepBoosted_probZbb();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDb")      val = cand.H().btag_MassDecorrelatedDeepBoosted_probQCDb();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probTbc")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probTbc();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probWqq")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probWqq();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDcc")     val = cand.H().btag_MassDecorrelatedDeepBoosted_probQCDcc();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probHcc")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probHcc();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probZcc")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probZcc();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_proWcq")        val = cand.H().btag_MassDecorrelatedDeepBoosted_proWcq();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probZqq")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probZqq();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probZbb")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probZbb();
 
       if (disc=="btag_DeepBoosted_HbbvsHcc") val = cand.H().btag_DeepBoosted_probHbb()/(cand.H().btag_DeepBoosted_probHcc()+cand.H().btag_DeepBoosted_probHbb());
       if (disc=="btag_DeepBoosted_HvsQCD") val = (cand.H().btag_DeepBoosted_probHcc()+cand.H().btag_DeepBoosted_probHbb())/(cand.H().btag_DeepBoosted_probQCDb()+cand.H().btag_DeepBoosted_probQCDbb()+cand.H().btag_DeepBoosted_probQCDc()+cand.H().btag_DeepBoosted_probQCDcc()+cand.H().btag_DeepBoosted_probQCDothers());
@@ -480,6 +422,7 @@ HiggsToWWHistsSlim::HiggsToWWHistsSlim(Context& ctx, const string& dname, const 
   }
   // book all histograms here
   book_TH1F("Zprime_"+massPlotName+"_rebin30",massType + "^{Zprime} [GeV/c^{2}]", 330, 0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV/c^{2}]", 100, 0,10000);
 
 }
 
@@ -504,7 +447,8 @@ void HiggsToWWHistsSlim::fill(const Event & event){
       } else if (condMatch!=match) continue;
     }
     if (condMatchStatus!="" && condMatchStatus!=matchstatus) continue;
-    fill_H1("Zprime_"+massPlotName+"_rebin30",    cand.Zprime_mass(),weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin30",  cand.Zprime_mass(),weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin100", cand.Zprime_mass(),weight);
 
   }
 
