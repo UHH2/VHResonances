@@ -2,6 +2,8 @@ import time, sys, os, glob
 import functools, argparse
 
 import numpy as np
+import pandas as pd
+from array import array
 
 sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros/")
 from ModuleRunnerBase import *
