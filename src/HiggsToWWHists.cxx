@@ -24,70 +24,57 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   }
 
   // book all histograms here
-  book_TH1F("sum_event_weights", "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("sum_event_weights_HtoWW", "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("sum_event_weights_Htobb", "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("sum_event_weights_Zee", "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("sum_event_weights_Zmumu", "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("sum_event_weights_Zelse", "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("sum_event_weights_Helse", "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("sum_event_weights_ZeeHtoWW", "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("sum_event_weights_ZeeHtobb", "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("sum_event_weights_ZeeHelse", "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights",            "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_HtoWW",      "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_Htobb",      "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_Zee",        "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_Zmumu",      "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_Zelse",      "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_Helse",      "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_ZeeHtoWW",   "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_ZeeHtobb",   "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_ZeeHelse",   "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZmumuHtoWW", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZmumuHtobb", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZmumuHelse", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZelseHtoWW", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZelseHtobb", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZelseHelse", "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("Zprime_number",  "number of Zprime",                21, -.5, 20.5);
+  book_TH1F("Zprime_number",                "number of Zprime",    6, -.5, 5.5);
 
   // Zprime reconstruction
-  vector<float> bins_Zprime_rebin_full;
-  for (float i = 0; i <= 10000; i+=100) bins_Zprime_rebin_full.push_back(i);
-  vector<float> bins_Zprime_rebin1;
-  for (float i = 0; i <= 2000; i+=100) bins_Zprime_rebin1.push_back(i);
-  for (float i = 2500; i <= 3000; i+=500) bins_Zprime_rebin1.push_back(i);
-  bins_Zprime_rebin1.push_back(10000);
 
-  // book_TH1F("Zprime_"+massPlotName+"_rebin_full", massType + "^{Zprime} [GeV/c^{2}]", bins_Zprime_rebin_full.size()-1, &bins_Zprime_rebin_full[0]);
-  // book_TH1F("Zprime_"+massPlotName+"_rebin1", massType + "^{Zprime} [GeV/c^{2}]", bins_Zprime_rebin1.size()-1, &bins_Zprime_rebin1[0]);
-  // book_TH1F("Zprime_"+massPlotName+"_rebin2", massType + "^{Zprime} [GeV/c^{2}]", 10000, 0, 10000);
   book_TH1F("Zprime_"+massPlotName+"_rebin30",massType + "^{Zprime} [GeV/c^{2}]",  330, 0, 9900);
   book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV/c^{2}]", 100, 0,10000);
 
   for (const string & name: {"Zprime","Z","H"}) {
-    if (name=="Zprime")   book_TH1F(name+"_"+massPlotName, massType + "^"+name+" [GeV/c^{2}]", 300,  0, 3000);
-    else if (name=="Z")   book_TH1F(name+"_mass", "m^"+name+" [GeV/c^{2}]", 40,  70, 110);
-    else if ((name=="H")) book_TH1F(name+"_mass", "m^"+name+" [GeV/c^{2}]", 10,   0, 200);
-    if ((name=="H")) book_TH1F(name+"_mass1GeV",  "m^"+name+" [GeV/c^{2}]", 200,  0, 200);
-    book_TH1F(name+"_pt",      "p_{T}^"   +name+" [GeV]",       100,0,1000);
-    book_TH1F(name+"_energy",  "energy^"  +name+" [GeV]",       1000,0,1000);
-    // book_TH1F(name+"_energy",  "energy^"  +name+" [GeV]",       1000,0,10000);
-    book_TH1F(name+"_eta",     "#eta"     +name,                100,-5,5);
-    book_TH1F(name+"_phi",     "#phi"     +name,                50,-M_PI,M_PI);
+    if (name=="Zprime")   book_TH1F(name+"_"+massPlotName, massType + "^"+name+" [GeV/c^{2}]", 40 ,700, 4700);
+    else if (name=="Z")   book_TH1F(name+"_mass", "m^"+name+" [GeV/c^{2}]",  21, 80.5, 101.5);
+    else if ((name=="H")) book_TH1F(name+"_mass",  "m^"+name+" [GeV/c^{2}]", 40,  0.,  200.);
+    book_TH1F(name+"_pt",      "p_{T}^"   +name+" [GeV]",  25,    0, 1000);
+    book_TH1F(name+"_energy",  "energy^"  +name+" [GeV]",  40,  200, 2200);
+    book_TH1F(name+"_eta",     "#eta"     +name,           100,  -5,    5);
+    book_TH1F(name+"_phi",     "#phi"     +name,           50,   -5,    5);
   }
 
-  book_TH1F("delta_eta_H_Z","#Delta#eta(H,Z)",50,0,5);
-  book_TH1F("delta_phi_H_Z","#Delta#phi(H,Z)",50,0,5);
-  book_TH1F("delta_R_H_Z","#Delta R(H,Z)",50,0,5);
-  book_TH1F("delta_R_ll","#Delta R(l,l)",50,0,5);
-  book_TH2F("delta_R_llvsZprime"+massPlotName, ";"+massType+"^{Zprime} [GeV/c^{2}];#Delta#R(l,l)", 330, 0, 9900, 50,0,5);
-  book_TH2F("PtZvsZprime"+massPlotName, ";"+massType+"^{Zprime} [GeV/c^{2}];#Delta#R(l,l)", 330, 0, 9900, 30,0,1500);
+  book_TH1F("delta_eta_H_Z", "#Delta#eta(H,Z)", 50, 0.0, 5.0);
+  book_TH1F("delta_phi_H_Z", "#Delta#phi(H,Z)", 20, 1.5, 3.5);
+  book_TH1F("delta_R_H_Z",   "#Delta R(H,Z)",   35, 1.5, 5.0);
+  book_TH1F("delta_R_ll",    "#Delta R(l,l)",   15, 0.0, 1.5);
+  book_TH2F("delta_R_llvsZprime"+massPlotName, ";"+massType+"^{Zprime} [GeV/c^{2}];#Delta#R(l,l)", 330, 0, 9900, 15,  0, 1.5);
+  book_TH2F("PtZvsZprime"+massPlotName,        ";"+massType+"^{Zprime} [GeV/c^{2}];#Delta#R(l,l)", 330, 0, 9900, 50,200, 2200);
 
   for (std::string & disc : discriminators) {
     if (FindInString("tau", disc)) {
-      book_TH1F("H_"+disc,"#"+disc+"^{H}",101,0,1.01);
-      book_TH1F("H_"+disc+"_rebin","#"+disc+"^{H}",30,0,1.02);
-      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30,0,1.02 );
+      book_TH1F("H_"+disc,"#"+disc+"^{H}",30, -0.01, 1.01);
+      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );
     }
-    else if (FindInString("btag", disc) || FindInString("NN", disc) || FindInString("DCL", disc) ) {
-      book_TH1F("H_"+disc, disc+"^{H}",101,0,1.01);
-      book_TH1F("H_"+disc+"_rebin", disc+"^{H}",30,0,1.02);
-      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30,0,1.02 );
+    else if (FindInString("btag", disc)) {
+      book_TH1F("H_"+disc, disc+"^{H}",30, -0.01, 1.01);
+      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );
     }
     else if (FindInString("chi2", disc)) book_TH1F("H_"+disc, disc+"^{H}",35,0,70);
-    else book_TH1F("H_"+disc, disc+"^{H} [GeV/c^{2}]",100,0,300);
+    else book_TH1F("H_"+disc, disc+"^{H} [GeV/c^{2}]",40,  0.,  200.);
   }
 
   book_TH1F("H_chitot","#chi_{TOT}",35,0,70);
@@ -95,6 +82,7 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   book_TH1F("H_chitot2","#chi_{TOT}",35,0,70);
   book_TH1F("H_chi_H", "#chi^{H}",35,0,70);
   book_TH1F("H_chi_Z", "#chi^{Z}",35,0,70);
+
   book_TH1F("H_Match","Match^{H}",17, 0, 17);
   book_TH1F("H_MatchingStatus","MatchingStatus^{H}",10, 0, 10);
   book_TH2F("H_MatchvsH_MatchingStatus",";Match^{H};MatchingStatus^{H}",17, 0, 17, 10, 0, 10);
@@ -107,13 +95,8 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
     H2("H_MatchvsH_MatchingStatus")->GetYaxis()->SetBinLabel(i,MatchingStatusToString(i-1).c_str());
   }
 
-  book_TH1F("H_NN_HWWvsQCD","NN_{HWWvsQCD}^{H}",100,0,1.01);
-  book_TH1F("H_NN_HWWvsQCD_1","NN_{HWWvsQCD_1}^{H}",100,0,1.01);
-  book_TH1F("H_NN_HWWvsQCD_2","NN_{HWWvsQCD_2}^{H}",100,0,1.01);
-
   book_TH1F("btags_DeepCSV","btags_DeepCSV", 4, 0, 4);
   book_TH2F("nsubjet_btags_DeepCSV",";DeepCSV^{WP,H}_{subjet1};DeepCSV^{WP,H}_{subjet2}",4, 0, 4, 4, 0, 4);
-  // book_TH2F("nsubjet_btags_DeepCSV",";nsubjet^{H};btags_DeepCSV^{H}",41, -.5, 40.5, 4, 0, 4);
   H1("btags_DeepCSV")->GetXaxis()->SetBinLabel(1,"no b-tag");
   H1("btags_DeepCSV")->GetXaxis()->SetBinLabel(2,"loose");
   H1("btags_DeepCSV")->GetXaxis()->SetBinLabel(3,"medium");
@@ -127,30 +110,28 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   H2("nsubjet_btags_DeepCSV")->GetYaxis()->SetBinLabel(3,"medium");
   H2("nsubjet_btags_DeepCSV")->GetYaxis()->SetBinLabel(4,"tight");
 
-  book_TH1F("Zprime_ptinv"+massPlotName,  "p_{T}^{ll}/"+massType+"(jet,ll)",         200, 0, 2);
-  book_TH1F("HT_event", "HT_event", 300, 0, 3000);
-  book_TH1F("ST_event", "ST_event", 300, 0, 3000);
-  book_TH1F("HT_Zprime", "HT_Zprime", 300, 0, 3000);
-  book_TH1F("ST_Zprime", "ST_Zprime", 300, 0, 3000);
+  book_TH1F("Zprime_ptinv"+massPlotName,  "p_{T}^{ll}/"+massType+"(jet,ll)", 10, 0, 1);
+  book_TH1F("HT_event", "HT_event",   50, 0, 3000);
+  book_TH1F("ST_event", "ST_event",   50, 0, 3000);
+  book_TH1F("HT_Zprime", "HT_Zprime", 50, 0, 3000);
+  book_TH1F("ST_Zprime", "ST_Zprime", 50, 0, 3000);
 
-  book_TH2F("ST_ZprimevsZprime"+massPlotName,      ";ST_Zprime;"+massType+"^{Zprime} [GeV/c^{2}]", 300, 0, 3000,330, 0, 9900);
-  book_TH2F("ST_ZprimevsDeepBoosted",              ";ST_Zprime;btag_DeepBoosted_H4qvsQCD", 300, 0, 3000, 30,0,1.02 );
+  book_TH2F("ST_ZprimevsZprime"+massPlotName, ";ST_Zprime;"+massType+"^{Zprime} [GeV/c^{2}]", 50, 0, 3000, 330, 0, 9900);
+  book_TH2F("ST_ZprimevsDeepBoosted",         ";ST_Zprime;btag_DeepBoosted_H4qvsQCD",         50, 0, 3000,  30, -0.01, 1.01);
 
   for (std::string & disc : discriminators_subjets) {
-    bool isLong = disc.find("combinedSecondaryVertex")!=std::string::npos;
-    book_TH1F("H_"+disc+"_subjet",       disc+"^{subjet}",  isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
-    book_TH1F("H_"+disc+"_subjet1",      disc+"^{subjet1}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
-    book_TH1F("H_"+disc+"_subjet2",      disc+"^{subjet2}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
-    book_TH1F("H_"+disc+"_subjet21",     disc+"^{subjet2/subjet1}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
-    book_TH2F("H_"+disc+"_subjet12", ";"+disc+"^{subjet1};"+disc+"^{subjet2}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01, isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
+    book_TH1F("H_"+disc+"_subjet",       disc+"^{subjet}",                     30, -0.01, 1.01);
+    book_TH1F("H_"+disc+"_subjet1",      disc+"^{subjet1}",                    30, -0.01, 1.01);
+    book_TH1F("H_"+disc+"_subjet2",      disc+"^{subjet2}",                    30, -0.01, 1.01);
+    book_TH1F("H_"+disc+"_subjet21",     disc+"^{subjet2/subjet1}",            30, -0.01, 1.01);
+    book_TH2F("H_"+disc+"_subjet12", ";"+disc+"^{subjet1};"+disc+"^{subjet2}", 30, -0.01, 1.01, 30, -0.01, 1.01);
   }
 
   for (std::string & disc : discriminators_Extra) {
-    book_TH1F("H_"+disc, disc+"^{H}",101,0,1.01);
-    book_TH1F("H_"+disc+"_rebin", disc+"^{H}",30,0,1.02);
-    book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30,0,1.02 );
+    book_TH1F("H_"+disc, disc+"^{H}",30, -0.01, 1.01);
+    book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );
   }
-  book_TH2F("H_btag_DeepBoosted_HbbvsHcc2", ";DeepBoosted_Hbb;DeepBoosted_Hcc", 101,0,1.01, 101,0,1.01 );
+  book_TH2F("H_btag_DeepBoosted_HbbvsHcc_2D", ";DeepBoosted_Hbb;DeepBoosted_Hcc", 30, -0.01, 1.01, 30, -0.01, 1.01 );
 
 }
 
@@ -189,7 +170,7 @@ void HiggsToWWHists::fill(const Event & event){
 
   // fill the histograms.
 
-  fill_H1("Zprime_number",  ZprimeCandidates.size(),weight);
+  fill_H1("Zprime_number",  ZprimeCandidates.size(), weight);
 
   std::string match, matchstatus;
 
@@ -204,29 +185,26 @@ void HiggsToWWHists::fill(const Event & event){
     }
     if (condMatchStatus!="" && condMatchStatus!=matchstatus) continue;
 
-    fill_H1("Zprime_"+massPlotName,               cand.Zprime_mass(),weight);
-    // fill_H1("Zprime_"+massPlotName+"_rebin_full", cand.Zprime_mass(),weight);
-    // fill_H1("Zprime_"+massPlotName+"_rebin1",     cand.Zprime_mass(),weight);
-    // fill_H1("Zprime_"+massPlotName+"_rebin2",     cand.Zprime_mass(),weight);
-    fill_H1("Zprime_"+massPlotName+"_rebin30",    cand.Zprime_mass(),weight);
-    fill_H1("Zprime_"+massPlotName+"_rebin100",   cand.Zprime_mass(),weight);
-    fill_H1("Zprime_pt",              cand.pt(),weight);
-    fill_H1("Zprime_energy",          cand.energy(),weight);
-    fill_H1("Zprime_eta",             cand.eta(),weight);
-    fill_H1("Zprime_phi",             cand.phi(),weight);
+    fill_H1("Zprime_"+massPlotName,               cand.Zprime_mass(), weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin30",    cand.Zprime_mass(), weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin100",   cand.Zprime_mass(), weight);
 
-    fill_H1("Z_mass",     cand.Z().v4().M(),weight);
-    fill_H1("Z_pt",       cand.Z().pt(),weight);
-    fill_H1("Z_energy",   cand.Z().energy(),weight);
-    fill_H1("Z_eta",      cand.Z().eta(),weight);
-    fill_H1("Z_phi",      cand.Z().phi(),weight);
+    fill_H1("Zprime_pt",     cand.pt(),         weight);
+    fill_H1("Zprime_energy", cand.energy(),     weight);
+    fill_H1("Zprime_eta",    cand.eta(),        weight);
+    fill_H1("Zprime_phi",    cand.phi(),        weight);
 
-    fill_H1("H_mass",     cand.H().v4().M(),weight);
-    fill_H1("H_mass1GeV", cand.H().v4().M(),weight);
-    fill_H1("H_pt",       cand.H().pt(),weight);
-    fill_H1("H_energy",   cand.H().energy(),weight);
-    fill_H1("H_eta",      cand.H().eta(),weight);
-    fill_H1("H_phi",      cand.H().phi(),weight);
+    fill_H1("Z_mass",        cand.Z().v4().M(), weight);
+    fill_H1("Z_pt",          cand.Z().pt(),     weight);
+    fill_H1("Z_energy",      cand.Z().energy(), weight);
+    fill_H1("Z_eta",         cand.Z().eta(),    weight);
+    fill_H1("Z_phi",         cand.Z().phi(),    weight);
+
+    fill_H1("H_mass",        cand.H().v4().M(), weight);
+    fill_H1("H_pt",          cand.H().pt(),     weight);
+    fill_H1("H_energy",      cand.H().energy(), weight);
+    fill_H1("H_eta",         cand.H().eta(),    weight);
+    fill_H1("H_phi",         cand.H().phi(),    weight);
 
     double delta_eta_H_Z = fabs(cand.H().eta() - cand.Z().eta());
     double delta_phi_H_Z = fabs(deltaPhi(cand.H(), cand.Z()));
@@ -234,8 +212,8 @@ void HiggsToWWHists::fill(const Event & event){
     double delta_R_ll = deltaR(cand.leptons()[0], cand.leptons()[1]);
     fill_H1("delta_eta_H_Z", delta_eta_H_Z, weight);
     fill_H1("delta_phi_H_Z", delta_phi_H_Z, weight);
-    fill_H1("delta_R_H_Z", delta_R_H_Z, weight);
-    fill_H1("delta_R_ll", delta_R_ll , weight);
+    fill_H1("delta_R_H_Z",   delta_R_H_Z,   weight);
+    fill_H1("delta_R_ll",    delta_R_ll,    weight);
     H2("delta_R_llvsZprimemass")->Fill(cand.Zprime_mass(), delta_R_ll, weight);
     H2("PtZvsZprimemass")->Fill(cand.Zprime_mass(), cand.Z().pt(), weight);
 
@@ -262,18 +240,14 @@ void HiggsToWWHists::fill(const Event & event){
     }
     H2("nsubjet_btags_DeepCSV")->Fill(index_tag[0].c_str(), index_tag[1].c_str(), weight);
 
-    fill_H1("Zprime_ptinv"+massPlotName,  cand.Z().pt()/cand.Zprime_mass(),weight);
+    fill_H1("Zprime_ptinv"+massPlotName,  cand.Z().pt()/cand.Zprime_mass(), weight);
 
     for (std::string & disc : discriminators) {
-      fill_H1("H_"+disc, cand.has_discriminator(disc)? cand.discriminator(disc): 9999 ,weight);
+      fill_H1("H_"+disc, cand.has_discriminator(disc)? cand.discriminator(disc): 9999 , weight);
       if (FindInString("chi2", disc) || FindInString("SDmass", disc)) continue;
-      fill_H1("H_"+disc+"_rebin", cand.has_discriminator(disc)? cand.discriminator(disc): 9999 ,weight);
       H2("Zprime"+massPlotName+"vs"+disc)->Fill(cand.Zprime_mass(), cand.has_discriminator(disc)? cand.discriminator(disc): 9999, weight);
     }
 
-    fill_H1("H_NN_HWWvsQCD", (cand.has_discriminator("NN_HWW")&&cand.has_discriminator("NN_QCD"))? cand.discriminator("NN_HWW")/(cand.discriminator("NN_HWW")+cand.discriminator("NN_QCD")): 9999 ,weight);
-    fill_H1("H_NN_HWWvsQCD_1", (cand.has_discriminator("NN_HWW_1")&&cand.has_discriminator("NN_QCD_1"))? cand.discriminator("NN_HWW_1")/(cand.discriminator("NN_HWW_1")+cand.discriminator("NN_QCD")): 9999 ,weight);
-    fill_H1("H_NN_HWWvsQCD_2", (cand.has_discriminator("NN_HWW_2")&&cand.has_discriminator("NN_QCD_2"))? cand.discriminator("NN_HWW_2")/(cand.discriminator("NN_HWW_2")+cand.discriminator("NN_QCD")): 9999 ,weight);
     H1("H_Match")->Fill(match.c_str(), weight);
     H1("H_MatchingStatus")->Fill(matchstatus.c_str(), weight);
     H2("H_MatchvsH_MatchingStatus")->Fill(match.c_str(), matchstatus.c_str(), weight);
@@ -380,10 +354,9 @@ void HiggsToWWHists::fill(const Event & event){
       if (disc=="btag_DeepBoosted_HvsQCD") val = (cand.H().btag_DeepBoosted_probHcc()+cand.H().btag_DeepBoosted_probHbb())/(cand.H().btag_DeepBoosted_probQCDb()+cand.H().btag_DeepBoosted_probQCDbb()+cand.H().btag_DeepBoosted_probQCDc()+cand.H().btag_DeepBoosted_probQCDcc()+cand.H().btag_DeepBoosted_probQCDothers());
 
       fill_H1("H_"+disc, val, weight);
-      fill_H1("H_"+disc+"_rebin", val, weight);
       H2("Zprime"+massPlotName+"vs"+disc)->Fill(cand.Zprime_mass(), val, weight);
     }
-    H2("H_btag_DeepBoosted_HbbvsHcc2")->Fill(cand.H().btag_DeepBoosted_probHbb(), cand.H().btag_DeepBoosted_probHcc(), weight);
+    H2("H_btag_DeepBoosted_HbbvsHcc_2D")->Fill(cand.H().btag_DeepBoosted_probHbb(), cand.H().btag_DeepBoosted_probHcc(), weight);
 
   }
 
@@ -448,8 +421,8 @@ void HiggsToWWHistsSlim::fill(const Event & event){
       } else if (condMatch!=match) continue;
     }
     if (condMatchStatus!="" && condMatchStatus!=matchstatus) continue;
-    fill_H1("Zprime_"+massPlotName+"_rebin30",  cand.Zprime_mass(),weight);
-    fill_H1("Zprime_"+massPlotName+"_rebin100", cand.Zprime_mass(),weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin30",  cand.Zprime_mass(), weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin100", cand.Zprime_mass(), weight);
 
   }
 
