@@ -89,6 +89,12 @@ class TaggerCutStudy(VariablesBase):
                         vars.setdefault("jet_pt",[]).append(jet.pt())
                         vars.setdefault("jet_DB",[]).append(jet.btag_DeepBoosted_H4qvsQCD())
                         vars.setdefault("Zprime_mass",[]).append(zp.Zprime_mass())
+                        vars.setdefault("Match",[]).append(rt.MatchingToString(rt.FloatToMatching(zp.discriminator("Match"))))
+                        vars.setdefault("MatchingStatus",[]).append(rt.MatchingStatusToString(rt.FloatToMatching(zp.discriminator("MatchingStatus"))))
+                        vars.setdefault("HDecay",[]).append(int(ev.HDecay))
+                        vars.setdefault("ZDecay",[]).append(int(ev.ZDecay))
+                        vars.setdefault("ZprimeDecay",[]).append(int(ev.ZprimeDecay))
+
         df = pd.DataFrame(data=vars)
         df.to_pickle(self.outdir+self.fName+".pkl")
 
@@ -291,9 +297,9 @@ class TaggerCutStudy(VariablesBase):
 def main():
     TCS = TaggerCutStudy()
     # TCS.StoreVars()
-    # TCS.PlotVar()
-    TCS.SensitivityScan("Mass")
-    TCS.SensitivityScan("PT")
+    TCS.PlotVar()
+    # TCS.SensitivityScan("Mass")
+    # TCS.SensitivityScan("PT")
 
 if __name__ == '__main__':
     main()
