@@ -20,7 +20,6 @@ void CalculateChiSquare(double& chi2, int& nbins, RooHist* hpull, double xmin, d
     double x,pull;
     hpull->GetPoint(i,x,pull);
     if (x<xmin || x>xmax) continue;
-    // std::cout << "FIND ME2 " << x << " " << pull << " " << pull*pull << " " << chi2 << '\n';
     chi2+=pull*pull;
     nbins++;
   }
@@ -103,7 +102,7 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
 
 std::string GetSgName(int mass, std::string syst) {
   if (syst=="nominal") return "M"+std::to_string(mass);
-  else return "M"+std::to_string(mass)+"_"+syst;
+  else return "M"+std::to_string(mass)+syst; // Be careful if you change it. It's needed as input to combine!!
 }
 
 
@@ -156,62 +155,75 @@ void CreateRooWorkspace::SetEnv() {
   workingDir      = Path_ANALYSIS+"Analysis/"+(isHbb? "Limits/Hbb_": "Limits/")+studies+"/"+year+"/"+collection+"/"+channel+"/"+histFolder+"/";
   gSystem->Exec(("mkdir -p "+workingDir+"/datacards").c_str());
 
-  Module    = "SignalRegion";
-  Histtype  = "ZprimeCandidate";
-  // HistName  = "Zprime_mass_rebin_full";
-  // HistName  = "Zprime_mass";
-  // HistName  = "Zprime_mass_rebin1";
-  // HistName  = "Zprime_mass_rebin2";
-  HistName  = "Zprime_mass_rebin30";
+  if (FindInVector(SystNames, "all")) {
+    SystNames.erase(SystNames.begin()+FindInVector(SystNames,"all"));
+    for (std::string syst: {"JEC", "JER", "MuonScale", "pu", "btag", "prefiring", "id", "tracking", "trigger", "reco"}) {
+      if (!FindInString("muon",channel) && FindInString("tracking",syst)) continue;
+      if (!FindInString("muon",channel) && FindInString("MuonScale",syst)) continue;
+      for (std::string var: {"Up","Down"}) { // Be careful if you change it. It's needed as input to combine!!
+      SystNames.push_back(syst+var);
+    }
+  }
+}
+if (debug) for (auto & syst : SystNames) std::cout << syst<< std::endl; //TODO print nicely
+
+Module    = "SignalRegion";
+Histtype  = "ZprimeCandidate";
+// HistName  = "Zprime_mass_rebin_full";
+// HistName  = "Zprime_mass";
+// HistName  = "Zprime_mass_rebin1";
+// HistName  = "Zprime_mass_rebin2";
+// HistName  = "Zprime_mass_rebin30";
+HistName  = "Zprime_mass_rebin100";
 
 
-  unique_name = "_"+channel+"_"+year;
-  unique_name = TString(unique_name).ReplaceAll("channel","");
-  unique_name_complete = unique_name.substr(1)+"_"+histFolder;
-  filepath    = Path_STORAGE+year+"/"+Module+"/"+collection+"/"+channel+"/nominal/";
+unique_name = "_"+channel+"_"+year;
+unique_name = TString(unique_name).ReplaceAll("channel","");
+unique_name_complete = unique_name.substr(1)+"_"+histFolder;
+filepath    = Path_STORAGE+year+"/"+Module+"/"+collection+"/"+channel+"/nominal/";
 
 
-  dataName  = channel.substr(0, channel.find("channel")); dataName[0] = toupper(dataName[0]) ; dataName = "DATA_Single"+dataName;
-  dataFileName = PrefixrootFile+"DATA."+dataName+"_"+year+"_noTree.root";
+dataName  = channel.substr(0, channel.find("channel")); dataName[0] = toupper(dataName[0]) ; dataName = "DATA_Single"+dataName;
+dataFileName = PrefixrootFile+"DATA."+dataName+"_"+year+"_noTree.root";
 
-  x_var.reset(new RooRealVar("x_var", "m_{Zprime} (GeV)", x_lo, x_hi));
-  ws.reset(new RooWorkspace((unique_name.substr(1)).c_str()));
-  DataCard.open (workingDir+"datacards/OutputFit_"+histFolder+".txt");
-  DataCard << "=== RooFit data fit result to be entered in datacard === " << std::endl;
-  if (doFtest) output.open(workingDir+"datacards/output_"+year+"_"+histFolder+".txt");
-  SignalProperties.open(workingDir+"datacards/SignalProperties_"+year+"_"+histFolder+".txt");
-
-
-
-  nameXaxis = "m(Z')";
-  nameYaxis = doBinWidth? "Events/bin" :"Events";
-  nameRatioaxis = doPlotRatio?"Hist/Fit": "Pull";
-
-  // rebin = 30;
-  rebin = 0;
-  bin = 50;
-  bin2 = 100;
-  for (double i = 0; i < 1500; i+=bin) bins_Zprime_rebin.push_back(i);
-  for (double i = 1500+bin; i <= 4000; i+=bin2) bins_Zprime_rebin.push_back(i);
-  bins_Zprime_rebin.push_back(4000);
-
-  for (std::string name : NameSgPars) SgPars[name] = std::vector<double>(MassPoints.size(), 0);
+x_var.reset(new RooRealVar("x_var", "m_{Zprime} (GeV)", x_lo, x_hi));
+ws.reset(new RooWorkspace((unique_name.substr(1)).c_str()));
+DataCard.open (workingDir+"datacards/OutputFit_"+histFolder+".txt");
+DataCard << "=== RooFit data fit result to be entered in datacard === " << std::endl;
+if (doFtest) output.open(workingDir+"datacards/output_"+year+"_"+histFolder+".txt");
+SignalProperties.open(workingDir+"datacards/SignalProperties_"+year+"_"+histFolder+".txt");
 
 
-  // xsec_ref_ = 0.1; // this is to mantain the signal strenght close to 1; (remember to multiply for this Normalization when plotting)
-  xsec_ref_ = (xsec_ref.find(histFolder) != xsec_ref.end())? xsec_ref.at(histFolder): xsec_ref.at("default_value"); // default_value = 1
-  DataCard << "xsec_ref " << " " << xsec_ref_ <<std::endl;
+
+nameXaxis = "m(Z')";
+nameYaxis = doBinWidth? "Events/bin" :"Events";
+nameRatioaxis = doPlotRatio?"Hist/Fit": "Pull";
+
+// rebin = 30;
+rebin = 0;
+bin = 50;
+bin2 = 100;
+for (double i = 0; i < 1500; i+=bin) bins_Zprime_rebin.push_back(i);
+for (double i = 1500+bin; i <= 4000; i+=bin2) bins_Zprime_rebin.push_back(i);
+bins_Zprime_rebin.push_back(4000);
+
+for (std::string name : NameSgPars) SgPars[name] = std::vector<double>(MassPoints.size(), 0);
 
 
-  for (auto x : Colors) { for (auto mode : Modes) doFits_map[mode][x.first]  = false; }
+// xsec_ref_ = 0.1; // this is to mantain the signal strenght close to 1; (remember to multiply for this Normalization when plotting)
+xsec_ref_ = (xsec_ref.find(histFolder) != xsec_ref.end())? xsec_ref.at(histFolder): xsec_ref.at("default_value"); // default_value = 1
+DataCard << "xsec_ref " << " " << xsec_ref_ <<std::endl;
 
-  // for (auto x : { "NO", "CB", "Exp_1", "Exp_2", "Exp_3", "Exp_4", "Exp_5", "Exp_6"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-  // for (auto x : {"CB", "Exp_1", "Exp_2", "Exp_3" }) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-  for (auto x : {"Exp_2", "Exp_3" }) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-  // for (auto x : { "NO", "CB", "Exp_3"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-  // BkgPdf4p, BkgPdf3p TODO
-  // for (auto x : { "NO", "CB", "Exp_4"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-  // for (auto x : { "CB"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+
+for (auto x : Colors) { for (auto mode : Modes) doFits_map[mode][x.first]  = false; }
+
+// for (auto x : { "NO", "CB", "Exp_1", "Exp_2", "Exp_3", "Exp_4", "Exp_5", "Exp_6"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+// for (auto x : {"CB", "Exp_1", "Exp_2", "Exp_3" }) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+for (auto x : {"Exp_2", "Exp_3" }) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+// for (auto x : { "NO", "CB", "Exp_3"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+// BkgPdf4p, BkgPdf3p TODO
+// for (auto x : { "NO", "CB", "Exp_4"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+// for (auto x : { "CB"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
 
 
 };
@@ -229,7 +241,6 @@ void CreateRooWorkspace::LoadFiles() {
   # ##       ##     ## ##     ## ##     ##    ##     ##  ##  ##    ##    ##    ##     ## ##    ##  ##    ##  ##     ## ##     ## ##    ##
   # ########  #######  ##     ## ########     ##     ## ####  ######     ##     #######   ######   ##     ## ##     ## ##     ##  ######
   */
-
 
   std::unordered_map<std::string, std::unique_ptr<TFile>> f_map;
 
@@ -278,11 +289,12 @@ void CreateRooWorkspace::LoadFiles() {
       std::string fname  = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+SgName+"_"+year+"_noTree.root";
       std::string hmname = GetSgName(mass, syst);
       std::string hname  = SRname;
-      if (!isNominalFolder(syst)) fname = TString(fname).ReplaceAll("nominal",syst);
-      else if (!isNominalSyst(syst)) hname = TString(hname).ReplaceAll(Histtype,Histtype+"_"+syst);
+      if (!isNominalFolder(syst)) fname = TString(fname).ReplaceAll("nominal",syst).ReplaceAll("Up","_up").ReplaceAll("Down","_down"); // Be careful if you change it. It's needed as input to combine!!
+      else if (!isNominalSyst(syst)) hname = TString(hname).ReplaceAll(Histtype,Histtype+"_"+syst).ReplaceAll("Up","_up").ReplaceAll("Down","_down"); // Be careful if you change it. It's needed as input to combine!!
       if (debug) std::cout << "Opening\t" << fname << " " << hmname << " " << hname << '\n';
       f_map[hmname].reset(new TFile(fname.c_str()));
       histo_map[hmname].reset((TH1F*)((TH1F*)f_map[hmname]->Get((hname).c_str()))->Clone((hmname+" SR").c_str()));
+      // std::cout << "FIND ME " << hmname << " " << histo_map[hmname].get()->Integral()<< std::endl;
     }
   }
 
@@ -598,7 +610,7 @@ void CreateRooWorkspace::DoFits() {
   for (const auto& x : histo_map) {
     fit_min[x.first] = GetRange(x.second.get(),fit_lo);
     fit_max[x.first] = GetRange(x.second.get(),fit_hi);
-    if ("DY_SR"==x.first) fit_min[x.first] = GetRange(x.second.get(),fit_SR);
+    // if ("DY_SR"==x.first) fit_min[x.first] = GetRange(x.second.get(),fit_SR);
     std::string mass = x.first;
     if (mass.compare(0,1,"M")==0) {
       CalculateSignalFittingRange(std::stoi(mass.substr(1, mass.find("_")-1)), fit_min[x.first], fit_max[x.first], plot_min[x.first], plot_max[x.first], y_max[x.first]); // TODO
@@ -606,7 +618,6 @@ void CreateRooWorkspace::DoFits() {
       nEventsSignal[x.first] = CalculateIntegral(histo_map[x.first].get(),fit_min[x.first],fit_max[x.first],doBinWidth);
     }
   }
-
 
   std::cout << "********************" << '\n';
   std::cout << "*  Background Fits *" << '\n';
@@ -626,10 +637,10 @@ void CreateRooWorkspace::DoFits() {
   }
 
   for (auto mode: Modes) {
-    if (mode!="bkg_pred" && mode!="DY_CR" && mode!="DY_SR") continue;
+    // if (mode!="bkg_pred" && mode!="DY_CR" && mode!="DY_SR") continue;
+    if (mode=="main_bkg_CR") continue;
     for (auto const& [model,dofit] : doFits_map[mode] ) {
       if (!dofit) continue;
-      std::cout << "PDF FIT " << mode << "\t" << model << '\n';
       if (mode=="bkg_pred" || mode=="data") { //TODO check this
         FitRes_map[mode][model].reset(Fits_map[mode][model]->fitTo(*rooHist_map[mode], RooFit::Range(fit_min[mode], fit_max[mode]), RooFit::SumW2Error(kFALSE), RooFit::Minimizer("Minuit2"), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
       } else {
@@ -880,7 +891,6 @@ void CreateRooWorkspace::PlotSignals(std::string syst) {
     ndf -=npf;
     double pv = TMath::Prob(chi2, ndf)*100;
     chi2 /=ndf;
-    // std::cout << "FIND ME " << mass << " " << year << " " << channel << " " << chi2 << " " << chi2*ndf << " " << ndf << '\n';
     SignalProperties << SgName+" signal number of events = " << nEventsSignal[SgName] << std::endl;
     SignalProperties << " chi2-ndf-pvalue "  << chi2 << " " << ndf << " " << pv << std::endl;
     SignalProperties << fitPars[SgName][0]->GetName() << "   param   " << fitPars[SgName][0]->getVal() << " " << fitPars[SgName][0]->getError() << std::endl;
@@ -889,7 +899,6 @@ void CreateRooWorkspace::PlotSignals(std::string syst) {
     SignalProperties << fitPars[SgName][3]->GetName() << "   param   " << fitPars[SgName][3]->getVal() << " " << fitPars[SgName][3]->getError() << std::endl;
 
 
-    std::cout << "FIND ME SIGNAL " << SgName << " " << FitSignal << '\n';
     nEventsSignal[SgName] /= CalculateFractionAreaPDF(Fits_map[SgName][FitSignal].get(), *x_var.get(), fit_min[SgName], fit_max[SgName]);
     SignalProperties << SgName+" signal number of events corrected = " << nEventsSignal[SgName] << std::endl;
 
@@ -1178,10 +1187,7 @@ void CreateRooWorkspace::InputDatacards(){
   for (auto mode: Modes) {
     for (auto const& [model,dofit] : doFits_map[mode] ) {
       if (!dofit || (model.find("Exp")!= std::string::npos && model!="Exp_2" && model!="Exp_3" && model!="Exp_4") ) continue;
-
-      std::cout << "FIND ME BKG " << mode << " " << model << '\n';
       double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_lo, fit_hi);
-
       if (debug) std::cout << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << std::endl;
       DataCard  << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << std::endl;
 
@@ -1255,12 +1261,10 @@ int main(int argc, char** argv){
 
   bool isHbb = false;
   // std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD"};
-  std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDptdep", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDpt1000", "btag_DeepBoosted_H4qvsQCDpt1000p2", "btag_DeepBoosted_H4qvsQCDpt1000p02",
-  "btag_DeepBoosted_H4qvsQCDptdep_x3", "btag_DeepBoosted_H4qvsQCDptdep_x2x3", "btag_DeepBoosted_H4qvsQCDptdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x3",
-  "btag_DeepBoosted_H4qvsQCDmassdep2_x3", "btag_DeepBoosted_H4qvsQCDmassdep_x2x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x2" };
+  std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_2", "btag_DeepBoosted_H4qvsQCDmassdep_3", "btag_DeepBoosted_H4qvsQCDmassdep_bb", "btag_DeepBoosted_H4qvsQCDmassdep_cc", "btag_DeepBoosted_H4qvsQCDmassdep_gg", "btag_DeepBoosted_H4qvsQCDmassdep_cc_2", "btag_DeepBoosted_H4qvsQCDmassdep_gg_2", "btag_DeepBoosted_H4qvsQCDmassdep_cc_3", "btag_DeepBoosted_H4qvsQCDmassdep_gg_3", "tau42"};
   if (isHbb) histFolders = {"btag_DeepBoosted_HbbvsQCD", "btag_DeepBoosted_probHbb", "tau21" };
   std::vector<std::string> collections = {"Puppi"};
-  std::vector<std::string> channels = {"muonchannel", "electronchannel"};
+  std::vector<std::string> channels = {"muonchannel", "electronchannel", "invisiblechannel"};
   std::vector<std::string> years = {"2016", "2017", "2018", "RunII"};
 
 
@@ -1275,6 +1279,7 @@ int main(int argc, char** argv){
       if (std::find(channels.begin(), channels.end(), argv[i]) != channels.end() ) channel = argv[i];
       if (std::find(years.begin(), years.end(), argv[i]) != years.end() ) year = argv[i];
     }
+    if (channel=="invisiblechannel") return 0 ;
     std::cout << histFolder << " " << channel << " " << collection << " " << year << '\n';
     roo.reset(new CreateRooWorkspace(year,collection, channel, histFolder));
     roo->Process();
@@ -1285,6 +1290,7 @@ int main(int argc, char** argv){
       for (std::string collection: collections) {
         for (std::string channel: channels) {
           for (std::string histFolder: histFolders) {
+            if (channel=="invisiblechannel") continue;
             roo.reset(new CreateRooWorkspace(year,collection, channel, histFolder));
             roo->Process();
           }

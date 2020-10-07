@@ -164,8 +164,10 @@ public:
   void PlotTranferFunction();
   void InputDatacards();
   void CalculateSignalFittingRange(double mass, double& rangeLo, double& rangeHi, double& plotLo, double& plotHi, double& ymax);
-  inline bool isNominalFolder(std::string syst) { return (syst=="nominal" || syst=="PU_up" || syst=="PU_down");};
-  inline bool isNominalSyst(std::string syst) { return syst=="nominal";}; // TODO
+  inline bool FindInVector(const std::vector<std::string>& vec, const std::string& str) {return (std::find(vec.begin(), vec.end(), str) != vec.end());};
+  inline bool FindInString(const std::string& search, const std::string& str) {return str.find(search)!=std::string::npos ;}
+  inline bool isNominalFolder(std::string syst) {return (isNominalSyst(syst) || FindInString("pu",syst) || FindInString("btag",syst) || FindInString("prefiring",syst) || FindInString("id",syst) || FindInString("tracking",syst) || FindInString("trigger",syst) || FindInString("reco",syst));};
+  inline bool isNominalSyst(std::string syst) { return FindInString("nominal",syst);}; // TODO
 
 private:
   std::string year, collection, channel, histFolder;
@@ -173,7 +175,8 @@ private:
   std::string workingDir, unique_name_complete, unique_name, filepath;
   std::string SRname, CRname;
 
-  std::vector<std::string> SystNames = {"nominal", "JEC_up", "JEC_down", "JER_up", "JER_down", "PU_up", "PU_down"};
+  std::vector<std::string> SystNames = {"nominal", "all"};
+  // std::vector<std::string> SystNames = {"nominal"};
   // std::vector<std::string> BkgNames = {"DY", "TTbar", "WZ", "WW", "ZZ"}; //TODO
   std::vector<std::string> BkgNames = {"DY", "TTbar", "WZ","ZZ"};
   std::vector<std::string> Modes = {"bkg_pred", "data", "main_bkg_CR", "main_bkg_SR", "DY_CR", "DY_SR"};
@@ -211,7 +214,8 @@ private:
   std::string studies="nominal";
   bool isHbb = false;
   bool fitCR = true;
-  bool doObs = false;
+  // bool doObs = false;
+  bool doObs = true; //TODO
 
 
   std::string Module, Histtype, HistName;
@@ -235,13 +239,14 @@ private:
 
   TString extra_text = doFtest? "_Ftest_": "";
 
-  double x_lo     = 200;
+  double x_lo     = 1000;
   double x_hi     = 10000;
-  double plot_lo  = 200;
+  double plot_lo  = 1000;
   double plot_hi  = 4000;
   double plot_ylo = 1.1*1e-03;
   double plot_yhi = 1e07;
-  double fit_lo   = 600;
+  // double fit_lo   = 600;
+  double fit_lo   = 1100;
   double fit_hi   = 4000;
   double fit_SR   = 810;
 
