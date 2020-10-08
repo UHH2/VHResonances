@@ -109,7 +109,7 @@ void SignalRegionModule::PrintInputs() {
 
 std::string SignalRegionModule::GetSystName(const std::string& syst, const std::string& var) {
   string tag = "weight_";
-  if (FindInString("id", syst) || FindInString("tracking", syst) || FindInString("trigger", syst) || FindInString("reco", syst)) {
+  if (FindInString("id", syst) || FindInString("isolation", syst) || FindInString("tracking", syst) || FindInString("trigger", syst) || FindInString("reco", syst)) {
     tag += MB["muonchannel"]? "sfmu_": (MB["electronchannel"]? "sfelec_": "");
   }
   tag += syst;

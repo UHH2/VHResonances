@@ -18,7 +18,7 @@ FinalStateMatching::FinalStateMatching(Context & ctx) {
   h_ZDecay_ = ctx.declare_event_output<float>("ZDecay");
   h_HDecay_ = ctx.declare_event_output<float>("HDecay");
   h_ZprimeDecay_ = ctx.declare_event_output<float>("ZprimeDecay");
-  skipMatching = !((ctx.get("dataset_type") == "MC" ) && (ctx.get("dataset_version").find("Zprime") != std::string::npos));
+  skipMatching = !((ctx.get("dataset_type") == "MC" ) && FindInString("Zprime", ctx.get("dataset_version")));
   GenParticles_printer.reset(new GenParticlesPrinter(ctx));
 }
 
@@ -458,43 +458,39 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
   muonchannel = string2bool(ctx.get("muonchannel"));
   electronchannel = string2bool(ctx.get("electronchannel"));
 
+  std::string weight_postfix = "";
+  double sys = 0.;
+  bool etaYaxis = false;
   // https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonReferenceSelectionAndCalibrationsRun2#Special_systematic_uncertainties
   for (auto& sf : ScaleFactors_map.at(year)) {
-    double sys = 0.;
-    std::string weight_postfix = "";
-    if (muonchannel && sf.first.find("Muon") != std::string::npos ) {
+    if (muonchannel && FindInString("Muon", sf.first) ) {
       std::string fname = "VHResonances/Analysis/ScaleFactors/Muons/"+sf.second.first+".root";
-      if (sf.first.find("ID") != std::string::npos || sf.first.find("Tracking") != std::string::npos){
-        sys = 0.;
-        weight_postfix = sf.first.find("ID") != std::string::npos ? "id":"tracking";
-      } else if (sf.first.find("Trigger") != std::string::npos) {
-        sys = 2.;
-        weight_postfix = "trigger";
-      } else if (sf.first.find("Reconstruction") != std::string::npos) {
-        sys = 0.;
-        weight_postfix = "reco";
+      if (FindInString("ID", sf.first)){
+        weight_postfix = "id";        sys = 0.; etaYaxis = true;
+      } else if (FindInString("Trigger", sf.first)) {
+        weight_postfix = "trigger";   sys = 2.; etaYaxis = false;
+      } else if (FindInString("Isolation", sf.first)) {
+        weight_postfix = "iso";       sys = 0.; etaYaxis = FindInString("2016", year) ? false : true;
+      } else if (FindInString("Tracking", sf.first)){
+        weight_postfix = "tracking";  sys = 0.; etaYaxis = false;
+      } else if (FindInString("Reconstruction", sf.first)) {
+        weight_postfix = "reco";      sys = 0.; etaYaxis = false;
       } else throw invalid_argument("In ScaleFactorsManager.cxx: No implementation for "+sf.first);
-      SFs_muo[sf.first].reset(new MCMuonScaleFactor(ctx, fname, sf.second.second, sys, weight_postfix));
+      SFs_muo[sf.first].reset(new MCMuonScaleFactor(ctx, fname, sf.second.second, sys, weight_postfix, etaYaxis));
     }
-    if (electronchannel && sf.first.find("Electron") != std::string::npos ) {
+    if (electronchannel && FindInString("Electron", sf.first) ) {
       std::string fname = "VHResonances/Analysis/ScaleFactors/Electrons/"+sf.second.first+".root";
-      if (sf.first.find("ID") != std::string::npos){
-        sys = 0.;
-        weight_postfix = "id";
-      } else if (sf.first.find("Trigger") != std::string::npos) {
-        sys = 0.;
-        weight_postfix = "trigger";
-      } else if (sf.first.find("Reconstruction") != std::string::npos) {
-        sys = 0.;
-        weight_postfix = "reco";
+      if (FindInString("ID", sf.first)){
+        weight_postfix = "id";        sys = 0.;  etaYaxis = false;
+      } else if (FindInString("Trigger", sf.first)) {
+        weight_postfix = "trigger";   sys = 0.;  etaYaxis = false;
+      } else if (FindInString("Reconstruction", sf.first)) {
+        weight_postfix = "reco";      sys = 0.;  etaYaxis = false;
       } else throw invalid_argument("In ScaleFactorsManager.cxx: No implementation for "+sf.first);
       if (FindInString("2017",year)) sys += 1.0;
       SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys, weight_postfix, "nominal", "electrons", sf.second.second));
     }
   }
-
-  for (auto& sf : SFs_muo) cout << sf.first<<endl; //TODO
-  for (auto& sf : SFs_ele) cout << sf.first<<endl; //TODO
 
 }
 
@@ -509,6 +505,7 @@ bool ScaleFactorsManager::process(uhh2::Event& event){
     for(const auto & muid: {0, 1}){
       if (cand.discriminator("MuonID"+std::to_string(muid+1))>=0) SFs_muo["Muon_HighPtID"]->process_onemuon(event,muid);
       else SFs_muo["Muon_TrkHighPtID"]->process_onemuon(event,muid);
+      SFs_muo["Muon_Isolation"]->process_onemuon(event,muid);
       SFs_muo["Muon_Tracking"]->process_onemuon(event,muid);
       SFs_muo["Muon_Reconstruction"]->process_onemuon(event,muid);
     }
