@@ -157,7 +157,8 @@ void CreateRooWorkspace::SetEnv() {
 
   if (FindInVector(SystNames, "all")) {
     SystNames.erase(SystNames.begin()+FindInVector(SystNames,"all"));
-    for (std::string syst: {"JEC", "JER", "MuonScale", "pu", "btag", "prefiring", "id", "tracking", "trigger", "reco"}) {
+    for (std::string syst: {"JEC", "JER", "MuonScale", "pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco"}) {
+      if (!FindInString("muon",channel) && FindInString("isolation",syst)) continue;
       if (!FindInString("muon",channel) && FindInString("tracking",syst)) continue;
       if (!FindInString("muon",channel) && FindInString("MuonScale",syst)) continue;
       for (std::string var: {"Up","Down"}) { // Be careful if you change it. It's needed as input to combine!!

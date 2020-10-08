@@ -21,11 +21,11 @@ const float min_topjet_pt = 200.0;
 // const float min_lepton_pt = 30.0;
 const float min_lepton_pt = 52.0;
 const float min_lepton_eta = 2.4;
-// const float max_lepton_iso = 0.15;
+const float max_muon_iso = 0.1;
 // const float min_jet_dilep_delta_phi = 2.7;
 const float min_MET_pt = 250.0;
 
-const float min_dilep_pt = 150;
+const float min_dilep_pt = 200;
 const float min_DR_dilep = 0.0;
 const float max_DR_dilep = 1.0;
 const float min_jet_dilep_delta_phi = M_PI/2;
@@ -157,6 +157,7 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Muon_Reconstruction",      std::pair("Muon_Reconstruction_SF_2016", "Reconstruction_SF")},
     { "Muon_HighPtID",            std::pair("Muon_ID_SF_2016_RunBCDEFGH", "NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt")},
     { "Muon_TrkHighPtID",         std::pair("Muon_ID_SF_2016_TrkHighPt", "scalefactor")},
+    { "Muon_Isolation",           std::pair("Muon_Isolation_SF_2016_RunBCDEFGH", "NUM_TightRelIso_DEN_TightIDandIPCut_eta_pt")},
     { "Muon_Trigger",             std::pair("Muon_Trigger_SF_2016_RunBCDEFGH", "Mu50_OR_TkMu50_PtEtaBins/abseta_pt_ratio")},
     { "Electron_LooseID",         std::pair("Electron_ID_SF_2016_loose", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_2016", "EGamma_SF2D")},
@@ -167,6 +168,7 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Muon_Reconstruction",      std::pair("Muon_Reconstruction_SF_2017", "Reconstruction_SF")},
     { "Muon_HighPtID",            std::pair("Muon_ID_SF_2017_RunBCDEF", "NUM_HighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta")},
     { "Muon_TrkHighPtID",         std::pair("Muon_ID_SF_2017_RunBCDEF", "NUM_TrkHighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta")},
+    { "Muon_Isolation",           std::pair("Muon_Isolation_SF_2017_RunBCDEF", "NUM_TightRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta")},
     { "Muon_Trigger",             std::pair("Muon_Trigger_SF_2017_RunBCDEF", "Mu50_PtEtaBins/abseta_pt_ratio")},
     { "Electron_LooseID",         std::pair("Electron_ID_SF_2017_loose", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_2017", "EGamma_SF2D")},
@@ -177,6 +179,7 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Muon_Reconstruction",      std::pair("Muon_Reconstruction_SF_2018", "Reconstruction_SF")},
     { "Muon_HighPtID",            std::pair("Muon_ID_SF_2018_RunABCD", "NUM_HighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta")},
     { "Muon_TrkHighPtID",         std::pair("Muon_ID_SF_2018_RunABCD", "NUM_TrkHighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta")},
+    { "Muon_Isolation",           std::pair("Muon_Isolation_SF_2018_RunABCD", "NUM_TightRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta")},
     { "Muon_Trigger",             std::pair("Muon_Trigger_SF_2018", "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/abseta_pt_ratio")},
     { "Electron_LooseID",         std::pair("Electron_ID_SF_2018_loose", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_2018", "EGamma_SF2D")},

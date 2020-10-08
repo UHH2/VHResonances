@@ -23,6 +23,23 @@ def main():
     file1.Close()
     file2.Close()
 
+    hname = "NUM_TightRelIso_DEN_TightIDandIPCut_eta_pt"
+    file1 = ROOT.TFile(dir+"Muon_Isolation_SF_2016_RunBCDEF.root")
+    file2 = ROOT.TFile(dir+"Muon_Isolation_SF_2016_RunGH.root")
+    h1 = file1.Get(hname)
+    h2 = file2.Get(hname)
+    Lumi1 = 19.65606276
+    Lumi2 = 16.226452636
+    h1.Scale(Lumi1)
+    h2.Scale(Lumi2)
+    h1.Add(h2)
+    h1.Scale(1./(Lumi1+Lumi2))
+    file_ = ROOT.TFile(dir+"Muon_Isolation_SF_2016_RunBCDEFGH.root", "RECREATE")
+    h1.Write(hname)
+    file_.Close()
+    file1.Close()
+    file2.Close()
+
     hdir  = "Mu50_OR_TkMu50_PtEtaBins/"
     hname = "abseta_pt_ratio"
     file1 = ROOT.TFile(dir+"Muon_Trigger_SF_2016_RunBCDEF.root")

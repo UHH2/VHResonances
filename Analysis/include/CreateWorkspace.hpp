@@ -166,7 +166,7 @@ public:
   void CalculateSignalFittingRange(double mass, double& rangeLo, double& rangeHi, double& plotLo, double& plotHi, double& ymax);
   inline bool FindInVector(const std::vector<std::string>& vec, const std::string& str) {return (std::find(vec.begin(), vec.end(), str) != vec.end());};
   inline bool FindInString(const std::string& search, const std::string& str) {return str.find(search)!=std::string::npos ;}
-  inline bool isNominalFolder(std::string syst) {return (isNominalSyst(syst) || FindInString("pu",syst) || FindInString("btag",syst) || FindInString("prefiring",syst) || FindInString("id",syst) || FindInString("tracking",syst) || FindInString("trigger",syst) || FindInString("reco",syst));};
+  inline bool isNominalFolder(std::string syst) {return (isNominalSyst(syst) || FindInString("pu",syst) || FindInString("btag",syst) || FindInString("prefiring",syst) || FindInString("id",syst) || FindInString("isolation",syst) || FindInString("tracking",syst) || FindInString("trigger",syst) || FindInString("reco",syst));};
   inline bool isNominalSyst(std::string syst) { return FindInString("nominal",syst);}; // TODO
 
 private:

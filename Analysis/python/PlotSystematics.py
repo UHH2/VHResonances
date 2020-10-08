@@ -44,6 +44,8 @@ class PlotSystematics(VariablesBase):
                        "prefiring_down":    ROOT.kCyan+1,
                        "id_up":             ROOT.kOrange+1,
                        "id_down":           ROOT.kOrange,
+                       "isolation_up":      ROOT.kkCyan+3,
+                       "isolation_down":    ROOT.kkCyan,
                        "tracking_up":       ROOT.kOrange+3,
                        "tracking_down":     ROOT.kOrange+4,
                        "trigger_up":        ROOT.kGreen+2,
