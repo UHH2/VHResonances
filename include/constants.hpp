@@ -21,11 +21,11 @@ const float min_topjet_pt = 200.0;
 // const float min_lepton_pt = 30.0;
 const float min_lepton_pt = 52.0;
 const float min_lepton_eta = 2.4;
-// const float max_lepton_iso = 0.15;
+const float max_muon_iso = 0.1;
 // const float min_jet_dilep_delta_phi = 2.7;
 const float min_MET_pt = 250.0;
 
-const float min_dilep_pt = 150;
+const float min_dilep_pt = 200;
 const float min_DR_dilep = 0.0;
 const float max_DR_dilep = 1.0;
 const float min_jet_dilep_delta_phi = M_PI/2;
@@ -35,7 +35,7 @@ const float min_Dphi_AK4jet_MET = 0.5;
 
 const float min_Z_pt_ZH_mass = 0.2;
 const float min_Z_pt_ZH_mass_invisible = 0.4;
-
+const float min_ZH_mass = 700;
 
 const BTag::algo BTag_algo = BTag::DEEPCSV;
 const BTag::wp BTag_wp = BTag::WP_LOOSE;
@@ -157,6 +157,7 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Muon_Reconstruction",      std::pair("Muon_Reconstruction_SF_2016", "Reconstruction_SF")},
     { "Muon_HighPtID",            std::pair("Muon_ID_SF_2016_RunBCDEFGH", "NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt")},
     { "Muon_TrkHighPtID",         std::pair("Muon_ID_SF_2016_TrkHighPt", "scalefactor")},
+    { "Muon_Isolation",           std::pair("Muon_Isolation_SF_2016_RunBCDEFGH", "NUM_TightRelIso_DEN_TightIDandIPCut_eta_pt")},
     { "Muon_Trigger",             std::pair("Muon_Trigger_SF_2016_RunBCDEFGH", "Mu50_OR_TkMu50_PtEtaBins/abseta_pt_ratio")},
     { "Electron_LooseID",         std::pair("Electron_ID_SF_2016_loose", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_2016", "EGamma_SF2D")},
@@ -167,6 +168,7 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Muon_Reconstruction",      std::pair("Muon_Reconstruction_SF_2017", "Reconstruction_SF")},
     { "Muon_HighPtID",            std::pair("Muon_ID_SF_2017_RunBCDEF", "NUM_HighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta")},
     { "Muon_TrkHighPtID",         std::pair("Muon_ID_SF_2017_RunBCDEF", "NUM_TrkHighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta")},
+    { "Muon_Isolation",           std::pair("Muon_Isolation_SF_2017_RunBCDEF", "NUM_TightRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta")},
     { "Muon_Trigger",             std::pair("Muon_Trigger_SF_2017_RunBCDEF", "Mu50_PtEtaBins/abseta_pt_ratio")},
     { "Electron_LooseID",         std::pair("Electron_ID_SF_2017_loose", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_2017", "EGamma_SF2D")},
@@ -177,6 +179,7 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Muon_Reconstruction",      std::pair("Muon_Reconstruction_SF_2018", "Reconstruction_SF")},
     { "Muon_HighPtID",            std::pair("Muon_ID_SF_2018_RunABCD", "NUM_HighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta")},
     { "Muon_TrkHighPtID",         std::pair("Muon_ID_SF_2018_RunABCD", "NUM_TrkHighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta")},
+    { "Muon_Isolation",           std::pair("Muon_Isolation_SF_2018_RunABCD", "NUM_TightRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta")},
     { "Muon_Trigger",             std::pair("Muon_Trigger_SF_2018", "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/abseta_pt_ratio")},
     { "Electron_LooseID",         std::pair("Electron_ID_SF_2018_loose", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_2018", "EGamma_SF2D")},
@@ -198,57 +201,8 @@ inline double PtToMass2(double pt) { return (pt-22.5)/0.36;}
 
 inline double MassToPt2(double mass) { return mass*0.36 +22.5;}
 
-
-
-
-// const double PtDepentdentCut_value_x3 = -1000; // Fit on pt exp(x0+x3)
-// inline double PtDepentdentCut_x3(double pt)   { return 5.65e-03+1.90e+07*TMath::Power(PtToMass(pt),-3);}
-// const double PtDepentdentCut_value_x2x3 = -2000; // Fit on pt exp(x0+x2+x3)
-// inline double PtDepentdentCut_x2x3(double pt) { return 9.31e-03-1.46e+04*TMath::Power(PtToMass(pt),-2)+2.60e+07*TMath::Power(PtToMass(pt),-3);}
-// const double PtDepentdentCut_value_x1x3 = -3000; // Fit on pt exp(x0+x1+x3)
-// inline double PtDepentdentCut_x1x3(double pt) { return 1.25e-02-1.31e+01*TMath::Power(PtToMass(pt),-1)+2.15e+07*TMath::Power(PtToMass(pt),-3);}
-
-
-// const double MassDepentdentCut_value_x3 = -100; // Fit on Mass exp(x0+x3). pt = m/2
-// inline double MassDepentdentCut_x3(double pt) { double x = PtToMass(pt); return 5.08e-03+2.72e07*TMath::Power(x,-3);}
-// const double MassDepentdentCut2_value_x3 = -150; // Fit on Mass exp(x0+x3). Fit on pt vs m
-// inline double MassDepentdentCut2_x3(double pt) { double x = PtToMass(pt); return 5.08e-03+2.72e07*TMath::Power(x,-3);}
-// const double MassDepentdentCut_value_x2x3 = -200; // Fit on Mass exp(x0+x2+x3). pt = m/2
-// inline double MassDepentdentCut_x2x3(double pt) { double x = PtToMass(pt); return 4.06e-03+1.15e+04*TMath::Power(x,-2)+1.83e+07*TMath::Power(x,-3);}
-// const double MassDepentdentCut_value_x1x3 = -300; // Fit on Mass exp(x0+x1+x3). pt = m/2
-// inline double MassDepentdentCut_x1x3(double pt) { double x = PtToMass(pt); return 3.32e-03+5.83*TMath::Power(x,-1)+2.41e+07*TMath::Power(x,-3);}
-// const double MassDepentdentCut_value_x1x2 = -400; // Fit on Mass exp(x0+x1+x2). pt = m/2
-// inline double MassDepentdentCut_x1x2(double pt) { double x = PtToMass(pt); return 6.72e-03-1.97e+01*TMath::Power(x,-1)+4.83e+04*TMath::Power(x,-2);}
-
-
-const double PtDepentdentCut_value_x3 = -1000; // Fit on pt exp(x0+x3)
-inline double PtDepentdentCut_x3(double pt)   { return 5.8e-03+1.9e+07*TMath::Power(PtToMass(pt),-3);}
-const double PtDepentdentCut_value_x2x3 = -2000; // Fit on pt exp(x0+x2+x3)
-inline double PtDepentdentCut_x2x3(double pt) { return 8.6e-03-1.3e+04*TMath::Power(PtToMass(pt),-2)+2.5e+07*TMath::Power(PtToMass(pt),-3);}
-const double PtDepentdentCut_value_x1x3 = -3000; // Fit on pt exp(x0+x1+x3)
-inline double PtDepentdentCut_x1x3(double pt) { return 1.1e-02-1.1e+01*TMath::Power(PtToMass(pt),-1)+2.1e+07*TMath::Power(PtToMass(pt),-3);}
-const double PtDepentdentCut_value_x1x2 = -4000; // Fit on pt exp(x0+x1+x2)
-inline double PtDepentdentCut_x1x2(double pt) { return 2.4e-02-6.7e+01*TMath::Power(PtToMass(pt),-1)+6.7e+04*TMath::Power(PtToMass(pt),-2);}
-const double PtDepentdentCut_value_x2 = -5000; // Fit on pt exp(x0+x2)
-inline double PtDepentdentCut_x2(double pt) { return 2.3e-03+2.3e04*TMath::Power(PtToMass(pt),-2);}
-const double PtDepentdentCut_value_sqrt = -6000; // Fit on pt [0]+[2]*pow(x,[1])
-inline double PtDepentdentCut_sqrt(double pt) { return 3.2e-03+7.8e+05*TMath::Power(PtToMass(pt),-2.5e+00);}
-
-
-const double MassDepentdentCut_value_x3 = -100; // Fit on Mass exp(x0+x3). pt = m/2
-inline double MassDepentdentCut_x3(double pt) { double x = PtToMass(pt); return 5.03e-03+2.7e07*TMath::Power(x,-3);}
-const double MassDepentdentCut2_value_x3 = -150; // Fit on Mass exp(x0+x3). Fit on pt vs m
-inline double MassDepentdentCut2_x3(double pt) { double x = PtToMass(pt); return 5.03e-03+2.7e07*TMath::Power(x,-3);}
-const double MassDepentdentCut_value_x2x3 = -200; // Fit on Mass exp(x0+x2+x3). pt = m/2
-inline double MassDepentdentCut_x2x3(double pt) { double x = PtToMass(pt); return 4.3e-03+9.7e+03*TMath::Power(x,-2)+2.0e+07*TMath::Power(x,-3);}
-const double MassDepentdentCut_value_x1x3 = -300; // Fit on Mass exp(x0+x1+x3). pt = m/2
-inline double MassDepentdentCut_x1x3(double pt) { double x = PtToMass(pt); return 3.8e-03+4.8e+00*TMath::Power(x,-1)+2.5e+07*TMath::Power(x,-3);}
-const double MassDepentdentCut_value_x1x2 = -400; // Fit on Mass exp(x0+x1+x2). pt = m/2
-inline double MassDepentdentCut_x1x2(double pt) { double x = PtToMass(pt); return 7.8e-03-2.3e+01*TMath::Power(x,-1)+5.0e+04*TMath::Power(x,-2);}
-const double MassDepentdentCut_value_x2 = -500; // Fit on Mass exp(x0+x2). pt = m/2
-inline double MassDepentdentCut_x2(double pt) { double x = PtToMass(pt); return 2.3e-03+2.3e04*TMath::Power(x,-2);}
-const double MassDepentdentCut_value_sqrt = -600; // Fit on Mass [0]+[2]*pow(x,[1]). pt = m/2
-inline double MassDepentdentCut_sqrt(double pt) { double x = PtToMass(pt); return 2.5e-03+5.6e+04*TMath::Power(x,-2.1e+00);}
+const double MassDepentdentCut_value = -10;
+inline double MassDepentdentCut(double pt) { double x = PtToMass(pt); return 5.03e-03+1.7e07*TMath::Power(x,-3);}
 
 inline const char* BoolToString(bool b) { return b ? "true" : "false";}
 
@@ -357,4 +311,25 @@ inline MatchingStatus StringToMatchingStatus(const std::string & tagname) {
   if(tagname == "FullLep")          return FullLep;
   if(tagname == "SemiMatched")      return SemiMatched;
   return Unknown;
+}
+
+
+inline std::string ZprimeDecayToString(const int & tagname) {
+  if(tagname == nomatch)     return "nomatch";
+  if(tagname == Zee)         return "Zee";
+  if(tagname == Zmumu)       return "Zmumu";
+  if(tagname == Zelse)       return "Zelse";
+  if(tagname == HWW)         return "HWW";
+  if(tagname == Hbb)         return "Hbb";
+  if(tagname == Helse)       return "Helse";
+  if(tagname == ZeeHWW)      return "ZeeHWW";
+  if(tagname == ZmumuHWW)    return "ZmumuHWW";
+  if(tagname == ZelseHWW)    return "ZelseHWW";
+  if(tagname == ZeeHbb)      return "ZeeHbb";
+  if(tagname == ZmumuHbb)    return "ZmumuHbb";
+  if(tagname == ZelseHbb)    return "ZelseHbb";
+  if(tagname == ZeeHelse)    return "ZeeHelse";
+  if(tagname == ZmumuHelse)  return "ZmumuHelse";
+  if(tagname == ZelseHelse)  return "ZelseHelse";
+  return "unknown";
 }

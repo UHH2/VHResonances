@@ -29,6 +29,7 @@
 #include "UHH2/common/include/Utils.h"
 #include "UHH2/common/include/CollectionProducer.h"
 #include "UHH2/common/include/DetectorCleaning.h"
+#include "UHH2/common/include/PDFWeights.h"
 
 #include "UHH2/VHResonances/include/ModuleBase.h"
 #include "UHH2/VHResonances/include/constants.hpp"
@@ -81,6 +82,7 @@ protected:
   std::vector<std::unique_ptr<AnalysisModule>> weightsmodules, modules;
   std::unique_ptr<uhh2::AndSelection> metfilters_selection;
   std::unique_ptr<GenericJetCleaner> GJC, GTJC;
+  std::unique_ptr<AnalysisModule> PDFReweight_module;
 
   // Define selections
   std::shared_ptr<Selection> NBoostedJetSel;
@@ -138,6 +140,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
   // Set up variables
   MS["year"]              = ctx.get("year");
+  MS["dataset_version"]   = ctx.get("dataset_version");
   MB["is_mc"]             = ctx.get("dataset_type") == "MC";
   MB["isPuppi"]           = string2bool(ctx.get("isPuppi"));
   MB["isCHS"]             = string2bool(ctx.get("isCHS"));
@@ -175,10 +178,8 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
   // Set up selections
 
-  const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta));
-  // const ElectronId eleId = AndId<Electron>(ElectronID_Fall17_loose, PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+  const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta), MuonIso(max_muon_iso));
   const ElectronId eleId = AndId<Electron>(ElectronTagID(Electron::cutBasedElectronID_Fall17_94X_V2_loose), PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-  // cutBasedElectronID_Summer16_80X_V1_loose
 
   const JetId jetId = AndId<Jet> (JetPFID(JETwp), PtEtaCut(min_jet_pt, min_lepton_eta));
   const TopJetId topjetId = AndId<TopJet> (JetPFID(JETwp), PtEtaCut(min_topjet_pt, min_lepton_eta), NoLeptonInJet("all", eleId, muoId, MB["isHOTVR"]? 0.8: -1));
@@ -216,9 +217,10 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   if (MB["invisiblechannel"]) HEMEventCleaner_Selection.reset(new HEMCleanerSelection(ctx, MS["jetLabel"], true, true, true));
   else HEMEventCleaner_Selection.reset(new AndSelection(ctx)); // HEM important for inv channel only. DiLep selection reduces prob drastiacally
 
-
   GJC.reset( new GenericJetCleaner(ctx, MS["jetLabel"],    false, jetId, topjetId, muoId, eleId));
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
+
+  PDFReweight_module.reset(new PDFReweight(ctx));
 
   NBoostedJetSel.reset(new NTopJetSelection(1,-1,topjetId,h_topjets));
 
@@ -257,6 +259,8 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 bool PreselectionModule::process(uhh2::Event& event) {
 
   if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In "+NameModule+".cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
+
+  if (MB["invisiblechannel"] && FindInString("MC_ZprimeToZH_inv", MS["dataset_version"])) PDFReweight_module->process(event);
 
   auto weight_gen = event.weight;
   fill_histograms(event, "nocuts");

@@ -82,9 +82,7 @@ bool ZprimeCandidateID::operator()(const ZprimeCandidate& cand, const uhh2::Even
   double min_chi2 = 10000;
   for(const auto & cand_: event.get(h_ZprimeCandidates)) min_chi2 = std::min(min_chi2, cand_.discriminator("chi2"));
 
-  // return cand.discriminator("btag_DeepCSV_loose")==0 && fabs(min_chi2-cand.discriminator("chi2"))<1e-05;
-  return cand.discriminator("btag_DeepCSV_loose")==0 && min_chi2==cand.discriminator("chi2");
-
+  return cand.Zprime_mass()>=min_ZH_mass && cand.discriminator("btag_DeepCSV_loose")==0 && min_chi2==cand.discriminator("chi2");
 }
 
 
@@ -138,21 +136,7 @@ bool TaggerCut::passes(const Event& event){
   else if (tagger=="tau43_groomed") tag = (jet.tau3_groomed()!=0 && jet.tau4_groomed()>0) ? (jet.tau4_groomed()/jet.tau3_groomed()) : -1;
   else throw std::runtime_error("TaggerCut::passes -- tagger not defined!");
 
-  if (pt_min == PtDepentdentCut_value_x3 )      return (cut_min<cut_max)? tag>PtDepentdentCut_x3(jet.pt())      : tag<=PtDepentdentCut_x3(jet.pt()); //TODO not too nice
-  if (pt_min == PtDepentdentCut_value_x2x3 )    return (cut_min<cut_max)? tag>PtDepentdentCut_x2x3(jet.pt())    : tag<=PtDepentdentCut_x2x3(jet.pt()); //TODO not too nice
-  if (pt_min == PtDepentdentCut_value_x1x3 )    return (cut_min<cut_max)? tag>PtDepentdentCut_x1x3(jet.pt())    : tag<=PtDepentdentCut_x1x3(jet.pt()); //TODO not too nice
-  if (pt_min == PtDepentdentCut_value_x1x2 )    return (cut_min<cut_max)? tag>PtDepentdentCut_x1x2(jet.pt())    : tag<=PtDepentdentCut_x1x2(jet.pt()); //TODO not too nice
-  if (pt_min == PtDepentdentCut_value_x2 )      return (cut_min<cut_max)? tag>PtDepentdentCut_x2(jet.pt())      : tag<=PtDepentdentCut_x2(jet.pt()); //TODO not too nice
-  if (pt_min == PtDepentdentCut_value_sqrt )    return (cut_min<cut_max)? tag>PtDepentdentCut_sqrt(jet.pt())    : tag<=PtDepentdentCut_sqrt(jet.pt()); //TODO not too nice
-
-  if (pt_min == MassDepentdentCut_value_x3 )    return (cut_min<cut_max)? tag>MassDepentdentCut_x3(jet.pt())    : tag<=MassDepentdentCut_x3(jet.pt()); //TODO not too nice
-  if (pt_min == MassDepentdentCut2_value_x3 )   return (cut_min<cut_max)? tag>MassDepentdentCut2_x3(jet.pt())   : tag<=MassDepentdentCut2_x3(jet.pt()); //TODO not too nice
-  if (pt_min == MassDepentdentCut_value_x2x3 )  return (cut_min<cut_max)? tag>MassDepentdentCut_x2x3(jet.pt())  : tag<=MassDepentdentCut_x2x3(jet.pt()); //TODO not too nice
-  if (pt_min == MassDepentdentCut_value_x1x3 )  return (cut_min<cut_max)? tag>MassDepentdentCut_x1x3(jet.pt())  : tag<=MassDepentdentCut_x1x3(jet.pt()); //TODO not too nice
-  if (pt_min == MassDepentdentCut_value_x1x2 )  return (cut_min<cut_max)? tag>MassDepentdentCut_x1x2(jet.pt())  : tag<=MassDepentdentCut_x1x2(jet.pt()); //TODO not too nice
-  if (pt_min == MassDepentdentCut_value_x2 )    return (cut_min<cut_max)? tag>MassDepentdentCut_x2(jet.pt())    : tag<=MassDepentdentCut_x2(jet.pt()); //TODO not too nice
-  if (pt_min == MassDepentdentCut_value_sqrt )  return (cut_min<cut_max)? tag>MassDepentdentCut_sqrt(jet.pt())  : tag<=MassDepentdentCut_sqrt(jet.pt()); //TODO not too nice
-
+  if (pt_min == MassDepentdentCut_value) return (cut_min<cut_max)? tag>MassDepentdentCut(jet.pt()): tag<=MassDepentdentCut(jet.pt()); //TODO not too nice
 
   return (cut_min < tag  && tag < cut_max);
 

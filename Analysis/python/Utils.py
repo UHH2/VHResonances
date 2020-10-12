@@ -2,6 +2,8 @@ import time, sys, os, glob
 import functools, argparse
 
 import numpy as np
+import pandas as pd
+from array import array
 
 sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros/")
 from ModuleRunnerBase import *
@@ -58,8 +60,9 @@ def DoControl(controls, control_, channel, sample):
     if "muon"      in channel and "DATA" in sample and not "SingleMuon" in sample: check = True
     if "invisible" in channel and "DATA" in sample and not "MET" in sample: check = True
     if not "muon"  in channel and "MuonScale" in control_: check = True
-    if not "muon"  in channel and "tracking" in control_: check = True
-    if not "muon"  in channel and "reco" in control_: check = True
+    if not "muon"  in channel and "isolation" in control_: check = True
+    if not "muon"  in channel and "tracking"  in control_: check = True
+    if not "muon"  in channel and "reco"      in control_: check = True
     return check
 
 

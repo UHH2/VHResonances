@@ -16,7 +16,7 @@
   - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2017
   - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2018
 
-- Trigger:
+- Trigger and Isolation:
   - 2016: https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonWorkInProgressAndPagResults (IsoMu24_OR_IsoTkMu24, Mu50_OR_TkMu50, BtoF and G)
   - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2017
   - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2018
