@@ -401,8 +401,7 @@ double NLOCorrections::GetPartonObjectPt(uhh2::Event& event, ParticleID objID) {
 bool NLOCorrections::process(uhh2::Event& event){
   // Sample dependant corrections
   if ((!is_Wjets && !is_Zjets) || event.isRealData) return true;
-  if ((is_Wjets || is_Zjets) && !is2016) return true;//check
-
+  // if ((is_Wjets || is_Zjets) && !is2016) return true;//check
   double objpt = uhh2::infinity, theory_weight = 1.0;
   std::string process = "";
 

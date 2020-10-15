@@ -44,9 +44,9 @@ def newNumber(year,sample,ConfigFile,syst,channel):
                 newNumber = 300
             if any(x in sample for x in ["DATA_SingleElectron_RunC", "DATA_SingleElectron_RunD", "DATA_SingleElectron_RunF"]):
                 newNumber = 250
-            if any(x in sample for x in ["DATA_SingleElectron_RunE", "DATA_SingleElectron_RunG", "DATA_SingleElectron_RunH"]):
+            if any(x in sample for x in ["DATA_SingleElectron_RunE", "DATA_SingleElectron_RunG"]):
                 newNumber = 200
-            if any(x in sample for x in ["DATA_SingleElectron_RunB"]):
+            if any(x in sample for x in ["DATA_SingleElectron_RunB", "DATA_SingleElectron_RunH"]):
                 newNumber = 180
             if any(x in sample for x in ["DATA_MET_RunD", "DATA_MET_RunE", "DATA_MET_RunF", "DATA_MET_RunG", "DATA_MET_RunH"]):
                 newNumber = 170
