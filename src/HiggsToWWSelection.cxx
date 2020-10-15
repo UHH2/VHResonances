@@ -74,6 +74,43 @@ bool DeltaRDiLepton::passes(const Event& event){
   return false;
 }
 
+/* Remove events if the number of jets with Delta Phi(jet, MET) > minDeltaPhi is outside the interval [minJets, maxJets].
+Can pass -1 as maxJets to require all jets to pass.
+*/
+DeltaPhiCleaning::DeltaPhiCleaning(Context& ctx, string jetCollection_, float minDeltaPhi_, int minJets_, int maxJets_): jetCollection(jetCollection_), minDeltaPhi(minDeltaPhi_), minJets(minJets_), maxJets(maxJets_){
+    h_jets = ctx.get_handle<vector<Jet>>(jetCollection);
+    h_topjets = ctx.get_handle<vector<TopJet>>(jetCollection);
+};
+
+bool DeltaPhiCleaning::passes(const Event& event){
+  vector<Jet> jets;
+  if (event.is_valid(h_topjets)) jets.assign((&event.get(h_topjets))->begin(), (&event.get(h_topjets))->end());
+  else if (event.is_valid(h_jets)) jets.assign((&event.get(h_jets))->begin(), (&event.get(h_jets))->end());
+  else throw logic_error("DeltaPhiCleaning: No valid jet collection given.");
+
+  // Count how many jets fullfill Delta Phi(jet, MET) > minDeltaPhi
+  int jetsCounter = 0;
+  // Count how many jets have failed Delta Phi(jet, MET) > minDeltaPhi
+  int jetsCounterFailing = 0;
+
+  int countJets = 0;
+
+  for(const auto & jet: jets){
+    double Dphi = fabs(deltaPhi(jet, *event.met));
+    if (Dphi > minDeltaPhi) jetsCounter ++;
+    if (Dphi < minDeltaPhi) jetsCounterFailing ++;
+     countJets ++;
+  }
+
+  // Pass if the number of jets fulfilling the criteria lies between minJets and maxJets.
+  if (minJets <= jetsCounter && jetsCounter <=maxJets) return true;
+
+  // Pass if maxJets is -1 (require all jets to pass) and number of jets fulfilling the criteria is at least minJets.
+  if (maxJets == -1 && jetsCounterFailing==0 && minJets <= jetsCounter) return true;
+
+  return false;
+}
+
 
 ZprimeCandidateID::ZprimeCandidateID (const Event::Handle<vector<ZprimeCandidate> > & h_ZprimeCandidates_ ): h_ZprimeCandidates(h_ZprimeCandidates_){}
 
