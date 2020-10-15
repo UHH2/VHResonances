@@ -58,11 +58,12 @@ private:
 
 class PTMassCut: public uhh2::Selection {
 public:
-  PTMassCut(float cut_min, const uhh2::Event::Handle<std::vector<ZprimeCandidate> > & h_ZprimeCandidates);
+  PTMassCut(float cut_min, const uhh2::Event::Handle<std::vector<ZprimeCandidate> > & h_ZprimeCandidates, std::string leptons);
   virtual bool passes(const uhh2::Event& event) override;
 private:
   float cut_min;
   uhh2::Event::Handle< std::vector<ZprimeCandidate> > h_ZprimeCandidates;
+  std::string leptons;
 
 };
 

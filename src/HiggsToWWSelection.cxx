@@ -121,7 +121,7 @@ bool ZprimeCandidateID::operator()(const ZprimeCandidate& cand, const uhh2::Even
 
 
 
-PTMassCut::PTMassCut (float cut_min_, const Event::Handle<vector<ZprimeCandidate> > & h_ZprimeCandidates_ ): cut_min(cut_min_), h_ZprimeCandidates(h_ZprimeCandidates_){}
+PTMassCut::PTMassCut (float cut_min_, const Event::Handle<vector<ZprimeCandidate> > & h_ZprimeCandidates_, string leptons_ ): cut_min(cut_min_), h_ZprimeCandidates(h_ZprimeCandidates_), leptons(leptons_){}
 
 bool PTMassCut::passes(const Event& event){
 
@@ -132,7 +132,13 @@ bool PTMassCut::passes(const Event& event){
     auto H = cand.H();
     auto ZPrime = Z.v4()+H.v4();
     float cut = Z.pt()/ZPrime.M();
-    if( cut > cut_min) return true;
+
+    // Work with transversal mass for invisible channel
+    if (leptons == "invisible"){
+      cut = Z.pt()/cand.Zprime_mass();
+    }
+
+    if (cut > cut_min) return true;
   }
 
   return false;

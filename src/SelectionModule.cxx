@@ -196,7 +196,9 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
   ZprimeCandidateReconstruction_module.reset(new ZprimeCandidateReconstruction(ctx, min_dilep_pt, min_DR_dilep, max_DR_dilep, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, MS["leptons"], MS["topjetLabel"]));
   CollectionProducer_module.reset(new CollectionProducer<ZprimeCandidate>( ctx, "ZprimeCandidate", "ZprimeCandidate", (ZprimeCandidate_ID)ZprimeCandidateID(h_ZprimeCandidates)));
 
-  PTMassCut_selection.reset(new PTMassCut(min_Z_pt_ZH_mass, h_ZprimeCandidates));
+  float min_Z_pt_ZH_mass_cut = min_Z_pt_ZH_mass;
+  if (MS["leptons"]=="invisible"){min_Z_pt_ZH_mass_cut = min_Z_pt_ZH_mass_invisible;}
+  PTMassCut_selection.reset(new PTMassCut(min_Z_pt_ZH_mass_cut, h_ZprimeCandidates, MS["leptons"]));
 
   // Delta Phi cut between MET and all TopJets at 2.0
   DeltaPhiJetMETCut_TopJets_selection.reset(new DeltaPhiJetMETCut(ctx, MS["topjetLabel"], min_Dphi_AK8jet_MET, 0, -1));
