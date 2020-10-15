@@ -29,9 +29,9 @@ private:
 };
 
 
-class DeltaPhiCleaning: public uhh2::Selection {
+class DeltaPhiJetMETCut: public uhh2::Selection {
 public:
-  DeltaPhiCleaning(uhh2::Context& ctx, std::string jetCollection, float minDeltaPhi, int minJets, int maxJets);
+  DeltaPhiJetMETCut(uhh2::Context& ctx, std::string jetCollection, float minDeltaPhi, int minJets, int maxJets);
   virtual bool passes(const uhh2::Event& event) override;
 private:
   std::string jetCollection;

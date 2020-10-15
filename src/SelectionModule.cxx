@@ -82,7 +82,7 @@ protected:
 
   // Define selections
 
-  std::unique_ptr<Selection> PTMassCut_selection, DeltaPhiCleaningTopJets_selection, DeltaPhiCleaningJets_selection;
+  std::unique_ptr<Selection> PTMassCut_selection, DeltaPhiJetMETCut_TopJets_selection, DeltaPhiJetMETCut_Jets_selection;
   std::unique_ptr<AnalysisModule> ZprimeCandidateReconstruction_module;
   std::unique_ptr<AnalysisModule> CollectionProducer_module;
   std::unordered_map<std::string, std::unique_ptr<Selection>> Trigger_selection;
@@ -199,10 +199,10 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
   PTMassCut_selection.reset(new PTMassCut(min_Z_pt_ZH_mass, h_ZprimeCandidates));
 
   // Delta Phi cut between MET and all TopJets at 2.0
-  DeltaPhiCleaningTopJets_selection.reset(new DeltaPhiCleaning(ctx, MS["topjetLabel"], min_Dphi_AK8jet_MET, 0, -1));
+  DeltaPhiJetMETCut_TopJets_selection.reset(new DeltaPhiJetMETCut(ctx, MS["topjetLabel"], min_Dphi_AK8jet_MET, 0, -1));
 
   // Delta Phi cut between MET and all Jets at 0.5 (QCD rejection)
-  DeltaPhiCleaningJets_selection.reset(new DeltaPhiCleaning(ctx, MS["jetLabel"], min_Dphi_AK4jet_MET, 0, -1));
+  DeltaPhiJetMETCut_Jets_selection.reset(new DeltaPhiJetMETCut(ctx, MS["jetLabel"], min_Dphi_AK4jet_MET, 0, -1));
 
 }
 
@@ -225,7 +225,7 @@ bool SelectionModule::process(uhh2::Event& event) {
 
   // QCD rejection, cut at Delta Phi between all jets and MET at min_Dphi_AK4jet_MET (0.5).
   if (MB["invisiblechannel"]){
-    if (!DeltaPhiCleaningJets_selection->passes(event)) return false;
+    if (!DeltaPhiJetMETCut_Jets_selection->passes(event)) return false;
   }
 
   bool pass_triggers_OR = false;
@@ -244,7 +244,7 @@ bool SelectionModule::process(uhh2::Event& event) {
 
   // Cut delta Phi between MET and all TopJets at min_Dphi_AK8jet_MET (2.0)
   if (MB["invisiblechannel"]){
-    if (!DeltaPhiCleaningTopJets_selection->passes(event)) return false;
+    if (!DeltaPhiJetMETCut_TopJets_selection->passes(event)) return false;
   }
 
   ZprimeCandidateReconstruction_module->process(event);
