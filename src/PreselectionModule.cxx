@@ -198,7 +198,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
   weightsmodules.emplace_back(new GenLevelJetMatch(ctx,MS["topjetLabel"]));
   weightsmodules.emplace_back(new FinalStateMatching(ctx));
-  //weightsmodules.emplace_back(new NLOCorrections(ctx));
+  weightsmodules.emplace_back(new NLOCorrections(ctx));
 
   // https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2
   metfilters_selection.reset(new AndSelection(ctx, "metfilters"));
@@ -215,7 +215,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
   //Quick fix for Detector issues
   if (MB["invisiblechannel"]) HEMEventCleaner_Selection.reset(new HEMCleanerSelection(ctx, MS["jetLabel"], true, true, true));
-  else HEMEventCleaner_Selection.reset(new AndSelection(ctx)); // HEM important for inv channel only. DiLep selection reduces prob drastiacally
+  else HEMEventCleaner_Selection.reset(new AndSelection(ctx)); // HEM important for inv channel only. DiLep selection reduces prob drastically
 
   GJC.reset( new GenericJetCleaner(ctx, MS["jetLabel"],    false, jetId, topjetId, muoId, eleId));
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
