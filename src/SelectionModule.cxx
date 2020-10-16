@@ -82,7 +82,7 @@ protected:
 
   // Define selections
 
-  std::unique_ptr<Selection> PTMassCut_selection;
+  std::unique_ptr<Selection> PTMassCut_selection, DeltaPhiJetMETCut_TopJets_selection, DeltaPhiJetMETCut_Jets_selection;
   std::unique_ptr<AnalysisModule> ZprimeCandidateReconstruction_module;
   std::unique_ptr<AnalysisModule> CollectionProducer_module;
   std::unordered_map<std::string, std::unique_ptr<Selection>> Trigger_selection;
@@ -195,7 +195,16 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
 
   ZprimeCandidateReconstruction_module.reset(new ZprimeCandidateReconstruction(ctx, min_dilep_pt, min_DR_dilep, max_DR_dilep, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, MS["leptons"], MS["topjetLabel"]));
   CollectionProducer_module.reset(new CollectionProducer<ZprimeCandidate>( ctx, "ZprimeCandidate", "ZprimeCandidate", (ZprimeCandidate_ID)ZprimeCandidateID(h_ZprimeCandidates)));
-  PTMassCut_selection.reset(new PTMassCut(min_Z_pt_ZH_mass, h_ZprimeCandidates));
+
+  float min_Z_pt_ZH_mass_cut = min_Z_pt_ZH_mass;
+  if (MS["leptons"]=="invisible"){min_Z_pt_ZH_mass_cut = min_Z_pt_ZH_mass_invisible;}
+  PTMassCut_selection.reset(new PTMassCut(min_Z_pt_ZH_mass_cut, h_ZprimeCandidates, MS["leptons"]));
+
+  // Delta Phi cut between MET and all TopJets at 2.0
+  DeltaPhiJetMETCut_TopJets_selection.reset(new DeltaPhiJetMETCut(ctx, MS["topjetLabel"], min_Dphi_AK8jet_MET, 0, -1));
+
+  // Delta Phi cut between MET and all Jets at 0.5 (QCD rejection)
+  DeltaPhiJetMETCut_Jets_selection.reset(new DeltaPhiJetMETCut(ctx, MS["jetLabel"], min_Dphi_AK4jet_MET, 0, -1));
 
 }
 
@@ -216,6 +225,11 @@ bool SelectionModule::process(uhh2::Event& event) {
 
   fill_histograms(event, "Preselection");
 
+  // QCD rejection, cut at Delta Phi between all jets and MET at min_Dphi_AK4jet_MET (0.5).
+  if (MB["invisiblechannel"]){
+    if (!DeltaPhiJetMETCut_Jets_selection->passes(event)) return false;
+  }
+
   bool pass_triggers_OR = false;
 
   for (auto& el : Trigger_selection) {
@@ -230,13 +244,9 @@ bool SelectionModule::process(uhh2::Event& event) {
   MuonScaleVariations_module->process(event);
   fill_histograms(event, "MuonScale");
 
-  // cut delta Phi between MET and all TopJets at min_Dphi_MET (2.0)
+  // Cut delta Phi between MET and all TopJets at min_Dphi_AK8jet_MET (2.0)
   if (MB["invisiblechannel"]){
-    const auto & jets = event.get(h_topjets);
-    for(const auto & jet: jets){
-      double Dphi = fabs(deltaPhi(jet, *event.met));
-      if (Dphi < min_Dphi_MET) return false;
-    }
+    if (!DeltaPhiJetMETCut_TopJets_selection->passes(event)) return false;
   }
 
   ZprimeCandidateReconstruction_module->process(event);

@@ -74,6 +74,40 @@ bool DeltaRDiLepton::passes(const Event& event){
   return false;
 }
 
+/* Remove events if the number of jets with Delta Phi(jet, MET) > minDeltaPhi is outside the interval [minJets, maxJets].
+Can pass -1 as maxJets to require all jets to pass.
+*/
+DeltaPhiJetMETCut::DeltaPhiJetMETCut(Context& ctx, string jetCollection_, float minDeltaPhi_, int minJets_, int maxJets_): jetCollection(jetCollection_), minDeltaPhi(minDeltaPhi_), minJets(minJets_), maxJets(maxJets_){
+    h_jets = ctx.get_handle<vector<Jet>>(jetCollection);
+    h_topjets = ctx.get_handle<vector<TopJet>>(jetCollection);
+};
+
+bool DeltaPhiJetMETCut::passes(const Event& event){
+  vector<Jet> jets;
+  if (event.is_valid(h_topjets)) jets.assign((&event.get(h_topjets))->begin(), (&event.get(h_topjets))->end());
+  else if (event.is_valid(h_jets)) jets.assign((&event.get(h_jets))->begin(), (&event.get(h_jets))->end());
+  else throw logic_error("DeltaPhiJetMETCut: No valid jet collection given.");
+
+  // Count how many jets fullfill Delta Phi(jet, MET) > minDeltaPhi
+  int jetsCounter = 0;
+  // Count how many jets have failed Delta Phi(jet, MET) > minDeltaPhi
+  int jetsCounterFailing = 0;
+
+  for(const auto & jet: jets){
+    double Dphi = fabs(deltaPhi(jet, *event.met));
+    if (Dphi > minDeltaPhi){jetsCounter ++;}
+    else {jetsCounterFailing ++;}
+  }
+
+  // Pass if the number of jets fulfilling the criteria lies between minJets and maxJets.
+  if (minJets <= jetsCounter && jetsCounter <=maxJets) return true;
+
+  // Pass if maxJets is -1 (require all jets to pass) and number of jets fulfilling the criteria is at least minJets.
+  if (minJets <= jetsCounter && maxJets == -1 && jetsCounterFailing==0) return true;
+
+  return false;
+}
+
 
 ZprimeCandidateID::ZprimeCandidateID (const Event::Handle<vector<ZprimeCandidate> > & h_ZprimeCandidates_ ): h_ZprimeCandidates(h_ZprimeCandidates_){}
 
@@ -87,7 +121,7 @@ bool ZprimeCandidateID::operator()(const ZprimeCandidate& cand, const uhh2::Even
 
 
 
-PTMassCut::PTMassCut (float cut_min_, const Event::Handle<vector<ZprimeCandidate> > & h_ZprimeCandidates_ ): cut_min(cut_min_), h_ZprimeCandidates(h_ZprimeCandidates_){}
+PTMassCut::PTMassCut (float cut_min_, const Event::Handle<vector<ZprimeCandidate> > & h_ZprimeCandidates_, string leptons_ ): cut_min(cut_min_), h_ZprimeCandidates(h_ZprimeCandidates_), leptons(leptons_){}
 
 bool PTMassCut::passes(const Event& event){
 
@@ -98,7 +132,13 @@ bool PTMassCut::passes(const Event& event){
     auto H = cand.H();
     auto ZPrime = Z.v4()+H.v4();
     float cut = Z.pt()/ZPrime.M();
-    if( cut > cut_min) return true;
+
+    // Work with transversal mass for invisible channel
+    if (leptons == "invisible"){
+      cut = Z.pt()/cand.Zprime_mass();
+    }
+
+    if (cut > cut_min) return true;
   }
 
   return false;

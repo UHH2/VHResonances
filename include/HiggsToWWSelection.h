@@ -29,6 +29,19 @@ private:
 };
 
 
+class DeltaPhiJetMETCut: public uhh2::Selection {
+public:
+  DeltaPhiJetMETCut(uhh2::Context& ctx, std::string jetCollection, float minDeltaPhi, int minJets, int maxJets);
+  virtual bool passes(const uhh2::Event& event) override;
+private:
+  std::string jetCollection;
+  float minDeltaPhi;
+  int minJets, maxJets;
+  uhh2::Event::Handle<std::vector<Jet> > h_jets;
+  uhh2::Event::Handle<std::vector<TopJet> > h_topjets;
+};
+
+
 typedef std::function<bool (const ZprimeCandidate &, const uhh2::Event &)> ZprimeCandidate_ID;
 
 class ZprimeCandidateID {
@@ -45,11 +58,12 @@ private:
 
 class PTMassCut: public uhh2::Selection {
 public:
-  PTMassCut(float cut_min, const uhh2::Event::Handle<std::vector<ZprimeCandidate> > & h_ZprimeCandidates);
+  PTMassCut(float cut_min, const uhh2::Event::Handle<std::vector<ZprimeCandidate> > & h_ZprimeCandidates, std::string leptons);
   virtual bool passes(const uhh2::Event& event) override;
 private:
   float cut_min;
   uhh2::Event::Handle< std::vector<ZprimeCandidate> > h_ZprimeCandidates;
+  std::string leptons;
 
 };
 
