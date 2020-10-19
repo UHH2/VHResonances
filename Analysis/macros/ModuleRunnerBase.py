@@ -34,6 +34,7 @@ class VariablesBase(GenericPath):
         self.Signal             = "MC_ZprimeToZH"
         self.MainBkg            = "MC_DY"
         self.MassPoints         = [600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]
+        self.MassPointsReduced  = [1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]
         self.SignalSamples      = [self.Signal+mode+"_M"+str(mass) for mass in self.MassPoints for mode in ["","_inv"]]
         self.RunPeriods_Dict    = {"2016": ["B", "C", "D", "E", "F", "G", "H"],
                                    "2017": ["B", "C", "D", "E", "F"],
@@ -42,7 +43,6 @@ class VariablesBase(GenericPath):
         self.years              = sorted(self.RunPeriods_Dict.keys())
         self.AllRunPeriods      = list(set(itertools.chain.from_iterable(self.RunPeriods_Dict.values())))
 
-        # TODO MC_DY_HT70to100
         self.Generic_SubSamples_Dict_ = {
             "MC_DY"                 : [proc+subsample for proc in ["MC_DY_HT", "MC_DY_inv_HT"] for subsample in ["100to200", "200to400", "400to600", "600to800", "800to1200", "1200to2500", "2500toInf",]],
             "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],

@@ -201,9 +201,11 @@ void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuf
   book_TH1F("jetArea_pt200_300"+histSuffix,"jetArea^{"+axisSuffix+",pt(200,300)}",150,0,15);
   book_TH1F("jetArea_pt300_400"+histSuffix,"jetArea^{"+axisSuffix+",pt(300,400)}",150,0,15);
   book_TH2F("jetAreavspt"+histSuffix,";jetArea^{"+axisSuffix+"};p_{T} "+axisSuffix+" [GeV]",150,0,15,50,minPt,maxPt);
+  book_TH2F("jetmassvspt"+histSuffix,";M^{"+axisSuffix+"};p_{T} "+axisSuffix+" [GeV]",100,0,300,50,minPt,maxPt);
   if (isTop) {
     book_TH1F("SDmass"+histSuffix,"SDmass^{"+axisSuffix+"} [GeV/c^{2}]",100,0,300);
     book_TH1F("SDmassvsinvMass"+histSuffix,"SDmass/invMass^{"+axisSuffix+"}",100,-1,2);
+    book_TH2F("jetSDvspt"+histSuffix,";SDmass^{"+axisSuffix+"};p_{T} "+axisSuffix+" [GeV]",100,0,300,50,minPt,maxPt);
     book_TH1F("tau1"+histSuffix,"#tau1^{"+axisSuffix+"}",20,0,1.01);
     book_TH1F("tau2"+histSuffix,"#tau2^{"+axisSuffix+"}",20,0,1.01);
     book_TH1F("tau3"+histSuffix,"#tau3^{"+axisSuffix+"}",20,0,1.01);
@@ -311,7 +313,8 @@ void ExtJetHists::fill_jetHist<Jet>(const Event & event, const string& histSuffi
   fill_H1("jetArea"+histSuffix, jet.jetArea(), weight);
   if (jet.pt()>200 || jet.pt()<300) fill_H1("jetArea_pt200_300"+histSuffix,jet.jetArea(), weight);
   if (jet.pt()>300 || jet.pt()<400) fill_H1("jetArea_pt300_400"+histSuffix,jet.jetArea(), weight);
-  fill_H2("jetAreavspt"+histSuffix,jet.jetArea(), jet.pt(), weight);
+  fill_H2("jetAreavspt"+histSuffix, jet.jetArea(), jet.pt(), weight);
+  fill_H2("jetmassvspt"+histSuffix, jet.v4().M(), jet.pt(), weight);
   if (event.muons) {
     if (event.muons->size() > 0) {
       fill_H1("deltaR_muon1"+histSuffix, deltaR(jet, (*event.muons)[0]), weight);
@@ -341,6 +344,7 @@ void ExtJetHists::fill_jetHist<TopJet>(const Event & event, const string& histSu
   fill_jetHist<Jet>(event, histSuffix,jet);
   fill_H1("SDmass"+histSuffix, jet.softdropmass(), weight);
   fill_H1("SDmassvsinvMass"+histSuffix, (jet.softdropmass()/jet.v4().M()<2) ? jet.softdropmass()/jet.v4().M() : 1.8, weight);
+  fill_H2("jetSDvspt"+histSuffix, jet.softdropmass(), jet.pt(), weight);
   fill_H1("tau1"+histSuffix, jet.tau1(), weight);
   fill_H1("tau2"+histSuffix, jet.tau2(), weight);
   fill_H1("tau3"+histSuffix, jet.tau3(), weight);

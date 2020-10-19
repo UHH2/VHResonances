@@ -82,7 +82,7 @@ bool ZprimeCandidateID::operator()(const ZprimeCandidate& cand, const uhh2::Even
   double min_chi2 = 10000;
   for(const auto & cand_: event.get(h_ZprimeCandidates)) min_chi2 = std::min(min_chi2, cand_.discriminator("chi2"));
 
-  return cand.Zprime_mass()>=min_ZH_mass && cand.discriminator("btag_DeepCSV_loose")==0 && min_chi2==cand.discriminator("chi2");
+  return cand.discriminator("btag_DeepCSV_loose")==0 && min_chi2==cand.discriminator("chi2");
 }
 
 
