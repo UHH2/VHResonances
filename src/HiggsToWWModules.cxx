@@ -469,7 +469,7 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
       } else if (FindInString("Trigger", sf.first)) {
         weight_postfix = "trigger";   sys = 2.; etaYaxis = false;
       } else if (FindInString("Isolation", sf.first)) {
-        weight_postfix = "iso";       sys = 0.; etaYaxis = FindInString("2016", year) ? false : true;
+        weight_postfix = "isolation"; sys = 0.; etaYaxis = FindInString("2016", year) ? false : true;
       } else if (FindInString("Tracking", sf.first)){
         weight_postfix = "tracking";  sys = 0.; etaYaxis = false;
       } else if (FindInString("Reconstruction", sf.first)) {

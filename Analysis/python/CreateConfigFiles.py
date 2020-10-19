@@ -215,7 +215,7 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                         comments.append(["<Item Name", "TopPuppiJetCollection",   'Value', 'jetsAk8PuppiSubstructure_SoftDropPuppi'])
                     comment_lines(path, filename, comments, remove=True)
                     changes = []
-                    # TODO change anmalara when creating xml. change also email
+                    # Change anmalara when creating xml. change also email
                     changes.append(["Mail=", "USER@mail.desy.de", "USER@mail.desy.de", os.environ["USER"]+"@mail.desy.de"])
                     changes.append(["<!ENTITY", "/nfs/dust/cms/user/USER", "USER", os.environ["USER"]])
                     changes.append(["<!ENTITY", "CMSSW_BASE", "CMSSW_BASE", os.environ["CMSSW_BASE"]])

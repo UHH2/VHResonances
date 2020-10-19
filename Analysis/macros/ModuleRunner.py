@@ -86,7 +86,7 @@ class ModuleRunner(ModuleRunnerBase):
         self.Collections = Collections if Collections else self.Collections
         self.Channels = Channels if Channels else self.Channels
         self.Systematics = Systematics if Systematics else self.Systematics
-        # TODO We run MuonScale Systematics later. Think if we want to do it earlier
+        # We run MuonScale Systematics later.
         if "Preselection" in self.Module:
             self.Systematics = filter(lambda x: not "Muon" in x, self.Systematics)
         if "Test" in self.Module or "GenericCleaning" in self.Module or "VariableRStudies" in self.Module:
@@ -294,7 +294,7 @@ class ModuleRunner(ModuleRunnerBase):
 
     @timeit
     def ReRunList(self, mylist=[]):
-        Path_SFRAME = self.Path_SFRAME.replace(self.year+"/","") # TODO not nice!!!
+        Path_SFRAME = self.Path_SFRAME.replace(self.year+"/","")
         list_processes = []
         list_copy = []
         for x in mylist:
@@ -365,7 +365,7 @@ class ModuleRunner(ModuleRunnerBase):
                 max_ = np.amax(np.array(val))
                 min_ = np.amin(np.array(val))
                 std_ = np.std(np.array(val))
-                if (max_>(0*3600) and max_<(200*3600) and ".o" in check):
+                if (max_>(2.9*3600) and max_<(200*3600) and ".o" in check):
                     print check, "\t", collection, "\t", channel[:4], "\t", syst, "\t", sample, " "*(30-len(sample)), round(max_/3600,2), "\t", round(min_/3600,2), "\t", round(std_*100/max_,2)
                     timeList.setdefault(sample,[]).append(max_)
                 elif (".l" in check and max_>(1*1024)):
