@@ -11,7 +11,7 @@ class Extractor(VariablesBase):
     def __init__(self):
         VariablesBase.__init__(self)
         self.isFast = True
-        # self.isFast = False
+        self.isFast = False
         self.fName = "TaggerVariables"
         if not self.isFast: self.fName += "_all"
         self.Samples = filter(lambda x: self.MainBkg in x or self.Signal in x, self.Processes_Year_Dict["2016"]) # 2016 as default. They are all the same

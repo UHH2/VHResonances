@@ -32,6 +32,14 @@ bool kSquare = true;
 bool kRectangular = false;
 
 
+void CMSOff() { cmsText = ""; }
+void ExtraTextOff() { writeExtraText = false;}
+
+void ForThesis(){
+  CMSOff();
+  ExtraTextOff();
+}
+
 
 // tdrGrid: Turns the grid lines on (true) or off (false)
 void tdrGrid(bool gridOn) {

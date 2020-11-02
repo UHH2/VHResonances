@@ -13,6 +13,7 @@
 #include "UHH2/common/include/ElectronIds.h"
 #include "UHH2/common/include/ObjectIdUtils.h"
 #include "UHH2/common/include/JetIds.h"
+#include "UHH2/common/include/JetHists.h"
 #include "UHH2/common/include/JetCorrections.h"
 #include "UHH2/common/include/CleaningModules.h"
 #include "UHH2/common/include/CommonModules.h"
@@ -27,6 +28,8 @@
 #include "UHH2/common/include/TriggerSelection.h"
 #include "UHH2/common/include/Utils.h"
 #include "UHH2/common/include/CollectionProducer.h"
+#include "UHH2/common/include/DetectorCleaning.h"
+#include "UHH2/common/include/PDFWeights.h"
 
 #include "UHH2/VHResonances/include/ModuleBase.h"
 #include "UHH2/VHResonances/include/constants.hpp"
@@ -66,7 +69,8 @@ public:
 protected:
 
   // Define variables
-  std::vector<std::string> histogram_tags = { "nocuts", "weights", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
+  std::string NameModule = "LeptonIDStudiesModule";
+  std::vector<std::string> histogram_tags = { "nocuts", "weights", "cleaned", "Veto", "NLeptonSel"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
@@ -96,7 +100,7 @@ void LeptonIDStudiesModule::book_handles(uhh2::Context& ctx) {
 
 void LeptonIDStudiesModule::PrintInputs() {
   std::cout << "****************************************" << std::endl;
-  std::cout << "          LeptonIDStudiesModule         " << std::endl;
+  std::cout << "             "+NameModule+"             " << std::endl;
   std::cout << "----------------------------------------" << std::endl;
   for (auto x : MS) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << x.second << '\n';
   for (auto x : MB) std::cout << x.first << std::string( 18-x.first.size(), ' ' ) << BoolToString(x.second) << '\n';
@@ -108,8 +112,6 @@ void LeptonIDStudiesModule::book_histograms(uhh2::Context& ctx){
     string mytag;
     mytag = "event_"    + tag; book_HFolder(mytag, new EventHists(ctx,mytag));
     mytag = "gen_"      + tag; book_HFolder(mytag, new GenMatchHists(ctx,mytag));
-    mytag = "nTopJet_"  + tag; book_HFolder(mytag, new ExtJetHists(ctx,mytag, MS["topjetLabel"]));
-    mytag = "nJet_"     + tag; book_HFolder(mytag, new ExtJetHists(ctx,mytag, MS["jetLabel"]));
     mytag = "ele_"      + tag; book_HFolder(mytag, new ElectronHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "muon_"     + tag; book_HFolder(mytag, new MuonHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "diLepton_" + tag; book_HFolder(mytag, new DiLeptonHists(ctx,mytag, "", MS["topjetLabel"]));
@@ -118,7 +120,7 @@ void LeptonIDStudiesModule::book_histograms(uhh2::Context& ctx){
 }
 
 void LeptonIDStudiesModule::fill_histograms(uhh2::Event& event, string tag){
-  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "LeptonID_"};
+  std::vector<string> mytags = {"event_", "gen_", "ele_", "muon_", "diLepton_", "LeptonID_"};
   for (auto& mytag : mytags) HFolder(mytag+ tag)->fill(event);
 }
 
@@ -133,26 +135,27 @@ void LeptonIDStudiesModule::fill_histograms(uhh2::Event& event, string tag){
 LeptonIDStudiesModule::LeptonIDStudiesModule(uhh2::Context& ctx){
 
   // Set up variables
-  MS["year"]             = ctx.get("year");
-  MS["SysType_PU"]       = ctx.get("SysType_PU");
-  MB["is_mc"]            = ctx.get("dataset_type") == "MC";
-  MB["lumisel"]          = string2bool(ctx.get("lumisel"));
-  MB["mclumiweight"]     = string2bool(ctx.get("mclumiweight"));
-  MB["mcpileupreweight"] = string2bool(ctx.get("mcpileupreweight"));
-  MB["isPuppi"]          = string2bool(ctx.get("isPuppi"));
-  MB["isCHS"]            = string2bool(ctx.get("isCHS"));
-  MB["isHOTVR"]          = string2bool(ctx.get("isHOTVR"));
-  MB["eleid"]            = string2bool(ctx.get("eleid"));
-  MB["muid"]             = string2bool(ctx.get("muid"));
-  MB["tauid"]            = string2bool(ctx.get("tauid"));
-  MB["metfilters"]       = string2bool(ctx.get("metfilters"));
-  MB["muonchannel"]      = string2bool(ctx.get("muonchannel"));
-  MB["electronchannel"]  = string2bool(ctx.get("electronchannel"));
+  MS["year"]              = ctx.get("year");
+  MB["is_mc"]             = ctx.get("dataset_type") == "MC";
+  MB["isPuppi"]           = string2bool(ctx.get("isPuppi"));
+  MB["isCHS"]             = string2bool(ctx.get("isCHS"));
+  MB["isHOTVR"]           = string2bool(ctx.get("isHOTVR"));
+  MB["muonchannel"]       = string2bool(ctx.get("muonchannel"));
+  MB["electronchannel"]   = string2bool(ctx.get("electronchannel"));
+  MB["invisiblechannel"]  = string2bool(ctx.get("invisiblechannel"));
+  MS["SysType_PU"]        = ctx.get("SysType_PU");
+  MB["lumisel"]           = string2bool(ctx.get("lumisel"));
+  MB["mclumiweight"]      = string2bool(ctx.get("mclumiweight"));
+  MB["mcpileupreweight"]  = string2bool(ctx.get("mcpileupreweight"));
+  MB["eleid"]             = string2bool(ctx.get("eleid"));
+  MB["muid"]              = string2bool(ctx.get("muid"));
+  MB["tauid"]             = string2bool(ctx.get("tauid"));
+  MB["metfilters"]        = string2bool(ctx.get("metfilters"));
 
-  if (MB["isPuppi"] == MB["isCHS"] && MB["isPuppi"] == MB["isHOTVR"]) throw std::runtime_error("In LeptonIDStudiesModule.cxx: Choose exactly one jet collection.");
-  if (MB["muonchannel"] == MB["electronchannel"]) throw std::runtime_error("In LeptonIDStudiesModule.cxx: Choose exactly one lepton channel.");
+  if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In "+NameModule+".cxx: Choose exactly one jet collection.");
+  if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In "+NameModule+".cxx: Choose exactly one lepton channel.");
 
-  MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": "");
+  MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": (MB["invisiblechannel"]? "invisible": ""));
 
   MS["jetLabel"]    = MB["isCHS"]? "jets":    (MB["isPuppi"]? "jetsAk4Puppi": (MB["isHOTVR"]? "jetsAk4Puppi": ""));
   MS["topjetLabel"] = MB["isCHS"]? "topjets": (MB["isPuppi"]? "toppuppijets": (MB["isHOTVR"]? "hotvrPuppi": ""));
@@ -199,10 +202,10 @@ LeptonIDStudiesModule::LeptonIDStudiesModule(uhh2::Context& ctx){
   metfilters_selection->add<TriggerSelection>("HBHENoiseFilter", "Flag_HBHENoiseFilter");
   metfilters_selection->add<TriggerSelection>("HBHENoiseIsoFilter", "Flag_HBHENoiseIsoFilter");
   metfilters_selection->add<TriggerSelection>("EcalDeadCellTriggerPrimitiveFilter", "Flag_EcalDeadCellTriggerPrimitiveFilter");
+  metfilters_selection->add<TriggerSelection>("BadPFMuonFilter", "Flag_BadPFMuonFilter");
   if (MS["year"] != "2016") metfilters_selection->add<EcalBadCalibSelection>("EcalBadCalibSelection"); /*TODO check 2016*/ // Use this instead of Flag_ecalBadCalibFilter, uses ecalBadCalibReducedMINIAODFilter in ntuple_generator
-  if (MS["year"] != "2016") metfilters_selection->add<TriggerSelection>("BadPFMuonFilter", "Flag_BadPFMuonFilter"); /*TODO check 2016, maybe Extra_BadPFMuonFilter */
   if (!MB["is_mc"]) metfilters_selection->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter"); /* TODO Not recommended for MC, but do check */
-  /* metfilters_selection->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter"); TODO Not recommended, under review.Separate module in ntuple_generator for 2016v2*/
+  /* metfilters_selection->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter"); TODO Not recommended, under review.*/
 
   GJC.reset( new GenericJetCleaner(ctx, MS["jetLabel"],    false, jetId, topjetId, muoId, eleId));
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
@@ -235,14 +238,14 @@ LeptonIDStudiesModule::LeptonIDStudiesModule(uhh2::Context& ctx){
 
 bool LeptonIDStudiesModule::process(uhh2::Event& event) {
 
-  if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In LeptonIDStudiesModule.cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
+  if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In "+NameModule+".cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
 
   auto weight_gen = event.weight;
   fill_histograms(event, "nocuts");
 
   if(event.isRealData && MB["lumisel"]) if(!lumi_selection->passes(event)) return false;
 
-  //  MCLumiWeight, MCPileupReweight, GenLevelJetMatch, FinalStateMatching
+  //  MCLumiWeight, MCPileupReweight, GenLevelJetMatch, FinalStateMatching, NLO corrections
   for(auto & m : weightsmodules) m->process(event);
 
   double weight_pu = 1;
@@ -273,15 +276,6 @@ bool LeptonIDStudiesModule::process(uhh2::Event& event) {
 
   if(!NLeptonSel->passes(event)) return false;
   fill_histograms(event, "NLeptonSel");
-
-  if(!NBoostedJetSel->passes(event)) return false;
-  fill_histograms(event, "NBoostedJet");
-
-  if(!DeltaRDiLepton_selection->passes(event)) return false;
-  fill_histograms(event, "DeltaRDiLepton");
-
-  if(!JetDiLeptonPhiAngularSel->passes(event)) return false;
-  fill_histograms(event, "JetDiLeptonPhiAngular");
 
   return true;
 }

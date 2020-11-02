@@ -6,6 +6,17 @@ import ROOT as rt
 # Merged all macros into one          #
 #######################################
 
+
+def CMSOff(TDR):
+    TDR.cmsText = ""
+
+def ExtraTextOff(TDR):
+    TDR.writeExtraText = False
+
+def ForThesis(TDR):
+    CMSOff(TDR)
+    ExtraTextOff(TDR)
+
 #############
 # tdrstyle  #
 #############

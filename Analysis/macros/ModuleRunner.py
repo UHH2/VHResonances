@@ -86,9 +86,12 @@ class ModuleRunner(ModuleRunnerBase):
         self.Collections = Collections if Collections else self.Collections
         self.Channels = Channels if Channels else self.Channels
         self.Systematics = Systematics if Systematics else self.Systematics
+        if "LeptonIDStudies" in self.Module:
+            self.Systematics = ["nominal"]
+            self.Samples     = list(filter(lambda x: "Zprime" in x or "DY" in x, self.Samples))
         # We run MuonScale Systematics later.
         if "Preselection" in self.Module:
-            self.Systematics = filter(lambda x: not "Muon" in x, self.Systematics)
+            self.Systematics = list(filter(lambda x: not "Muon" in x, self.Systematics))
         if "Test" in self.Module or "GenericCleaning" in self.Module or "VariableRStudies" in self.Module:
             self.Collections = ["All"]
         if ( "GenericCleaning" in self.Module or "Test" in self.Module or "NeuralNetwork" in self.Module or "VariableRStudies" in self.Module ):
@@ -216,8 +219,7 @@ class ModuleRunner(ModuleRunnerBase):
                     continue
                 path_RunII = self.Path_STORAGE+year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/"
                 a = os.system("mkdir -p "+path_RunII+"Plots")
-                if self.Module=="SignalRegion":
-                    list_processes_plots.append(["Plots", "-f", "Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+year+".steer" ])
+                list_processes_plots.append(["Plots", "-f", "Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+year+".steer" ])
                 for sample in self.Processes_Dict:
                     mode = "MC" if "MC" in sample else "DATA"
                     filespath = path_RunII+self.PrefixrootFile+mode+"."+sample+"_noTree.root"
@@ -225,10 +227,6 @@ class ModuleRunner(ModuleRunnerBase):
                     for histo in glob.glob(filespath.replace("RunII","201*").replace(self.year,"201*").replace("_noTree","*")):
                         command.append(histo)
                     list_processes.append(command)
-        # for i in list_processes:
-        #     print i
-        print "Number of processes", len(list_processes)
-        parallelise(list_processes, 20)
         if doPlots:
             print "Number of processes", len(list_processes_plots)
             cwd = os.getcwd()
@@ -237,6 +235,11 @@ class ModuleRunner(ModuleRunnerBase):
                 process = subprocess.Popen(" ".join(proc), shell=True)
                 process.wait()
             os.chdir(cwd)
+        else:
+            # for i in list_processes:
+            #     print i
+            print "Number of processes", len(list_processes)
+            parallelise(list_processes, 20)
 
 
     @timeit

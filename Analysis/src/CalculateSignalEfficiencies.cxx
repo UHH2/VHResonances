@@ -43,21 +43,23 @@ void CalculateSignalEfficiencies(std::string histFolder) {
   std::string user            = std::getenv("USER");
   std::string Path_NFS        = "/nfs/dust/cms/user/"+user+"/";
   std::string Path_STORAGE    = Path_NFS+"WorkingArea/File/Analysis/";
+  std::string Path_ANALYSIS   = std::getenv("CMSSW_BASE"); Path_ANALYSIS += "/src/UHH2/VHResonances/Analysis/";
 
-  std::string outdir = "./SignalEfficiencies/";
+  std::string outdir = Path_ANALYSIS+"/SignalEfficiencies/";
   std::string prefix = "uhh2.AnalysisModuleRunner.MC.";
   std::string syst = "nominal";
 
   std::vector<std::string> years =  {"2016", "2017", "2018", "RunII"};
-  // std::vector<std::string> years =  {"2016"};
+  // std::vector<std::string> years =  {"RunII"};
   // std::vector<std::string> collections =  {"Puppi", "CHS", "HOTVR"};
   std::vector<std::string> collections =  {"Puppi"};
   std::vector<std::string> channels =  {"muonchannel", "electronchannel", "leptonchannel" };
+  // std::vector<std::string> channels =  {"muonchannel"};
   std::vector<std::string> decaymodes =  {"bb", "WW", "else", "Inc" };
 
   double x_min = 300;
-  double y_min = 8500;
-  double x_max = 0.001;
+  double x_max = 8500;
+  double y_min = 0.001;
   double y_max = 30;
   TString x_name = "M_{Z'} (GeV)";
   TString y_name = "Selection efficiency";
@@ -66,24 +68,46 @@ void CalculateSignalEfficiencies(std::string histFolder) {
   extraText  = "Simulation";
   extraText2 = "Work in progress";
   lumi_13TeV  = "";
+  ForThesis();
 
   std::map<std::string, mypair_I > Cuts;
 
   // Cuts.insert(std::pair<std::string, mypair_I>("0_nocuts",                              mypair_I("weights",kBlack))); // only as control
-  Cuts.insert(std::pair<std::string, mypair_I>("1_N_{l} #geq 2",                        mypair_I("NLeptonSel",                    kRed+1)));
-  Cuts.insert(std::pair<std::string, mypair_I>("2_#it{p}_{T}^{#it{jet}} #geq 200 GeV",  mypair_I("NBoostedJet",                   kOrange+1)));
-  Cuts.insert(std::pair<std::string, mypair_I>("3_#Delta R(ll) < 1.0",                  mypair_I("DeltaRDiLepton",                kOrange-2)));
-  Cuts.insert(std::pair<std::string, mypair_I>("4_#Delta#phi(ll,#it{jet}) #geq #pi/2",  mypair_I("JetDiLeptonPhiAngular",         kGreen+1)));
+  Cuts.insert(std::pair<std::string, mypair_I>("1_N_{l} #geq 2",                        mypair_I("NLeptonSel",                    kOrange-2)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("2_#it{p}_{T}^{#it{jet}} #geq 200 GeV",  mypair_I("NBoostedJet",                   kOrange-2)));
+  Cuts.insert(std::pair<std::string, mypair_I>("3_#Delta R(ll) < 1.0",                  mypair_I("DeltaRDiLepton",                kOrange+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("4_#Delta#phi(ll,#it{jet}) #geq #pi/2",  mypair_I("JetDiLeptonPhiAngular",         kGreen+1)));
   // Cuts.insert(std::pair<std::string, mypair_I>("5_preselection",                        mypair_I("Preselection",                  kBlack))); // only as control
-  Cuts.insert(std::pair<std::string, mypair_I>("6_Triggers",                            mypair_I("Trigger",                       kGreen+3)));
+  Cuts.insert(std::pair<std::string, mypair_I>("6_Triggers",                            mypair_I("Trigger",                       kRed+1)));
   // Cuts.insert(std::pair<std::string, mypair_I>("7_Z' Reconstruction",                   mypair_I("ZprimeReco",                    kGreen+2))); // only as control
-  Cuts.insert(std::pair<std::string, mypair_I>("7_Z' Selection",                        mypair_I("ZprimeSelection",               kAzure+1)));
-  Cuts.insert(std::pair<std::string, mypair_I>("8_#it{p}_{T}^{#it{ll}}/m_{Z'} #geq 0.2",mypair_I("PTMassCut",                     kBlue+1)));
-  Cuts.insert(std::pair<std::string, mypair_I>("9_DeepBoosted",                         mypair_I(histFolder+"_SR",  kViolet+1)));
-  Cuts.insert(std::pair<std::string, mypair_I>("00_H4qvsQCD_SR",                        mypair_I(histFolder+"_SR",  kGreen+3)));
-  Cuts.insert(std::pair<std::string, mypair_I>("01_H4qvsQCD_CR",                        mypair_I(histFolder+"_CR",  kGreen+1)));
-  Cuts.insert(std::pair<std::string, mypair_I>("10_HbbvsQCD_SR",                        mypair_I("btag_DeepBoosted_HbbvsQCD_SR",  kViolet+1)));
-  Cuts.insert(std::pair<std::string, mypair_I>("11_HbbvsQCD_CR",                        mypair_I("btag_DeepBoosted_HbbvsQCD_CR",  kMagenta+1)));
+  Cuts.insert(std::pair<std::string, mypair_I>("7_Z' Selection",                        mypair_I("ZprimeSelection",               kBlue+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("8_#it{p}_{T}^{#it{ll}}/m_{Z'} #geq 0.2",mypair_I("PTMassCut",                     kBlue+1)));
+  Cuts.insert(std::pair<std::string, mypair_I>("8_H4qvsQCD",                            mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_SR", kAzure+1)));
+  Cuts.insert(std::pair<std::string, mypair_I>("9_HccvsQCD",                            mypair_I(histFolder+"_SR",                kGreen+3)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_cc2",                    mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_cc2_SR",   kGreen+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_cc1",                    mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_cc1_SR", kBlue+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_ccMD",                    mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_ccMD_SR", kOrange+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_cc",                     mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_cc_SR",   kViolet+1)));
+
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_3",                      mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_3_SR",    kBlack)));
+  // // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted",                        mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_SR",      kRed+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_cc2",                     mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_cc2_SR",   kGreen+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_cc",                     mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_cc_SR",   kViolet+1)));
+  // // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_gg",                     mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_gg_SR",   kAzure+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("98_tau42",                              mypair_I("tau42_SR",                                 kOrange+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("98_tau21",                              mypair_I("tau21_SR",                                 kOrange-1)));
+  // // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_2",                      mypair_I(histFolder+"_2_SR",                         kRed+2)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_cc2_2",                   mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_cc2_2_SR", kGreen+2)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_cc_2",                   mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_cc_2_SR", kViolet+2)));
+  // // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_gg_2",                   mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_gg_2_SR", kAzure+2)));
+  // // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_3",                      mypair_I(histFolder+"_3_SR",                         kRed+3)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_cc2_3",                   mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_cc2_3_SR", kGreen+3)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_cc_3",                   mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_cc_3_SR", kViolet+3)));
+  // // Cuts.insert(std::pair<std::string, mypair_I>("99_DeepBoosted_gg_3",                   mypair_I("btag_DeepBoosted_H4qvsQCDmassdep_gg_3_SR", kAzure+3)));
+  // // Cuts.insert(std::pair<std::string, mypair_I>("00_H4qvsQCD_SR",                        mypair_I(histFolder+"_SR",  kGreen+3)));
+  // // Cuts.insert(std::pair<std::string, mypair_I>("01_H4qvsQCD_CR",                        mypair_I(histFolder+"_CR",  kGreen+1)));
+  // // // Cuts.insert(std::pair<std::string, mypair_I>("10_HbbvsQCD_SR",                        mypair_I("btag_DeepBoosted_HbbvsQCD_SR",  kViolet+1)));
+  // // Cuts.insert(std::pair<std::string, mypair_I>("11_HbbvsQCD_CR",                        mypair_I("btag_DeepBoosted_HbbvsQCD_CR",  kMagenta+1)));
   Cuts.insert(std::pair<std::string, mypair_I>("20_tau42_SR",                           mypair_I("tau42_SR",                      kOrange+1)));
   Cuts.insert(std::pair<std::string, mypair_I>("21_tau42_CR",                           mypair_I("tau42_CR",                      kOrange-2)));
 
@@ -151,6 +175,7 @@ void CalculateSignalEfficiencies(std::string histFolder) {
               TFile *file_presel  = new TFile(fn_presel);
               TFile *file_sel     = new TFile(fn_sel);
               TFile *file_csr     = new TFile(fn_csr);
+
               // Load histograms
               for (std::pair<std::string, mypair_I> element : Cuts) {
                 std::string tag = element.first;
@@ -164,11 +189,12 @@ void CalculateSignalEfficiencies(std::string histFolder) {
                 TH1F* h_preselection = (TH1F*)file_presel->Get("ZprimeCandidate_"+cut+"/"+hname);
                 TH1F* h_selection = (TH1F*)file_sel->Get("ZprimeCandidate_"+cut+"/"+hname);
                 if (isCSR) h_selection = (TH1F*)file_csr->Get("ZprimeCandidate_"+cut+"/"+hname);
+
                 //Decide which is the right one.
                 TH1F* h_sel;
                 if (h_preselection) h_sel = h_preselection;
                 else if (h_selection) h_sel = h_selection;
-                else h_sel = (TH1F*)file_csr->Get("ZprimeCandidate_"+cut+"/"+hname); //In case the hist in the SignalRegion file (eg. 9_DeepBoosted)
+                else h_sel = (TH1F*)file_csr->Get("ZprimeCandidate_"+cut+"/"+hname); //In case the hist in the SignalRegion file (eg. 9_HccvsQCD)
 
                 double sel_event = h_sel->GetBinContent(1);
                 SignalEfficiencies[tag][Mass_index] += sel_event/tot_event;
@@ -183,9 +209,9 @@ void CalculateSignalEfficiencies(std::string histFolder) {
           lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at(year).at("lumi_fb"));
 
           y_max = 30;
-          TCanvas* canv_eff = tdrCanvas(("canv_eff"+namePlot).c_str(), x_min, y_min, x_max, y_max, x_name, y_name);
+          TCanvas* canv_eff = tdrCanvas(("canv_eff"+namePlot).c_str(), x_min, x_max, y_min, y_max, x_name, y_name);
           canv_eff->SetLogy(1);
-          TCanvas* canv_eff_SR = tdrCanvas(("canv_eff_SR"+namePlot).c_str(), x_min, y_min, x_max, y_max, x_name, y_name);
+          TCanvas* canv_eff_SR = tdrCanvas(("canv_eff_SR"+namePlot).c_str(), x_min, x_max, y_min, y_max, x_name, y_name);
           canv_eff_SR->SetLogy(1);
           TLegend *leg_eff = tdrLeg(0.50,0.68,0.89,0.89, 0.030, 42, kBlack);
           leg_eff->SetNColumns(2);
@@ -206,7 +232,7 @@ void CalculateSignalEfficiencies(std::string histFolder) {
             else leg_eff->AddEntry(gr_eff, tag.substr(tag.find("_")+1).c_str(),"lp");
 
             //Save graph for further usage. We care only about the SR eff.
-            if(tag=="9_DeepBoosted") Plot_ComparisonFinal[namePlot] = gr_eff;
+            if(tag=="9_HccvsQCD") Plot_ComparisonFinal[namePlot] = gr_eff;
           }
 
           canv_eff->cd();
@@ -222,7 +248,7 @@ void CalculateSignalEfficiencies(std::string histFolder) {
           // Create eff normalized wrt the previous step
           // NB. This is nothing related to e_x^norm
           y_max = 1.5;
-          TCanvas* canv_eff_norm = tdrCanvas(("canv_eff_norm"+namePlot).c_str(), x_min, y_min, x_max, y_max, x_name, y_name);
+          TCanvas* canv_eff_norm = tdrCanvas(("canv_eff_norm"+namePlot).c_str(), x_min, x_max, y_min, y_max, x_name, y_name);
           TLegend *leg_eff_norm = tdrLeg(0.50,0.68,0.89,0.89, 0.030, 42, kBlack);
           leg_eff_norm->SetNColumns(2);
 
@@ -244,7 +270,7 @@ void CalculateSignalEfficiencies(std::string histFolder) {
 
           // Create eff relative e_x^rel
           y_max = 1.5;
-          TCanvas* canv_eff_rel = tdrCanvas(("canv_rel_eff"+namePlot).c_str(), x_min, y_min, x_max, y_max, x_name, y_name);
+          TCanvas* canv_eff_rel = tdrCanvas(("canv_rel_eff"+namePlot).c_str(), x_min, x_max, y_min, y_max, x_name, y_name);
           // canv_eff_rel->SetLogy(1);
           TLegend *leg_eff_rel = tdrLeg(0.50,0.68,0.89,0.89, 0.030, 42, kBlack);
           leg_eff_rel->SetNColumns(2);
@@ -283,42 +309,44 @@ void CalculateSignalEfficiencies(std::string histFolder) {
   // Now all the eff are stored. One can plot extra comparisons
 
   TCanvas* canv_ComparisonFinal;
-  y_max = 30.;
+  y_min = 5*1e-04;
+  y_max = 3.;
   TLegend* leg_ComparisonFinal;
   int color, lineStyle, markerSyle=kFullDotLarge;
   std::string namePlot, nameLeg;
 
   if (FindInVector(years, "RunII")>0) {
     lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at("RunII").at("lumi_fb"));
-    canv_ComparisonFinal = tdrCanvas("canv_ComparisonFinal_RunII", x_min, y_min, x_max, y_max, x_name, y_name);
+    canv_ComparisonFinal = tdrCanvas("canv_ComparisonFinal_RunII", x_min, x_max, y_min, y_max, x_name, y_name);
     canv_ComparisonFinal->SetLogy(1);
     leg_ComparisonFinal = tdrLeg(0.40,0.68,0.89,0.89, 0.030, 42, kBlack);
     leg_ComparisonFinal->SetNColumns(3);
 
-    color = kRed+1;    lineStyle = kSolid;  namePlot = "WW_Puppi_muonchannel_RunII_"+histFolder;       nameLeg = "Z#mu#muHWW";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kOrange+1; lineStyle = kDashed; namePlot = "bb_Puppi_muonchannel_RunII_"+histFolder;       nameLeg = "Z#mu#muHbb";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kOrange;   lineStyle = kDotted; namePlot = "else_Puppi_muonchannel_RunII_"+histFolder;     nameLeg = "Z#mu#muHelse"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kBlue+1;   lineStyle = kSolid;  namePlot = "WW_Puppi_electronchannel_RunII_"+histFolder;   nameLeg = "ZeeHWW";       tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kViolet+1; lineStyle = kDashed; namePlot = "bb_Puppi_electronchannel_RunII_"+histFolder;   nameLeg = "ZeeHbb";       tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kViolet;   lineStyle = kDotted; namePlot = "else_Puppi_electronchannel_RunII_"+histFolder; nameLeg = "ZeeHelse";     tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kGreen+3;  lineStyle = kSolid;  namePlot = "WW_Puppi_leptonchannel_RunII_"+histFolder;     nameLeg = "ZllHWW";       tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kGreen+1;  lineStyle = kDashed; namePlot = "bb_Puppi_leptonchannel_RunII_"+histFolder;     nameLeg = "ZllHbb";       tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kGreen+2;  lineStyle = kDotted; namePlot = "else_Puppi_leptonchannel_RunII_"+histFolder;   nameLeg = "ZllHelse";     tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+
+    color = kRed+1;    markerSyle=kFullDotLarge;     lineStyle = kSolid;  namePlot = "WW_Puppi_muonchannel_RunII_"+histFolder;       nameLeg = "Z#mu#muHWW";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kOrange+1; markerSyle=kFullCircle;       lineStyle = kDashed; namePlot = "bb_Puppi_muonchannel_RunII_"+histFolder;       nameLeg = "Z#mu#muHbb";   tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kOrange-2; markerSyle=kOpenCircle;       lineStyle = kDotted; namePlot = "else_Puppi_muonchannel_RunII_"+histFolder;     nameLeg = "Z#mu#muHelse"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kBlue+1;   markerSyle=kFullDiamond;      lineStyle = kSolid;  namePlot = "WW_Puppi_electronchannel_RunII_"+histFolder;   nameLeg = "ZeeHWW";       tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kViolet+1; markerSyle=kFullCross;        lineStyle = kDashed; namePlot = "bb_Puppi_electronchannel_RunII_"+histFolder;   nameLeg = "ZeeHbb";       tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kViolet;   markerSyle=kOpenSquare;       lineStyle = kDotted; namePlot = "else_Puppi_electronchannel_RunII_"+histFolder; nameLeg = "ZeeHelse";     tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kGreen+3;  markerSyle=kFullTriangleDown; lineStyle = kSolid;  namePlot = "WW_Puppi_leptonchannel_RunII_"+histFolder;     nameLeg = "ZllHWW";       tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kGreen+1;  markerSyle=kFullSquare;       lineStyle = kDashed; namePlot = "bb_Puppi_leptonchannel_RunII_"+histFolder;     nameLeg = "ZllHbb";       tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kGreen+2;  markerSyle=kFullTriangleUp;   lineStyle = kDotted; namePlot = "else_Puppi_leptonchannel_RunII_"+histFolder;   nameLeg = "ZllHelse";     tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
     leg_ComparisonFinal->Draw("same");
     canv_ComparisonFinal->SaveAs((outdir+"Eff_ComparisonFinal_RunII_"+histFolder+".pdf").c_str());
   }
 
   lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at("RunII").at("lumi_fb"));
-  canv_ComparisonFinal = tdrCanvas("canv_ComparisonFinal_Inc", x_min, y_min, x_max, y_max, x_name, y_name);
+  canv_ComparisonFinal = tdrCanvas("canv_ComparisonFinal_Inc", x_min, x_max, y_min, y_max, x_name, y_name);
   canv_ComparisonFinal->SetLogy(1);
   leg_ComparisonFinal = tdrLeg(0.40,0.68,0.89,0.89, 0.025, 42, kBlack);
   leg_ComparisonFinal->SetNColumns(3);
 
   for (std::string year: years) {
-    if (year=="2016")  color = kGreen+2;
-    if (year=="2017")  color = kAzure+1;
-    if (year=="2018")  color = kRed+1;
-    if (year=="RunII") color = kOrange+1;
+    if (year=="2016")  {color = kGreen+2;  markerSyle=kFullTriangleDown;}
+    if (year=="2017")  {color = kAzure+1;  markerSyle=kFullTriangleUp;}
+    if (year=="2018")  {color = kRed+1;    markerSyle=kFullSquare;}
+    if (year=="RunII") {color = kOrange+1; markerSyle=kFullDotLarge;}
     for (std::string channel: channels) {
       namePlot = "Inc_Puppi_"+channel+"_"+year+"_"+histFolder;
       nameLeg = year+std::string(6-year.size(), ' ' );
@@ -336,17 +364,17 @@ void CalculateSignalEfficiencies(std::string histFolder) {
 
   if (FindInVector(years, "RunII")>0) {
     lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at("RunII").at("lumi_fb"));
-    canv_ComparisonFinal = tdrCanvas("canv_ComparisonFinal_RunII_Higgs_", x_min, y_min, x_max, y_max, x_name, y_name);
+    canv_ComparisonFinal = tdrCanvas("canv_ComparisonFinal_RunII_Higgs_", x_min, x_max, y_min, y_max, x_name, y_name);
     canv_ComparisonFinal->SetLogy(1);
     leg_ComparisonFinal = tdrLeg(0.40,0.68,0.89,0.89, 0.030, 42, kBlack);
     leg_ComparisonFinal->SetNColumns(3);
 
-    color = kGreen+3;  lineStyle = kSolid;  namePlot = "WW_Puppi_leptonchannel_RunII_"+histFolder;    nameLeg = "ZllHWW";      tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kGreen+1;  lineStyle = kSolid;  namePlot = "bb_Puppi_leptonchannel_RunII_"+histFolder;    nameLeg = "ZllHbb";      tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kGreen+2;  lineStyle = kSolid;  namePlot = "else_Puppi_leptonchannel_RunII_"+histFolder;  nameLeg = "ZllHelse";    tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kViolet+1; lineStyle = kDotted; namePlot = "Inc_Puppi_muonchannel_RunII_"+histFolder;     nameLeg = "Z#mu#muHInc"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kAzure+1;  lineStyle = kDotted; namePlot = "Inc_Puppi_electronchannel_RunII_"+histFolder; nameLeg = "ZeeHInc";     tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
-    color = kRed+1;    lineStyle = kSolid;  namePlot = "Inc_Puppi_leptonchannel_RunII_"+histFolder;   nameLeg = "ZllHInc";     tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kGreen+3;  markerSyle=kFullTriangleDown; lineStyle = kSolid;  namePlot = "WW_Puppi_leptonchannel_RunII_"+histFolder;    nameLeg = "ZllHWW";      tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kGreen+1;  markerSyle=kFullSquare;       lineStyle = kSolid;  namePlot = "bb_Puppi_leptonchannel_RunII_"+histFolder;    nameLeg = "ZllHbb";      tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kGreen+2;  markerSyle=kFullTriangleUp;   lineStyle = kSolid;  namePlot = "else_Puppi_leptonchannel_RunII_"+histFolder;  nameLeg = "ZllHelse";    tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kViolet+1; markerSyle=kOpenSquare;       lineStyle = kDotted; namePlot = "Inc_Puppi_muonchannel_RunII_"+histFolder;     nameLeg = "Z#mu#muHInc"; tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kAzure+1;  markerSyle=kFullCross;        lineStyle = kDotted; namePlot = "Inc_Puppi_electronchannel_RunII_"+histFolder; nameLeg = "ZeeHInc";     tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
+    color = kRed+1;    markerSyle=kFullDotLarge;     lineStyle = kSolid;  namePlot = "Inc_Puppi_leptonchannel_RunII_"+histFolder;   nameLeg = "ZllHInc";     tdrDraw(Plot_ComparisonFinal[namePlot], "lp", markerSyle, color, lineStyle, color, 1000, color); leg_ComparisonFinal->AddEntry(Plot_ComparisonFinal[namePlot], nameLeg.c_str(),"lp");
     leg_ComparisonFinal->Draw("same");
     canv_ComparisonFinal->SaveAs((outdir+"Eff_ComparisonFinal_RunII_Higgs_"+histFolder+".pdf").c_str());
   }
@@ -366,12 +394,11 @@ int FindInVector(const std::vector<std::string>& vec, const std::string& el) {
 int main(int argc, char** argv){
   gSystem->Exec("mkdir -p ./SignalEfficiencies");
 
-  std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDptdep", "btag_DeepBoosted_H4qvsQCDp2",
-  "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDpt1000", "btag_DeepBoosted_H4qvsQCDpt1000p2", "btag_DeepBoosted_H4qvsQCDpt1000p02",
-  "btag_DeepBoosted_H4qvsQCDptdep_x3", "btag_DeepBoosted_H4qvsQCDptdep_x2x3", "btag_DeepBoosted_H4qvsQCDptdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x3",
-  "btag_DeepBoosted_H4qvsQCDmassdep2_x3", "btag_DeepBoosted_H4qvsQCDmassdep_x2x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x2" };
+  std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_2", "btag_DeepBoosted_H4qvsQCDmassdep_3",
+  "btag_DeepBoosted_H4qvsQCDmassdep_bb", "btag_DeepBoosted_H4qvsQCDmassdep_cc", "btag_DeepBoosted_H4qvsQCDmassdep_gg", "btag_DeepBoosted_H4qvsQCDmassdep_cc_2", "btag_DeepBoosted_H4qvsQCDmassdep_gg_2",
+  "btag_DeepBoosted_H4qvsQCDmassdep_cc_3", "btag_DeepBoosted_H4qvsQCDmassdep_gg_3", "tau42"};
 
-  // std::vector<std::string> histFolders = { "btag_DeepBoosted_H4qvsQCDmassdep_x3" };
+  // std::vector<std::string> histFolders = { "btag_DeepBoosted_H4qvsQCDmassdep" };
 
   if (argc>1) {
     std::string histFolder;
