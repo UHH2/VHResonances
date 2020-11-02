@@ -52,6 +52,10 @@ extern bool kRectangular;
 
 
 
+void CMSOff();
+void ExtraTextOff();
+
+void ForThesis();
 
 // tdrGrid: Turns the grid lines on (true) or off (false)
 void tdrGrid(bool gridOn);

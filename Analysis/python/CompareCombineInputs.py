@@ -16,8 +16,8 @@ class CompareCombineInputs(ModuleRunnerBase):
     def __init__(self, year="RunII", histFolder="btag_DeepBoosted_H4qvsQCDmassdep_x3", channel="muonchannel"):
         VariablesBase.__init__(self)
         self.year           = year
-        # self.histoName      = "Zprime_mass_rebin30"
-        self.histoName      = "Zprime_mass_rebin100"
+        self.histoName      = "Zprime_mass_rebin30"
+        # self.histoName      = "Zprime_mass_rebin100"
         self.fitFunction    = "Exp_2"
         self.histFolder     = histFolder
         self.histoPath      = self.Path_STORAGE+self.year+"/SignalRegion/Puppi/"+channel+"/nominal/"
@@ -48,12 +48,13 @@ class CompareCombineInputs(ModuleRunnerBase):
         file_ = ROOT.TFile(self.histoPath+self.PrefixrootFile+"DATA."+dataName+"_"+self.year+"_noTree.root")
         self.histos["DATA_CR"] = file_.Get("ZprimeCandidate_"+self.histFolder+"_CR/"+self.histoName).Clone("DATA_CR")
         self.histos["DATA_CR"].SetDirectory(0)
-        # self.histos["DATA_SR"] = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone("DATA_SR")
-        # self.histos["DATA_SR"].SetDirectory(0)
+        self.histos["DATA_SR"] = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone("DATA_SR")
+        self.histos["DATA_SR"].SetDirectory(0)
         file_.Close()
         for massPoint in self.SignalSamples:
             if "inv" in massPoint: continue
             if massPoint=="MC_ZprimeToZH_M600": continue
+            if massPoint=="MC_ZprimeToZH_M800": continue
             file_ = ROOT.TFile(self.histoPath+self.PrefixrootFile+"MC."+massPoint+"_"+self.year+"_noTree.root")
             self.histos[massPoint] = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone(massPoint)
             self.histos[massPoint].SetDirectory(0)
@@ -185,8 +186,10 @@ def main():
     # CompareCombineInputs().RunAll()
     # CompareCombineInputs().RunAll()
 
-    for histFolder in ["btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_cc"]:
-        CompareCombineInputs(histFolder=histFolder).RunAll()
+    # for histFolder in ["btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_cc"]:
+    #     CompareCombineInputs(histFolder=histFolder).RunAll()
+    # CompareCombineInputs(histFolder="btag_DeepBoosted_H4qvsQCDmassdep_cc_2").RunAll()
+    CompareCombineInputs(histFolder="btag_DeepBoosted_H4qvsQCDmassdep_cc").RunAll()
 
 
     # for channel in channels:

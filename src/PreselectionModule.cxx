@@ -147,7 +147,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   MB["isHOTVR"]           = string2bool(ctx.get("isHOTVR"));
   MB["muonchannel"]       = string2bool(ctx.get("muonchannel"));
   MB["electronchannel"]   = string2bool(ctx.get("electronchannel"));
-  MB["invisiblechannel"]   = string2bool(ctx.get("invisiblechannel"));
+  MB["invisiblechannel"]  = string2bool(ctx.get("invisiblechannel"));
   MS["SysType_PU"]        = ctx.get("SysType_PU");
   MB["lumisel"]           = string2bool(ctx.get("lumisel"));
   MB["mclumiweight"]      = string2bool(ctx.get("mclumiweight"));
@@ -157,8 +157,8 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   MB["tauid"]             = string2bool(ctx.get("tauid"));
   MB["metfilters"]        = string2bool(ctx.get("metfilters"));
 
-  if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one jet collection.");
-  if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In PreselectionModule.cxx: Choose exactly one lepton channel.");
+  if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In "+NameModule+".cxx: Choose exactly one jet collection.");
+  if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In "+NameModule+".cxx: Choose exactly one lepton channel.");
 
   MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": (MB["invisiblechannel"]? "invisible": ""));
 
@@ -208,10 +208,10 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   metfilters_selection->add<TriggerSelection>("HBHENoiseFilter", "Flag_HBHENoiseFilter");
   metfilters_selection->add<TriggerSelection>("HBHENoiseIsoFilter", "Flag_HBHENoiseIsoFilter");
   metfilters_selection->add<TriggerSelection>("EcalDeadCellTriggerPrimitiveFilter", "Flag_EcalDeadCellTriggerPrimitiveFilter");
+  metfilters_selection->add<TriggerSelection>("BadPFMuonFilter", "Flag_BadPFMuonFilter");
   if (MS["year"] != "2016") metfilters_selection->add<EcalBadCalibSelection>("EcalBadCalibSelection"); /*TODO check 2016*/ // Use this instead of Flag_ecalBadCalibFilter, uses ecalBadCalibReducedMINIAODFilter in ntuple_generator
-  if (MS["year"] != "2016") metfilters_selection->add<TriggerSelection>("BadPFMuonFilter", "Flag_BadPFMuonFilter"); /*TODO check 2016, maybe Extra_BadPFMuonFilter */
   if (!MB["is_mc"]) metfilters_selection->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter"); /* TODO Not recommended for MC, but do check */
-  /* metfilters_selection->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter"); TODO Not recommended, under review.Separate module in ntuple_generator for 2016v2*/
+  /* metfilters_selection->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter"); TODO Not recommended, under review.*/
 
   //Quick fix for Detector issues
   if (MB["invisiblechannel"]) HEMEventCleaner_Selection.reset(new HEMCleanerSelection(ctx, MS["jetLabel"], true, true, true));

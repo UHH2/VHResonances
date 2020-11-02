@@ -34,7 +34,7 @@ private:
   "btag_DeepBoosted_probQCDb", "btag_DeepBoosted_probQCDbb", "btag_DeepBoosted_probQCDc", "btag_DeepBoosted_probQCDcc", "btag_DeepBoosted_probQCDothers",
   "btag_DeepBoosted_probWqq", "btag_DeepBoosted_probWcq", "btag_DeepBoosted_probZcc", "btag_DeepBoosted_probZqq", "btag_DeepBoosted_probZbb",
   "btag_DeepBoosted_probHbb", "btag_DeepBoosted_probHcc", "btag_DeepBoosted_raw_score_qcd", "btag_DeepBoosted_raw_score_w", "btag_DeepBoosted_raw_score_z",
-  "btag_DeepBoosted_HbbvsHcc", "btag_DeepBoosted_HvsQCD" };
+  "btag_DeepBoosted_HbbvsHcc", "btag_DeepBoosted_HccvsQCD", "btag_DeepBoosted_HvsQCD" };
 
   std::vector<std::string> discriminators_subjets =  {"btag_combinedSecondaryVertex", "btag_combinedSecondaryVertexMVA", "btag_DeepJet",
   "btag_DeepCSV", "btag_DeepFlavour_bb", "btag_DeepFlavour_b", "btag_DeepFlavour_lepb", "btag_DeepFlavour_uds", "btag_DeepFlavour_g", "btag_DeepFlavour_c"};

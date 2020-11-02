@@ -84,6 +84,9 @@
 *******************************************
 */
 
+
+const std::vector<double> MyMassPoints = {1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000};
+
 double GetRange(TH1F* h, double x);
 
 double CalculateIntegral(TH1F* h, double min, double max, bool dorebin);
@@ -176,14 +179,9 @@ private:
   std::string SRname, CRname;
 
   std::vector<std::string> SystNames = {"nominal", "all"};
-  // std::vector<std::string> SystNames = {"nominal"};
-  // std::vector<std::string> BkgNames = {"DY", "TTbar", "WZ", "WW", "ZZ"}; //TODO
-  std::vector<std::string> BkgNames = {"DY", "TTbar", "WZ","ZZ"};
+  // std::vector<std::string> BkgNames = {"DY", "TTbar", "WZ", "WW", "ZZ"};
+  std::vector<std::string> BkgNames = {"DY", "TTbar"};
   std::vector<std::string> Modes = {"bkg_pred", "data", "main_bkg_CR", "main_bkg_SR", "DY_CR", "DY_SR"};
-
-  //TODO
-  // const std::unordered_map<int, int> colors = {{600, kRed}, {800, kGreen}, {1000, kViolet}, {1200, kBlue}, {1400, kBlack}, {1600, kOrange}, {1800, kAzure}, {2000, kSpring}, {2500, kPink},
-  // {3000, kRed}, {3500, kGreen}, {4000, kViolet}, {4500, kBlue}, {5000, kBlack}, {5500, kOrange}, {6000, kAzure}, {7000, kSpring}, {8000, kPink}};
 
   std::string dataName, dataFileName;
   std::string BkgName = "DY";
@@ -206,11 +204,9 @@ private:
   std::unordered_map<std::string, double> nEventsSignal;
   std::unordered_map<std::string, double> fit_min, fit_max, plot_min, plot_max, y_max;
 
-  // TFile file_WS("WS.root","RECREATE");
   std::ofstream DataCard, output, SignalProperties;
   std::unique_ptr<RooWorkspace> ws;
 
-  // TODO
   std::string studies="nominal";
   bool isHbb = false;
   bool fitCR = true;
@@ -239,16 +235,24 @@ private:
 
   TString extra_text = doFtest? "_Ftest_": "";
 
-  double x_lo     = 1000;
+  double x_lo     = 700;
   double x_hi     = 10000;
   double plot_lo  = 1000;
-  double plot_hi  = 4000;
+  double plot_hi  = 6000;
   double plot_ylo = 1.1*1e-03;
   double plot_yhi = 1e07;
   // double fit_lo   = 600;
-  double fit_lo   = 1100;
-  double fit_hi   = 4000;
+  double fit_lo   = 1230;
+  double fit_hi   = 3500;
+
+  // double fit_lo   = 1360; DY_CR bin30 ok also for DR_SR 30
+  // double fit_hi   = 5500; DY_CR bin30 ok also for DR_SR 30
+  // double fit_lo   = 1200; data_CR bin30
+  // double fit_hi   = 4000; data_CR bin30
+  // double fit_lo   = 1300; DR_SR bin30
+  // double fit_hi   = 4500; DR_SR bin30
   double fit_SR   = 810;
+  double fit_max_DY_CR = 5000;
 
   bool debug = false;
   // bool debug = true;
