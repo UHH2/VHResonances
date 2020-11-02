@@ -37,7 +37,7 @@
 <!ENTITY topjetid                   "true">  <!--true/false -->
 <!ENTITY do_metcorrection           "true">  <!--true/false -->
 
-<!--   SYSTEMatic uncertainties -->
+<!-- Systematic uncertainties -->
 <!ENTITY JEC_Version                "defaultValue">
 <!ENTITY JER_Version                "defaultValue">
 <!ENTITY jecsmear_direction         "nominal">  <!--nominal/down/up -->
@@ -90,7 +90,6 @@
 <!ENTITY MC_ZprimeToZH_inv_M6000_2016     SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZprimeToZH/ZprimeToZHToZinvHinc_narrow_M-6000_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
 <!ENTITY MC_ZprimeToZH_inv_M7000_2016     SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZprimeToZH/ZprimeToZHToZinvHinc_narrow_M-7000_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
 <!ENTITY MC_ZprimeToZH_inv_M8000_2016     SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2016v3/ZprimeToZH/ZprimeToZHToZinvHinc_narrow_M-8000_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
-
 
 <!ENTITY MC_DY_HT100to200_2016            SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-100to200.xml">
 <!ENTITY MC_DY_HT200to400_2016            SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2016v3/MC_DYJetsToLL_M-50_HT-200to400.xml">
@@ -157,7 +156,6 @@
 <!ENTITY MC_ZprimeToZH_M6000_2017         SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/ZprimeToZH/ZprimeToZHToZlepHinc_narrow_M-6000_TuneCP5_13TeV-madgraph-pythia8_Fall17_v1.xml">
 <!ENTITY MC_ZprimeToZH_M7000_2017         SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/ZprimeToZH/ZprimeToZHToZlepHinc_narrow_M-7000_TuneCP5_13TeV-madgraph-pythia8_Fall17_v1.xml">
 <!ENTITY MC_ZprimeToZH_M8000_2017         SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/ZprimeToZH/ZprimeToZHToZlepHinc_narrow_M-8000_TuneCP5_13TeV-madgraph-pythia8_Fall17_v1.xml">
-
 
 <!ENTITY MC_ZprimeToZH_inv_M600_2017      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/ZprimeToZH/ZprimeToZHToZinvHinc_narrow_M-600_TuneCP5_13TeV-madgraph-pythia8_Fall17_v1.xml">
 <!ENTITY MC_ZprimeToZH_inv_M800_2017      SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/RunII_102X_v2/2017/ZprimeToZH/ZprimeToZHToZinvHinc_narrow_M-800_TuneCP5_13TeV-madgraph-pythia8_Fall17_v1.xml">
@@ -568,11 +566,11 @@
     <InputData Type="MC"    Version="MC_TTToHadronic_2018"            Lumi="110354799.3"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTToHadronic_2018;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_TTToSemiLeptonic_2018"        Lumi="83703610.93"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTToSemiLeptonic_2018;        <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_WW_2018"                      Lumi="103452.8202"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2018;                      <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW_2018"                      Lumi="103401.8972"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2018;                      <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_WZ_2018"                      Lumi="141067.5381"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2018;                      <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_2018"                      Lumi="141037.2914"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2018;                      <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_ZZ_2018"                      Lumi="162746.7105"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2018;                      <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ_2018"                      Lumi="162728.3513"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2018;                      <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
     <InputData Type="MC"    Version="MC_WJetsToLNu_HT100To200_2018"   Lumi="21190.44971"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJetsToLNu_HT100To200_2018;   <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_WJetsToLNu_HT200To400_2018"   Lumi="62016.02242"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJetsToLNu_HT200To400_2018;   <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
@@ -687,7 +685,7 @@
 
     <Item Name="year"                       Value="&YEAR;"/>
 
-    <!--   SYSTEMatic uncertainties -->
+    <!-- Systematic uncertainties -->
     <Item Name="JEC_Version"                Value="&JEC_Version;"/>
     <Item Name="JER_Version"                Value="&JER_Version;"/>
     <Item Name="jersmear_direction"         Value="&jersmear_direction;"/>  <!--used only in UHH2/common/include/JetCorrections.cxx -->

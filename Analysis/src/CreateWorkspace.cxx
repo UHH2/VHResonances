@@ -31,72 +31,56 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
 
   // rangeLo = mass*(1-5./28.);
   // rangeHi = mass*(1+3.5/28.);
-  rangeLo = 0.776*mass-56;
-  rangeHi = 1.085*mass+46;
+  // rangeLo = 0.776*mass-56;
+  // rangeHi = 1.085*mass+46;
+  //
+  // if (mass==1200) rangeLo = 790;
+  // if (mass==1200) rangeHi = 1390;
 
-  if (mass==1200) rangeLo = 790;
-  if (mass==1200) rangeHi = 1390;
+  rangeLo = 0.7742*mass-113;
+  rangeHi = 1.0857*mass+46;
+
+  if (mass==1000) { rangeLo = 700;  rangeHi = 1400;}
+  if (mass==1200) { rangeLo = 700;  rangeHi = 1600;}
+
+  if (mass==1400) { rangeLo = 1000; rangeHi = 1800;}
+  if (mass==1600) { rangeLo = 1000; rangeHi = 1900;}
+  if (mass==1800) { rangeLo = 1100; rangeHi = 2000;}
+  if (mass==2000) { rangeLo = 1400; rangeHi = 2200;}
+  if (mass==2500) { rangeLo = 1800; rangeHi = 2700;}
+  if (mass==3000) { rangeLo = 2100; rangeHi = 3300;}
+  if (mass==3500) { rangeLo = 2400; rangeHi = 3900;}
+  if (mass==4000) { rangeLo = 2800; rangeHi = 4400;}
+  if (mass==4500) { rangeLo = 3400; rangeHi = 4900;}
+  if (mass==5000) { rangeLo = 3800; rangeHi = 5400;}
+  if (mass==5500) { rangeLo = 4400; rangeHi = 6000;}
+  if (mass==6000) { rangeLo = 4600; rangeHi = 6600;}
+  if (mass==7000) { rangeLo = 5700; rangeHi = 7600;}
+  if (mass==8000) { rangeLo = 6800; rangeHi = 8800;}
+
+  // if (mass==1200) rangeLo = 790;
+  // if (mass==1200) rangeHi = 1390;
 
 
   plotLo = mass*(1-10./28.);
   plotHi = mass*(1+10./28.);
-  ymax = (50-mass*1./100)*1.5;
-  if (mass<1200) ymax = (-20+mass*6./100)*1.4;
-  if (mass>3500) ymax = (30-mass*3./1000)*1.3;
+  // ymax = (50-mass*1./100)*1.5;
+  // if (mass<1200) ymax = (-20+mass*6./100)*1.4;
+  // if (mass>3500) ymax = (30-mass*3./1000)*1.5;
 
-  // fit mass:600	390 -- 690
-  // fit mass:800	540 -- 900
-  // fit mass:1000	720 -- 1110
-  // fit mass:1200	870 -- 1320
-  // fit mass:1400	1020 -- 1560
-  // fit mass:1600	1170 -- 1770
-  // fit mass:1800	1320 -- 1980
-  // fit mass:2000	1470 -- 2190
-  // fit mass:2500	1860 -- 2730
-  // fit mass:3000	2250 -- 3300
-  // fit mass:3500	2640 -- 3840
-  // fit mass:4000	3030 -- 4380
-  // fit mass:4500	3420 -- 4920
-  // fit mass:5000	3810 -- 5460
-  // fit mass:5500	4200 -- 6000
-  // fit mass:6000	4590 -- 6540
-  // fit mass:7000	5370 -- 7620
-  // fit mass:8000	6150 -- 8700
+  ymax = 2.8;
+
 
   ymax *= lumi_map.at(year).at("lumi_fb")/lumi_map.at("RunII").at("lumi_fb");
   if (year=="2017") ymax *= 1.1;
 
-  ymax *= xsec_ref_/0.1;
-
-  if ((histFolder.find("ptdep")!=std::string::npos || histFolder.find("massdep")!=std::string::npos)) ymax *= 6;
+  // ymax *= xsec_ref_/0.01;
 
   std::string hname = GetSgName(mass);
   rangeLo = GetRange(histo_map[hname].get(), rangeLo);
   rangeHi = GetRange(histo_map[hname].get(), rangeHi);
   plotLo  = GetRange(histo_map[hname].get(), plotLo);
   plotHi  = GetRange(histo_map[hname].get(), plotHi);
-
-  // rangeLo = GetRange(histo_map[hname].get(), 0.8*mass-88);
-  // rangeHi = GetRange(histo_map[hname].get(), 1.1*mass+18);
-
-  // rangeLo = GetRange(histo_map[hname].get(), 0.8*mass-60);
-  // rangeHi = GetRange(histo_map[hname].get(), 1.1*mass+44);
-
-  // rangeLo = GetRange(histo_map[hname].get(), 0.8*mass-103);
-  // rangeHi = GetRange(histo_map[hname].get(), 1.1*mass+18);
-
-  // 2016 ele
-  // if (year=="2016" && channel=="electronchannel") rangeLo = GetRange(histo_map[hname].get(), 0.8*mass-88);
-  // if (year=="2016" && channel=="electronchannel") rangeHi = GetRange(histo_map[hname].get(), 1.1*mass+18);
-  //   fit_max p0 = 43.636 +- 31.361
-  // fit_max p1 = 1.086 +- 0.008
-  // fit_min p0 = -60.489 +- 26.919
-  // fit_min p1 = 0.777 +- 0.007
-  //
-  // fit_max p0 = 17.868 +- 31.564
-  // fit_max p1 = 1.099 +- 0.008
-  // fit_min p0 = -103.616 +- 27.194
-  // fit_min p1 = 0.798 +- 0.007
 
 }
 
@@ -174,15 +158,14 @@ Histtype  = "ZprimeCandidate";
 // HistName  = "Zprime_mass";
 // HistName  = "Zprime_mass_rebin1";
 // HistName  = "Zprime_mass_rebin2";
-// HistName  = "Zprime_mass_rebin30";
-HistName  = "Zprime_mass_rebin100";
+HistName  = "Zprime_mass_rebin30";
+// HistName  = "Zprime_mass_rebin100";
 
 
 unique_name = "_"+channel+"_"+year;
 unique_name = TString(unique_name).ReplaceAll("channel","");
 unique_name_complete = unique_name.substr(1)+"_"+histFolder;
 filepath    = Path_STORAGE+year+"/"+Module+"/"+collection+"/"+channel+"/nominal/";
-
 
 dataName  = channel.substr(0, channel.find("channel")); dataName[0] = toupper(dataName[0]) ; dataName = "DATA_Single"+dataName;
 dataFileName = PrefixrootFile+"DATA."+dataName+"_"+year+"_noTree.root";
@@ -208,7 +191,7 @@ for (double i = 0; i < 1500; i+=bin) bins_Zprime_rebin.push_back(i);
 for (double i = 1500+bin; i <= 4000; i+=bin2) bins_Zprime_rebin.push_back(i);
 bins_Zprime_rebin.push_back(4000);
 
-for (std::string name : NameSgPars) SgPars[name] = std::vector<double>(MassPoints.size(), 0);
+for (std::string name : NameSgPars) SgPars[name] = std::vector<double>(MyMassPoints.size(), 0);
 
 
 // xsec_ref_ = 0.1; // this is to mantain the signal strenght close to 1; (remember to multiply for this Normalization when plotting)
@@ -284,7 +267,7 @@ void CreateRooWorkspace::LoadFiles() {
   }
 
   for (auto syst: SystNames) {
-    for (const int & mass : MassPoints) {
+    for (const int & mass : MyMassPoints) {
 
       std::string SgName = "M"+std::to_string(mass);
       std::string fname  = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+SgName+"_"+year+"_noTree.root";
@@ -351,9 +334,10 @@ void CreateRooWorkspace::PrepocessHistos() {
     if (debug) std::cout << "rebin " << mode << "\t" << CalculateIntegral(x.second.get(),fit_lo,fit_hi,doBinWidth) << '\n';
 
     // Removing bins with low stat TODO
-    if (mode=="DY_SR") {
+    if (mode=="DY_SR" || mode=="DY_CR") {
       for (int i = 0; i < x.second->GetNbinsX()+1; i++) {
-        if (x.second->GetBinContent(i)<2*1e-02) { histo_map[mode]->SetBinContent(i,0); histo_map[mode]->SetBinError(i,0); } // TODO
+        // if (x.second->GetBinContent(i)<2*1e-02) { histo_map[mode]->SetBinContent(i,0); histo_map[mode]->SetBinError(i,0); } // TODO
+        if (x.second->GetBinContent(i)<5*1e-03) { histo_map[mode]->SetBinContent(i,0); histo_map[mode]->SetBinError(i,0); } // TODO
         // if (h->GetBinCenter(i)>1280 && h->GetBinCenter(i)<1320) { h->SetBinContent(i,0); h->SetBinError(i,0); }
       }
     }
@@ -367,7 +351,7 @@ void CreateRooWorkspace::PrepocessHistos() {
 
 
   // Normalize signal to arbitraty xsec.
-  for (auto syst: SystNames) { for (const int & mass : MassPoints) { histo_map[GetSgName(mass,syst)]->Scale(xsec_ref_); } }
+  for (auto syst: SystNames) { for (const int & mass : MyMassPoints) { histo_map[GetSgName(mass,syst)]->Scale(xsec_ref_); } }
 
 }
 
@@ -384,7 +368,8 @@ void CreateRooWorkspace::NormaliseData() {
   */
 
   // Normalize h_MC_SR to h_Data_SR pretending it's data but has shape of bkg_pred in SR
-  nEventsSR  = CalculateIntegral(histo_map["norm"].get(),fit_lo,fit_hi,doBinWidth);
+  // nEventsSR  = CalculateIntegral(histo_map["norm"].get(),fit_lo,fit_hi,doBinWidth);
+  nEventsSR  = CalculateIntegral(histo_map["DY_SR"].get(),fit_lo,fit_hi,doBinWidth);
   if (!doObs) {
     // Normalization is taken such that it matches in the fitting range
     histo_map["data"]->Scale(nEventsSR/CalculateIntegral(histo_map["data"].get(),fit_lo,fit_hi,doBinWidth));
@@ -469,7 +454,7 @@ void CreateRooWorkspace::InitializePDFs() {
   std::string FitName;
 
   for (auto syst: SystNames) {
-    for (const int & mass : MassPoints) {
+    for (const int & mass : MyMassPoints) {
       FitName = GetSgName(mass,syst);
       std::string ParName = "_"+FitName+unique_name;
       fitPars[FitName].emplace_back(new RooRealVar(("sg_p0"+ParName).c_str(), ("sg_p0_"+ParName).c_str(), mass, mass*0.8, mass*1.2));
@@ -580,7 +565,7 @@ void CreateRooWorkspace::CreateRooDataHist() {
   if (dorebin && rebin!=0) {
     for (auto mode: Modes) rooHist_map[mode].reset(new RooDataHist(mode.c_str(), mode.c_str(), RooArgList(*x_var), RooFit::Import(*histo_map[mode].get(),doBinWidth)));
     for (auto syst: SystNames) {
-      for (const int & mass : MassPoints) {
+      for (const int & mass : MyMassPoints) {
         std::string hname = GetSgName(mass,syst);
         rooHist_map[hname].reset(new RooDataHist(hname.c_str(), hname.c_str(), RooArgList(*x_var), RooFit::Import(*histo_map[hname].get(),doBinWidth)));
       }
@@ -588,7 +573,7 @@ void CreateRooWorkspace::CreateRooDataHist() {
   } else {
     for (auto mode: Modes) rooHist_map[mode].reset(new RooDataHist(mode.c_str(), mode.c_str(), RooArgList(*x_var), histo_map[mode].get()));
     for (auto syst: SystNames) {
-      for (const int & mass : MassPoints) {
+      for (const int & mass : MyMassPoints) {
         std::string hname = GetSgName(mass,syst);
         rooHist_map[hname].reset(new RooDataHist(hname.c_str(), hname.c_str(), RooArgList(*x_var), histo_map[hname].get()));
       }
@@ -612,6 +597,7 @@ void CreateRooWorkspace::DoFits() {
     fit_min[x.first] = GetRange(x.second.get(),fit_lo);
     fit_max[x.first] = GetRange(x.second.get(),fit_hi);
     // if ("DY_SR"==x.first) fit_min[x.first] = GetRange(x.second.get(),fit_SR);
+    if ("DY_CR"==x.first) fit_max[x.first] = GetRange(x.second.get(),fit_max_DY_CR);
     std::string mass = x.first;
     if (mass.compare(0,1,"M")==0) {
       CalculateSignalFittingRange(std::stoi(mass.substr(1, mass.find("_")-1)), fit_min[x.first], fit_max[x.first], plot_min[x.first], plot_max[x.first], y_max[x.first]); // TODO
@@ -655,7 +641,7 @@ void CreateRooWorkspace::DoFits() {
   std::cout << "********************" << '\n';
 
   for (auto syst: SystNames) {
-    for (const int & mass : MassPoints) {
+    for (const int & mass : MyMassPoints) {
       std::string hname = GetSgName(mass,syst);
       if (debug) std::cout << "fit mass:" << syst << "\t" << mass << "\t" << fit_min[hname] << " -- " << fit_max[hname] << '\n';
       FitRes_map[hname][FitSignal].reset(Fits_map[hname][FitSignal]->fitTo(*rooHist_map[hname], RooFit::Range(fit_min[hname], fit_max[hname]), RooFit::SumW2Error(kTRUE), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
@@ -676,7 +662,7 @@ void CreateRooWorkspace::ImportToWorkspace() {
   # #### ##     ## ##         #######  ##     ##    ##       ##     #######   ###  ###   #######  ##     ## ##    ##  ######  ##        ##     ##  ######  ########
   */
 
-  for (auto syst: SystNames) { for (const int & mass : MassPoints) {ws->import(*Fits_map[GetSgName(mass,syst)][FitSignal], RooFit::Silence()); }}
+  for (auto syst: SystNames) { for (const int & mass : MyMassPoints) {ws->import(*Fits_map[GetSgName(mass,syst)][FitSignal], RooFit::Silence()); }}
   for (auto mode: Modes) { for (auto const& [model,dofit] : doFits_map[mode] ) { if (dofit) ws->import(*Fits_map[mode][model], RooFit::Silence()); }}
 
   ws->import(*data_obs.get());
@@ -741,7 +727,7 @@ void CreateRooWorkspace::PlotBkgFit() {
       if (dofit) {
         int color = Colors[model];
         // if (!doFtest && model.Contains("Exp") && model!="Exp_2" && model!="Exp_3" && model!="Exp_4" ) continue;
-        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::LineColor(color), RooFit::Range(fit_min[mode], fit_max[mode], kFALSE));
+        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::LineColor(color), RooFit::Range(fit_min[mode]-100, fit_max[mode]+100, kFALSE));
         // Fits_map[mode][model]->plotOn(plotter, RooFit::LineColor(color), RooFit::Range(fit_min[mode], fit_max[mode], kFALSE));
 
         // CREATE RATIO BETWEEN CURVE AND HIST
@@ -849,7 +835,7 @@ void CreateRooWorkspace::PlotSignals(std::string syst) {
   std::unique_ptr<TCanvas> c_sg_all(tdrDiCanvas("signal", plot_lo, x_hi, 1*1e-03, 1, -6, 6, nameXaxis, nameYaxis, "Pull"));
 
   int i_mass = -1;
-  for (const int & mass : MassPoints) {
+  for (const int & mass : MyMassPoints) {
     i_mass++;
     std::string SgName = GetSgName(mass,syst);
 
@@ -1188,8 +1174,9 @@ void CreateRooWorkspace::InputDatacards(){
   for (auto mode: Modes) {
     for (auto const& [model,dofit] : doFits_map[mode] ) {
       if (!dofit || (model.find("Exp")!= std::string::npos && model!="Exp_2" && model!="Exp_3" && model!="Exp_4") ) continue;
-      double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_lo, fit_hi);
-      if (debug) std::cout << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << std::endl;
+      // double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_lo, fit_hi);
+      double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_min[mode], fit_max[mode]);
+      if (debug) std::cout << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << " " << CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_lo, fit_hi) << std::endl;
       DataCard  << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << std::endl;
 
 
@@ -1203,7 +1190,7 @@ void CreateRooWorkspace::InputDatacards(){
   }
 
   for (auto syst: SystNames) {
-    for (const int & mass : MassPoints) {
+    for (const int & mass : MyMassPoints) {
       std::string SgName = GetSgName(mass,syst);
       DataCard << SgName+" signal number of events = " << nEventsSignal[SgName] <<""<<std::endl;
       for (unsigned int i = 0; i < fitPars[SgName].size(); i++) {
@@ -1262,7 +1249,15 @@ int main(int argc, char** argv){
 
   bool isHbb = false;
   // std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD"};
-  std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_2", "btag_DeepBoosted_H4qvsQCDmassdep_3", "btag_DeepBoosted_H4qvsQCDmassdep_bb", "btag_DeepBoosted_H4qvsQCDmassdep_cc", "btag_DeepBoosted_H4qvsQCDmassdep_gg", "btag_DeepBoosted_H4qvsQCDmassdep_cc_2", "btag_DeepBoosted_H4qvsQCDmassdep_gg_2", "btag_DeepBoosted_H4qvsQCDmassdep_cc_3", "btag_DeepBoosted_H4qvsQCDmassdep_gg_3", "tau42"};
+  std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDmassdep",
+  "btag_DeepBoosted_H4qvsQCDmassdep_2", "btag_DeepBoosted_H4qvsQCDmassdep_3", "btag_DeepBoosted_H4qvsQCDmassdep_bb",
+  "btag_DeepBoosted_H4qvsQCDmassdep_bb_2", "btag_DeepBoosted_H4qvsQCDmassdep_bb_3",
+  "btag_DeepBoosted_H4qvsQCDmassdep_cc", "btag_DeepBoosted_H4qvsQCDmassdep_gg",
+  "btag_DeepBoosted_H4qvsQCDmassdep_cc_2", "btag_DeepBoosted_H4qvsQCDmassdep_cc_3",
+  "btag_DeepBoosted_H4qvsQCDmassdep_gg_2", "btag_DeepBoosted_H4qvsQCDmassdep_gg_3",
+  "btag_DeepBoosted_H4qvsQCDmassdep_cc2_2", "btag_DeepBoosted_H4qvsQCDmassdep_cc2_3",
+  "btag_DeepBoosted_H4qvsQCDmassdep_cc2", "btag_DeepBoosted_H4qvsQCDmassdep_ccMD",
+  "btag_DeepBoosted_H4qvsQCDmassdep_cc1", "tau42"};
   if (isHbb) histFolders = {"btag_DeepBoosted_HbbvsQCD", "btag_DeepBoosted_probHbb", "tau21" };
   std::vector<std::string> collections = {"Puppi"};
   std::vector<std::string> channels = {"muonchannel", "electronchannel", "invisiblechannel"};

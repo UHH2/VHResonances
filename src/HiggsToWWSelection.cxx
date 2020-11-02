@@ -160,6 +160,7 @@ bool TaggerCut::passes(const Event& event){
   else if (tagger.find("MC_")!=std::string::npos)tag = jet.get_tag(jet.tagname2tag(tagger));
   else if (tagger=="btag_DeepBoosted_H4qvsQCD")  tag = jet.btag_DeepBoosted_H4qvsQCD();
   else if (tagger=="btag_DeepBoosted_HbbvsQCD")  tag = jet.btag_DeepBoosted_HbbvsQCD();
+  else if (tagger=="btag_DeepBoosted_HccvsQCD")  tag = jet.btag_DeepBoosted_probHcc()/(jet.btag_DeepBoosted_probHcc()+jet.btag_DeepBoosted_probQCDb()+jet.btag_DeepBoosted_probQCDbb()+jet.btag_DeepBoosted_probQCDc()+jet.btag_DeepBoosted_probQCDcc()+jet.btag_DeepBoosted_probQCDothers());
   else if (tagger=="btag_DeepBoosted_probHbb")   tag = jet.btag_DeepBoosted_probHbb();
   else if (tagger=="btag_DeepBoosted_probHqqqq") tag = jet.btag_DeepBoosted_probHqqqq();
   else if (tagger=="tau21") tag = (jet.tau1()!=0) ? (jet.tau2()/jet.tau1()) : -1;
@@ -176,7 +177,9 @@ bool TaggerCut::passes(const Event& event){
   else if (tagger=="tau43_groomed") tag = (jet.tau3_groomed()!=0 && jet.tau4_groomed()>0) ? (jet.tau4_groomed()/jet.tau3_groomed()) : -1;
   else throw std::runtime_error("TaggerCut::passes -- tagger not defined!");
 
-  if (pt_min == MassDepentdentCut_value) return (cut_min<cut_max)? tag>MassDepentdentCut(jet.pt()): tag<=MassDepentdentCut(jet.pt()); //TODO not too nice
+  if (pt_min == MassDepentdentCut_value)      return (cut_min<cut_max)? tag>MassDepentdentCut(jet.pt())     : tag<=MassDepentdentCut(jet.pt()); //TODO not too nice
+  if (pt_min == MassDepentdentCut_old_value)  return (cut_min<cut_max)? tag>MassDepentdentCut_old(jet.pt()) : tag<=MassDepentdentCut_old(jet.pt()); //TODO not too nice
+  if (pt_min == MassDepentdentCut_cc_value)   return (cut_min<cut_max)? tag>MassDepentdentCut_cc(jet.pt())  : tag<=MassDepentdentCut_cc(jet.pt()); //TODO not too nice
 
   return (cut_min < tag  && tag < cut_max);
 

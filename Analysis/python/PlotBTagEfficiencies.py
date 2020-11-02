@@ -5,6 +5,8 @@ TDR.writeExtraText = True
 TDR.extraText  = "Simulation"
 TDR.extraText2 = "Work in progress"
 
+ForThesis(TDR)
+
 ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/common/include/JetHists.h"')
 
 
@@ -18,7 +20,7 @@ Module to study BTag Efficiencies
 '''
 #TODO invisible channel not implemented
 
-colors = {"2016":       ROOT.kGreen+1,
+colors = {"2016":       ROOT.kGreen+2,
           "2017":       ROOT.kRed+1,
           "2018":       ROOT.kOrange+1,
           "lepton":     ROOT.kFullCircle,
@@ -36,8 +38,8 @@ class PlotBTagEfficiencies(VariablesBase):
         self.nameYaxis  = "Efficiency"
         self.Xaxis_min  = 0
         self.Xaxis_max  = 1000
-        self.Yaxis_min  = 0.3
-        self.Yaxis_max  = 1
+        self.Yaxis_min  = 0.001
+        self.Yaxis_max  = 1.2
         self.lepton     = "lepton"
         self.histoname  = "BTagMCEff"
         self.defaultFlav= "FlavB"
@@ -78,7 +80,7 @@ class PlotBTagEfficiencies(VariablesBase):
                         self.histos[hname].SetDirectory(0)
 
     def ResetCanvas(self, name="canv"):
-        self.canv = tdrCanvas(name, self.Xaxis_min, self.Xaxis_max, self.Yaxis_min if name=="FlavB" else 0, self.Yaxis_max, self.nameXaxis,self.nameYaxis)
+        self.canv = tdrCanvas(name, self.Xaxis_min, self.Xaxis_max, self.Yaxis_min, self.Yaxis_max, self.nameXaxis,self.nameYaxis)
         self.leg = tdrLeg(0.40,0.70,0.95,0.89, 0.025, 42, ROOT.kBlack)
         self.leg.SetNColumns(3)
 

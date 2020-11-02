@@ -1,18 +1,11 @@
-import sys,os, time
-import numpy as np
-
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-
+from Utils import *
 from parallelise import *
-
-sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros")
-from ModuleRunnerBase import *
-
 
 nSpace_text   = 50
 nSpace_number = 25
+nSpace_small  = 10
+def nSpace_short(word=""):
+    return word+" "*(nSpace_small -len(word))
 def nSpace(word=""):
     return word+" "*(nSpace_number -len(word))
 def nSpace_Long(word=""):
@@ -21,10 +14,17 @@ def nSpace_Long(word=""):
 def MergeListString(myList):
     return " ".join([nSpace_Long(str(x)) if len(myList)>1 and "param" in str(myList[1]).lower() else nSpace(str(x)) for x in myList[:1]]+[nSpace(str(x)) for x in myList[1:]])
 
-def CreateDataCard(path, filename, mode = "", signalName="MC_ZprimeToZH", ChannelNames=["ZprimeZH", "bbchannel"], bkgNames=["MC_DY", "MC_TTbar", "MC_Diboson"], Parameters=[], Observed=[-1,-1], Rates=[[0,0,0],[0,0,0]], year="2016"):
+def lnN(nominal, varUp, varDown):
+    if varUp==0: raise Exception("varUp==0")
+    if varDown==0: raise Exception("varDown==0")
+    return (1+abs(nominal-varUp)/nominal,1+abs(nominal-varDown)/nominal)
+
+
+def DataCardTemplate(path, filename, mode = "", signalName="MC_ZprimeToZH", ChannelNames=["ZprimeZH", "bbchannel"], bkgNames=["MC_DY", "MC_TTbar", "MC_Diboson"], Parameters=[], Observed=[-1,-1], Rates=[[0,0,0],[0,0,0]], lumi=(100,1)):
     nChannel = len(ChannelNames)
     nBkg = len(bkgNames)
-    nSys = 2 +len(filter(lambda x: "param" in x, Parameters)) # 2 = Lumi and shape for signal
+    nSys = 2 +len(filter(lambda x: "param" in x, Parameters)) +len(filter(lambda x: "lnN" in x, Parameters)) # 2 = Lumi and shape for signal
+    # nSys = 1 +len(filter(lambda x: "param" in x, Parameters)) +len(filter(lambda x: "lnN" in x, Parameters)) # 1 = Lumi and shape for signal
     # nSys = 1 +len(filter(lambda x: "param" in x, Parameters)) # 2 = Lumi
     if nChannel!=len(Observed):
         raise Exception("nChannel!=len(Observed): "+str(nChannel)+" "+str(len(Observed)))
@@ -33,9 +33,9 @@ def CreateDataCard(path, filename, mode = "", signalName="MC_ZprimeToZH", Channe
     separator = "\n"+"-"*(2*nSpace_number)
     lines = []
     if isHbb:
-        lines.append("# Version of the "+str(ModuleRunnerBase(year).lumi_fb)+"/fb Zprime->Z(ll)H(bb) analysis") #TODO Make it more general for other channels
+        lines.append("# Version of the "+str(round(lumi[0],1))+"/fb Zprime->Z(ll)H(bb) analysis") #TODO Make it more general for other channels
     else:
-        lines.append("# Version of the "+str(ModuleRunnerBase(year).lumi_fb)+"/fb Zprime->Z(ll)H(WW) analysis") #TODO Make it more general for other channels
+        lines.append("# Version of the "+str(round(lumi[0],1))+"/fb Zprime->Z(ll)H(WW) analysis") #TODO Make it more general for other channels
     lines.append(separator)
     lines.append("imax  "+str(nChannel)+" number of channels")
     lines.append("jmax  "+str(nBkg)+" number of backgrounds")
@@ -57,8 +57,9 @@ def CreateDataCard(path, filename, mode = "", signalName="MC_ZprimeToZH", Channe
     lines.append(nSpace("rate")+MergeListString(Rates if Rates else [""]*(nBkg+1)*nChannel))
     lines.append(separator)
     lines.append("# list of independent sources of uncertainties, and give their effect (syst. error)\n")
-    lines.append(nSpace("lumi     lnN")+MergeListString(([str(ModuleRunnerBase(year).lumi_sys/100+1.)]+["-"]*nBkg)*nChannel))
-    lines.append(nSpace("sigma    lnU")+MergeListString((["1.150"]+["-"]*nBkg)*nChannel))
+    lines.append(nSpace(nSpace_short("lumi")+"lnN")+MergeListString(([str(lumi[1]/100+1.)]+["-"]*nBkg)*nChannel))
+    lines.append(nSpace(nSpace_short("sigma")+"lnN")+MergeListString((["1.150"]+["-"]*nBkg)*nChannel))
+    # lines.append(nSpace(nSpace_short("sigma")+"lnN")+MergeListString((["1.0001"]+["-"]*nBkg)*nChannel))
     lines.append(separator)
     for param in Parameters:
         lines.append(param)
@@ -69,35 +70,27 @@ def CreateDataCard(path, filename, mode = "", signalName="MC_ZprimeToZH", Channe
 
 
 class CreateDataCards(VariablesBase):
-    def __init__(self,studies = "nominal", RunCombine = True, Method="AsymptoticLimits", extraOptions = ["-t", "-1"], extraOptionsText = "Asimov" , isHbb = False):
+    def __init__(self, histFolders, years, channels, collections, studies = "nominal", RunCombine = True, RunSystematics=True, Method="AsymptoticLimits", extraOptions = ["-t", "-1"], extraOptionsText = "Asimov" , isHbb = False):
         VariablesBase.__init__(self)
         self.studies = studies
         self.RunCombine = RunCombine
+        self.RunSystematics = RunSystematics
         self.isHbb = isHbb
         self.Method = Method
         self.extraOptions = extraOptions
         self.extraOptionsText = extraOptionsText
-
-        self.AnalysisDir = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/Limits/"+studies+"/"
+        self.histFolders = histFolders
+        self.years = years
+        self.channels = channels
+        self.collections = collections
+        print "\n"+("*"*40)+"\t","\n \tModule Name: \t", type(self).__name__, "\n"+("*"*40)+"\t", "\nUsing \t \t", self.years, "\n", self.histFolders, "\n", self.channels, "\n"
+        self.AnalysisDir = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/Limits/"+self.studies+"/"
         if (self.isHbb): self.AnalysisDir += "/Hbb/"
-        # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "NN", "NN_1","NN_2", "CNN", "tau42"]
-        # self.histFolders = ["btag_DeepBoosted_H4qvsQCD"]
-        self.histFolders = ["btag_DeepBoosted_H4qvsQCDptdep"]
-        self.histFolders=["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDptdep_x3", "btag_DeepBoosted_H4qvsQCDptdep_x2x3", "btag_DeepBoosted_H4qvsQCDptdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x3", "btag_DeepBoosted_H4qvsQCDmassdep2_x3", "btag_DeepBoosted_H4qvsQCDmassdep_x2x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x3", "btag_DeepBoosted_H4qvsQCDmassdep_x1x2"]
-        # self.histFolders=["btag_DeepBoosted_H4qvsQCDp02",]
-        self.histFolders=["btag_DeepBoosted_H4qvsQCDptdep_x3"]
-        # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02", "btag_DeepBoosted_H4qvsQCDpt1000", "btag_DeepBoosted_H4qvsQCDpt1000p2", "btag_DeepBoosted_H4qvsQCDpt1000p02"]
-        # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDp2", "btag_DeepBoosted_H4qvsQCDp02"]
-        # self.histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDptdep", "btag_DeepBoosted_H4qvsQCDp02"]
-        # self.years = ["2016", "2017", "2018", "RunII"]
-        # self.channels = ["muonchannel", "electronchannel"]
-        self.collections = ["Puppi"]
-        self.years = ["2016"]
-        self.channels = ["muonchannel"]
+
         # self.fitFunction = "CB"
         # self.fitFunction = "Exp_3"
+        # self.mode = "bkg_pred"
         self.fitFunction = "Exp_2"
-        self.mode = "bkg_pred"
         self.mode = "DY_SR"
         self.ResetLists()
 
@@ -114,10 +107,12 @@ class CreateDataCards(VariablesBase):
 
     def ExtractParameters(self,uniqueName,workingDir,year,channel,histFolder):
         AnalysisOutput = "OutputFit_"+histFolder+".txt"
-        self.ChannelNames.setdefault(uniqueName,{"single":[], "leptonchannel": [], "fullRunII": []})
-        self.ChannelNames[uniqueName]["leptonchannel"].append(self.ChannelName(channel,year)) # TODO not yet implemented. Do we need it?
-        self.ChannelNames[uniqueName]["fullRunII"].append(self.ChannelName(channel,year)) # TODO not yet implemented. Do we need it?
-        self.ChannelNames[uniqueName]["single"] = [self.ChannelName(channel,year)]
+        ChannelName = self.ChannelName(channel,year)
+        # self.ChannelNames.setdefault(uniqueName,{"single":[], "leptonchannel": [], "fullRunII": []})
+        self.ChannelNames.setdefault(uniqueName,{"single":[]})
+        # self.ChannelNames[uniqueName]["leptonchannel"].append(ChannelName) # TODO not yet implemented. Do we need it?
+        # self.ChannelNames[uniqueName]["fullRunII"].append(ChannelName) # TODO not yet implemented. Do we need it?
+        self.ChannelNames[uniqueName]["single"] = [ChannelName]
         self.Observed.setdefault(uniqueName,[])
         self.Observed[uniqueName] = [-1]
         self.bkgNames.setdefault(uniqueName,[])
@@ -130,12 +125,15 @@ class CreateDataCards(VariablesBase):
             for line in lines:
                 if "integral" in line and self.fitFunction in line and self.mode in line:
                     self.bkgNames[uniqueName].append(line.split()[0]  if "h_" in self.fitFunction else line.split()[0])
-                    self.RatesBkg[uniqueName].setdefault(self.ChannelName(channel,year),[]).append(line.split()[-1] if "h_" in self.fitFunction else line.split()[-2]) #TODO fix for all cases. Before was -3
-                if "signal" in line and not any(syst in line for syst in self.Systematics+self.Systematics_Scale):
-                    self.RatesSignal[uniqueName][line.split()[0]] = line.split()[-1]
+                    self.RatesBkg[uniqueName].setdefault(ChannelName,[]).append(line.split()[-1] if "h_" in self.fitFunction else line.split()[-2]) #TODO fix for all cases. Before was -3
+                if "signal" in line:
+                    if not any(syst in line for syst in self.Systematics+self.Systematics_Scale):
+                        self.RatesSignal[uniqueName][line.split()[0]] = line.split()[-1]
+                    else:
+                        self.ParametersSignal[uniqueName].setdefault(line.split()[0],[]).append(MergeListString(["rate",line.split()[-1]]))
                 if "param" in line.lower():
                     # if "rateParam" in line:
-                    #     Parameters.append(MergeListString(["TF","rateParam",self.ChannelName(channel,year)]+[self.fitFunction if "h_" in self.fitFunction else "default_value"]+[line.split()[-1]]))
+                    #     Parameters.append(MergeListString(["TF","rateParam",ChannelName]+[self.fitFunction if "h_" in self.fitFunction else "default_value"]+[line.split()[-1]]))
                     # elif "sg_" in line:
                     if "sg_" in line:
                         self.ParametersSignal[uniqueName].setdefault(line.split()[0],[]).append(MergeListString(line.split()[1:]))
@@ -147,11 +145,12 @@ class CreateDataCards(VariablesBase):
 
     def ChannelName(self,channel,year):
         return channel.replace("channel","")+"_"+year
+
     def DataCardName(self,uniqueName,signalName):
-        return "DataCard_"+uniqueName+"_"+signalName+"_"+self.fitFunction+".txt"
+        return "DataCard_"+uniqueName+"_"+signalName+"_"+self.fitFunction+"_"+self.extraOptionsText+".txt"
 
     def DataCardOutPutName(self,workingDir,filename):
-        return workingDir+"out/"+filename.replace(".txt","")+"_"+self.Method+"_"+self.extraOptionsText+".out"
+        return workingDir+"out/"+filename.replace(".txt","")+"_"+self.Method+".out"
 
     def GetWorkdirName(self,uniqueName):
         workingDir = self.AnalysisDir+"/"+uniqueName+"/datacards/"
@@ -168,9 +167,56 @@ class CreateDataCards(VariablesBase):
         if self.RunCombine and os.path.exists(outname): os.remove(outname)
 
     def CombineCards(self,workingDir,filename,signalName,inputCards):
-        if not self.RunCombine: a = os.system("combineCards.py "+inputCards+" > "+workingDir+filename)
+        if not RunCombine: a = os.system("combineCards.py "+inputCards+" > "+workingDir+filename)
         outname = self.DataCardOutPutName(workingDir,filename)
         self.AppendDataCard(workingDir=workingDir,outname=outname,filename=filename,signalName=signalName)
+
+    def CreateDataCard(self, path, filename, mode = "", signalName="MC_ZprimeToZH", uniqueName ="",channel="muonchannel",year="2016"):
+        ChannelNames = self.ChannelNames[uniqueName]["single"]
+        Observed     = self.Observed[uniqueName]
+        bkgNames     = self.bkgNames[uniqueName]
+        Rates        = [self.RatesSignal[uniqueName][signalName]]+self.RatesBkg[uniqueName][self.ChannelName(channel,year)]
+        lumi         = (float(self.lumi_map[year]["lumi_fb"]),float(self.lumi_map[year]["uncertainty"]))
+        Parameters   = self.Parameters[uniqueName]+self.ParametersSignal[uniqueName][signalName]
+        # if self.RunSystematics:
+        #     for sys in self.Systematics + self.Systematics_Scale:
+        #         for var in ["Up","Down"]:
+        #             if signalName+sys+var in self.ParametersSignal[uniqueName]:
+        #                 Parameters += self.ParametersSignal[uniqueName][signalName+sys+var]
+        if self.RunSystematics:
+            for sys in self.Systematics + self.Systematics_Scale:
+                if sys=="nominal": continue
+                nominal = float(self.RatesSignal[uniqueName][signalName])
+                varUp = 0
+                varDown = 0
+                # print uniqueName, signalName+sys, nominal,
+                for var in ["Up","Down"]:
+                    if signalName+sys+var in self.ParametersSignal[uniqueName]:
+                        for par in self.ParametersSignal[uniqueName][signalName+sys+var]:
+                            if not "rate" in par: continue
+                            # print var,
+                            if var == "Up": varUp = float(par.split()[-1])
+                            else: varDown = float(par.split()[-1])
+                            # print (varUp, varDown),
+                #     else: #TODO Fix me
+                #         varUp = nominal
+                #         varDown = nominal
+                if not "muon"  in channel and "MuonScale" in sys: continue
+                if not "muon"  in channel and "isolation" in sys: continue
+                if not "muon"  in channel and "tracking"  in sys: continue
+                if not "muon"  in channel and "reco" in sys: continue
+                if nominal==0:#TODO Fix me
+                    print channel, year,sys,signalName, nominal,varUp,varDown
+                    continue
+                if "M600" == signalName and (varUp==0 or varDown==0):#TODO Fix me
+                    print channel, year,sys,signalName, nominal,varUp,varDown
+                    continue
+                # if varUp==0: varUp = nominal
+                # if varDown==0: varDown = nominal
+                # print filename,channel, year,sys,signalName, nominal,varUp,varDown, lnN(nominal,varUp,varDown)
+                Parameters += [nSpace(nSpace_short(sys)+"lnN")+MergeListString(([str(lnN(nominal,varUp,varDown)[0])+"/"+str(lnN(nominal,varUp,varDown)[1])]+["-"]*len(bkgNames))*len(ChannelNames))]
+                        # Parameters += self.ParametersSignal[uniqueName][signalName+sys+var]
+        DataCardTemplate(path, filename, mode = mode , signalName = signalName, ChannelNames = ChannelNames, bkgNames = bkgNames, Parameters = Parameters, Observed = Observed, Rates = Rates, lumi = lumi)
 
     @timeit
     def WriteDataCards(self):
@@ -183,10 +229,9 @@ class CreateDataCards(VariablesBase):
                         self.ExtractParameters(uniqueName,workingDir,year,channel,histFolder)
                         for signalName in self.RatesSignal[uniqueName]:
                             filename = self.DataCardName(uniqueName,signalName)
-                            Rates = [self.RatesSignal[uniqueName][signalName]]+self.RatesBkg[uniqueName][self.ChannelName(channel,year)]
-                            CreateDataCard(workingDir, filename, mode=histFolder, signalName= signalName, ChannelNames=self.ChannelNames[uniqueName]["single"], Observed=self.Observed[uniqueName], bkgNames=self.bkgNames[uniqueName],Rates=Rates, Parameters=self.Parameters[uniqueName]+self.ParametersSignal[uniqueName][signalName], year=year)
+                            if not RunCombine: self.CreateDataCard(workingDir, filename, mode = histFolder, signalName = signalName, uniqueName = uniqueName, channel = channel, year = year)
                             outname = self.DataCardOutPutName(workingDir,filename)
-                            self.AppendDataCard(workingDir=workingDir,outname=outname,filename=filename,signalName=signalName)
+                            self.AppendDataCard(workingDir = workingDir, outname = outname, filename = filename, signalName = signalName)
                             # TODO output tree with different workingDir/name
                             # TODO Parallelize/ Optimize for multi toys (now takes 10 minutes)
 
@@ -215,34 +260,86 @@ class CreateDataCards(VariablesBase):
     @timeit
     def RunDataCards(self):
         # TODO if one wants to filter the running cards.
-        # self.list_logfiles  = list(map(lambda x: self.list_logfiles[x]  if ("RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
-        # self.list_processes = list(map(lambda x: self.list_processes[x] if ("RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
-        self.list_logfiles  = list(map(lambda x: self.list_logfiles[x]  if (not "RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
-        self.list_processes = list(map(lambda x: self.list_processes[x] if (not "RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
+        self.list_logfiles  = list(map(lambda x: self.list_logfiles[x]  if ("RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
+        self.list_processes = list(map(lambda x: self.list_processes[x] if ("RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
+        # self.list_logfiles  = list(map(lambda x: self.list_logfiles[x]  if ("lepton" in self.list_processes[x][0] and "RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
+        # self.list_processes = list(map(lambda x: self.list_processes[x] if ("lepton" in self.list_processes[x][0] and "RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
+        # # self.list_logfiles  = list(map(lambda x: self.list_logfiles[x]  if (not "RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
+        # self.list_processes = list(map(lambda x: self.list_processes[x] if (not "RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
         self.list_logfiles  = list(filter(lambda x: x!="", self.list_logfiles))
         self.list_processes = list(filter(lambda x: x!="", self.list_processes))
         # for i in range(len(self.list_processes)):
         #     print self.list_processes[i], self.list_logfiles[i]
         print len(self.list_processes)
+        for x in self.list_processes: print x
         # print " ".join(self.list_processes[0])
-        print self.list_processes[0]
+        # print self.list_processes[0]
         if self.RunCombine: parallelise(self.list_processes, 20, self.list_logfiles, cwd=True)
 
 
 if __name__ == '__main__':
-    # Method="AsymptoticLimits"
+    Method="AsymptoticLimits"
     # extraOptions = ["-t", "-1"]
-    Method="FitDiagnostics"
-    extraOptions = ["--saveWorkspace", "--saveShapes"]
-    extraOptionsText = "Asimov"
+    # extraOptionsText = "Asimov"
+    extraOptions = ["--run", "expected"]
+    extraOptionsText = "Expected"
+    # Method="FitDiagnostics"
+    # extraOptions = ["--saveWorkspace", "--saveShapes"]
+    # extraOptionsText = "Diagnostics"
     isHbb = False
+    RunSystematics = True
+    # RunSystematics = False
+    if not RunSystematics: extraOptionsText += "NoSys"
+    # if not RunSystematics: extraOptionsText += "NoSys0"
+    # if RunSystematics: extraOptionsText += "Sys0"
     # TODO Don't create datacards if not needed.
     RunCombine = True
     # RunCombine = False
     studies = "nominal"
     # studies = "noSignalFlatUncertainty"
-    DataCards = CreateDataCards(studies=studies, RunCombine=RunCombine, Method=Method, extraOptions=extraOptions, extraOptionsText=extraOptionsText, isHbb=isHbb)
+
+
+    # histFolders = ["btag_DeepBoosted_H4qvsQCD"]
+    # histFolders =["btag_DeepBoosted_H4qvsQCDmassdep"]
+    # histFolders =["btag_DeepBoosted_H4qvsQCDmassdep_x3_3", "btag_DeepBoosted_H4qvsQCDmassdep_x3", "btag_DeepBoosted_H4qvsQCDmassdep_x32", "btag_DeepBoosted_H4qvsQCDmassdep_x3_2", "btag_DeepBoosted_H4qvsQCDmassdep_x3_cc", "btag_DeepBoosted_H4qvsQCDmassdep_x3_bb", "btag_DeepBoosted_H4qvsQCDmassdep_x3_cb", "btag_DeepBoosted_H4qvsQCDmassdep_x3_gg", "btag_DeepBoosted_H4qvsQCDmassdep_x3_cg", "btag_DeepBoosted_H4qvsQCDmassdep_x3_scg", "btag_DeepBoosted_H4qvsQCDmassdep_x3_scc"]
+    # btag_DeepBoosted_H4qvsQCDmassdep_gg, btag_DeepBoosted_H4qvsQCDmassdep_bb, btag_DeepBoosted_H4qvsQCDmassdep_gg_3
+    # histFolders = ["btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_2", "btag_DeepBoosted_H4qvsQCDmassdep_3", "btag_DeepBoosted_H4qvsQCDmassdep_cc", "btag_DeepBoosted_H4qvsQCDmassdep_cc_2", "btag_DeepBoosted_H4qvsQCDmassdep_gg_2", "btag_DeepBoosted_H4qvsQCDmassdep_cc_3", "tau42"]
+    # histFolders =[ "btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_2", "btag_DeepBoosted_H4qvsQCDmassdep_3"]
+    # histFolders = ["btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_cc"]
+    # histFolders = ["btag_DeepBoosted_H4qvsQCDmassdep_3", "btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_cc", "btag_DeepBoosted_H4qvsQCDmassdep_bb", "btag_DeepBoosted_H4qvsQCDmassdep_gg"]
+    # histFolders = ["btag_DeepBoosted_H4qvsQCDmassdep_3","btag_DeepBoosted_H4qvsQCDmassdep_cc2_3","btag_DeepBoosted_H4qvsQCDmassdep_cc_3","btag_DeepBoosted_H4qvsQCDmassdep","btag_DeepBoosted_H4qvsQCDmassdep_cc2","btag_DeepBoosted_H4qvsQCDmassdep_cc","btag_DeepBoosted_H4qvsQCDmassdep_2","btag_DeepBoosted_H4qvsQCDmassdep_cc2_2","btag_DeepBoosted_H4qvsQCDmassdep_cc_2",
+    #                "btag_DeepBoosted_H4qvsQCDmassdep_bb","btag_DeepBoosted_H4qvsQCDmassdep_bb_2",
+    #                "btag_DeepBoosted_H4qvsQCDmassdep_gg_3","btag_DeepBoosted_H4qvsQCDmassdep_gg","btag_DeepBoosted_H4qvsQCDmassdep_gg_2"]
+
+    # histFolders = ["btag_DeepBoosted_H4qvsQCDmassdep_cc_2"]
+    # histFolders = [ "btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_cc", "btag_DeepBoosted_H4qvsQCDmassdep_cc1", "btag_DeepBoosted_H4qvsQCDmassdep_cc2", "btag_DeepBoosted_H4qvsQCDmassdep_ccMD"]
+    # histFolders = ["btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_cc"]
+    histFolders = ["btag_DeepBoosted_H4qvsQCDmassdep_cc"]
+
+    # years = ["2016", "2017", "2018", "RunII"]
+    channels = ["muonchannel", "electronchannel"]
+    collections = ["Puppi"]
+    years = ["RunII"]
+    # channels = ["muonchannel"]
+
+
+    DataCards = CreateDataCards(histFolders, years, channels, collections, studies=studies, RunCombine=RunCombine, RunSystematics=RunSystematics, Method=Method, extraOptions=extraOptions, extraOptionsText=extraOptionsText, isHbb=isHbb)
     DataCards.WriteDataCards()
     DataCards.CombineChannels()
-    DataCards.CombineYear()
+    # DataCards.CombineYear()
     DataCards.RunDataCards()
+
+
+
+# _syst_rate 125
+#
+# _simple 1000
+# _simple2 2000
+#
+# name="DataCard_RunII_Puppi_muonchannel_btag_DeepBoosted_H4qvsQCDmassdep_x3_M1000_Exp_2_simple2"
+# mpoint="2000"
+# text2workspace.py ${name}.txt -m ${mpoint}
+# combineTool.py -M Impacts -d ${name}.root -m ${mpoint} --doInitialFit --robustFit 1
+# combineTool.py -M Impacts -d ${name}.root -m ${mpoint} --robustFit 1 --doFits
+# combineTool.py -M Impacts -d ${name}.root -m ${mpoint} -o impacts.json
+# plotImpacts.py -i impacts.json -o impacts_simple2
