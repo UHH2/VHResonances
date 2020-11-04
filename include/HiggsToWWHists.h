@@ -18,6 +18,7 @@ private:
   uhh2::Event::Handle<float> h_ZDecay;
   uhh2::Event::Handle<float> h_ZprimeDecay;
 
+  bool isInvisible;
   std::string condMatch;
   std::string condMatchStatus;
   std::string massType;
@@ -57,6 +58,7 @@ public:
 
 private:
   uhh2::Event::Handle< std::vector<ZprimeCandidate> > h_ZprimeCandidates;
+  bool isInvisible;
   std::string condMatch;
   std::string condMatchStatus;
   std::string massType;

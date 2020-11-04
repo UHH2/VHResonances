@@ -114,6 +114,7 @@ protected:
   std::unordered_map<std::string, std::unique_ptr<MCElecScaleFactor> > SFs_ele;
   bool muonchannel;
   bool electronchannel;
+  bool invisiblechannel;
 
 };
 

@@ -68,6 +68,7 @@
 <!ENTITY MC_WZ_2016                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_WZ_2016.xml">
 <!ENTITY MC_ZZ_2016                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZZ_2016.xml">
 <!ENTITY MC_WJets_2016                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_WJets_2016.xml">
+<!ENTITY MC_QCD_2016                    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_QCD_2016.xml">
 
 
 <!-- MC Samples 2017 -->
@@ -118,6 +119,7 @@
 <!ENTITY MC_WZ_2017                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_WZ_2017.xml">
 <!ENTITY MC_ZZ_2017                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZZ_2017.xml">
 <!ENTITY MC_WJets_2017                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_WJets_2017.xml">
+<!ENTITY MC_QCD_2017                    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_QCD_2017.xml">
 
 
 <!-- MC Samples 2018 -->
@@ -168,6 +170,7 @@
 <!ENTITY MC_WZ_2018                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_WZ_2018.xml">
 <!ENTITY MC_ZZ_2018                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZZ_2018.xml">
 <!ENTITY MC_WJets_2018                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_WJets_2018.xml">
+<!ENTITY MC_QCD_2018                    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_QCD_2018.xml">
 
 <!-- Data Samples -->
 <!ENTITY DATA_SingleMuon_2016           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_2016.xml">
@@ -197,24 +200,24 @@
   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTDIR;/" PostFix="" TargetLumi="1" >
 
     <!-- MC 2016 -->
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2016"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2016;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_2016"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_2016;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2016"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2016;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_2016"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_2016;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M600_2016"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M600_2016;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M800_2016"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M800_2016;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
@@ -235,38 +238,39 @@
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M7000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M7000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M8000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M8000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_DY_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2016;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_TTbar_2016"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2016;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WW_incl_2016"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_incl_2016;           <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WZ_incl_2016"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_incl_2016;           <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_incl_2016"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_incl_2016;           <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WW_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2016;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WZ_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2016;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2016;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WJets_2016"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2016;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_2016"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2016;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_TTbar_2016"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2016;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW_incl_2016"               Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_incl_2016;               <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_incl_2016"               Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_incl_2016;               <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ_incl_2016"               Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_incl_2016;               <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW_2016"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2016;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_2016"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2016;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ_2016"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2016;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WJets_2016"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2016;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_2016"                   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_2016;                   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <!-- MC 2017 -->
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2017"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2017;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_2017"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_2017;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2017"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2017;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_2017"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_2017;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M600_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M600_2017;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M800_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M800_2017;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M600_2017"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M600_2017;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M800_2017"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M800_2017;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1200_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1200_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1400_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1400_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
@@ -284,35 +288,36 @@
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M7000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M7000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M8000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M8000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_DY_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2017;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_TTbar_2017"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2017;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WW_incl_2017"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_incl_2017;           <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WZ_incl_2017"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_incl_2017;           <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_incl_2017"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_incl_2017;           <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WW_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2017;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WZ_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2017;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2017;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WJets_2017"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2017;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_2017"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2017;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_TTbar_2017"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2017;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW_incl_2017"               Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_incl_2017;               <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_incl_2017"               Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_incl_2017;               <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ_incl_2017"               Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_incl_2017;               <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW_2017"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2017;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_2017"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2017;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ_2017"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2017;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WJets_2017"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2017;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_2017"                   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_2017;                   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <!-- MC 2018 -->
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2018"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2018;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_2018"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_2018;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2018"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2018;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_2018"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_2018;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M600_2018"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M600_2018;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M800_2018"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M800_2018;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
@@ -333,29 +338,30 @@
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M7000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M7000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
     <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M8000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M8000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_DY_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2018;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_TTbar_2018"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2018;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WW_incl_2018"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_incl_2018;           <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WZ_incl_2018"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_incl_2018;           <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_incl_2018"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_incl_2018;           <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WW_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2018;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WZ_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2018;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2018;                <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WJets_2018"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2018;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_2018"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2018;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_TTbar_2018"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2018;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW_incl_2018"               Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_incl_2018;               <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_incl_2018"               Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_incl_2018;               <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ_incl_2018"               Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_incl_2018;               <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW_2018"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2018;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_2018"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2018;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ_2018"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2018;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WJets_2018"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2018;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_QCD_2018"                   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_QCD_2018;                   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <!-- Data -->
 
-    <InputData Type="DATA"  Version="DATA_SingleMuon_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_SingleElectron_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_MET_2016"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2016;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_2016"          Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2016;          <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_2016"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2016;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="DATA"  Version="DATA_SingleMuon_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_SingleElectron_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_MET_2017"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2016;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_2017"          Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2017;          <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_2017"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2017;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="DATA"  Version="DATA_SingleMuon_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_SingleElectron_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_MET_2018"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2018;             <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_2018"          Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2018;          <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_2018"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2018;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
 
     <UserConfig>
       <!-- define which collections to read from the input. Only specify what you need to save I/O time -->

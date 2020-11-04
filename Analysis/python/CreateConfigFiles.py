@@ -147,6 +147,18 @@ def newNumber(year,sample,ConfigFile,syst,channel):
             newNumber = 500 if "inv" in channel else 1000
         if any(x in sample for x in ["MC_ZZTo2L2Nu_2016"]):
             newNumber = 100 if "inv" in channel else 250
+    if "MC_QCD" in sample:
+        newNumber = 42
+        if any(x in sample for x in ["MC_QCD_HT500to700", "MC_QCD_HT700to1000"]):
+            newNumber = 65
+        if any(x in sample for x in ["MC_QCD_HT300to500"]):
+            newNumber = 130
+        if any(x in sample for x in ["MC_QCD_HT200to300"]):
+            newNumber = 130
+        if any(x in sample for x in ["MC_QCD_HT100to200_2017"]):
+            newNumber = 185
+        if any(x in sample for x in ["MC_QCD_HT100to200_2018"]):
+            newNumber = 300
     if "MC_ZprimeToZH" in sample:
         newNumber = 100
     if not "Preselection" in ConfigFile and not "SF" in ConfigFile and not "LeptonIDStudies" in ConfigFile:
