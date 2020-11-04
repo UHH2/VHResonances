@@ -56,6 +56,8 @@ def DoControl(controls, control_, channel, sample):
         check = True
     if not "invisible" in channel and "WJets" in sample:
         check = True
+    if not "invisible" in channel and "QCD" in sample:
+        check = True
     if "electron"  in channel and "DATA" in sample and not "SingleElectron" in sample: check = True
     if "muon"      in channel and "DATA" in sample and not "SingleMuon" in sample: check = True
     if "invisible" in channel and "DATA" in sample and not "MET" in sample: check = True

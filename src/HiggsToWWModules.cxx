@@ -256,10 +256,11 @@ bool ZprimeCandidateReconstruction::process(Event& event){
          if( phi_min < Dphi  && Dphi < phi_max){
 
           // use empty particles for the two leptons
-          Particle emptyLep1, emptyLep2;
+          Particle* emptyLep1 = new Particle();
+          Particle* emptyLep2 = new Particle();
 
           ZprimeCandidate candidate;
-          setDiscriminators(event, candidate, emptyLep1, emptyLep2, jet, -1, -1 , Btag_map);
+          setDiscriminators(event, candidate, *emptyLep1, *emptyLep2, jet, -1, -1 , Btag_map);
 
           candidates.emplace_back(candidate);
          }
@@ -456,6 +457,7 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
   std::string year = ctx.get("year");
   muonchannel = string2bool(ctx.get("muonchannel"));
   electronchannel = string2bool(ctx.get("electronchannel"));
+  invisiblechannel = string2bool(ctx.get("invisiblechannel"));
 
   std::string weight_postfix = "";
   double sys = 0.;
@@ -495,7 +497,7 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
 
 
 bool ScaleFactorsManager::process(uhh2::Event& event){
-  if(event.get(h_ZprimeCandidates_).size() < 1 || event.isRealData) return true;
+  if(event.get(h_ZprimeCandidates_).size() < 1 || event.isRealData || invisiblechannel) return true;
 
   auto cand = event.get(h_ZprimeCandidates_).at(0);
   if (cand.leptons().at(0).pt() < cand.leptons().at(1).pt()) throw std::runtime_error("In ScaleFactorsManager.cxx: leptons not ordered in pt");
