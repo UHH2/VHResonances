@@ -53,6 +53,7 @@ class ModuleRunner(ModuleRunnerBase):
                                     "GenericCleaning"    : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "ProbeNN"            : {"sample": self.Processes_Dict, "all": self.AllProcesses_List},
                                     "NeuralNetwork"      : {"sample": self.Processes_Dict, "all": self.AllProcesses_List},
+                                    "PDFReweight"        : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "Preselection"       : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "Selection"          : {"sample": self.Processes_Dict, "all": self.AllProcesses_List},
                                     "SignalRegion"       : {"sample": self.Processes_Dict, "all": self.AllProcesses_List},
@@ -94,6 +95,10 @@ class ModuleRunner(ModuleRunnerBase):
             self.Systematics = list(filter(lambda x: not "Muon" in x, self.Systematics))
         if "Test" in self.Module or "GenericCleaning" in self.Module or "VariableRStudies" in self.Module:
             self.Collections = ["All"]
+        if "PDFReweight" in self.Module:
+            self.Channels    = ["invisible"]
+            self.Systematics = ["nominal"]
+            self.Samples     = list(filter(lambda x: "Zprime" in x, self.Samples))
         if ( "GenericCleaning" in self.Module or "Test" in self.Module or "NeuralNetwork" in self.Module or "VariableRStudies" in self.Module ):
             self.Channels = ["lepton"]
         print "\n****************************************\t","\n \tModule Name: \t", self.Module, "\n****************************************\t", "\nRunning \t", self.ConfigFile, "\nUsing \t \t", self.ModuleFile, "\nSamples:\t", len(self.Samples), self.Samples, "\n", self.Channels, "\n", self.Systematics, "\n", self.Collections
@@ -368,7 +373,7 @@ class ModuleRunner(ModuleRunnerBase):
                 max_ = np.amax(np.array(val))
                 min_ = np.amin(np.array(val))
                 std_ = np.std(np.array(val))
-                if (max_>(2.9*3600) and max_<(200*3600) and ".o" in check):
+                if (max_>(0.*3600) and max_<(200*3600) and ".o" in check):
                     print check, "\t", collection, "\t", channel[:4], "\t", syst, "\t", sample, " "*(30-len(sample)), round(max_/3600,2), "\t", round(min_/3600,2), "\t", round(std_*100/max_,2)
                     timeList.setdefault(sample,[]).append(max_)
                 elif (".l" in check and max_>(1*1024)):

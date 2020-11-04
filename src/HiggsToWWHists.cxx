@@ -12,13 +12,15 @@ using namespace uhh2;
 
 HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& condMatch_, const string & condMatchStatus_): HistsBase(ctx, dname), condMatch(condMatch_), condMatchStatus(condMatchStatus_) {
 
+  isInvisible = string2bool(ctx.get("invisiblechannel"));
+
   h_ZprimeCandidates = ctx.get_handle<vector<ZprimeCandidate>>("ZprimeCandidate");
   h_HDecay = ctx.get_handle<float>("HDecay");
   h_ZDecay = ctx.get_handle<float>("ZDecay");
   h_ZprimeDecay = ctx.get_handle<float>("ZprimeDecay");
 
   massType = "m"; massPlotName = "mass";
-  if (string2bool(ctx.get("invisiblechannel"))){
+  if (isInvisible){
     massType =  "m_T";
     massPlotName = "mass_transversal";
   }
@@ -110,7 +112,11 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   H2("nsubjet_btags_DeepCSV")->GetYaxis()->SetBinLabel(3,"medium");
   H2("nsubjet_btags_DeepCSV")->GetYaxis()->SetBinLabel(4,"tight");
 
-  book_TH1F("Zprime_ptinv"+massPlotName,  "p_{T}^{ll}/"+massType+"(jet,ll)", 10, 0, 1);
+  if (!isInvisible){
+    book_TH1F("Zprime_ptinv"+massPlotName, "p_{T}^{ll}/"+massType+"(jet,ll)", 10, 0, 1);
+  } else {
+    book_TH1F("Zprime_ptinv"+massPlotName, "missing E_{T}/"+massType+"(Z')", 10, 0, 1);
+  }
   book_TH1F("HT_event", "HT_event",   50, 0, 3000);
   book_TH1F("ST_event", "ST_event",   50, 0, 3000);
   book_TH1F("HT_Zprime", "HT_Zprime", 50, 0, 3000);
@@ -206,16 +212,26 @@ void HiggsToWWHists::fill(const Event & event){
     fill_H1("H_eta",         cand.H().eta(),    weight);
     fill_H1("H_phi",         cand.H().phi(),    weight);
 
-    double delta_eta_H_Z = fabs(cand.H().eta() - cand.Z().eta());
-    double delta_phi_H_Z = fabs(deltaPhi(cand.H(), cand.Z()));
-    double delta_R_H_Z   = deltaR(cand.H(), cand.Z());
-    double delta_R_ll = deltaR(cand.leptons()[0], cand.leptons()[1]);
+    double delta_eta_H_Z = 0;
+    double delta_phi_H_Z = 0;
+    double delta_R_H_Z   = 0;
+    double delta_R_ll = 0;
+
+    if (!isInvisible) {
+      delta_eta_H_Z = fabs(cand.H().eta() - cand.Z().eta());
+      delta_phi_H_Z = fabs(deltaPhi(cand.H(), cand.Z()));
+      delta_R_H_Z = deltaR(cand.H(), cand.Z());
+      delta_R_ll = deltaR(cand.leptons()[0], cand.leptons()[1]);
+    }
+
     fill_H1("delta_eta_H_Z", delta_eta_H_Z, weight);
     fill_H1("delta_phi_H_Z", delta_phi_H_Z, weight);
     fill_H1("delta_R_H_Z",   delta_R_H_Z,   weight);
     fill_H1("delta_R_ll",    delta_R_ll,    weight);
-    H2("delta_R_llvsZprimemass")->Fill(cand.Zprime_mass(), delta_R_ll, weight);
-    H2("PtZvsZprimemass")->Fill(cand.Zprime_mass(), cand.Z().pt(), weight);
+
+    H2("delta_R_llvsZprime"+massPlotName)->Fill(cand.Zprime_mass(), delta_R_ll, weight);
+
+    H2("PtZvsZprime"+massPlotName)->Fill(cand.Zprime_mass(), cand.Z().pt(), weight);
 
     double chi_H = (cand.H().softdropmass()-HMASS)/HWIDTH;
     double chi_Z = (cand.Z().v4().M()-ZMASS)/ZWIDTH;
@@ -387,10 +403,11 @@ HiggsToWWHists::~HiggsToWWHists(){}
 
 HiggsToWWHistsSlim::HiggsToWWHistsSlim(Context& ctx, const string& dname, const string& condMatch_, const string & condMatchStatus_): HistsBase(ctx, dname), condMatch(condMatch_), condMatchStatus(condMatchStatus_) {
 
+  isInvisible = string2bool(ctx.get("invisiblechannel"));
   h_ZprimeCandidates = ctx.get_handle<vector<ZprimeCandidate>>("ZprimeCandidate");
 
   massType = "m"; massPlotName = "mass";
-  if (string2bool(ctx.get("invisiblechannel"))){
+  if (isInvisible){
     massType =  "m_T";
     massPlotName = "mass_transversal";
   }

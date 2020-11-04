@@ -278,16 +278,16 @@ bool PreselectionModule::process(uhh2::Event& event) {
 
   fill_histograms(event, "weights");
 
+  //Effective in 2018 only.
+  // Here the assumption is that it should check for cleaned jets to avoid overlap with leptons (Tight WP recommanded).
+  if(!HEMEventCleaner_Selection->passes(event)) return false;
+  fill_histograms(event, "HEM");
+  
   // PrimaryVertexCleaner, ElectronCleaner, MuonCleaner
   for(auto & m : modules) m->process(event);
 
   GJC->process(event);
   GTJC->process(event);
-
-  //Effective in 2018 only.
-  // Here the assumption is that it should check for cleaned jets to avoid overlap with leptons (Tight WP recommanded).
-  if(!HEMEventCleaner_Selection->passes(event)) return false;
-  fill_histograms(event, "HEM");
 
   if(MB["metfilters"]) if(!metfilters_selection->passes(event)) return false;
 
