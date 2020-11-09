@@ -122,6 +122,9 @@ void ZprimeCandidateReconstruction::setDiscriminators(Event& event, ZprimeCandid
     auto ZplusJet = diLep + jet.v4();
 
     double chi2 = TMath::Power(((jet.softdropmass()-HMASS)/HWIDTH),2)+ TMath::Power(((diLep.M()-ZMASS)/ZWIDTH),2);
+    if (lepton == "invisible"){ // for the invisible channel, the Z is not taken into account for chi2
+      chi2 = TMath::Power(((jet.softdropmass()-HMASS)/HWIDTH),2);
+    }
     candidate.set_Zprime(ZplusJet);
     candidate.set_Z(diLep);
     candidate.set_H(jet);
