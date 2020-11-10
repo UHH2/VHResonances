@@ -126,8 +126,8 @@ class CompareDistibutionsOverYear(VariablesBase):
             fName = self.Path_STORAGE+year+"/"+self.nameFolders+self.PrefixrootFile+"MC."+self.sampleName+"_"+year+"_noTree.root"
             if "Preselection" in self.nameFolders and not (year=="2016" and self.sampleName=="MC_TTbar") and not (year!="2016" and (self.sampleName=="MC_WW" or self.sampleName=="MC_WZ" or self.sampleName=="MC_ZZ")): fName = fName.replace(".root","_merge.root")
             if "DATA" in self.sampleName: fName = fName.replace(".MC.", ".DATA.")
-            # Remove "_merge" for TTBar 2016 or HT binned samples:
-            if "2016" in year and "TTbar" in self.sampleName: fName = fName.replace("_merge", "")
+            # Remove "_merge" for TTBar 2016 or HT binned samples for invisiblechannel:
+            if "2016" in year and "TTbar" in self.sampleName and "invisible" in channel: fName = fName.replace("_merge", "")
             if "HT" in self.sampleName: fName = fName.replace("_merge", "")
             self.files[year] = ROOT.TFile(fName)
             if not self.files[year]:
@@ -175,14 +175,15 @@ class CompareDistibutionsOverYear(VariablesBase):
     def Plot(self):
         for year in self.years:
             col = ROOT.kRed+1 if year=="2016" else (ROOT.kGreen+1 if year=="2017" else (ROOT.kOrange+1 if year=="2018" else (ROOT.kBlue+1)))
+            if self.normalize: self.h_inp[year].Scale(1./self.h_inp[year].Integral())
             tdrDraw(self.h_ratio[year],  "hist", ROOT.kFullDotLarge,col, ROOT.kDashed, col, 0, col)
             tdrDraw(self.h_inp[year],  "hist", ROOT.kFullDotLarge,col, ROOT.kSolid, col, 0, col)
             self.leg.AddEntry(self.h_inp[year], year, "l")
 
     def Save(self):
         self.leg.Draw("same")
-        self.canv.SaveAs(self.outdir+self.sampleName+"_"+self.histFolder+"_"+self.extraname+".pdf")
 
+        self.canv.SaveAs(self.outdir+self.sampleName+"_"+self.histFolder+"_"+self.extraname + ("_normalised" if self.normalize==True else "") +".pdf")
 
 
 def main():
