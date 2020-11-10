@@ -1,6 +1,8 @@
 from Utils import *
 
 import tdrstyle_all as TDR
+import math
+
 TDR.writeExtraText = True
 TDR.extraText = "Work in progress"
 
@@ -21,7 +23,7 @@ class CompareCombineInputs(ModuleRunnerBase):
         self.fitFunction    = "Exp_2"
         self.histFolder     = histFolder
         self.histoPath      = self.Path_STORAGE+self.year+"/SignalRegion/Puppi/"+channel+"/nominal/"
-        self.channel        = "muon" if "muon" in channel else "electron"
+        self.channel        = "muon" if "muon" in channel else "electron" if "electron" in channel else "invisible"
         self.histos         = {}
         self.min = 600 #TODO take it from file
         self.max = 4000 #TODO take it from file
@@ -97,7 +99,7 @@ class CompareCombineInputs(ModuleRunnerBase):
 
 
 class CompareDistibutionsOverYear(VariablesBase):
-    def __init__(self, nameFolders="SignalRegion/Puppi/muonchannel/nominal/", sampleName="MC_DY", histFolder="ZprimeCandidate_Selection", extraname="muon"):
+    def __init__(self, nameFolders="SignalRegion/Puppi/muonchannel/nominal/", sampleName="MC_DY", histFolder="ZprimeCandidate_Selection", extraname="muon", normalize = False):
         VariablesBase.__init__(self)
         self.defYear        = "2016"
         self.nameFolders    = nameFolders
@@ -108,6 +110,8 @@ class CompareDistibutionsOverYear(VariablesBase):
         self.h_ratio        = {}
         self.files          = {}
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/CompareCombineInputs/"
+        self.years = ["2016", "2017", "2018"]
+        self.normalize = normalize
         os.system("mkdir -p "+self.outdir)
 
     def RunAll(self):
@@ -122,6 +126,9 @@ class CompareDistibutionsOverYear(VariablesBase):
             fName = self.Path_STORAGE+year+"/"+self.nameFolders+self.PrefixrootFile+"MC."+self.sampleName+"_"+year+"_noTree.root"
             if "Preselection" in self.nameFolders and not (year=="2016" and self.sampleName=="MC_TTbar") and not (year!="2016" and (self.sampleName=="MC_WW" or self.sampleName=="MC_WZ" or self.sampleName=="MC_ZZ")): fName = fName.replace(".root","_merge.root")
             if "DATA" in self.sampleName: fName = fName.replace(".MC.", ".DATA.")
+            # Remove "_merge" for TTBar 2016 or HT binned samples:
+            if "2016" in year and "TTbar" in self.sampleName: fName = fName.replace("_merge", "")
+            if "HT" in self.sampleName: fName = fName.replace("_merge", "")
             self.files[year] = ROOT.TFile(fName)
             if not self.files[year]:
                 raise RuntimeError("fName = "+fName+" not found.")
@@ -132,9 +139,14 @@ class CompareDistibutionsOverYear(VariablesBase):
             if "Preselection" in self.nameFolders:
                 self.hname = self.histFolder+"/sum_event_weights"
         elif "nTopJet" in self.histFolder:
-            self.hname = self.histFolder+"/SDmass_jet"
+            self.hname = self.histFolder+"/jetCHF_jet"
+        elif "event" in self.histFolder:
+            self.hname = self.histFolder+"/Weights"
+        elif "gen" in self.histFolder:
+            self.hname = self.histFolder+"/HT"
         else:
             raise ValueError("histFolder = "+self.histFolder+" not expected")
+
         for year in self.years:
             self.h_inp[year] = self.files[year].Get(self.hname).Clone("inp")
             self.h_ratio[year] = self.files[self.defYear].Get(self.hname).Clone("ratio")
@@ -151,7 +163,7 @@ class CompareDistibutionsOverYear(VariablesBase):
         if "sum_event_weights" in self.hname:
             self.canv = tdrCanvas(self.hname, 0.5, 1.5, 1e-01, 1e07, "counting Experiment", "Events")
         elif "jet" in self.hname:
-            self.canv = tdrCanvas(self.hname, 0, 200, 1e-01, 1e05, "m(jet)", "Events")
+            self.canv = tdrCanvas(self.hname, 0, 1, (1e-04 if self.normalize==True else 1e-01), (2 if self.normalize==True else 1e05), "CHF", ("Fraction" if self.normalize==True else "Events"))
         elif "Zprime" in self.hname:
             self.canv = tdrCanvas(self.hname, 300, 4500, 1e-01, 1e05, "M(Z')", "Events")
         else:
