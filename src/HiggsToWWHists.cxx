@@ -235,6 +235,8 @@ void HiggsToWWHists::fill(const Event & event){
 
     double chi_H = (cand.H().softdropmass()-HMASS)/HWIDTH;
     double chi_Z = (cand.Z().v4().M()-ZMASS)/ZWIDTH;
+    if (isInvisible){ chi_Z=0; } // For the invisible channel, Z is not taken into account for the chi calculations.
+
     fill_H1("H_chitot", chi_H +chi_Z , weight);
     fill_H1("H_chitot1",TMath::Power(chi_H,2) +TMath::Power(chi_Z,2) , weight);
     fill_H1("H_chitot2",TMath::Sqrt(TMath::Power(chi_H,2) +TMath::Power(chi_Z,2)) , weight);
