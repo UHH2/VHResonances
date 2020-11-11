@@ -25,7 +25,7 @@ colors = {"2016":       ROOT.kGreen+2,
           "lepton":     ROOT.kFullCircle,
           "muon":       ROOT.kFullTriangleDown,
           "electron":   ROOT.kFullTriangleUp,
-          "invisible":  ROOT.kStar,
+          "invisible":  ROOT.kFullSquare,
 
 }
 
@@ -106,7 +106,7 @@ class PlotBTagEfficiencies(VariablesBase):
                             if col.isdigit(): color = colors[col]
                             else : point = colors[col]
                     tdrDraw(self.histos[hname+"pt"], "P", point, color, 1, color, 0, color)
-                    self.leg.AddEntry(self.histos[hname+"pt"], hname.replace(self.defaultCut,"").replace("FlavUDSG","_light").replace("channel", ""), "lp")
+                    self.leg.AddEntry(self.histos[hname+"pt"], hname.replace(self.defaultCut,"").replace("FlavUDSG","_light"), "lp")
             self.canv.SaveAs(self.outdir+"Years_lepton_"+flavor+".pdf")
 
     def SaveRootFiles(self):
@@ -115,7 +115,6 @@ class PlotBTagEfficiencies(VariablesBase):
             for flavor in self.Flavours:
                 self.histos[year+self.lepton+self.defaultCut+flavor].Write(self.histoname+flavor+"Eff")
             file_.Close()
-            print "Saved " + self.outdir.replace("OtherPlots","ScaleFactors")+"SF_"+year+".root"
 
 
 def main():
