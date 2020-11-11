@@ -52,8 +52,9 @@ bool GenLevelJetMatch::MatchGenPart(const Event & event, TopJet& jet, double Dr)
 
       if      (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,WW))       jet.set_tag(TopJet::Matching, (float)HWWMatch);
       else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,bb))       jet.set_tag(TopJet::Matching, (float)HbbMatch);
+      else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,cc))       jet.set_tag(TopJet::Matching, (float)HccMatch);
       else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,light))    jet.set_tag(TopJet::Matching, (float)HqqMatch);
-      else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,gluon))    jet.set_tag(TopJet::Matching, (float)HqqMatch);
+      else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,gluon))    jet.set_tag(TopJet::Matching, (float)HggMatch);
       else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,ZZ))       jet.set_tag(TopJet::Matching, (float)HZZMatch);
       else if (fabs(gp.pdgId())== H && DoubleDecay(ID1, ID2,tautau))   jet.set_tag(TopJet::Matching, (float)HtautauMatch);
       else if (fabs(gp.pdgId())== t && DoubleDecay(ID1, ID2,Wb))       jet.set_tag(TopJet::Matching, (float)tWbMatch);

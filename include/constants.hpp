@@ -213,10 +213,10 @@ inline const char* BoolToString(bool b) { return b ? "true" : "false";}
 enum taggers {NN_IsHiggs=1000, NN_IsQCD, NN_IsTop};
 
 enum ParticleID { H=25, W=24, Z=23, t=6, b=5, c=4, s=3, d=2, u=1, g=21, ZPrime=9000001};
-enum Matching { unknown=-1, noMatch=0, gluonMatch=1, qMatch=2, HMatch=3, HbbMatch=4, HWWMatch=5, HqqMatch=6, HtautauMatch=7, HZZMatch=8, topMatch=9, tWbMatch=10, WMatch=11, WqqMatch=12, WllMatch=13, ZMatch=14, ZqqMatch=15, ZllMatch=16};
+enum Matching { unknown=-1, noMatch=0, gluonMatch=1, qMatch=2, HMatch=3, HbbMatch=4, HWWMatch=5, HccMatch=6, HqqMatch=7, HggMatch=8, HtautauMatch=9, HZZMatch=10, topMatch=11, tWbMatch=12, WMatch=13, WqqMatch=14, WllMatch=15, ZMatch=16, ZqqMatch=17, ZllMatch=18};
 enum MatchingStatus { Unknown=-1, NotMatched=0, MotherMatched=1, DaughterMatched=2, Hadronic=3, Hadronic1=4, Hadronic2=5, Hadronic3=6, SemiLep=7, FullLep=8, SemiMatched=9 };
-enum Decay {nodecay, leptonic, semileptonic, hadronic, gluon, light, bb, Wb, WW, ZZ, ee, mumu, tautau, ll, nunu, HWWfullLep, HWWfullHad, HWWsemiLep, ZH};
-enum ZprimeDecay {nomatch=0, Zee=1, Zmumu=2, Zelse=3, HWW=10, Hbb=20, Helse=30, ZeeHWW=11, ZmumuHWW=12, ZelseHWW=13, ZeeHbb=21, ZmumuHbb=22, ZelseHbb=23, ZeeHelse=31, ZmumuHelse=32, ZelseHelse=33};
+enum Decay {nodecay, leptonic, semileptonic, hadronic, gluon, light, cc, bb, Wb, WW, ZZ, ee, mumu, tautau, ll, nunu, HWWfullLep, HWWfullHad, HWWsemiLep, ZH};
+enum ZprimeDecay {nomatch=0, Zee=1, Zmumu=2, Zelse=3, HWW=10, Hbb=20, Hcc=30, Hgg=40, Helse=50, ZeeHWW=11, ZmumuHWW=12, ZelseHWW=13, ZeeHbb=21, ZmumuHbb=22, ZelseHbb=23, ZeeHcc=31, ZmumuHcc=32, ZelseHcc=33, ZeeHgg=41, ZmumuHgg=42, ZelseHgg=43, ZeeHelse=51, ZmumuHelse=52, ZelseHelse=53};
 
 inline std::string DecayToString(const int & tagname) {
   if(tagname == nodecay)      return "nodecay";
@@ -225,6 +225,7 @@ inline std::string DecayToString(const int & tagname) {
   if(tagname == hadronic)     return "hadronic";
   if(tagname == gluon)        return "gluon";
   if(tagname == light)        return "light";
+  if(tagname == cc)           return "cc";
   if(tagname == bb)           return "bb";
   if(tagname == Wb)           return "Wb";
   if(tagname == WW)           return "WW";
@@ -252,6 +253,8 @@ inline Matching StringToMatching(const std::string & tagname) {
   if(tagname == "HbbMatch")     return HbbMatch;
   if(tagname == "HWWMatch")     return HWWMatch;
   if(tagname == "HqqMatch")     return HqqMatch;
+  if(tagname == "HggMatch")     return HggMatch;
+  if(tagname == "HccMatch")     return HccMatch;
   if(tagname == "HtautauMatch") return HtautauMatch;
   if(tagname == "HZZMatch")     return HZZMatch;
   if(tagname == "topMatch")     return topMatch;
@@ -274,6 +277,8 @@ inline std::string MatchingToString(const float & tagname_) {
   if(tagname == HbbMatch)     return "HbbMatch";
   if(tagname == HWWMatch)     return "HWWMatch";
   if(tagname == HqqMatch)     return "HqqMatch";
+  if(tagname == HccMatch)     return "HccMatch";
+  if(tagname == HggMatch)     return "HggMatch";
   if(tagname == HtautauMatch) return "HtautauMatch";
   if(tagname == HZZMatch)     return "HZZMatch";
   if(tagname == topMatch)     return "topMatch";
@@ -325,6 +330,8 @@ inline std::string ZprimeDecayToString(const int & tagname) {
   if(tagname == Zelse)       return "Zelse";
   if(tagname == HWW)         return "HWW";
   if(tagname == Hbb)         return "Hbb";
+  if(tagname == Hcc)         return "Hcc";
+  if(tagname == Hgg)         return "Hgg";
   if(tagname == Helse)       return "Helse";
   if(tagname == ZeeHWW)      return "ZeeHWW";
   if(tagname == ZmumuHWW)    return "ZmumuHWW";
@@ -332,6 +339,12 @@ inline std::string ZprimeDecayToString(const int & tagname) {
   if(tagname == ZeeHbb)      return "ZeeHbb";
   if(tagname == ZmumuHbb)    return "ZmumuHbb";
   if(tagname == ZelseHbb)    return "ZelseHbb";
+  if(tagname == ZeeHcc)      return "ZeeHcc";
+  if(tagname == ZmumuHcc)    return "ZmumuHcc";
+  if(tagname == ZelseHcc)    return "ZelseHcc";
+  if(tagname == ZeeHgg)      return "ZeeHgg";
+  if(tagname == ZmumuHgg)    return "ZmumuHgg";
+  if(tagname == ZelseHgg)    return "ZelseHgg";
   if(tagname == ZeeHelse)    return "ZeeHelse";
   if(tagname == ZmumuHelse)  return "ZmumuHelse";
   if(tagname == ZelseHelse)  return "ZelseHelse";

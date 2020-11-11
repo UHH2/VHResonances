@@ -29,18 +29,26 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   book_TH1F("sum_event_weights",            "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_HtoWW",      "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_Htobb",      "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_Htocc",      "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_Htogg",      "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_Zee",        "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_Zmumu",      "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_Zelse",      "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_Helse",      "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZeeHtoWW",   "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZeeHtobb",   "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_ZeeHtocc",   "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_ZeeHtogg",   "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZeeHelse",   "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZmumuHtoWW", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZmumuHtobb", "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_ZmumuHtocc", "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_ZmumuHtogg", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZmumuHelse", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZelseHtoWW", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZelseHtobb", "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_ZelseHtocc", "counting experiment", 1, 0.5, 1.5);
+  book_TH1F("sum_event_weights_ZelseHtogg", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("sum_event_weights_ZelseHelse", "counting experiment", 1, 0.5, 1.5);
   book_TH1F("Zprime_number",                "number of Zprime",    6, -.5, 5.5);
 
@@ -85,10 +93,10 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   book_TH1F("H_chi_H", "#chi^{H}",35,0,70);
   book_TH1F("H_chi_Z", "#chi^{Z}",35,0,70);
 
-  book_TH1F("H_Match","Match^{H}",17, 0, 17);
+  book_TH1F("H_Match","Match^{H}",19, 0, 19);
   book_TH1F("H_MatchingStatus","MatchingStatus^{H}",10, 0, 10);
-  book_TH2F("H_MatchvsH_MatchingStatus",";Match^{H};MatchingStatus^{H}",17, 0, 17, 10, 0, 10);
-  for (int i=1;i<18;i++) {
+  book_TH2F("H_MatchvsH_MatchingStatus",";Match^{H};MatchingStatus^{H}",19, 0, 19, 10, 0, 10);
+  for (int i=1;i<20;i++) {
     H1("H_Match")->GetXaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
     H2("H_MatchvsH_MatchingStatus")->GetXaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
   }
@@ -154,6 +162,8 @@ void HiggsToWWHists::fill(const Event & event){
 
     if(HDec==HWW)   fill_H1("sum_event_weights_HtoWW", 1., weight);
     if(HDec==Hbb)   fill_H1("sum_event_weights_Htobb", 1., weight);
+    if(HDec==Hcc)   fill_H1("sum_event_weights_Htocc", 1., weight);
+    if(HDec==Hgg)   fill_H1("sum_event_weights_Htogg", 1., weight);
     if(HDec==Helse) fill_H1("sum_event_weights_Helse", 1., weight);
     if(ZDec==Zee)   fill_H1("sum_event_weights_Zee", 1., weight);
     if(ZDec==Zmumu) fill_H1("sum_event_weights_Zmumu", 1., weight);
@@ -161,12 +171,18 @@ void HiggsToWWHists::fill(const Event & event){
 
     if(ZprimeDec==ZeeHWW)     fill_H1("sum_event_weights_ZeeHtoWW",   1., weight);
     if(ZprimeDec==ZeeHbb)     fill_H1("sum_event_weights_ZeeHtobb",   1., weight);
+    if(ZprimeDec==ZeeHcc)     fill_H1("sum_event_weights_ZeeHtocc",   1., weight);
+    if(ZprimeDec==ZeeHgg)     fill_H1("sum_event_weights_ZeeHtogg",   1., weight);
     if(ZprimeDec==ZeeHelse)   fill_H1("sum_event_weights_ZeeHelse",   1., weight);
     if(ZprimeDec==ZmumuHWW)   fill_H1("sum_event_weights_ZmumuHtoWW", 1., weight);
     if(ZprimeDec==ZmumuHbb)   fill_H1("sum_event_weights_ZmumuHtobb", 1., weight);
+    if(ZprimeDec==ZmumuHcc)   fill_H1("sum_event_weights_ZmumuHtocc", 1., weight);
+    if(ZprimeDec==ZmumuHgg)   fill_H1("sum_event_weights_ZmumuHtogg", 1., weight);
     if(ZprimeDec==ZmumuHelse) fill_H1("sum_event_weights_ZmumuHelse", 1., weight);
     if(ZprimeDec==ZelseHWW)   fill_H1("sum_event_weights_ZelseHtoWW", 1., weight);
     if(ZprimeDec==ZelseHbb)   fill_H1("sum_event_weights_ZelseHtobb", 1., weight);
+    if(ZprimeDec==ZelseHcc)   fill_H1("sum_event_weights_ZelseHtocc", 1., weight);
+    if(ZprimeDec==ZelseHgg)   fill_H1("sum_event_weights_ZelseHtogg", 1., weight);
     if(ZprimeDec==ZelseHelse) fill_H1("sum_event_weights_ZelseHelse", 1., weight);
   }
 

@@ -247,10 +247,10 @@ void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuf
     H2("nsubjet_btags_DeepCSV"+histSuffix)->GetYaxis()->SetBinLabel(2,"loose");
     H2("nsubjet_btags_DeepCSV"+histSuffix)->GetYaxis()->SetBinLabel(3,"medium");
     H2("nsubjet_btags_DeepCSV"+histSuffix)->GetYaxis()->SetBinLabel(4,"tight");
-    book_TH1F("Match"+histSuffix,"Match^{"+axisSuffix+"}",17, 0, 17);
+    book_TH1F("Match"+histSuffix,"Match^{"+axisSuffix+"}",19, 0, 19);
     book_TH1F("MatchingStatus"+histSuffix,"MatchingStatus^{"+axisSuffix+"}",10, 0, 10);
-    book_TH2F("MatchvsMatchingStatus"+histSuffix,";Match^{"+axisSuffix+"};MatchingStatus^{"+axisSuffix+"}",17, 0, 17, 10, 0, 10);
-    for (int i=1;i<18;i++) {
+    book_TH2F("MatchvsMatchingStatus"+histSuffix,";Match^{"+axisSuffix+"};MatchingStatus^{"+axisSuffix+"}",19, 0, 19, 10, 0, 10);
+    for (int i=1;i<20;i++) {
       H1("Match"+histSuffix)->GetXaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
       H2("MatchvsMatchingStatus"+histSuffix)->GetXaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
     }
