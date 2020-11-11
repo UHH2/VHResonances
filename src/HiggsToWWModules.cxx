@@ -62,6 +62,8 @@ bool FinalStateMatching::process(Event &event){
     const GenParticle* H_dau2 = gp.daughter(event.genparticles, ParticleFlavorMap["H"])->daughter(event.genparticles, 2);
     if (H_dau1 && H_dau2) {
       if (DoubleDecay(H_dau1->pdgId(), H_dau2->pdgId(),bb)) ParticleDecayMap["H"] = Hbb;
+      else if (DoubleDecay(H_dau1->pdgId(), H_dau2->pdgId(),cc)) ParticleDecayMap["H"] = Hcc;
+      else if (DoubleDecay(H_dau1->pdgId(), H_dau2->pdgId(),gluon)) ParticleDecayMap["H"] = Hgg;
       else if (DoubleDecay(H_dau1->pdgId(), H_dau2->pdgId(),WW)) {
         const GenParticle* W_dau1_1 = H_dau1->daughter(event.genparticles, 1);
         const GenParticle* W_dau1_2 = H_dau1->daughter(event.genparticles, 2);

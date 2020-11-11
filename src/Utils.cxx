@@ -19,7 +19,8 @@ bool DoubleDecay(int pdgId1, int pdgId2, Decay decay) {
   if ( isHadronic(pdgId1) && isLeptonic(pdgId2) && decay==semileptonic) return true;
   if ( isHadronic(pdgId1) && isHadronic(pdgId2) && decay==hadronic)     return true;
   if ( fabs(pdgId1) == 21 && fabs(pdgId2) == 21 && decay==gluon)        return true;
-  if ( fabs(pdgId1) <=  4 && fabs(pdgId2) <=  4 && decay==light)        return true;
+  if ( fabs(pdgId1) <=  3 && fabs(pdgId2) <=  3 && decay==light)        return true;
+  if ( fabs(pdgId1) ==  4 && fabs(pdgId2) ==  4 && decay==cc)           return true;
   if ( fabs(pdgId1) ==  5 && fabs(pdgId2) ==  5 && decay==bb)           return true;
   if ( fabs(pdgId1) == 23 && fabs(pdgId2) == 23 && decay==ZZ)           return true;
   if ( fabs(pdgId1) == 24 && fabs(pdgId2) == 24 && decay==WW)           return true;
