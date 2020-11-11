@@ -18,7 +18,6 @@ Module to study BTag Efficiencies
 - Runs automatically for all years and channels.
 - Default collection is Puppi.
 '''
-#TODO invisible channel not implemented
 
 colors = {"2016":       ROOT.kGreen+2,
           "2017":       ROOT.kRed+1,
@@ -26,6 +25,7 @@ colors = {"2016":       ROOT.kGreen+2,
           "lepton":     ROOT.kFullCircle,
           "muon":       ROOT.kFullTriangleDown,
           "electron":   ROOT.kFullTriangleUp,
+          "invisible":  ROOT.kFullSquare,
 
 }
 
@@ -55,7 +55,6 @@ class PlotBTagEfficiencies(VariablesBase):
         for year in self.years:
             # Load MC_DY histos
             for channel in self.Channels:
-                if "invisible" in channel: continue
                 filename = self.Path_STORAGE+year+"/Preselection/Puppi/"+channel+"channel/nominal/uhh2.AnalysisModuleRunner.MC.MC_DY_"+year+"_noTree_merge.root"
                 file_ = ROOT.TFile(filename)
                 for cut,flavor,mode in list(itertools.product(self.Cuts, self.Flavours, self.Modes)):
@@ -71,8 +70,7 @@ class PlotBTagEfficiencies(VariablesBase):
                         self.histos[hname_lep].SetDirectory(0)
                 file_.Close()
             # Calculate MC_DY efficiencies
-            for channel in self.Channels+[self.lepton]:
-                if "invisible" in channel: continue
+            for channel in self.Channels + [self.lepton]:
                 for cut,flavor in list(itertools.product(self.Cuts, self.Flavours)):
                         hname = year+channel+cut+flavor
                         self.histos[hname] = self.histos[hname+"Passing"].Clone(hname)
@@ -81,8 +79,8 @@ class PlotBTagEfficiencies(VariablesBase):
 
     def ResetCanvas(self, name="canv"):
         self.canv = tdrCanvas(name, self.Xaxis_min, self.Xaxis_max, self.Yaxis_min, self.Yaxis_max, self.nameXaxis,self.nameYaxis)
-        self.leg = tdrLeg(0.40,0.70,0.95,0.89, 0.025, 42, ROOT.kBlack)
-        self.leg.SetNColumns(3)
+        self.leg = tdrLeg(0.15,0.70,0.95,0.89, 0.025, 42, ROOT.kBlack)
+        self.leg.SetNColumns( len(self.Channels) + 1)
 
     def PlotHistos(self):
         # For Debug
@@ -97,8 +95,7 @@ class PlotBTagEfficiencies(VariablesBase):
         for flavor in self.Flavours:
             self.ResetCanvas(flavor)
             for year in self.years:
-                for channel in self.Channels+[self.lepton]:
-                    if "invisible" in channel: continue
+                for channel in self.Channels + [self.lepton]:
                     hname = year+channel+self.defaultCut+flavor
                     self.histos[hname+"pt"] = ROOT.TH1D(hname+"pt",hname+"pt", ROOT.BTagMCEffBinsPt.size()-1,array('d',list(ROOT.BTagMCEffBinsPt)))
                     for x in range(1,self.histos[hname+"pt"].GetNbinsX()+1):
