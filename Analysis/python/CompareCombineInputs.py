@@ -110,7 +110,6 @@ class CompareDistibutionsOverYear(VariablesBase):
         self.h_ratio        = {}
         self.files          = {}
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/CompareCombineInputs/"
-        self.years = ["2016", "2017", "2018"]
         self.normalize = normalize
         os.system("mkdir -p "+self.outdir)
 

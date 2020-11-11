@@ -18,7 +18,6 @@ Module to study BTag Efficiencies
 - Runs automatically for all years and channels.
 - Default collection is Puppi.
 '''
-#TODO invisible channel not implemented
 
 colors = {"2016":       ROOT.kGreen+2,
           "2017":       ROOT.kRed+1,
@@ -49,8 +48,6 @@ class PlotBTagEfficiencies(VariablesBase):
         self.Flavours   = ["FlavB", "FlavC", "FlavUDSG"]
         self.Modes      = ["Passing", "Total"]
         self.histos     = {}
-        self.Channels   =  ["muonchannel", "electronchannel", "invisiblechannel"]
-        self.onlyInvisible = (self.Channels==["invisiblechannel"])
 
         os.system("mkdir -p "+self.outdir)
 
@@ -58,14 +55,13 @@ class PlotBTagEfficiencies(VariablesBase):
         for year in self.years:
             # Load MC_DY histos
             for channel in self.Channels:
-                filename = self.Path_STORAGE+year+"/Preselection/Puppi/"+channel+"/nominal/uhh2.AnalysisModuleRunner.MC.MC_DY_"+year+"_noTree_merge.root"
+                filename = self.Path_STORAGE+year+"/Preselection/Puppi/"+channel+"channel/nominal/uhh2.AnalysisModuleRunner.MC.MC_DY_"+year+"_noTree_merge.root"
                 file_ = ROOT.TFile(filename)
                 for cut,flavor,mode in list(itertools.product(self.Cuts, self.Flavours, self.Modes)):
                     hname = year+channel+cut+flavor+mode
                     self.histos[hname] = file_.Get(self.histoname.replace("MC","")+"_"+cut+"/"+self.histoname+flavor+mode).Clone(hname)
                     self.histos[hname].SetDirectory(0)
                     # Merge all the channels
-                    if ("invisible" in channel): continue
                     hname_lep = hname.replace(channel,self.lepton)
                     if hname_lep in self.histos:
                         self.histos[hname_lep].Add(self.histos[hname])
@@ -74,7 +70,7 @@ class PlotBTagEfficiencies(VariablesBase):
                         self.histos[hname_lep].SetDirectory(0)
                 file_.Close()
             # Calculate MC_DY efficiencies
-            for channel in self.Channels + ([self.lepton] if not self.onlyInvisible else []):
+            for channel in self.Channels + [self.lepton]:
                 for cut,flavor in list(itertools.product(self.Cuts, self.Flavours)):
                         hname = year+channel+cut+flavor
                         self.histos[hname] = self.histos[hname+"Passing"].Clone(hname)
@@ -84,7 +80,7 @@ class PlotBTagEfficiencies(VariablesBase):
     def ResetCanvas(self, name="canv"):
         self.canv = tdrCanvas(name, self.Xaxis_min, self.Xaxis_max, self.Yaxis_min, self.Yaxis_max, self.nameXaxis,self.nameYaxis)
         self.leg = tdrLeg(0.15,0.70,0.95,0.89, 0.025, 42, ROOT.kBlack)
-        self.leg.SetNColumns( len(self.Channels)+ (0 if self.onlyInvisible else 1))
+        self.leg.SetNColumns( len(self.Channels) + 1)
 
     def PlotHistos(self):
         # For Debug
@@ -99,7 +95,7 @@ class PlotBTagEfficiencies(VariablesBase):
         for flavor in self.Flavours:
             self.ResetCanvas(flavor)
             for year in self.years:
-                for channel in self.Channels+([self.lepton] if not self.onlyInvisible else []):
+                for channel in self.Channels + [self.lepton]:
                     hname = year+channel+self.defaultCut+flavor
                     self.histos[hname+"pt"] = ROOT.TH1D(hname+"pt",hname+"pt", ROOT.BTagMCEffBinsPt.size()-1,array('d',list(ROOT.BTagMCEffBinsPt)))
                     for x in range(1,self.histos[hname+"pt"].GetNbinsX()+1):
@@ -115,14 +111,11 @@ class PlotBTagEfficiencies(VariablesBase):
 
     def SaveRootFiles(self):
         for year in self.years:
-            for channel in [self.lepton, "invisiblechannel"]:
-                if (channel=="invisiblechannel" and not "invisiblechannel" in self.Channels): continue
-                if (channel!="invisiblechannel" and self.onlyInvisible): continue
-                file_ = ROOT.TFile(self.outdir.replace("OtherPlots","ScaleFactors")+"SF_"+year+".root", "RECREATE")
-                for flavor in self.Flavours:
-                    self.histos[year+channel+self.defaultCut+flavor].Write(self.histoname+flavor+"Eff")
-                file_.Close()
-                print "Saved " + self.outdir.replace("OtherPlots","ScaleFactors")+"SF_"+year+".root"
+            file_ = ROOT.TFile(self.outdir.replace("OtherPlots","ScaleFactors")+"SF_"+year+".root", "RECREATE")
+            for flavor in self.Flavours:
+                self.histos[year+self.lepton+self.defaultCut+flavor].Write(self.histoname+flavor+"Eff")
+            file_.Close()
+            print "Saved " + self.outdir.replace("OtherPlots","ScaleFactors")+"SF_"+year+".root"
 
 
 def main():
