@@ -38,6 +38,7 @@ colors = {"2016":       rt.kGreen+1,
           "lepton":     rt.kFullCircle,
           "muon":       rt.kFullTriangleDown,
           "electron":   rt.kFullTriangleUp,
+          "invisible":  rt.kFullSquare,
 }
 
 class TaggerCutStudy(VariablesBase):
@@ -69,10 +70,9 @@ class TaggerCutStudy(VariablesBase):
         self.LoadVars()
 
         histos = {}
-        for Xvar, Yvar, year, channel, sample in list(itertools.product(self.Xvars, self.Yvars, self.years+["RunII"], self.Channels+["lepton"], self.Samples+[self.Signal])):
+        for Xvar, Yvar, year, channel, sample in list(itertools.product(self.Xvars, self.Yvars, self.years+["RunII"], self.Channels+(["lepton"] if self.Channels!=["invisible"] else []), self.Samples+[self.Signal, self.Signal+"_inv"])):
             sample = sample.replace("2016",year)
             if DoControl([""], year+channel+sample, channel, sample): continue
-            if "invisible" in channel: continue #TODO
             name = Xvar+Yvar+year+channel+sample
             histos[name] = rt.TH2D(name,name,len(self.Xbins)-1,array('d',self.Xbins), len(self.Ybins)-1, array('d',self.Ybins))
             histos[name+"bins"] = rt.TH2D(name+"bins", name+"bins", 1000, 0, 10000, 2000, 0, 1)
@@ -82,7 +82,6 @@ class TaggerCutStudy(VariablesBase):
         for year, channel, sample in list(itertools.product(self.years, self.Channels, self.Samples)):
             sample = sample.replace("2016",year)
             if DoControl([""], year+channel+sample, channel, sample): continue
-            if "invisible" in channel: continue #TODO
             print year, channel, sample
 
             for ind, entry in self.df[(self.df["year"]==year) & (self.df["channel"]==channel) & (self.df["sample"]==sample)].iterrows():
@@ -94,9 +93,13 @@ class TaggerCutStudy(VariablesBase):
                         if "SR" in Yvar and DB_H4q<PtDependentCut(pt): continue
                         for y_ in [year, "RunII"]:
                             for c_ in [channel, "lepton"]:
-                                if "invisible" in channel and c_=="lepton": continue
-                                for s_ in [sample, self.Signal]:
-                                    if not self.Signal in sample and s_==self.Signal: continue
+                                signal = self.Signal
+                                # Change signal name for the invisible channel
+                                if "invisible" in channel: signal =  signal + "_inv"
+                                if "invisible" in channel and c_=="lepton":
+                                    continue
+                                for s_ in [sample, signal]:
+                                    if not signal in sample and s_==signal: continue
                                     histos[Xvar+Yvar+y_+c_+s_.replace(year,y_)].Fill(x_val, y_val, w)
                                     histos[Xvar+Yvar+y_+c_+s_.replace(year,y_)+"bins"].Fill(x_val, y_val, w)
 
