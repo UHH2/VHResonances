@@ -4,7 +4,6 @@ from Utils import *
 Module to extract Tagger info. The output will be used later on to make quick checks
 Need to choose if you want the whole dataset or not via the isFast option.
 '''
-# TODO invisible channel not fully implemented yet
 
 
 class Extractor(VariablesBase):
@@ -25,7 +24,6 @@ class Extractor(VariablesBase):
             if self.isFast and "electron" in channel: continue
             sample = sample.replace("2016",year)
             if DoControl([""], year+channel+sample, channel, sample): continue
-            if "invisible" in channel: continue #TODO
             print year,channel,sample
             for filename in glob.glob(self.Path_STORAGE+year+"/Selection/Puppi/"+channel+"channel/nominal/workdir_Selection_"+sample+"/*.root"):
                 f_ = ROOT.TFile(filename)
@@ -92,9 +90,8 @@ class Extractor(VariablesBase):
                             vars.setdefault("subjet_"+str(j)+"_uds",  []).append(uds)
                             vars.setdefault("subjet_"+str(j)+"_g",    []).append(g)
                             vars.setdefault("subjet_"+str(j)+"_c",    []).append(c)
-
         df = pd.DataFrame(data=vars)
-        df.to_pickle(self.outdir+self.fName+".pkl")
+        joblib.dump(df, self.outdir+self.fName+".pkl")
 
     def LoadVars(self):
         self.df = pd.read_pickle(self.outdir+self.fName+".pkl")
