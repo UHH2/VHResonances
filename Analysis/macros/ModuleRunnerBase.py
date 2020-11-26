@@ -46,15 +46,11 @@ class VariablesBase(GenericPath):
         self.Generic_SubSamples_Dict_ = {
             "MC_DY"                 : [proc+subsample for proc in ["MC_DY_HT", "MC_DY_inv_HT"] for subsample in ["100to200", "200to400", "400to600", "600to800", "800to1200", "1200to2500", "2500toInf",]],
             "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],
-            "MC_WW_incl"            : ["MC_WW"],
-            "MC_WZ_incl"            : ["MC_WZ"],
-            "MC_ZZ_incl"            : ["MC_ZZ"],
-            "MC_WW"                 : ["MC_WWTo4Q", "MC_WWToLNuQQ", "MC_WWTo2L2Nu"],
-            "MC_WZ"                 : ["MC_WZToLNu2Q", "MC_WZTo2Q2Nu", "MC_WZTo2L2Q", "MC_WZTo1L3Nu", "MC_WZTo3LNu"],
-            "MC_ZZ"                 : ["MC_ZZTo4Q", "MC_ZZTo2Q2Nu", "MC_ZZTo2L2Q", "MC_ZZTo2L2Nu", "MC_ZZTo4L"],
+            "MC_WW"                 : ["MC_WW"],
+            "MC_WZ"                 : ["MC_WZ"],
+            "MC_ZZ"                 : ["MC_ZZ"],
             "MC_WJets"              : [proc+subsample for proc in ["MC_WJetsToLNu_HT"] for subsample in ["100To200", "200To400", "400To600", "600To800", "800To1200", "1200To2500", "2500ToInf",]],
-            "MC_QCD"                : [proc+subsample for proc in ["MC_QCD_HT"] for subsample in ["100to200", "200to300", "300to500", "500to700", "700to1000", "1000to1500", "1500to2000", "2000toInf"]],
-            "DATA_SingleElectron"   : ["DATA_SingleElectron_Run"+str(run) for run in self.AllRunPeriods],
+            "DATA_SingleElectron"   : ["DATA_SingleElectron_Run"+str(run) for run in self.AllRunPeriods]+["DATA_SinglePhoton_Run"+str(run) for run in self.AllRunPeriods],
             "DATA_SingleMuon"       : ["DATA_SingleMuon_Run"+str(run) for run in self.AllRunPeriods],
             "DATA_MET"              : ["DATA_MET_Run"+str(run) for run in self.AllRunPeriods],
             self.Signal             : self.SignalSamples,
@@ -98,8 +94,10 @@ class VariablesBase(GenericPath):
             for subsample in sorted(self.Generic_SubSamples_Dict_):
                 loop_over = self.Generic_SubSamples_Dict_[subsample]
                 if (year=="2016" and subsample=="MC_TTbar"): loop_over = ["MC_TTbar"]
-                if (year!="2016" and (subsample=="MC_WW" or subsample=="MC_WZ" or subsample=="MC_ZZ") ): loop_over = self.Generic_SubSamples_Dict_[subsample+"_incl"]
-                if "DATA" in subsample: loop_over = [subsample+"_Run"+str(run) for run in self.RunPeriods_Dict[year]]
+                if "DATA" in subsample:
+                    loop_over = [subsample+"_Run"+str(run) for run in self.RunPeriods_Dict[year]]
+                    if "Electron" in subsample and year!="2018":
+                        loop_over.extend(["DATA_SinglePhoton_Run"+str(run) for run in self.RunPeriods_Dict[year]])
                 self.Samples_Year_Dict.setdefault(year, {}).setdefault(subsample+"_"+year, [el+"_"+year for el in sorted(loop_over)] )
                 self.Processes_Year_Dict.setdefault(year, []).append(subsample+"_"+year)
             self.Processes_Year_Dict[year].remove(self.Signal+"_"+year)
