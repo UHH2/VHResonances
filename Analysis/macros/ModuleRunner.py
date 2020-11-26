@@ -203,9 +203,25 @@ class ModuleRunner(ModuleRunnerBase):
 
     @timeit
     def MakePlots(self):
+        list_processes = []
+        for collection, channel, syst in self.SmartLoop():
+            for mode in ["", "incl_"]:
+                fname = self.ModuleStorage+"/"+collection+"/"+channel+"channel/"+syst+"/"+self.PrefixrootFile+"MC.MC_VV_"+mode+self.year+"_noTree.root"
+                command = ["hadd", "-f", "-T", fname]
+                for sample in glob.glob(fname.replace("VV","*")):
+                    if "incl" in mode and not "incl" in sample: continue
+                    if not "incl" in mode and "incl" in sample: continue
+                    if not ("WW" in sample or "WZ" in sample or "ZZ" in sample ): continue
+                    command.append(sample)
+                if len(command)>4: list_processes.append(command)
+
+        print "Number of processes", len(list_processes)
+        parallelise(list_processes, 20)
+
         cwd = os.getcwd()
         os.chdir(self.Path_SPlotter)
         for collection, channel, syst in self.SmartLoop():
+            if syst!="nominal": continue
             if DoControl(self.controls,self.year+collection+syst+channel, channel, ""):
                 continue
             a = os.system("mkdir -p "+self.Path_STORAGE+self.year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/Plots")
@@ -216,6 +232,7 @@ class ModuleRunner(ModuleRunnerBase):
     def MakeRunII(self, Collections=[], Channels=[], Systematics=[], doPlots=False):
         year = "RunII"
         list_processes = []
+        list_processes_merge = []
         list_processes_plots = []
         for module in ["Preselection","Selection","SignalRegion", "LeptonIDStudies","SF"]:
             self.SetModule(module, Collections=Collections, Channels=Channels, Systematics=Systematics)
@@ -232,7 +249,16 @@ class ModuleRunner(ModuleRunnerBase):
                     for histo in glob.glob(filespath.replace("RunII","201*").replace(self.year,"201*").replace("_noTree","*")):
                         command.append(histo)
                     list_processes.append(command)
+                for mode in ["", "incl_"]:
+                    fname = path_RunII+self.PrefixrootFile+"MC.MC_VV_"+mode+year+"_noTree.root"
+                    command = ["hadd", "-f", "-T", fname]
+                    for file_ in glob.glob(fname.replace("RunII","201*")):
+                        command.append(file_)
+                    if len(command)>4: list_processes_merge.append(command)
         if doPlots:
+            print "Number of processes", len(list_processes_merge)
+            parallelise(list_processes_merge, 20)
+
             print "Number of processes", len(list_processes_plots)
             cwd = os.getcwd()
             os.chdir(self.Path_SPlotter)

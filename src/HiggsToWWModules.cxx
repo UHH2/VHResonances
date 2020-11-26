@@ -411,9 +411,6 @@ bool NLOCorrections::process(uhh2::Event& event){
   double objpt = uhh2::infinity, theory_weight = 1.0;
   std::string process = "";
 
-  // TODO only DY or also Znn?
-  if (is_DY) theory_weight /= default_DY_kFactor;
-
   if (is_Zjets) objpt = GetPartonObjectPt(event,ParticleID::Z);
   if (is_Wjets) objpt = GetPartonObjectPt(event,ParticleID::W);
 

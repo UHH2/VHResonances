@@ -21,7 +21,6 @@ const float min_topjet_pt = 200.0;
 // const float min_lepton_pt = 30.0;
 const float min_lepton_pt = 52.0;
 const float min_lepton_eta = 2.4;
-const float max_muon_iso = 0.1;
 // const float min_jet_dilep_delta_phi = 2.7;
 const float min_MET_pt = 250.0;
 
@@ -207,6 +206,11 @@ const double MassDepentdentCut_value = -10;
 inline double MassDepentdentCut(double pt) { double x = PtToMass(pt); return 0.00238601739564+15407844.1061*TMath::Power(x,-3);}
 const double MassDepentdentCut_cc_value = -40; // For Hcc
 inline double MassDepentdentCut_cc(double pt) { double x = PtToMass(pt); return 0.110034415361+236887594.133*TMath::Power(x,-3);}
+
+const double MassDepentdentCut2_cc_value = -20; // For Hcc
+inline double MassDepentdentCut2_cc(double pt) { double x = PtToMass(pt); return 0.155+115000000*TMath::Power(x,-3);}
+const double MassDepentdentCut3_cc_value = -30; // For Hcc
+inline double MassDepentdentCut3_cc(double pt) { double x = PtToMass(pt); return 0.385+151000000*TMath::Power(x,-3);}
 
 inline const char* BoolToString(bool b) { return b ? "true" : "false";}
 
