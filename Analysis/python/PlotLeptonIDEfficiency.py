@@ -40,8 +40,8 @@ colors = {"ele_ID_kincut":                  (ROOT.kBlack,ROOT.kDot),
           "muon_ID_CutBasedIdTight":        (ROOT.kOrange-2,ROOT.kDot),
           "muon_ID_CutBasedIdGlobalHighPt": (ROOT.kRed+1,ROOT.kOpenSquare),
           "muon_ID_CutBasedIdTrkHighPt":    (ROOT.kOrange+1,ROOT.kFullTriangleUp),
-          "muon_ID_MvaLoose":               (ROOT.kGreen,ROOT.kDot),
-          "muon_ID_MvaMedium":              (ROOT.kAzure+1,ROOT.kDot),
+          "muon_ID_MvaLoose":               (ROOT.kBlue+1,ROOT.kFullTriangleDown),
+          "muon_ID_MvaMedium":              (ROOT.kGreen,ROOT.kDot),
           "muon_ID_MvaTight":               (ROOT.kMagenta,ROOT.kDot),
           "muon_ID_TkIsoLoose":             (ROOT.kBlue+1,ROOT.kFullTriangleDown),
           "muon_ID_TkIsoTight":             (ROOT.kRed,ROOT.kDot),
@@ -67,7 +67,7 @@ class PlotLeptonIDEfficiency(VariablesBase):
         self.IDs        = colors.keys() + [x+self.doubleID for x in colors.keys() if "muon" in x ]
         self.IDs        = list(filter(lambda x: (self.isMuon and "muon" in x) or (self.isEle and "ele" in x), self.IDs))
         self.IDs        = list(reversed(sorted(self.IDs)))
-        self.MinSetIDs  = ["ID_MVA", "veto", "loose", "loose_noIso", "HEEP", "IdLoose", "HighPt", "TkIsoLoose"]
+        self.MinSetIDs  = ["ID_MVA", "veto", "loose", "loose_noIso", "HEEP", "IdLoose", "HighPt", "MvaLoose"]
         # self.HistName   = "_DR12" if self.isDR else "_pt12"
         # self.HistName   = "_DR12_sel" if self.isDR else "_pt12_sel"
         self.HistName   = "_DR12_match" if self.isDR else "_pt12_match"
@@ -147,6 +147,7 @@ class PlotLeptonIDEfficiency(VariablesBase):
             if "noIso" in ID and not "loose" in ID : continue
             if "TrkHighPt" in ID and self.doubleID in ID : continue
             if "Tk" in ID and self.doubleID in ID : continue
+            if "Mva" in ID and self.doubleID in ID : continue
             hist.SetMarkerSize(1.2)
             color = colors[ID.replace(self.doubleID,"")][0]
             marker = colors[ID.replace(self.doubleID,"")][1]
