@@ -38,9 +38,6 @@
 
 <!ENTITY MC_DY_2016                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_DY_2016.xml">
 <!ENTITY MC_TTbar_2016              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_TTbar_2016.xml">
-<!ENTITY MC_WW_incl_2016            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WW_incl_2016.xml">
-<!ENTITY MC_WZ_incl_2016            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WZ_incl_2016.xml">
-<!ENTITY MC_ZZ_incl_2016            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZZ_incl_2016.xml">
 <!ENTITY MC_WW_2016                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WW_2016.xml">
 <!ENTITY MC_WZ_2016                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_WZ_2016.xml">
 <!ENTITY MC_ZZ_2016                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZZ_2016.xml">
@@ -68,9 +65,6 @@
 
 <!ENTITY MC_DY_2017                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_DY_2017.xml">
 <!ENTITY MC_TTbar_2017              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_TTbar_2017.xml">
-<!ENTITY MC_WW_incl_2017            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WW_incl_2017.xml">
-<!ENTITY MC_WZ_incl_2017            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WZ_incl_2017.xml">
-<!ENTITY MC_ZZ_incl_2017            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZZ_incl_2017.xml">
 <!ENTITY MC_WW_2017                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WW_2017.xml">
 <!ENTITY MC_WZ_2017                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_WZ_2017.xml">
 <!ENTITY MC_ZZ_2017                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Selection/All/leptonchannel/nominal/MC_ZZ_2017.xml">
@@ -98,9 +92,6 @@
 
 <!ENTITY MC_DY_2018                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_DY_2018.xml">
 <!ENTITY MC_TTbar_2018              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_TTbar_2018.xml">
-<!ENTITY MC_WW_incl_2018            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WW_incl_2018.xml">
-<!ENTITY MC_WZ_incl_2018            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WZ_incl_2018.xml">
-<!ENTITY MC_ZZ_incl_2018            SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZZ_incl_2018.xml">
 <!ENTITY MC_WW_2018                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WW_2018.xml">
 <!ENTITY MC_WZ_2018                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_WZ_2018.xml">
 <!ENTITY MC_ZZ_2018                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Selection/All/leptonchannel/nominal/MC_ZZ_2018.xml">
@@ -151,9 +142,6 @@
 
     <InputData Type="MC"    Version="MC_DY_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2016;                <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_TTbar_2016"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2016;             <InputTree Name="AnalysisTree"/>  </InputData>
-    <InputData Type="MC"    Version="MC_WW_incl_2016"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_incl_2016;           <InputTree Name="AnalysisTree"/>  </InputData>
-    <InputData Type="MC"    Version="MC_WZ_incl_2016"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_incl_2016;           <InputTree Name="AnalysisTree"/>  </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_incl_2016"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_incl_2016;           <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_WW_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2016;                <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_WZ_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2016;                <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_ZZ_2016"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2016;                <InputTree Name="AnalysisTree"/>  </InputData>
@@ -180,9 +168,6 @@
 
     <InputData Type="MC"    Version="MC_DY_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2017;                <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_TTbar_2017"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2017;             <InputTree Name="AnalysisTree"/>  </InputData>
-    <InputData Type="MC"    Version="MC_WW_incl_2017"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_incl_2017;           <InputTree Name="AnalysisTree"/>  </InputData>
-    <InputData Type="MC"    Version="MC_WZ_incl_2017"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_incl_2017;           <InputTree Name="AnalysisTree"/>  </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_incl_2017"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_incl_2017;           <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_WW_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2017;                <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_WZ_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2017;                <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_ZZ_2017"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2017;                <InputTree Name="AnalysisTree"/>  </InputData>
@@ -209,9 +194,6 @@
 
     <InputData Type="MC"    Version="MC_DY_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2018;                <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_TTbar_2018"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2018;             <InputTree Name="AnalysisTree"/>  </InputData>
-    <InputData Type="MC"    Version="MC_WW_incl_2018"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_incl_2018;           <InputTree Name="AnalysisTree"/>  </InputData>
-    <InputData Type="MC"    Version="MC_WZ_incl_2018"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_incl_2018;           <InputTree Name="AnalysisTree"/>  </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_incl_2018"           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_incl_2018;           <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_WW_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2018;                <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_WZ_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2018;                <InputTree Name="AnalysisTree"/>  </InputData>
     <InputData Type="MC"    Version="MC_ZZ_2018"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2018;                <InputTree Name="AnalysisTree"/>  </InputData>
