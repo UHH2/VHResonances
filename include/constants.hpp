@@ -41,7 +41,6 @@ const BTag::wp BTag_wp = BTag::WP_LOOSE;
 
 
 // Theory Corrections
-const double default_DY_kFactor = 1.23;
 const bool do_EWK = true;
 const bool do_QCD_EWK = false;
 const bool do_QCD_NLO  = true;
