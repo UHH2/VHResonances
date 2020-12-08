@@ -223,8 +223,8 @@ class TaggerCutStudy(VariablesBase):
                 funcs = {}
                 funcs["1/x3"] = rt.TF1("1/x3","[0]+[1]*TMath::Power(x,-3)",x_min, x_max)
                 funcs["1/x3"].SetLineColor(rt.kBlue+1)
-                funcs["1/x2x3"] = rt.TF1("1/x2x3","[0]+[1]*TMath::Power(x,-2)+[2]*TMath::Power(x,-3)",x_min, x_max)
-                funcs["1/x2x3"].SetLineColor(rt.kOrange+1)
+                # funcs["1/x2x3"] = rt.TF1("1/x2x3","[0]+[1]*TMath::Power(x,-2)+[2]*TMath::Power(x,-3)",x_min, x_max)
+                # funcs["1/x2x3"].SetLineColor(rt.kOrange+1)
                 funcs["1/x1x3"] = rt.TF1("1/x1x3","[0]+[1]*TMath::Power(x,-1)+[2]*TMath::Power(x,-3)",x_min, x_max)
                 funcs["1/x1x3"].SetLineColor(rt.kRed+1)
                 if Xvar=="Mass":
@@ -250,9 +250,17 @@ class TaggerCutStudy(VariablesBase):
                 # tdrDraw(gr_forfit, "P",  colors[channel], colors[year], 2, colors[year], 1000, colors[year])
                 func_ref.SetLineColor(rt.kRed+1)
                 func_ref2.SetLineColor(rt.kGreen+2)
+                func_ref2.SetLineStyle(2)
                 func_ref3.SetLineColor(rt.kOrange-1)
                 # func_ref.Draw("same")
-                # func_ref2.Draw("same")
+
+                if channel=="invisiblechannel":
+                    # Draw the fit for the leptonchannel
+                    name = "[0]+[1]*x^{-3}"
+                    for n_ in range(0,func_ref2.GetNpar()):
+                        name = name.replace("["+str(n_)+"]", "{:.2e}".format(func_ref2.GetParameter(n_)))
+                    leg.AddEntry(func_ref2, "lepton: "+ name , "l")
+                    func_ref2.Draw("same")
                 # func_ref3.Draw("same")
             # leg.AddEntry(gr, year+"_"+channel, "lp")
         canv.SaveAs(self.outdir+DB+"Vs"+Xvar+".pdf")
