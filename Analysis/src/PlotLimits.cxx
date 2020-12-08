@@ -79,7 +79,7 @@ void PlotLimits(bool doObs, bool isHbb) {
   // std::vector<std::string> collections = {"Puppi", kRed+1},
   std::vector<std::string> collections = {"Puppi"};
   // std::vector<std::string> channels = {"muonchannel", "electronchannel"};
-  std::vector<std::string> channels = {"muonchannel", "electronchannel", "leptonchannel"};
+  // std::vector<std::string> channels = {"muonchannel", "electronchannel", "leptonchannel", "invisiblechannel"};
   // std::vector<std::string> channels = {"leptonchannel"};
   // std::vector<std::string> years = {"2016", "2017", "2018", "RunII", "fullRunII"};
   std::vector<std::string> years = {"RunII"};
@@ -123,6 +123,7 @@ void PlotLimits(bool doObs, bool isHbb) {
     for (std::string collection: collections) {
       for (std::string channel: channels) {
         double BR = 0.1;
+        if (channel=="invisiblechannel"){BR = 0.2;}
         for (std::string histFolder : histFolders) {
           std::string workingDir = year+"/"+collection+"/"+channel+"/"+histFolder+"/";
 
@@ -192,9 +193,9 @@ void PlotLimits(bool doObs, bool isHbb) {
     }
   }
 
-  TString nameXaxix = "m(Z') [GeV]";
-  // TString nameYaxix = "#sigma\(pp#rightarrowX\) #times Br\(Z'#rightarrowZ\(ll\) H\(WW\)\) \(fb\)";
-  TString nameYaxix = "#sigma#left(pp#rightarrowX#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)";
+  TString nameXaxis = "m(Z') [GeV]";
+  // TString nameYaxis = "#sigma\(pp#rightarrowX\) #times Br\(Z'#rightarrowZ\(ll\) H\(WW\)\) \(fb\)";
+  TString nameYaxis = "#sigma#left(pp#rightarrowZ'#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)";
 
   writeExtraText = true;       // if extra text
   extraText  = "Work in progress" ;//"Preliminary";
@@ -203,7 +204,7 @@ void PlotLimits(bool doObs, bool isHbb) {
   std::unordered_map<std::string, TCanvas*> Canvas_Limits_Comparison;
   std::unordered_map<std::string, TLegend*> Legend_Limits_Comparison;
 
-  Canvas_Limits_Comparison["all"] = tdrCanvas("c_limits_comparison_all", plot_lo, plot_hi, yaxis_lo, yaxis_hi, nameXaxix, nameYaxix);
+  Canvas_Limits_Comparison["all"] = tdrCanvas("c_limits_comparison_all", plot_lo, plot_hi, yaxis_lo, yaxis_hi, nameXaxis, nameYaxis);
   Legend_Limits_Comparison["all"] = tdrLeg(0.65,0.5,0.9,0.85, 0.025, 42, kBlack);
 
   for (auto [name,canvas]: Canvas_Limits_Comparison ) {
@@ -245,9 +246,9 @@ void PlotLimits(bool doObs, bool isHbb) {
         extraText  = "Work in progress" ;//"Preliminary";
         lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at((year=="fullRunII")?"RunII":year).at("lumi_fb"));
 
-        // TCanvas* c_xsec_modecomparison = tdrCanvas("c_xsec_modecomparison", plot_lo, plot_hi, yaxis_lo, yaxis_hi, nameXaxix, nameYaxix);
-        // TCanvas* c_xsec_modecomparison = tdrCanvas("c_xsec_modecomparison", plot_lo, plot_hi, 0.01, 10.3, nameXaxix, nameYaxix);
-        TCanvas* c_xsec_modecomparison = tdrCanvas("c_xsec_modecomparison", 1000, plot_hi, 0.1, 500, nameXaxix, nameYaxix);
+        // TCanvas* c_xsec_modecomparison = tdrCanvas("c_xsec_modecomparison", plot_lo, plot_hi, yaxis_lo, yaxis_hi, nameXaxis, nameYaxis);
+        // TCanvas* c_xsec_modecomparison = tdrCanvas("c_xsec_modecomparison", plot_lo, plot_hi, 0.01, 10.3, nameXaxis, nameYaxis);
+        TCanvas* c_xsec_modecomparison = tdrCanvas("c_xsec_modecomparison", 1000, plot_hi, 0.1, 500, nameXaxis, nameYaxis);
         c_xsec_modecomparison->SetLogy(1);
         c_xsec_modecomparison->SetGridx(1);
         c_xsec_modecomparison->SetGridy(1);
@@ -279,7 +280,7 @@ void PlotLimits(bool doObs, bool isHbb) {
         for (std::string histFolder : histFolders) {
           std::string workingDir = year+"/"+collection+"/"+channel+"/"+histFolder+"/";
 
-          TCanvas* c_xsec = tdrCanvas(("xsec"+workingDir).c_str(), plot_lo, plot_hi, yaxis_lo, yaxis_hi, nameXaxix, nameYaxix);
+          TCanvas* c_xsec = tdrCanvas(("xsec"+workingDir).c_str(), plot_lo, plot_hi, yaxis_lo, yaxis_hi, nameXaxis, nameYaxis);
           c_xsec->SetLogy(1);
           c_xsec->SetGridx(1);
           c_xsec->SetGridy(1);
@@ -334,6 +335,18 @@ void PlotLimits(bool doObs, bool isHbb) {
           // leg_ExtraPlot->AddEntry(gr_H0lll2b, "Hbb 0l2l2b", "l");
           // leg_ExtraPlot->AddEntry(gr_H0lll0b, "Hbb 0l2l0b", "l");
           // leg_ExtraPlot->AddEntry(gr_Hcomb,   "Hbb comb", "l");
+
+          // Plot lepton channel as comparison
+          if (channel=="invisiblechannel"){
+            const std::vector<double> & x_val         = {1000.0,   1200.0,  1400.0, 1600.0,   1800.0, 2000.0, 2500.0, 3000.0, 3500.0, 4000.0, 4500.0, 5000.0, 5500.0, 6000.0, 7000.0, 8000.0};
+            const std::vector<double> & y_val         = {18.828, 20.391, 12.93, 9.102, 7.031, 5.723, 3.564, 2.52, 1.909, 1.572, 1.396, 1.323, 1.357, 1.504, 1.904, 2.266};
+            TGraph* gr   = new TGraphErrors(x_val.size(), &(x_val[0]), &y_val[0]);
+            gr->SetLineWidth(2);
+            c_xsec->cd();
+            tdrDraw(gr, "C", kFullDotLarge, kRed+1, kDashed, kRed+1);
+            leg_ExtraPlot->AddEntry(gr,  "lepton channel", "l");
+          }
+
           leg_ExtraPlot->Draw();
 
           c_xsec->SaveAs((dir_modecomparison+histFolder+"/"+"UpperLimit_"+histFolder+"_"+extraOptionsText+".pdf").c_str());
@@ -418,13 +431,13 @@ void PlotLimits(bool doObs, bool isHbb) {
   std::unordered_map<std::string, TLegend*> Legend_Limits_Ratio;
 
   std::string collection = "Puppi";
-  std::string channel = "muonchannel";
+  std::string channel = "invisiblechannel";
   std::string histFolder = histFolders[0];
   // std::string histFolder = "btag_DeepBoosted_H4qvsQCDmassdep_x3";
   // std::string histFolder = "btag_DeepBoosted_H4qvsQCDp2";
   // std::string histFolder = "btag_DeepBoosted_H4qvsQCDp02";
   std::string workingDir = collection+"/"+channel+"/"+histFolder+"/";
-  Canvas_Limits_Ratio[workingDir] = tdrCanvas("c_limits_ratio", plot_lo, plot_hi, yaxis_lo, 5, nameXaxix, "Ratio Limits");
+  Canvas_Limits_Ratio[workingDir] = tdrCanvas("c_limits_ratio", plot_lo, plot_hi, yaxis_lo, 5, nameXaxis, "Ratio Limits");
   Legend_Limits_Ratio[workingDir] = tdrLeg(0.65,0.5,0.9,0.85, 0.025, 42, kBlack);
 
   for (std::string year: years) {
