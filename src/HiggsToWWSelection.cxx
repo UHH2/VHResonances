@@ -23,7 +23,7 @@ bool JetDiLeptonPhiAngularSelection::passes(const Event& event){
   if(jets.size() < 1 ) throw std::runtime_error("JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection -- unexpected number of jets");
 
   if (lepton == "invisible"){
-    // invisblechannel
+    // invisiblechannel
     for(const auto & jet: jets){
       double Dphi = deltaPhi(jet, *event.met);
       if (Dphi > min_Dphi_jet_MET) return true;

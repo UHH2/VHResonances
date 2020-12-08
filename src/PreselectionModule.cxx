@@ -250,6 +250,8 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   }
 
   DeltaRDiLepton_selection.reset(new DeltaRDiLepton(min_DR_dilep, max_DR_dilep, MS["leptons"]));
+
+  // min_Dphi_AK8jet_MET = 2.0
   JetDiLeptonPhiAngularSel.reset(new JetDiLeptonPhiAngularSelection(min_dilep_pt, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, min_Dphi_AK8jet_MET, MS["leptons"], h_topjets));
   VetoLeptonSel.reset(new VetoSelection(NoLeptonSel));
 

@@ -55,7 +55,7 @@ class VerifySignalNormalization(VariablesBase):
             massPoint = str(mp)
             self.Values[massPoint] = {}
             for module in self.Modules:
-                fname = self.Path_STORAGE+self.year+"/"+module+"/"+self.collection+"/"+self.channel+"channel/nominal/"+self.PrefixrootFile+"MC."+self.Signal+"_M"+massPoint+"_"+self.year+"_noTree.root"
+                fname = self.Path_STORAGE+self.year+"/"+module+"/"+self.collection+"/"+self.channel+"channel/nominal/"+self.PrefixrootFile+"MC."+self.Signal+("_inv" if "invisible" in channel else "")+"_M"+massPoint+"_"+self.year+"_noTree.root"
                 self.Values[massPoint][module] = {}
                 f_ = ROOT.TFile(str(fname))
                 for cut in self.cuts[module]:
