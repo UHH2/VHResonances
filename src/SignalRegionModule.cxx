@@ -226,8 +226,8 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
   h_topjets = ctx.get_handle<std::vector<TopJet>>(MS["topjetLabel"]);
   h_ZprimeCandidates = ctx.declare_event_input<std::vector<ZprimeCandidate>>("ZprimeCandidate");
 
-  btag_DeepBoosted_H4qvsQCDmassdep_SR_selection.reset(new TaggerCut(0, 1,  MassDepentdentCut_value, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
-  btag_DeepBoosted_HccvsQCDmassdep_SR_selection.reset(new TaggerCut(0, 1,  MassDepentdentCut_cc_value, "btag_DeepBoosted_HccvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_H4qvsQCDmassdep_SR_selection.reset(new TaggerCut(0, 1,  MassDependentCut_value, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
+  btag_DeepBoosted_HccvsQCDmassdep_SR_selection.reset(new TaggerCut(0, 1,  MassDependentCut_cc_value, "btag_DeepBoosted_HccvsQCD", h_ZprimeCandidates));
 
   std::string groom = MB["isHOTVR"]? "_groomed": "";
   tau42_SR_selection.reset(new TaggerCut(0.0, 0.5, -1, "tau42"+groom, h_ZprimeCandidates));
@@ -255,7 +255,6 @@ bool SignalRegionModule::process(uhh2::Event& event) {
 
   ZprimeCandidate cand = event.get(h_ZprimeCandidates)[0];
 
-  double delta_R_ll = deltaR(cand.leptons()[0], cand.leptons()[1]);
   double cc_score = cand.H().btag_DeepBoosted_probHcc();
   double qcd_score = cand.H().btag_DeepBoosted_probQCDb()+cand.H().btag_DeepBoosted_probQCDbb()+cand.H().btag_DeepBoosted_probQCDc()+cand.H().btag_DeepBoosted_probQCDcc()+cand.H().btag_DeepBoosted_probQCDothers();
   double Hcc = cc_score/(cc_score+qcd_score);
@@ -266,9 +265,13 @@ bool SignalRegionModule::process(uhh2::Event& event) {
   bool HccvsQCD_pass2 = Hcc>0.9;
 
   bool HccvsQCD_passMD = btag_DeepBoosted_HccvsQCDmassdep_SR_selection->passes(event);
-  bool extraCleaning_pass = (fabs(cand.H().eta()-cand.Z().eta())>1.7) || (deltaR(cand.H(),cand.Z())<2) || (delta_R_ll>0.4);
 
-  if (extraCleaning_pass) return false;
+  if(!MB["invisiblechannel"]){ // Don't apply ExtraCleaning to invisiblechannel.
+    double delta_R_ll = deltaR(cand.leptons()[0], cand.leptons()[1]);
+    bool extraCleaning_pass = (fabs(cand.H().eta()-cand.Z().eta())>1.7) || (deltaR(cand.H(),cand.Z())<2) || (delta_R_ll>0.4);
+    if (extraCleaning_pass) return false;
+  }
+
   fill_histograms(event, "ExtraCleaning");
 
   if(H4qvsQCD_pass) {
