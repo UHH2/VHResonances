@@ -48,12 +48,16 @@ def newNumber(year,sample,ConfigFile,syst,channel):
                 newNumber = 200
             if any(x in sample for x in ["DATA_SingleElectron_RunB", "DATA_SingleElectron_RunH"]):
                 newNumber = 180
+            if any(x in sample for x in ["DATA_SinglePhoton"]):
+                newNumber = 150
             if any(x in sample for x in ["DATA_MET_RunD", "DATA_MET_RunE", "DATA_MET_RunF", "DATA_MET_RunG", "DATA_MET_RunH"]):
                 newNumber = 170
             if any(x in sample for x in ["DATA_MET_RunB", "DATA_MET_RunC"]):
                newNumber = 250
         if year=="2017":
             newNumber = 340
+            if any(x in sample for x in ["DATA_SinglePhoton"]):
+                newNumber = 150
             if any(x in sample for x in ["DATA_SingleMuon_RunF"]):
                 newNumber = 280
             if any(x in sample for x in ["DATA_SingleElectron_RunE", "DATA_SingleMuon_RunF"]):
@@ -108,25 +112,21 @@ def newNumber(year,sample,ConfigFile,syst,channel):
         newNumber = 40 if year=="2016" else 200 if year=="2017" else 60
         if "inv" in channel:
             if any(x in sample for x in ["MC_TTTo2L2Nu_2017","MC_TTToHadronic_2017"]):
-                newNumber = 260
+                newNumber = 250
             if any(x in sample for x in ["MC_TTToSemiLeptonic_2018","MC_TTTo2L2Nu_2018"]):
-                newNumber = 110
+                newNumber = 100
             if any(x in sample for x in ["MC_TTToHadronic_2018"]):
-                newNumber = 60
+                newNumber = 50
     if "MC_W" in sample:
-        newNumber = 230
-        if any(x in sample for x in ["MC_WZTo2Q2Nu_2016"]):
-            newNumber = 200
-        if any(x in sample for x in ["MC_WWTo2L2Nu_2016", "MC_WZTo1L3Nu_2016", "MC_WZTo3LNu_2016"]):
-            newNumber = 300
+        newNumber = 200
         if any(x in sample for x in ["MC_WZ_2017"]):
             newNumber = 500 if "inv" in channel else 700
         if any(x in sample for x in ["MC_WZ_2018"]):
             newNumber = 500 if "inv" in channel else 800
         if any(x in sample for x in ["MC_WW_2017"]):
-            newNumber = 500 if "inv" in channel else 300
+            newNumber = 500 if "inv" in channel else 200
         if any(x in sample for x in ["MC_WW_2018"]):
-            newNumber = 500 if "inv" in channel else 900
+            newNumber = 500
         if any(x in sample for x in ["MC_WZTo2L2Q_2016"]):
             newNumber = 40
         if any(x in sample for x in ["MC_WJets"]):
@@ -165,6 +165,8 @@ def newNumber(year,sample,ConfigFile,syst,channel):
         newNumber = 1 if "MC_DY" in sample else 1000
         if "MC_WJets" in sample: newNumber = 10
     if syst!="nominal":
+        newNumber = int(0.9*newNumber)
+    if "Preselection" in ConfigFile:
         newNumber = int(0.9*newNumber)
     if "LeptonIDStudies" in ConfigFile:
         if not "MC_ZprimeToZH" in sample: newNumber = int(newNumber/3)

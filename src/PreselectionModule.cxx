@@ -69,14 +69,13 @@ protected:
 
   // Define variables
   std::string NameModule = "PreselectionModule";
-  std::vector<std::string> histogram_tags = { "nocuts", "weights", "HEM", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
+  std::vector<std::string> histogram_tags = { "nocuts", "weights", "Trigger", "HEM", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
 
   Event::Handle<std::vector<Jet> > h_jets;
   Event::Handle<std::vector<TopJet> > h_topjets;
-
   // Define common modules
   std::unique_ptr<uhh2::Selection> lumi_selection;
   std::vector<std::unique_ptr<AnalysisModule>> weightsmodules, modules;
@@ -85,10 +84,12 @@ protected:
   std::unique_ptr<AnalysisModule> PDFReweight_module;
 
   // Define selections
+  std::unordered_map<std::string, std::unique_ptr<Selection>> Trigger_selection;
   std::shared_ptr<Selection> NBoostedJetSel;
   std::shared_ptr<VetoSelection> VetoLeptonSel;
   std::shared_ptr<Selection> NoLeptonSel, NLeptonSel, DeltaRDiLepton_selection, JetDiLeptonPhiAngularSel;
   std::unique_ptr<Selection> HEMEventCleaner_Selection;
+
 
 };
 
@@ -119,12 +120,13 @@ void PreselectionModule::book_histograms(uhh2::Context& ctx) {
     mytag = "muon_"     + tag; book_HFolder(mytag, new MuonHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "diLepton_" + tag; book_HFolder(mytag, new DiLeptonHists(ctx,mytag, "", MS["topjetLabel"]));
     mytag = "BTagEff_"  + tag; book_HFolder(mytag, new BTagMCEfficiencyHists(ctx, mytag,BTag(BTag::DEEPCSV, BTag::WP_LOOSE), MS["topjetLabel"]));
+    mytag = "Lumi_"     + tag; book_HFolder(mytag, new LuminosityHists(ctx, mytag));
     mytag = "ZprimeCandidate_" + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
   }
 }
 
 void PreselectionModule::fill_histograms(uhh2::Event& event, string tag){
-  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "BTagEff_", "ZprimeCandidate_"};
+  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "BTagEff_", "Lumi_", "ZprimeCandidate_"};
   for (auto& mytag : mytags) HFolder(mytag+ tag)->fill(event);
 }
 
@@ -141,6 +143,8 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   // Set up variables
   MS["year"]              = ctx.get("year");
   MS["dataset_version"]   = ctx.get("dataset_version");
+  MB["is_SingleElectron"] = FindInString("SingleElectron", MS["dataset_version"]);
+  MB["is_SinglePhoton"]   = FindInString("SinglePhoton",   MS["dataset_version"]);
   MB["is_mc"]             = ctx.get("dataset_type") == "MC";
   MB["isPuppi"]           = string2bool(ctx.get("isPuppi"));
   MB["isCHS"]             = string2bool(ctx.get("isCHS"));
@@ -178,7 +182,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
 
   // Set up selections
 
-  const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta), MuonIso(max_muon_iso));
+  const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta), MuonID(Muon::PFIsoTight));
   const ElectronId eleId = AndId<Electron>(ElectronTagID(Electron::cutBasedElectronID_Fall17_94X_V2_loose), PtEtaSCCut(min_lepton_pt, min_lepton_eta));
 
   const JetId jetId = AndId<Jet> (JetPFID(JETwp), PtEtaCut(min_jet_pt, min_lepton_eta));
@@ -221,6 +225,14 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
 
   PDFReweight_module.reset(new PDFReweight(ctx));
+
+  for (auto& t : Trigger_run_validity.at(MS["year"])) {
+    if (MB["muonchannel"] && !FindInString("Mu", t.first) ) continue;
+    if (MB["muonchannel"] && FindInString("NoMu", t.first) ) continue;
+    if (MB["electronchannel"] && !FindInString("Ele", t.first) && !FindInString("Pho", t.first) ) continue;
+    if (MB["invisiblechannel"] && !FindInString("MET", t.first) ) continue;
+    Trigger_selection[t.first].reset(new TriggerSelection( t.first ));
+  }
 
   NBoostedJetSel.reset(new NTopJetSelection(1,-1,topjetId,h_topjets));
 
@@ -278,11 +290,32 @@ bool PreselectionModule::process(uhh2::Event& event) {
 
   fill_histograms(event, "weights");
 
+  bool pass_triggers_OR = false;
+  bool pass_Ele_triggers_Photon_Dataset = false;
+
+  for (auto& el : Trigger_selection) {
+    if (event.isRealData && (event.run < Trigger_run_validity.at(MS["year"]).at(el.first).first || event.run > Trigger_run_validity.at(MS["year"]).at(el.first).second) ) continue;
+    bool pass = el.second->passes(event);
+    // For 2016 and 2017 the SinglePhoton and SingleElectron datasets are separete.
+    // To avoid double counting, we consider eleTriggers in the SingleElectron
+    // and we veto eleTriggers in the SinglePhoton
+    if (MS["year"]!="2018") {
+      if (MB["is_SingleElectron"] && !FindInString("Ele", el.first)) continue;
+      if (MB["is_SinglePhoton"] && FindInString("Ele", el.first) && pass) {pass_Ele_triggers_Photon_Dataset = true; break;}
+    }
+    pass_triggers_OR += pass;
+    pass_triggers_OR += el.second->passes(event);
+    if (pass_triggers_OR && !MB["is_SinglePhoton"]) break;
+  }
+  if (!pass_triggers_OR || pass_Ele_triggers_Photon_Dataset) return false;
+
+  fill_histograms(event, "Trigger");
+
   //Effective in 2018 only.
   // Here the assumption is that it should check for cleaned jets to avoid overlap with leptons (Tight WP recommanded).
   if(!HEMEventCleaner_Selection->passes(event)) return false;
   fill_histograms(event, "HEM");
-  
+
   // PrimaryVertexCleaner, ElectronCleaner, MuonCleaner
   for(auto & m : modules) m->process(event);
 

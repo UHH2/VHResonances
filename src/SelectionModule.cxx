@@ -68,7 +68,7 @@ protected:
 
   // Define variables
   std::string NameModule = "SelectionModule";
-  std::vector<std::string> histogram_tags = {"Preselection", "Trigger", "MuonScale", "ZprimeReco", "ZprimeSelection", "PTMassCut", "ScaleFactors"};
+  std::vector<std::string> histogram_tags = {"Preselection", "MuonScale", "ZprimeReco", "ZprimeSelection", "PTMassCut", "ScaleFactors"};
   std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "weight_pu", "weight_pu_up", "weight_pu_down", "HDecay", "ZDecay", "ZprimeDecay", "weight_btag","weight_btag_up", "weight_btag_down"};
 
   std::unordered_map<std::string, std::string> MS;
@@ -85,7 +85,6 @@ protected:
   std::unique_ptr<Selection> PTMassCut_selection, DeltaPhiJetMETCut_TopJets_selection, DeltaPhiJetMETCut_Jets_selection;
   std::unique_ptr<AnalysisModule> ZprimeCandidateReconstruction_module;
   std::unique_ptr<AnalysisModule> CollectionProducer_module;
-  std::unordered_map<std::string, std::unique_ptr<Selection>> Trigger_selection;
   std::unordered_map<std::string, std::unique_ptr<AnalysisModule>> ScaleFactors_module;
   std::unique_ptr<AnalysisModule> MuonScaleVariations_module;
 
@@ -130,12 +129,13 @@ void SelectionModule::book_histograms(uhh2::Context& ctx){
     mytag = "muon_"     + tag; book_HFolder(mytag, new MuonHists(ctx,mytag, MS["topjetLabel"]));
     mytag = "diLepton_" + tag; book_HFolder(mytag, new DiLeptonHists(ctx,mytag, "", MS["topjetLabel"]));
     mytag = "BTagEff_"  + tag; book_HFolder(mytag, new BTagMCEfficiencyHists(ctx, mytag,BTag(BTag::DEEPCSV, BTag::WP_LOOSE), MS["topjetLabel"]));
+    mytag = "Lumi_"     + tag; book_HFolder(mytag, new LuminosityHists(ctx, mytag));
     mytag = "ZprimeCandidate_" + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
   }
 }
 
 void SelectionModule::fill_histograms(uhh2::Event& event, string tag){
-  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "BTagEff_", "ZprimeCandidate_"};
+  std::vector<string> mytags = {"event_", "gen_", "nTopJet_", "nJet_", "ele_", "muon_", "diLepton_", "BTagEff_", "Lumi_", "ZprimeCandidate_"};
   for (auto& mytag : mytags) HFolder(mytag+ tag)->fill(event);
 }
 
@@ -179,13 +179,6 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
   h_image = ctx.get_handle<std::vector<tensorflow::Tensor>>("Images");
 
   MS["leptons"] = MB["muonchannel"]? "muons": (MB["electronchannel"]? "electrons": (MB["invisiblechannel"]? "invisible": ""));
-  for (auto& t : Trigger_run_validity.at(MS["year"])) {
-    if (MB["muonchannel"] && t.first.find("Mu")==std::string::npos ) continue;
-    if (MB["muonchannel"] &&  t.first.find("NoMu")!=std::string::npos ) continue;
-    if (MB["electronchannel"] && t.first.find("Ele")==std::string::npos ) continue;
-    if (MB["invisiblechannel"] && t.first.find("MET")==std::string::npos ) continue;
-    Trigger_selection[t.first].reset(new TriggerSelection( t.first ));
-  }
 
   //Scale factors
   MuonScaleVariations_module.reset(new MuonScaleVariations(ctx));
@@ -229,17 +222,6 @@ bool SelectionModule::process(uhh2::Event& event) {
   if (MB["invisiblechannel"]){
     if (!DeltaPhiJetMETCut_Jets_selection->passes(event)) return false;
   }
-
-  bool pass_triggers_OR = false;
-
-  for (auto& el : Trigger_selection) {
-    if (event.isRealData && (event.run < Trigger_run_validity.at(MS["year"]).at(el.first).first || event.run > Trigger_run_validity.at(MS["year"]).at(el.first).second) ) continue;
-    pass_triggers_OR += el.second->passes(event);
-    if (pass_triggers_OR) break;
-  }
-  if (!pass_triggers_OR) return false;
-
-  fill_histograms(event, "Trigger");
 
   MuonScaleVariations_module->process(event);
   fill_histograms(event, "MuonScale");
