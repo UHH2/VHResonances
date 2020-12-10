@@ -37,39 +37,71 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
   // if (mass==1200) rangeLo = 790;
   // if (mass==1200) rangeHi = 1390;
 
-  rangeLo = 0.7742*mass-113;
-  rangeHi = 1.0857*mass+46;
+  if (channel=="invisiblechannel"){
+    rangeLo = 0.7742*mass-113;
+    rangeHi = 1.0857*mass+46;
 
-  if (mass==1000) { rangeLo = 700;  rangeHi = 1400;}
-  if (mass==1200) { rangeLo = 700;  rangeHi = 1600;}
+    if (mass==1000) { rangeLo = 700;  rangeHi = 1300;}
+    if (mass==1200) { rangeLo = 700;  rangeHi = 1600;}
+    if (mass==1400) { rangeLo = 800; rangeHi = 1800;}
+    if (mass==1600) { rangeLo = 900; rangeHi = 1900;}
+    if (mass==1800) { rangeLo = 1000; rangeHi = 2000;}
+    if (mass==2000) { rangeLo = 1000; rangeHi = 2200;}
+    if (mass==2500) { rangeLo = 1000; rangeHi = 2700;}
+    if (mass==3000) { rangeLo = 1500; rangeHi = 3500;}
+    if (mass==3500) { rangeLo = 1500; rangeHi = 3900;}
+    if (mass==4000) { rangeLo = 2000; rangeHi = 4400;}
+    if (mass==4500) { rangeLo = 2000; rangeHi = 4900;}
+    if (mass==5000) { rangeLo = 2000; rangeHi = 5400;}
+    if (mass==5500) { rangeLo = 2500; rangeHi = 6000;}
+    if (mass==6000) { rangeLo = 2800; rangeHi = 7000;}
+    if (mass==7000) { rangeLo = 3000; rangeHi = 7600;}
+    if (mass==8000) { rangeLo = 4000; rangeHi = 8800;}
 
-  if (mass==1400) { rangeLo = 1000; rangeHi = 1800;}
-  if (mass==1600) { rangeLo = 1000; rangeHi = 1900;}
-  if (mass==1800) { rangeLo = 1100; rangeHi = 2000;}
-  if (mass==2000) { rangeLo = 1400; rangeHi = 2200;}
-  if (mass==2500) { rangeLo = 1800; rangeHi = 2700;}
-  if (mass==3000) { rangeLo = 2100; rangeHi = 3300;}
-  if (mass==3500) { rangeLo = 2400; rangeHi = 3900;}
-  if (mass==4000) { rangeLo = 2800; rangeHi = 4400;}
-  if (mass==4500) { rangeLo = 3400; rangeHi = 4900;}
-  if (mass==5000) { rangeLo = 3800; rangeHi = 5400;}
-  if (mass==5500) { rangeLo = 4400; rangeHi = 6000;}
-  if (mass==6000) { rangeLo = 4600; rangeHi = 6600;}
-  if (mass==7000) { rangeLo = 5700; rangeHi = 7600;}
-  if (mass==8000) { rangeLo = 6800; rangeHi = 8800;}
+    plotLo = mass*(1-10./28.);
+    plotHi = mass*(1+10./28.);
 
-  // if (mass==1200) rangeLo = 790;
-  // if (mass==1200) rangeHi = 1390;
+    // Temporary changes
+    plotLo = mass*(1-20./28.);
+    plotHi = mass*(1+20./28.);
+
+    ymax = 1.8;
+
+  } else {
+    rangeLo = 0.7742*mass-113;
+    rangeHi = 1.0857*mass+46;
+
+    if (mass==1000) { rangeLo = 700;  rangeHi = 1400;}
+    if (mass==1200) { rangeLo = 700;  rangeHi = 1600;}
+
+    if (mass==1400) { rangeLo = 1000; rangeHi = 1800;}
+    if (mass==1600) { rangeLo = 1000; rangeHi = 1900;}
+    if (mass==1800) { rangeLo = 1100; rangeHi = 2000;}
+    if (mass==2000) { rangeLo = 1400; rangeHi = 2200;}
+    if (mass==2500) { rangeLo = 1800; rangeHi = 2700;}
+    if (mass==3000) { rangeLo = 2100; rangeHi = 3300;}
+    if (mass==3500) { rangeLo = 2400; rangeHi = 3900;}
+    if (mass==4000) { rangeLo = 2800; rangeHi = 4400;}
+    if (mass==4500) { rangeLo = 3400; rangeHi = 4900;}
+    if (mass==5000) { rangeLo = 3800; rangeHi = 5400;}
+    if (mass==5500) { rangeLo = 4400; rangeHi = 6000;}
+    if (mass==6000) { rangeLo = 4600; rangeHi = 6600;}
+    if (mass==7000) { rangeLo = 5700; rangeHi = 7600;}
+    if (mass==8000) { rangeLo = 6800; rangeHi = 8800;}
+
+    // if (mass==1200) rangeLo = 790;
+    // if (mass==1200) rangeHi = 1390;
 
 
-  plotLo = mass*(1-10./28.);
-  plotHi = mass*(1+10./28.);
-  // ymax = (50-mass*1./100)*1.5;
-  // if (mass<1200) ymax = (-20+mass*6./100)*1.4;
-  // if (mass>3500) ymax = (30-mass*3./1000)*1.5;
+    plotLo = mass*(1-10./28.);
+    plotHi = mass*(1+10./28.);
+    // ymax = (50-mass*1./100)*1.5;
+    // if (mass<1200) ymax = (-20+mass*6./100)*1.4;
+    // if (mass>3500) ymax = (30-mass*3./1000)*1.5;
 
-  ymax = 2.8;
+    ymax = 2.8;
 
+  }
 
   ymax *= lumi_map.at(year).at("lumi_fb")/lumi_map.at("RunII").at("lumi_fb");
   if (year=="2017") ymax *= 1.1;
@@ -154,12 +186,15 @@ if (debug) for (auto & syst : SystNames) std::cout << syst<< std::endl; //TODO p
 
 Module    = "SignalRegion";
 Histtype  = "ZprimeCandidate";
-// HistName  = "Zprime_mass_rebin_full";
-// HistName  = "Zprime_mass";
-// HistName  = "Zprime_mass_rebin1";
-// HistName  = "Zprime_mass_rebin2";
-HistName  = "Zprime_mass_rebin30";
-// HistName  = "Zprime_mass_rebin100";
+
+std::string massText = "mass";
+if (channel=="invisiblechannel") massText="mass_transversal";
+// HistName  = "Zprime_"+massText+"_rebin_full";
+// HistName  = "Zprime_"+massText+"";
+// HistName  = "Zprime_"+massText+"_rebin1";
+// HistName  = "Zprime_"+massText+"_rebin2";
+HistName  = "Zprime_"+massText+"_rebin30";
+// HistName  = "Zprime_"+massText+"_rebin100";
 
 
 unique_name = "_"+channel+"_"+year;
@@ -168,6 +203,7 @@ unique_name_complete = unique_name.substr(1)+"_"+histFolder;
 filepath    = Path_STORAGE+year+"/"+Module+"/"+collection+"/"+channel+"/nominal/";
 
 dataName  = channel.substr(0, channel.find("channel")); dataName[0] = toupper(dataName[0]) ; dataName = "DATA_Single"+dataName;
+if (channel=="invisiblechannel") dataName = "DATA_MET";
 dataFileName = PrefixrootFile+"DATA."+dataName+"_"+year+"_noTree.root";
 
 x_var.reset(new RooRealVar("x_var", "m_{Zprime} (GeV)", x_lo, x_hi));
@@ -270,7 +306,7 @@ void CreateRooWorkspace::LoadFiles() {
     for (const int & mass : MyMassPoints) {
 
       std::string SgName = "M"+std::to_string(mass);
-      std::string fname  = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+SgName+"_"+year+"_noTree.root";
+      std::string fname  = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+(channel=="invisiblechannel"?"inv_" : "")+SgName+"_"+year+"_noTree.root";
       std::string hmname = GetSgName(mass, syst);
       std::string hname  = SRname;
       if (!isNominalFolder(syst)) fname = TString(fname).ReplaceAll("nominal",syst).ReplaceAll("Up","_up").ReplaceAll("Down","_down"); // Be careful if you change it. It's needed as input to combine!!
@@ -457,10 +493,19 @@ void CreateRooWorkspace::InitializePDFs() {
     for (const int & mass : MyMassPoints) {
       FitName = GetSgName(mass,syst);
       std::string ParName = "_"+FitName+unique_name;
-      fitPars[FitName].emplace_back(new RooRealVar(("sg_p0"+ParName).c_str(), ("sg_p0_"+ParName).c_str(), mass, mass*0.8, mass*1.2));
-      fitPars[FitName].emplace_back(new RooRealVar(("sg_p1"+ParName).c_str(), ("sg_p1_"+ParName).c_str(), (mass>3000)? 150: 30, (mass>3000)? 120: 10., (mass>3000)? 400:110.));
-      fitPars[FitName].emplace_back(new RooRealVar(("sg_p2"+ParName).c_str(), ("sg_p2_"+ParName).c_str(), 1, -10, 10));
-      fitPars[FitName].emplace_back(new RooRealVar(("sg_p3"+ParName).c_str(), ("sg_p3_"+ParName).c_str(), 0.1, -10, 10));
+
+      if (channel=="invisiblechannel"){
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p0"+ParName).c_str(), ("sg_p0_"+ParName).c_str(), mass, mass*0.7, mass*1.05)); // mu
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p1"+ParName).c_str(), ("sg_p1_"+ParName).c_str(), 80,10,600));                 // sigma - width
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p2"+ParName).c_str(), ("sg_p2_"+ParName).c_str(), 0.3, -2, 10));
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p3"+ParName).c_str(), ("sg_p3_"+ParName).c_str(), 40, -50, 150));
+      } else {
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p0"+ParName).c_str(), ("sg_p0_"+ParName).c_str(), mass, mass*0.8, mass*1.2));
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p1"+ParName).c_str(), ("sg_p1_"+ParName).c_str(), (mass>3000)? 150: 30, (mass>3000)? 120: 10., (mass>3000)? 400:110.));
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p2"+ParName).c_str(), ("sg_p2_"+ParName).c_str(), 1, -10, 10));
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p3"+ParName).c_str(), ("sg_p3_"+ParName).c_str(), 0.1, -10, 10));
+      }
+
       Fits_map[FitName]["Gauss"].reset(new RooGaussian(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
       Fits_map[FitName]["CB"].reset(new RooCBShape(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
     }
@@ -617,7 +662,7 @@ void CreateRooWorkspace::DoFits() {
     std::cout << "\nFitting Functions:\t";
     for (auto x : doFits_map["bkg_pred"]) if (x.second) std::cout << x.first << '\t';
     std::cout << '\n';
-    std::cout << "Fitting range:\t fit_min\fit_max" << '\n';
+    std::cout << "Fitting range:\t fit_min\t fit_max" << '\n';
     // std::cout << "sub_fit" << std::string(10,' ') << fit_min_turnOn << "\t" << fit_max_tails << std::endl; // not used
     for (auto mode : Modes) std::cout << mode << std::string(17-mode.size(),' ') << fit_min[mode] << "\t" << fit_max[mode] << std::endl;
     std::cout << "----------------------------------------" << std::endl;
@@ -1275,7 +1320,6 @@ int main(int argc, char** argv){
       if (std::find(channels.begin(), channels.end(), argv[i]) != channels.end() ) channel = argv[i];
       if (std::find(years.begin(), years.end(), argv[i]) != years.end() ) year = argv[i];
     }
-    if (channel=="invisiblechannel") return 0 ;
     std::cout << histFolder << " " << channel << " " << collection << " " << year << '\n';
     roo.reset(new CreateRooWorkspace(year,collection, channel, histFolder));
     roo->Process();
@@ -1286,7 +1330,6 @@ int main(int argc, char** argv){
       for (std::string collection: collections) {
         for (std::string channel: channels) {
           for (std::string histFolder: histFolders) {
-            if (channel=="invisiblechannel") continue;
             roo.reset(new CreateRooWorkspace(year,collection, channel, histFolder));
             roo->Process();
           }

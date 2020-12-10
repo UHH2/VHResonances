@@ -199,17 +199,17 @@ inline double PtToMass2(double pt) { return (pt-22.5)/0.36;}
 
 inline double MassToPt2(double mass) { return mass*0.36 +22.5;}
 
-const double MassDepentdentCut_old_value = -100;
-inline double MassDepentdentCut_old(double pt) { double x = PtToMass(pt); return 5.03e-03+1.7e07*TMath::Power(x,-3);}
-const double MassDepentdentCut_value = -10;
-inline double MassDepentdentCut(double pt) { double x = PtToMass(pt); return 0.00238601739564+15407844.1061*TMath::Power(x,-3);}
-const double MassDepentdentCut_cc_value = -40; // For Hcc
-inline double MassDepentdentCut_cc(double pt) { double x = PtToMass(pt); return 0.110034415361+236887594.133*TMath::Power(x,-3);}
+const double MassDependentCut_old_value = -100;
+inline double MassDependentCut_old(double pt) { double x = PtToMass(pt); return 5.03e-03+1.7e07*TMath::Power(x,-3);}
+const double MassDependentCut_value = -10;
+inline double MassDependentCut(double pt) { double x = PtToMass(pt); return 0.00238601739564+15407844.1061*TMath::Power(x,-3);}
+const double MassDependentCut_cc_value = -40; // For Hcc
+inline double MassDependentCut_cc(double pt) { double x = PtToMass(pt); return 0.110034415361+236887594.133*TMath::Power(x,-3);}
 
-const double MassDepentdentCut2_cc_value = -20; // For Hcc
-inline double MassDepentdentCut2_cc(double pt) { double x = PtToMass(pt); return 0.155+115000000*TMath::Power(x,-3);}
-const double MassDepentdentCut3_cc_value = -30; // For Hcc
-inline double MassDepentdentCut3_cc(double pt) { double x = PtToMass(pt); return 0.385+151000000*TMath::Power(x,-3);}
+const double MassDependentCut2_cc_value = -20; // For Hcc
+inline double MassDependentCut2_cc(double pt) { double x = PtToMass(pt); return 0.155+115000000*TMath::Power(x,-3);}
+const double MassDependentCut3_cc_value = -30; // For Hcc
+inline double MassDependentCut3_cc(double pt) { double x = PtToMass(pt); return 0.385+151000000*TMath::Power(x,-3);}
 
 inline const char* BoolToString(bool b) { return b ? "true" : "false";}
 

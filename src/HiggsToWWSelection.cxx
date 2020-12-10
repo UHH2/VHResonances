@@ -23,7 +23,7 @@ bool JetDiLeptonPhiAngularSelection::passes(const Event& event){
   if(jets.size() < 1 ) throw std::runtime_error("JetDiLeptonPhiAngularSelection::JetDiLeptonPhiAngularSelection -- unexpected number of jets");
 
   if (lepton == "invisible"){
-    // invisblechannel
+    // invisiblechannel
     for(const auto & jet: jets){
       double Dphi = deltaPhi(jet, *event.met);
       if (Dphi > min_Dphi_jet_MET) return true;
@@ -177,9 +177,9 @@ bool TaggerCut::passes(const Event& event){
   else if (tagger=="tau43_groomed") tag = (jet.tau3_groomed()!=0 && jet.tau4_groomed()>0) ? (jet.tau4_groomed()/jet.tau3_groomed()) : -1;
   else throw std::runtime_error("TaggerCut::passes -- tagger not defined!");
 
-  if (pt_min == MassDepentdentCut_value)      return (cut_min<cut_max)? tag>MassDepentdentCut(jet.pt())     : tag<=MassDepentdentCut(jet.pt()); //TODO not too nice
-  if (pt_min == MassDepentdentCut_old_value)  return (cut_min<cut_max)? tag>MassDepentdentCut_old(jet.pt()) : tag<=MassDepentdentCut_old(jet.pt()); //TODO not too nice
-  if (pt_min == MassDepentdentCut_cc_value)   return (cut_min<cut_max)? tag>MassDepentdentCut_cc(jet.pt())  : tag<=MassDepentdentCut_cc(jet.pt()); //TODO not too nice
+  if (pt_min == MassDependentCut_value)      return (cut_min<cut_max)? tag>MassDependentCut(jet.pt())     : tag<=MassDependentCut(jet.pt()); //TODO not too nice
+  if (pt_min == MassDependentCut_old_value)  return (cut_min<cut_max)? tag>MassDependentCut_old(jet.pt()) : tag<=MassDependentCut_old(jet.pt()); //TODO not too nice
+  if (pt_min == MassDependentCut_cc_value)   return (cut_min<cut_max)? tag>MassDependentCut_cc(jet.pt())  : tag<=MassDependentCut_cc(jet.pt()); //TODO not too nice
 
   return (cut_min < tag  && tag < cut_max);
 
