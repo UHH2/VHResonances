@@ -288,8 +288,10 @@ void CreateRooWorkspace::LoadFiles() {
       }
       histo_map["main_bkg_"+reg]->Add(histo_map[bkg+"_"+reg].get());
       histo_map["main_bkg_"+reg]->SetName((std::string(histo_map["main_bkg_"+reg]->GetName())+"+"+bkg).c_str());
-      if (bkg=="TTbar") {
-        histo_map["extra_bkg_"+reg].reset((TH1F*)((TH1F*)f_map["TTbar"]->Get((CRname).c_str()))->Clone(("extra_bkg_"+reg+": TTbar").c_str()));
+
+      if (bkg=="TTbar" || bkg=="WJets") {
+        histo_map["extra_bkg_"+reg].reset((TH1F*)((TH1F*)f_map[bkg]->Get((CRname).c_str()))->Clone(("extra_bkg_"+reg+": " + bkg).c_str()));
+
         continue;
       }
       histo_map["extra_bkg_"+reg]->Add(histo_map[bkg+"_"+reg].get());
@@ -323,8 +325,17 @@ void CreateRooWorkspace::LoadFiles() {
   if (doObs) histo_map["data"].reset((TH1F*)((TH1F*)f_map["data"]->Get((SRname).c_str()))->Clone("data: data SR"));
   else histo_map["data"].reset((TH1F*)((TH1F*)f_map[BkgName]->Get((SRname).c_str()))->Clone(("h_data_fake: "+BkgName+" SR").c_str()));
 
-  if (fitCR) histo_map["bkg_pred"].reset((TH1F*)((TH1F*)f_map["data"]->Get((CRname).c_str()))->Clone("bkg_pred: data CR"));
-  else histo_map["bkg_pred"].reset((TH1F*)((TH1F*)f_map[BkgName]->Get((SRname).c_str()))->Clone(("bkg_pred: "+BkgName+" SR").c_str()));
+
+  // bkg_pred = DY_SR for lepton channel
+  // bkg_pred = DY_SR + WJets_SR for invisiblechannel
+  histo_map["bkg_pred"].reset(((TH1F*) histo_map["DY_SR"]->Clone("bkg_pred_DY: SR") ));
+  histo_map["bkg_pred"]->SetName("bkg_pred (DY): SR");
+
+  if (channel=="invisiblechannel"){
+    histo_map["bkg_pred"]->Add((TH1F*) histo_map["WJets_SR"]->Clone("bkg_pred_WJets: SR"));
+    histo_map["bkg_pred"]->SetName("bkg_pred (DY+WJets): SR");
+  }
+
 
 
   for (std::string name : {"main", "extra"}) histo_map[name+"_bkg_ratio"].reset((TH1F*)(histo_map[name+"_bkg_SR"])->Clone((name+"_bkg_ratio").c_str()));
@@ -405,7 +416,7 @@ void CreateRooWorkspace::NormaliseData() {
 
   // Normalize h_MC_SR to h_Data_SR pretending it's data but has shape of bkg_pred in SR
   // nEventsSR  = CalculateIntegral(histo_map["norm"].get(),fit_lo,fit_hi,doBinWidth);
-  nEventsSR  = CalculateIntegral(histo_map["DY_SR"].get(),fit_lo,fit_hi,doBinWidth);
+  nEventsSR  = CalculateIntegral(histo_map["bkg_pred"].get(),fit_lo,fit_hi,doBinWidth);
   if (!doObs) {
     // Normalization is taken such that it matches in the fitting range
     histo_map["data"]->Scale(nEventsSR/CalculateIntegral(histo_map["data"].get(),fit_lo,fit_hi,doBinWidth));
@@ -673,7 +684,7 @@ void CreateRooWorkspace::DoFits() {
     if (mode=="main_bkg_CR") continue;
     for (auto const& [model,dofit] : doFits_map[mode] ) {
       if (!dofit) continue;
-      if (mode=="bkg_pred" || mode=="data") { //TODO check this
+      if (mode=="data") {
         FitRes_map[mode][model].reset(Fits_map[mode][model]->fitTo(*rooHist_map[mode], RooFit::Range(fit_min[mode], fit_max[mode]), RooFit::SumW2Error(kFALSE), RooFit::Minimizer("Minuit2"), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
       } else {
         FitRes_map[mode][model].reset(Fits_map[mode][model]->fitTo(*rooHist_map[mode], RooFit::Range(fit_min[mode], fit_max[mode]), RooFit::SumW2Error(kTRUE), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
@@ -748,7 +759,7 @@ void CreateRooWorkspace::PlotBkgFit() {
   plotter.reset(x_var->frame(plot_lo,plot_hi));
 
   for (auto mode: Modes) {
-    if (mode!="bkg_pred" && mode!="DY_CR" && mode!="DY_SR") continue;
+    if (mode!="bkg_pred" && mode!="DY_CR" && mode!="DY_SR" && mode!="WJets_CR" && mode!="WJets_SR") continue;
     // if (mode!="bkg_pred" && mode!="DY_CR") continue;
     // if (mode!="bkg_pred") continue;
 
@@ -761,7 +772,7 @@ void CreateRooWorkspace::PlotBkgFit() {
     // plotter = x_var->frame(plot_lo,plot_hi);
     plotter.reset(x_var->frame(plot_lo,plot_hi));
 
-    if (mode=="bkg_pred" || mode=="data") rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::Poisson));
+    if (mode=="data") rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::Poisson));
     else rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
     // rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
     // rooHist_map[mode]->plotOn(plotter.get());

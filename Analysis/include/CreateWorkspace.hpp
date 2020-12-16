@@ -179,9 +179,9 @@ private:
   std::string SRname, CRname;
 
   std::vector<std::string> SystNames = {"nominal", "all"};
-  // std::vector<std::string> BkgNames = {"DY", "TTbar", "WZ", "WW", "ZZ"};
-  std::vector<std::string> BkgNames = {"DY", "TTbar"};
-  std::vector<std::string> Modes = {"bkg_pred", "data", "main_bkg_CR", "main_bkg_SR", "DY_CR", "DY_SR"};
+  // std::vector<std::string> BkgNames = {"DY", "TTbar", "WZ", "WW", "ZZ", "WJets"};
+  std::vector<std::string> BkgNames = {"DY", "WJets"};
+  std::vector<std::string> Modes = {"bkg_pred", "data", "main_bkg_CR", "main_bkg_SR", "DY_CR", "DY_SR", "WJets_CR", "WJets_SR"};
 
   std::string dataName, dataFileName;
   std::string BkgName = "DY";
