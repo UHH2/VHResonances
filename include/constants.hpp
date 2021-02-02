@@ -66,6 +66,16 @@ Trigger_run_validity = {
     { "HLT_PFMET170_NotCleaned_v*",               std::pair(274954, 284044) },                    // most restrictive numbers
     { "HLT_PFMET170_HBHECleaned*",                std::pair(274954, 284044) },                    // most restrictive numbers
     { "HLT_Photon175_v*",                         std::pair(272760, 284044) }, // 273158, 284044
+    { "HLT_AK8PFJet40_v*",                        std::pair(272760, 284044) },
+    { "HLT_AK8PFJet60_v*",                        std::pair(272760, 284044) },
+    { "HLT_AK8PFJet80_v*",                        std::pair(272760, 284044) },
+    { "HLT_AK8PFJet140_v*",                       std::pair(272760, 284044) },
+    { "HLT_AK8PFJet200_v*",                       std::pair(272760, 284044) },
+    { "HLT_AK8PFJet260_v*",                       std::pair(272760, 284044) },
+    { "HLT_AK8PFJet320_v*",                       std::pair(272760, 284044) },
+    { "HLT_AK8PFJet400_v*",                       std::pair(272760, 284044) },
+    { "HLT_AK8PFJet450_v*",                       std::pair(272760, 284044) },
+    { "HLT_AK8PFJet500_v*",                       std::pair(272760, 284044) },
   }},
   { "2017", {
     { "HLT_Mu50_v*",                              std::pair(296070, 306460) }, // 297020, 306462
@@ -91,6 +101,16 @@ Trigger_run_validity = {
     { "HLT_PFMET200_HBHE_BeamHaloCleaned_v*",     std::pair(299368, 306460) },                    // most restrictive numbers
     { "HLT_PFMET250_HBHECleaned*",                std::pair(299368, 306460) },                    // most restrictive numbers
     { "HLT_Photon200_v*",                         std::pair(299368, 306460) }, // 273158, 284044
+    { "HLT_AK8PFJet40_v*",                        std::pair(296070, 306460) },
+    { "HLT_AK8PFJet60_v*",                        std::pair(296070, 306460) },
+    { "HLT_AK8PFJet80_v*",                        std::pair(296070, 306460) },
+    { "HLT_AK8PFJet140_v*",                       std::pair(296070, 306460) },
+    { "HLT_AK8PFJet200_v*",                       std::pair(296070, 306460) },
+    { "HLT_AK8PFJet260_v*",                       std::pair(296070, 306460) },
+    { "HLT_AK8PFJet320_v*",                       std::pair(296070, 306460) },
+    { "HLT_AK8PFJet400_v*",                       std::pair(296070, 306460) },
+    { "HLT_AK8PFJet450_v*",                       std::pair(296070, 306460) },
+    { "HLT_AK8PFJet500_v*",                       std::pair(296070, 306460) },
   }},
   { "2018", {
     { "HLT_Mu50_v*",                              std::pair(315252, 325175) }, // 315252, 325273
@@ -116,6 +136,27 @@ Trigger_run_validity = {
     { "HLT_PFMET200_HBHE_BeamHaloCleaned_v*",     std::pair(315252, 325175) },                    // most restrictive numbers
     { "HLT_PFMET250_HBHECleaned*",                std::pair(315252, 325175) },                    // most restrictive numbers
     { "HLT_Photon200_v*",                         std::pair(315252, 325175) }, // 273158, 325175
+    { "HLT_PFHT180_v*",                           std::pair(315252, 325175) },
+    { "HLT_PFHT250_v*",                           std::pair(315252, 325175) },
+    { "HLT_PFHT350_v*",                           std::pair(315252, 325175) },
+    { "HLT_PFHT370_v*",                           std::pair(315252, 325175) },
+    { "HLT_PFHT430_v*",                           std::pair(315252, 325175) },
+    { "HLT_PFHT510_v*",                           std::pair(315252, 325175) },
+    { "HLT_PFHT590_v*",                           std::pair(315252, 325175) },
+    { "HLT_PFHT680_v*",                           std::pair(315252, 325175) },
+    { "HLT_PFHT780_v*",                           std::pair(315252, 325175) },
+    { "HLT_PFHT890_v*",                           std::pair(315252, 325175) },
+    { "HLT_PFHT1050_v*",                           std::pair(315252, 325175) },
+    { "HLT_AK8PFJet40_v*",                        std::pair(315252, 325175) },
+    { "HLT_AK8PFJet60_v*",                        std::pair(315252, 325175) },
+    { "HLT_AK8PFJet80_v*",                        std::pair(315252, 325175) },
+    { "HLT_AK8PFJet140_v*",                       std::pair(315252, 325175) },
+    { "HLT_AK8PFJet200_v*",                       std::pair(315252, 325175) },
+    { "HLT_AK8PFJet260_v*",                       std::pair(315252, 325175) },
+    { "HLT_AK8PFJet320_v*",                       std::pair(315252, 325175) },
+    { "HLT_AK8PFJet400_v*",                       std::pair(315252, 325175) },
+    { "HLT_AK8PFJet450_v*",                       std::pair(315252, 325175) },
+    { "HLT_AK8PFJet500_v*",                       std::pair(315252, 325175) },
   }},
 };
 
