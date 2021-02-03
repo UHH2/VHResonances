@@ -54,8 +54,10 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
 
   // Zprime reconstruction
 
-  book_TH1F("Zprime_"+massPlotName+"_rebin30",massType + "^{Zprime} [GeV/c^{2}]",  330, 0, 9900);
-  book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV/c^{2}]", 100, 0,10000);
+  book_TH1F("Zprime_"+massPlotName+"_rebin1",  massType + "^{Zprime} [GeV/c^{2}]", 9900, 0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin10", massType + "^{Zprime} [GeV/c^{2}]", 990,  0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin30", massType + "^{Zprime} [GeV/c^{2}]", 330,  0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV/c^{2}]", 100,  0,10000);
 
   for (const string & name: {"Zprime","Z","H"}) {
     if (name=="Zprime")   book_TH1F(name+"_"+massPlotName, massType + "^"+name+" [GeV/c^{2}]", 40 ,700, 4700);
@@ -125,6 +127,22 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   } else {
     book_TH1F("Zprime_ptinv"+massPlotName, "missing E_{T}/"+massType+"(Z')", 10, 0, 1);
   }
+
+  for (const std::string & disc : {"Hcc", "HccMD"}) {
+    for (const std::string & sel : {"tot", "Twp", "Mwp", "Lwp"}) {
+      auto name = disc+"_ptvsmatch_"+sel;
+      book_TH2F(name,";p_{T}^{H} [GeV];MatchingStatus^{H}", 7, 0, 7, 19, 0, 19);
+      H2(name)->GetXaxis()->SetBinLabel(1,"200");
+      H2(name)->GetXaxis()->SetBinLabel(2,"250");
+      H2(name)->GetXaxis()->SetBinLabel(3,"300");
+      H2(name)->GetXaxis()->SetBinLabel(4,"350");
+      H2(name)->GetXaxis()->SetBinLabel(5,"400");
+      H2(name)->GetXaxis()->SetBinLabel(6,"450");
+      H2(name)->GetXaxis()->SetBinLabel(7,"500");
+      for (int i=1;i<20;i++) H2(name)->GetYaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
+    }
+  }
+
   book_TH1F("HT_event", "HT_event",   50, 0, 3000);
   book_TH1F("ST_event", "ST_event",   50, 0, 3000);
   book_TH1F("HT_Zprime", "HT_Zprime", 50, 0, 3000);
@@ -207,9 +225,11 @@ void HiggsToWWHists::fill(const Event & event){
     }
     if (condMatchStatus!="" && condMatchStatus!=matchstatus) continue;
 
-    fill_H1("Zprime_"+massPlotName,               cand.Zprime_mass(), weight);
-    fill_H1("Zprime_"+massPlotName+"_rebin30",    cand.Zprime_mass(), weight);
-    fill_H1("Zprime_"+massPlotName+"_rebin100",   cand.Zprime_mass(), weight);
+    fill_H1("Zprime_"+massPlotName,             cand.Zprime_mass(), weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin1",   cand.Zprime_mass(), weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin10",  cand.Zprime_mass(), weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin30",  cand.Zprime_mass(), weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin100", cand.Zprime_mass(), weight);
 
     fill_H1("Zprime_pt",     cand.pt(),         weight);
     fill_H1("Zprime_energy", cand.energy(),     weight);
@@ -276,15 +296,33 @@ void HiggsToWWHists::fill(const Event & event){
 
     fill_H1("Zprime_ptinv"+massPlotName,  cand.Z().pt()/cand.Zprime_mass(), weight);
 
-    for (std::string & disc : discriminators) {
-      fill_H1("H_"+disc, cand.has_discriminator(disc)? cand.discriminator(disc): 9999 , weight);
-      if (FindInString("chi2", disc) || FindInString("SDmass", disc)) continue;
-      H2("Zprime"+massPlotName+"vs"+disc)->Fill(cand.Zprime_mass(), cand.has_discriminator(disc)? cand.discriminator(disc): 9999, weight);
-    }
-
     H1("H_Match")->Fill(match.c_str(), weight);
     H1("H_MatchingStatus")->Fill(matchstatus.c_str(), weight);
     H2("H_MatchvsH_MatchingStatus")->Fill(match.c_str(), matchstatus.c_str(), weight);
+
+    double HccvsQCD    = cand.discriminator("btag_DeepBoosted_HccvsQCD");
+    double HccvsQCD_MD = cand.discriminator("btag_DeepBoosted_HccvsQCD_MD");
+    double H_pt = cand.H().pt();
+
+    std::string H_pt_str = "";
+    if (H_pt>500) H_pt_str = "500";
+    else if (H_pt>450) H_pt_str = "450";
+    else if (H_pt>400) H_pt_str = "400";
+    else if (H_pt>350) H_pt_str = "350";
+    else if (H_pt>300) H_pt_str = "300";
+    else if (H_pt>250) H_pt_str = "250";
+    else if (H_pt>200) H_pt_str = "200";
+
+    // Values hard-coded taken from Loukas
+    H2("Hcc_ptvsmatch_tot")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+    H2("HccMD_ptvsmatch_tot")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+    if (HccvsQCD>0.90)      H2("Hcc_ptvsmatch_Twp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+    else if (HccvsQCD>0.80) H2("Hcc_ptvsmatch_Mwp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+    else if (HccvsQCD>0.70) H2("Hcc_ptvsmatch_Lwp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+
+    if (HccvsQCD_MD>0.90)      H2("HccMD_ptvsmatch_Twp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+    else if (HccvsQCD_MD>0.80) H2("HccMD_ptvsmatch_Mwp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+    else if (HccvsQCD_MD>0.70) H2("HccMD_ptvsmatch_Lwp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
 
     double HT = cand.H().pt();
     double ST = cand.H().pt()+cand.Z().pt();
@@ -292,6 +330,20 @@ void HiggsToWWHists::fill(const Event & event){
     fill_H1("ST_Zprime", ST, weight);
     H2("ST_ZprimevsZprime"+massPlotName)->Fill( ST, cand.Zprime_mass(), weight);
     H2("ST_ZprimevsDeepBoosted")->Fill(ST, cand.has_discriminator("btag_DeepBoosted_H4qvsQCD")? cand.discriminator("btag_DeepBoosted_H4qvsQCD"): 9999, weight);
+
+    for (std::string & disc : discriminators) {
+      double val = 9999;
+      if (disc=="btag_MassDecorrelatedDeepBoosted_HccvsQCD") val = GetHccvsQCD(cand.H(), true);
+      if (disc=="btag_DeepBoosted_HccvsQCD") val = GetHccvsQCD(cand.H(), false);
+      if (disc=="btag_MassDecorrelatedDeepBoosted_ZHccvsQCD") val = GetZHccvsQCD(cand.H(), true);
+      if (disc=="btag_DeepBoosted_ZHccvsQCD") val = GetZHccvsQCD(cand.H(), false);
+      if (disc=="btag_MassDecorrelatedDeepBoosted_H4qvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_H4qvsQCD();
+      if (disc=="btag_DeepBoosted_H4qvsQCD") val = cand.H().btag_DeepBoosted_H4qvsQCD();
+      if (cand.has_discriminator(disc)) val = cand.discriminator(disc);
+      fill_H1("H_"+disc, val, weight);
+      if (FindInString("chi2", disc) || FindInString("SDmass", disc)) continue;
+      H2("Zprime"+massPlotName+"vs"+disc)->Fill(cand.Zprime_mass(), val, weight);
+    }
 
     int nsubjet = cand.H().subjets().size();
     for (std::string & disc : discriminators_subjets) {
@@ -318,6 +370,19 @@ void HiggsToWWHists::fill(const Event & event){
 
     for (std::string & disc : discriminators_Extra) {
       double val=0;
+      if (disc=="btag_DeepBoosted_TvsQCD")   val = cand.H().btag_DeepBoosted_TvsQCD();
+      if (disc=="btag_DeepBoosted_WvsQCD")   val = cand.H().btag_DeepBoosted_WvsQCD();
+      if (disc=="btag_DeepBoosted_ZvsQCD")   val = cand.H().btag_DeepBoosted_ZvsQCD();
+      if (disc=="btag_DeepBoosted_HbbvsQCD") val = cand.H().btag_DeepBoosted_HbbvsQCD();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_TvsQCD")    val = cand.H().btag_MassDecorrelatedDeepBoosted_TvsQCD();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_WvsQCD")    val = cand.H().btag_MassDecorrelatedDeepBoosted_WvsQCD();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_ZvsQCD")    val = cand.H().btag_MassDecorrelatedDeepBoosted_ZvsQCD();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_ZbbvsQCD")  val = cand.H().btag_MassDecorrelatedDeepBoosted_ZbbvsQCD();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_HbbvsQCD")  val = cand.H().btag_MassDecorrelatedDeepBoosted_HbbvsQCD();
+      if (disc=="btag_DeepBoosted_HbbvsHcc") val = cand.H().btag_DeepBoosted_probHbb()/(cand.H().btag_DeepBoosted_probHcc()+cand.H().btag_DeepBoosted_probHbb());
+      if (disc=="btag_DeepBoosted_HvsQCD") val = (cand.H().btag_DeepBoosted_probHcc()+cand.H().btag_DeepBoosted_probHbb())/(cand.H().btag_DeepBoosted_probHcc()+cand.H().btag_DeepBoosted_probHbb()+GetQCD(cand.H(), false));
+      if (disc=="btag_DeepBoosted_ZbbvsQCD") val = cand.H().btag_DeepBoosted_ZbbvsQCD();
       if (disc=="btag_BoostedDoubleSecondaryVertexAK8")  val = cand.H().btag_BoostedDoubleSecondaryVertexAK8();
       if (disc=="btag_BoostedDoubleSecondaryVertexCA15") val = cand.H().btag_BoostedDoubleSecondaryVertexCA15();
       if (disc=="btag_DeepDoubleBvLJet_probHbb") val = cand.H().btag_DeepDoubleBvLJet_probHbb();
@@ -332,19 +397,6 @@ void HiggsToWWHists::fill(const Event & event){
       if (disc=="btag_MassIndependentDeepDoubleCvBJet_probHcc") val = cand.H().btag_MassIndependentDeepDoubleCvBJet_probHcc();
       if (disc=="btag_MassIndependentDeepDoubleCvLJet_probHcc") val = cand.H().btag_MassIndependentDeepDoubleCvLJet_probHcc();
       if (disc=="btag_MassIndependentDeepDoubleCvLJet_probQCD") val = cand.H().btag_MassIndependentDeepDoubleCvLJet_probQCD();
-      if (disc=="btag_DeepBoosted_TvsQCD")   val = cand.H().btag_DeepBoosted_TvsQCD();
-      if (disc=="btag_DeepBoosted_WvsQCD")   val = cand.H().btag_DeepBoosted_WvsQCD();
-      if (disc=="btag_DeepBoosted_ZvsQCD")   val = cand.H().btag_DeepBoosted_ZvsQCD();
-      if (disc=="btag_DeepBoosted_ZbbvsQCD") val = cand.H().btag_DeepBoosted_ZbbvsQCD();
-      if (disc=="btag_DeepBoosted_HbbvsQCD") val = cand.H().btag_DeepBoosted_HbbvsQCD();
-      if (disc=="btag_DeepBoosted_HccvsQCD") val = cand.H().btag_DeepBoosted_probHcc()/(cand.H().btag_DeepBoosted_probHcc()+cand.H().btag_DeepBoosted_probQCDb()+cand.H().btag_DeepBoosted_probQCDbb()+cand.H().btag_DeepBoosted_probQCDc()+cand.H().btag_DeepBoosted_probQCDcc()+cand.H().btag_DeepBoosted_probQCDothers());
-      if (disc=="btag_MassDecorrelatedDeepBoosted_TvsQCD")    val = cand.H().btag_MassDecorrelatedDeepBoosted_TvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_ZHccvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_ZHccvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_WvsQCD")    val = cand.H().btag_MassDecorrelatedDeepBoosted_WvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_ZvsQCD")    val = cand.H().btag_MassDecorrelatedDeepBoosted_ZvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_ZbbvsQCD")  val = cand.H().btag_MassDecorrelatedDeepBoosted_ZbbvsQCD();
-      if (disc=="btag_MassDecorrelatedDeepBoosted_HbbvsQCD")  val = cand.H().btag_MassDecorrelatedDeepBoosted_HbbvsQCD();
       if (disc=="btag_DeepBoosted_probQCDb")      val = cand.H().btag_DeepBoosted_probQCDb();
       if (disc=="btag_DeepBoosted_probQCDbb")     val = cand.H().btag_DeepBoosted_probQCDbb();
       if (disc=="btag_DeepBoosted_probQCDc")      val = cand.H().btag_DeepBoosted_probQCDc();
@@ -361,10 +413,12 @@ void HiggsToWWHists::fill(const Event & event){
       if (disc=="btag_DeepBoosted_probZbb")       val = cand.H().btag_DeepBoosted_probZbb();
       if (disc=="btag_DeepBoosted_probHbb")       val = cand.H().btag_DeepBoosted_probHbb();
       if (disc=="btag_DeepBoosted_probHcc")       val = cand.H().btag_DeepBoosted_probHcc();
+      if (disc=="btag_DeepBoosted_probHqqqq")       val = cand.H().btag_DeepBoosted_probHqqqq();
       if (disc=="btag_DeepBoosted_raw_score_qcd") val = cand.H().btag_DeepBoosted_raw_score_qcd();
       if (disc=="btag_DeepBoosted_raw_score_top") val = cand.H().btag_DeepBoosted_raw_score_top();
       if (disc=="btag_DeepBoosted_raw_score_w")   val = cand.H().btag_DeepBoosted_raw_score_w();
       if (disc=="btag_DeepBoosted_raw_score_z")   val = cand.H().btag_DeepBoosted_raw_score_z();
+      if (disc=="btag_DeepBoosted_raw_score_h")   val = cand.H().btag_DeepBoosted_raw_score_h();
       if (disc=="btag_MassDecorrelatedDeepBoosted_bbvsLight")     val = cand.H().btag_MassDecorrelatedDeepBoosted_bbvsLight();
       if (disc=="btag_MassDecorrelatedDeepBoosted_ccvsLight")     val = cand.H().btag_MassDecorrelatedDeepBoosted_ccvsLight();
       if (disc=="btag_MassDecorrelatedDeepBoosted_probHbb")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probHbb();
@@ -382,10 +436,8 @@ void HiggsToWWHists::fill(const Event & event){
       if (disc=="btag_MassDecorrelatedDeepBoosted_probZcc")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probZcc();
       if (disc=="btag_MassDecorrelatedDeepBoosted_proWcq")        val = cand.H().btag_MassDecorrelatedDeepBoosted_proWcq();
       if (disc=="btag_MassDecorrelatedDeepBoosted_probZqq")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probZqq();
+      if (disc=="btag_MassDecorrelatedDeepBoosted_probHqqqq")     val = cand.H().btag_MassDecorrelatedDeepBoosted_probHqqqq();
       if (disc=="btag_MassDecorrelatedDeepBoosted_probZbb")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probZbb();
-
-      if (disc=="btag_DeepBoosted_HbbvsHcc") val = cand.H().btag_DeepBoosted_probHbb()/(cand.H().btag_DeepBoosted_probHcc()+cand.H().btag_DeepBoosted_probHbb());
-      if (disc=="btag_DeepBoosted_HvsQCD") val = (cand.H().btag_DeepBoosted_probHcc()+cand.H().btag_DeepBoosted_probHbb())/(cand.H().btag_DeepBoosted_probQCDb()+cand.H().btag_DeepBoosted_probQCDbb()+cand.H().btag_DeepBoosted_probQCDc()+cand.H().btag_DeepBoosted_probQCDcc()+cand.H().btag_DeepBoosted_probQCDothers());
 
       fill_H1("H_"+disc, val, weight);
       H2("Zprime"+massPlotName+"vs"+disc)->Fill(cand.Zprime_mass(), val, weight);
@@ -430,8 +482,10 @@ HiggsToWWHistsSlim::HiggsToWWHistsSlim(Context& ctx, const string& dname, const 
     massPlotName = "mass_transversal";
   }
   // book all histograms here
-  book_TH1F("Zprime_"+massPlotName+"_rebin30",massType + "^{Zprime} [GeV/c^{2}]", 330, 0, 9900);
-  book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV/c^{2}]", 100, 0,10000);
+  book_TH1F("Zprime_"+massPlotName+"_rebin1",  massType + "^{Zprime} [GeV/c^{2}]", 9900, 0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin10", massType + "^{Zprime} [GeV/c^{2}]", 990,  0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin30", massType + "^{Zprime} [GeV/c^{2}]", 330,  0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV/c^{2}]", 100,  0,10000);
 
 }
 
@@ -456,6 +510,8 @@ void HiggsToWWHistsSlim::fill(const Event & event){
       } else if (condMatch!=match) continue;
     }
     if (condMatchStatus!="" && condMatchStatus!=matchstatus) continue;
+    fill_H1("Zprime_"+massPlotName+"_rebin1",   cand.Zprime_mass(), weight);
+    fill_H1("Zprime_"+massPlotName+"_rebin10",  cand.Zprime_mass(), weight);
     fill_H1("Zprime_"+massPlotName+"_rebin30",  cand.Zprime_mass(), weight);
     fill_H1("Zprime_"+massPlotName+"_rebin100", cand.Zprime_mass(), weight);
 

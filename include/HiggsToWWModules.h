@@ -100,6 +100,26 @@ private:
 
 
 
+class JetTaggerSF : public ScaleFactorsFromHistos {
+
+public:
+  explicit JetTaggerSF(uhh2::Context & ctx, const std::string& fname, const std::string& hname, const uhh2::Event::Handle<std::vector<ZprimeCandidate> >&);
+  virtual bool process(uhh2::Event&) override;
+  Decay GetJetFlavor(uhh2::Event& event, const Jet& jet);
+
+private:
+  std::string year;
+  bool isZprime;
+  double radius;
+  uhh2::Event::Handle< std::vector<ZprimeCandidate> > h_ZprimeCandidates_;
+  uhh2::Event::Handle<float> h_taggerSF_weight_;
+  uhh2::Event::Handle<float> h_taggerSF_weight_up_;
+  uhh2::Event::Handle<float> h_taggerSF_weight_down_;
+
+};
+
+
+
 
 // Generic Class for Applying SFs
 class ScaleFactorsManager : public uhh2::AnalysisModule {
@@ -112,6 +132,7 @@ protected:
   uhh2::Event::Handle< std::vector<ZprimeCandidate> > h_ZprimeCandidates_;
   std::unordered_map<std::string, std::unique_ptr<MCMuonScaleFactor> > SFs_muo;
   std::unordered_map<std::string, std::unique_ptr<MCElecScaleFactor> > SFs_ele;
+  std::unordered_map<std::string, std::unique_ptr<AnalysisModule> > SFs;
   bool muonchannel;
   bool electronchannel;
   bool invisiblechannel;
@@ -130,5 +151,23 @@ public:
 private:
   int mode;
   std::unique_ptr<GeneralizedEndpoint> GE;
+
+};
+
+
+
+/**
+* Check presence of at least one lepton inside the jet
+*/
+class LeptonInJet{
+public:
+  explicit LeptonInJet(const std::string& lepton_ = "all", const boost::optional<ElectronId> & ele_id_ = boost::none, const boost::optional<MuonId> & muo_id_ = boost::none, const boost::optional<double> & drmax_ = boost::none);
+  ~LeptonInJet()=default;
+  bool operator()(const Jet&,const uhh2::Event&) const;
+private:
+  std::string lepton;
+  boost::optional<ElectronId> ele_id;
+  boost::optional<MuonId> muo_id;
+  boost::optional<double> drmax;
 
 };

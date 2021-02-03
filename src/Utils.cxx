@@ -42,11 +42,35 @@ bool DoubleDecay(int pdgId1, int pdgId2, Decay decay) {
 bool FindInString(const std::string& search, const std::string& str) {return str.find(search)!=std::string::npos ;}
 
 int FindInVector(const std::vector<std::string>& vec, const std::string& el) {
-    int index = -1;
-    // Find given element in vector
-    auto it = std::find(vec.begin(), vec.end(), el);
-    if (it != vec.end()) index = distance(vec.begin(), it);
-    return index;
+  int index = -1;
+  // Find given element in vector
+  auto it = std::find(vec.begin(), vec.end(), el);
+  if (it != vec.end()) index = distance(vec.begin(), it);
+  return index;
 }
 
 const std::string MyString(const std::string & tag) {return tag;};// Needed just to deal with preprocessing macros
+
+
+double GetQCD(const TopJet& j, bool isMD) {
+  if (isMD) {
+    return (j.btag_MassDecorrelatedDeepBoosted_probQCDb()+j.btag_MassDecorrelatedDeepBoosted_probQCDbb()+j.btag_MassDecorrelatedDeepBoosted_probQCDc()+j.btag_MassDecorrelatedDeepBoosted_probQCDcc()+j.btag_MassDecorrelatedDeepBoosted_probQCDothers());
+  }
+  else {
+    return (j.btag_DeepBoosted_probQCDb()+j.btag_DeepBoosted_probQCDbb()+j.btag_DeepBoosted_probQCDc()+j.btag_DeepBoosted_probQCDcc()+j.btag_DeepBoosted_probQCDothers());
+  }
+}
+
+double GetHccvsQCD(const TopJet& j, bool isMD) {
+  double Hcc = 0;
+  if (isMD) Hcc = j.btag_MassDecorrelatedDeepBoosted_probHcc();
+  else Hcc = j.btag_DeepBoosted_probHcc();
+  return Hcc/(Hcc+GetQCD(j,isMD));
+}
+
+double GetZHccvsQCD(const TopJet& j, bool isMD) {
+  double ZHcc = 0;
+  if (isMD) ZHcc = j.btag_MassDecorrelatedDeepBoosted_probZcc()+j.btag_MassDecorrelatedDeepBoosted_probHcc();
+  else ZHcc = j.btag_DeepBoosted_probZcc()+j.btag_DeepBoosted_probHcc();
+  return ZHcc/(ZHcc+GetQCD(j,isMD));
+}
