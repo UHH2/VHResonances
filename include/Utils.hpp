@@ -17,3 +17,7 @@ bool FindInString(const std::string& search, const std::string& str);
 int FindInVector(const std::vector<std::string>& vec, const std::string& el);
 
 const std::string MyString(const std::string & tag);// Needed just to deal with preprocessing macros
+
+double GetQCD(const TopJet& j, bool isMD=false);
+double GetHccvsQCD(const TopJet& j, bool isMD=false);
+double GetZHccvsQCD(const TopJet& j, bool isMD=false);

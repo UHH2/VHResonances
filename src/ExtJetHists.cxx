@@ -13,83 +13,6 @@
 using namespace std;
 using namespace uhh2;
 
-#define MYTAGLOOP(func)\
-func(btag_BoostedDoubleSecondaryVertexAK8)\
-func(btag_BoostedDoubleSecondaryVertexCA15)\
-func(btag_DeepDoubleBvLJet_probHbb)\
-func(btag_DeepDoubleBvLJet_probQCD)\
-func(btag_DeepDoubleCvBJet_probHbb)\
-func(btag_DeepDoubleCvBJet_probHcc)\
-func(btag_DeepDoubleCvLJet_probHcc)\
-func(btag_DeepDoubleCvLJet_probQCD)\
-func(btag_MassIndependentDeepDoubleBvLJet_probHbb)\
-func(btag_MassIndependentDeepDoubleBvLJet_probQCD)\
-func(btag_MassIndependentDeepDoubleCvBJet_probHbb)\
-func(btag_MassIndependentDeepDoubleCvBJet_probHcc)\
-func(btag_MassIndependentDeepDoubleCvLJet_probHcc)\
-func(btag_MassIndependentDeepDoubleCvLJet_probQCD)\
-func(btag_DeepBoosted_TvsQCD)\
-func(btag_DeepBoosted_WvsQCD)\
-func(btag_DeepBoosted_ZvsQCD)\
-func(btag_DeepBoosted_ZbbvsQCD)\
-func(btag_DeepBoosted_HbbvsQCD)\
-func(btag_DeepBoosted_H4qvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_TvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_ZHccvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_WvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_ZvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_ZbbvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_HbbvsQCD)\
-func(btag_MassDecorrelatedDeepBoosted_H4qvsQCD)\
-func(btag_DeepBoosted_probQCDb)\
-func(btag_DeepBoosted_probQCDbb)\
-func(btag_DeepBoosted_probQCDc)\
-func(btag_DeepBoosted_probQCDcc)\
-func(btag_DeepBoosted_probQCDothers)\
-func(btag_DeepBoosted_probTbqq)\
-func(btag_DeepBoosted_probTbcq)\
-func(btag_DeepBoosted_probTbq)\
-func(btag_DeepBoosted_probTbc)\
-func(btag_DeepBoosted_probWqq)\
-func(btag_DeepBoosted_probWcq)\
-func(btag_DeepBoosted_probZcc)\
-func(btag_DeepBoosted_probZqq)\
-func(btag_DeepBoosted_probZbb)\
-func(btag_DeepBoosted_probHbb)\
-func(btag_DeepBoosted_probHcc)\
-func(btag_DeepBoosted_probHqqqq)\
-func(btag_DeepBoosted_raw_score_qcd)\
-func(btag_DeepBoosted_raw_score_top)\
-func(btag_DeepBoosted_raw_score_w)\
-func(btag_DeepBoosted_raw_score_z)\
-func(btag_DeepBoosted_raw_score_h)\
-func(btag_MassDecorrelatedDeepBoosted_bbvsLight)\
-func(btag_MassDecorrelatedDeepBoosted_ccvsLight)\
-func(btag_MassDecorrelatedDeepBoosted_probHbb)\
-func(btag_MassDecorrelatedDeepBoosted_probQCDc)\
-func(btag_MassDecorrelatedDeepBoosted_probQCDbb)\
-func(btag_MassDecorrelatedDeepBoosted_probTbqq)\
-func(btag_MassDecorrelatedDeepBoosted_probTbcq)\
-func(btag_MassDecorrelatedDeepBoosted_probTbq)\
-func(btag_MassDecorrelatedDeepBoosted_probQCDothers)\
-func(btag_MassDecorrelatedDeepBoosted_probQCDb)\
-func(btag_MassDecorrelatedDeepBoosted_probTbc)\
-func(btag_MassDecorrelatedDeepBoosted_probWqq)\
-func(btag_MassDecorrelatedDeepBoosted_probQCDcc)\
-func(btag_MassDecorrelatedDeepBoosted_probHcc)\
-func(btag_MassDecorrelatedDeepBoosted_probZcc)\
-func(btag_MassDecorrelatedDeepBoosted_proWcq)\
-func(btag_MassDecorrelatedDeepBoosted_probZqq)\
-func(btag_MassDecorrelatedDeepBoosted_probHqqqq)\
-func(btag_MassDecorrelatedDeepBoosted_probZbb)\
-
-#define MYTAGBOOK(mytag)\
-isLong = MyString(#mytag).find("BoostedDoubleSecondary")!=std::string::npos;\
-book_TH1F(MyString(#mytag)+histSuffix,MyString(#mytag)+"^{"+axisSuffix+"}", isLong? 202: 101, isLong? -1.01: -0.01, isLong? 1.01: 1.01);\
-
-#define MYTAGFILL(mytag)\
-fill_H1(MyString(#mytag)+histSuffix, jet.mytag(),weight);\
 
 /*
 █  ██████  ██████  ███    ██ ███████ ████████ ██████  ██    ██  ██████ ████████  ██████  ██████
@@ -258,32 +181,27 @@ void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuf
       H1("MatchingStatus"+histSuffix)->GetXaxis()->SetBinLabel(i,MatchingStatusToString(i-1).c_str());
       H2("MatchvsMatchingStatus"+histSuffix)->GetYaxis()->SetBinLabel(i,MatchingStatusToString(i-1).c_str());
     }
-    book_TH1F("NN_HWW"+histSuffix,"NN_HWW^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_Hbb"+histSuffix,"NN_Hbb^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_QCD"+histSuffix,"NN_QCD^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_Top"+histSuffix,"NN_Top^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_W"+histSuffix,"NN_W^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_Z"+histSuffix,"NN_Z^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_HWW_1"+histSuffix,"NN_HWW_1^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_Hbb_1"+histSuffix,"NN_Hbb_1^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_QCD_1"+histSuffix,"NN_QCD_1^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_Top_1"+histSuffix,"NN_Top_1^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_W_1"+histSuffix,"NN_W_1^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_Z_1"+histSuffix,"NN_Z_1^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_HWW_2"+histSuffix,"NN_HWW_2^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_Hbb_2"+histSuffix,"NN_Hbb_2^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_QCD_2"+histSuffix,"NN_QCD_2^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_Top_2"+histSuffix,"NN_Top_2^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_W_2"+histSuffix,"NN_W_2^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("NN_Z_2"+histSuffix,"NN_Z_2^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("CNN_HWW"+histSuffix,"CNN_HWW^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH1F("CNN_QCD"+histSuffix,"CNN_QCD^{"+axisSuffix+"}",100, 0, 1.01);
-    book_TH2F("NN_HWW_2vsCNN_HWW"+histSuffix,";NN_HWW_2^{"+axisSuffix+"}"+";CNN_HWW^{"+axisSuffix+"}",100, 0, 1.01,100, 0, 1.01);
-    book_TH2F("imagept"+histSuffix,";#eta;#phi}",40, -1, 1.01, 40, 1, 1.01);
-    book_TH2F("imageCH"+histSuffix,";#eta;#phi}",40, -1, 1.01, 40, 1, 1.01);
-    book_TH2F("imageNH"+histSuffix,";#eta;#phi}",40, -1, 1.01, 40, 1, 1.01);
-    bool isLong;
-    MYTAGLOOP(MYTAGBOOK)
+
+    for (std::string & disc : discriminators) {
+      if (FindInString("tau", disc))       book_TH1F(disc+histSuffix,"#"+disc+"^{"+axisSuffix+"}", 30, -0.01, 1.01);
+      else if (FindInString("btag", disc)) book_TH1F(disc+histSuffix, disc+"^{"+axisSuffix+"}", 30, -0.01, 1.01);
+      else if (FindInString("chi2", disc)) book_TH1F(disc+histSuffix, disc+"^{"+axisSuffix+"}", 35, 0, 70);
+      else book_TH1F(disc+histSuffix, disc+"^{"+axisSuffix+"}[GeV/c^{2}]", 40, 0., 200.);
+    }
+
+    for (std::string & disc : discriminators_subjets) {
+      book_TH1F(disc+"_subjet"+histSuffix,   disc+"_{subjet}^{"+axisSuffix+"}",          30, -0.01, 1.01);
+      book_TH1F(disc+"_subjet1"+histSuffix,  disc+"_{subjet1}^{"+axisSuffix+"}",         30, -0.01, 1.01);
+      book_TH1F(disc+"_subjet2"+histSuffix,  disc+"_{subjet2}^{"+axisSuffix+"}",         30, -0.01, 1.01);
+      book_TH1F(disc+"_subjet21"+histSuffix, disc+"_{subjet2/subjet1}^{"+axisSuffix+"}", 30, -0.01, 1.01);
+      book_TH2F(disc+"_subjet12"+histSuffix, ";"+disc+"_{subjet1}^{"+axisSuffix+"};"+disc+"^{subjet2}^{"+axisSuffix+"}", 30, -0.01, 1.01, 30, -0.01, 1.01);
+    }
+
+    for (std::string & disc : discriminators_Extra) {
+      bool isLong = FindInString("BoostedDoubleSecondary", disc);
+      book_TH1F(disc+histSuffix, disc+"^{"+axisSuffix+"}", isLong? 60: 30, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
+    }
+
   }
   book_TH2F("jetptvsdeltaphi_dilep"+histSuffix,";#Delta#phi(lepton,"+axisSuffix+"; p_{T} "+axisSuffix+" [GeV]",50, 0, M_PI,50,minPt,maxPt);
   return;
@@ -393,19 +311,6 @@ void ExtJetHists::fill_jetHist<TopJet>(const Event & event, const string& histSu
   fill_H1("tau43"+histSuffix, (jet.tau3()!=0) ? (jet.tau4()/jet.tau3()) : -1, weight);
   fill_H1("nsubjet"+histSuffix, jet.subjets().size(), weight);
 
-  // int tight = 0; int medium = 0; int loose = 0; int notag = 0;
-  // for(auto subjet: jet.subjets()){
-  //   if (Btag_map["DeepCSV_tight"](subjet, event)) tight+=1;
-  //   else if (Btag_map["DeepCSV_medium"](subjet, event)) medium+=1;
-  //   else if (Btag_map["DeepCSV_loose"](subjet, event)) loose+=1;
-  //   else notag+=1;
-  // }
-  // fill_H2("nsubjet_btags_DeepCSV"+histSuffix,jet.subjets().size(), 1, notag*weight);
-  // fill_H2("nsubjet_btags_DeepCSV"+histSuffix,jet.subjets().size(), 2, loose*weight);
-  // fill_H2("nsubjet_btags_DeepCSV"+histSuffix,jet.subjets().size(), 3, medium*weight);
-  // fill_H2("nsubjet_btags_DeepCSV"+histSuffix,jet.subjets().size(), 4, tight*weight);
-
-
   std::vector<std::string> index_tag(2,"no b-tag"); int sj_ind = 0;
   for(auto subjet: jet.subjets()){
     if (sj_ind>1) continue;
@@ -418,45 +323,123 @@ void ExtJetHists::fill_jetHist<TopJet>(const Event & event, const string& histSu
 
   H2("nsubjet_btags_DeepCSV"+histSuffix)->Fill(index_tag[0].c_str(), index_tag[1].c_str(), weight);
 
-
   std::string match = jet.has_tag(TopJet::Matching)? MatchingToString(FloatToMatching(jet)) : MatchingToString(0);
   std::string matchstatus = jet.has_tag(TopJet::MatchingStatus)? MatchingStatusToString(FloatToMatchingStatus(jet)) : MatchingStatusToString(0);
   H1("Match"+histSuffix)->Fill(match.c_str(), weight);
   H1("MatchingStatus"+histSuffix)->Fill(matchstatus.c_str(), weight);
   H2("MatchvsMatchingStatus"+histSuffix)->Fill(match.c_str(),matchstatus.c_str(), weight);
-  fill_H1("NN_HWW"+histSuffix,    jet.has_tag(TopJet::NN_HWW)   ? jet.get_tag(TopJet::NN_HWW)   : 9999, weight);
-  fill_H1("NN_Hbb"+histSuffix,    jet.has_tag(TopJet::NN_Hbb)   ? jet.get_tag(TopJet::NN_Hbb)   : 9999, weight);
-  fill_H1("NN_QCD"+histSuffix,    jet.has_tag(TopJet::NN_QCD)   ? jet.get_tag(TopJet::NN_QCD)   : 9999, weight);
-  fill_H1("NN_Top"+histSuffix,    jet.has_tag(TopJet::NN_Top)   ? jet.get_tag(TopJet::NN_Top)   : 9999, weight);
-  fill_H1("NN_W"+histSuffix,      jet.has_tag(TopJet::NN_W)     ? jet.get_tag(TopJet::NN_W)     : 9999, weight);
-  fill_H1("NN_Z"+histSuffix,      jet.has_tag(TopJet::NN_Z)     ? jet.get_tag(TopJet::NN_Z)     : 9999, weight);
-  fill_H1("NN_HWW_1"+histSuffix,  jet.has_tag(TopJet::NN_HWW_1) ? jet.get_tag(TopJet::NN_HWW_1) : 9999, weight);
-  fill_H1("NN_Hbb_1"+histSuffix,  jet.has_tag(TopJet::NN_Hbb_1) ? jet.get_tag(TopJet::NN_Hbb_1) : 9999, weight);
-  fill_H1("NN_QCD_1"+histSuffix,  jet.has_tag(TopJet::NN_QCD_1) ? jet.get_tag(TopJet::NN_QCD_1) : 9999, weight);
-  fill_H1("NN_Top_1"+histSuffix,  jet.has_tag(TopJet::NN_Top_1) ? jet.get_tag(TopJet::NN_Top_1) : 9999, weight);
-  fill_H1("NN_W_1"+histSuffix,    jet.has_tag(TopJet::NN_W_1)   ? jet.get_tag(TopJet::NN_W_1)   : 9999, weight);
-  fill_H1("NN_Z_1"+histSuffix,    jet.has_tag(TopJet::NN_Z_1)   ? jet.get_tag(TopJet::NN_Z_1)   : 9999, weight);
-  fill_H1("NN_HWW_2"+histSuffix,  jet.has_tag(TopJet::NN_HWW_2) ? jet.get_tag(TopJet::NN_HWW_2) : 9999, weight);
-  fill_H1("NN_Hbb_2"+histSuffix,  jet.has_tag(TopJet::NN_Hbb_2) ? jet.get_tag(TopJet::NN_Hbb_2) : 9999, weight);
-  fill_H1("NN_QCD_2"+histSuffix,  jet.has_tag(TopJet::NN_QCD_2) ? jet.get_tag(TopJet::NN_QCD_2) : 9999, weight);
-  fill_H1("NN_Top_2"+histSuffix,  jet.has_tag(TopJet::NN_Top_2) ? jet.get_tag(TopJet::NN_Top_2) : 9999, weight);
-  fill_H1("NN_W_2"+histSuffix,    jet.has_tag(TopJet::NN_W_2)   ? jet.get_tag(TopJet::NN_W_2)   : 9999, weight);
-  fill_H1("NN_Z_2"+histSuffix,    jet.has_tag(TopJet::NN_Z_2)   ? jet.get_tag(TopJet::NN_Z_2)   : 9999, weight);
-  fill_H1("CNN_HWW"+histSuffix,   jet.has_tag(TopJet::CNN_HWW)  ? jet.get_tag(TopJet::CNN_HWW)  : 9999, weight);
-  fill_H1("CNN_QCD"+histSuffix,   jet.has_tag(TopJet::CNN_QCD)  ? jet.get_tag(TopJet::CNN_QCD)  : 9999, weight);
-  fill_H2("NN_HWW_2vsCNN_HWW"+histSuffix, jet.has_tag(TopJet::NN_HWW_2)  ? jet.get_tag(TopJet::NN_HWW_2)  : 9999, jet.has_tag(TopJet::CNN_HWW)  ? jet.get_tag(TopJet::CNN_HWW)  : 9999, weight);
-  if (event.is_valid(h_image)) {
-    int index = std::distance( event.get(h_topjets).begin(), std::find(event.get(h_topjets).begin(), event.get(h_topjets).end(), jet));
-    auto image = event.get(h_image)[index];
-    for (int i = 0; i < 40; i++) {
-      for (int j = 0; j < 40; j++) {
-        H2("imagept"+histSuffix)->SetBinContent(i+1,j+1, H2("imagept"+histSuffix)->GetBinContent(i+1,j+1)+image.tensor<float, 4>()(0,0,i,j)*weight);
-        H2("imageCH"+histSuffix)->SetBinContent(i+1,j+1, H2("imageCH"+histSuffix)->GetBinContent(i+1,j+1)+image.tensor<float, 4>()(0,1,i,j)*weight);
-        H2("imageNH"+histSuffix)->SetBinContent(i+1,j+1, H2("imageNH"+histSuffix)->GetBinContent(i+1,j+1)+image.tensor<float, 4>()(0,2,i,j)*weight);
-      }
-    }
+
+
+  for (std::string & disc : discriminators) {
+    double val=0;
+    if (disc=="btag_MassDecorrelatedDeepBoosted_HccvsQCD") val = GetHccvsQCD(jet, true);
+    if (disc=="btag_DeepBoosted_HccvsQCD") val = GetHccvsQCD(jet, false);
+    if (disc=="btag_MassDecorrelatedDeepBoosted_ZHccvsQCD") val = GetZHccvsQCD(jet, true);
+    if (disc=="btag_DeepBoosted_ZHccvsQCD") val = GetZHccvsQCD(jet, false);
+    if (disc=="btag_MassDecorrelatedDeepBoosted_H4qvsQCD") val = jet.btag_MassDecorrelatedDeepBoosted_H4qvsQCD();
+    if (disc=="btag_DeepBoosted_H4qvsQCD") val = jet.btag_DeepBoosted_H4qvsQCD();
+    fill_H1(disc+histSuffix, val, weight);
   }
-  MYTAGLOOP(MYTAGFILL)
+
+  int nsubjet = jet.subjets().size();
+  for (std::string & disc : discriminators_subjets) {
+    Jet subjet1, subjet2;
+    if (nsubjet>0) subjet1 = jet.subjets().at(0);
+    if (nsubjet>1) subjet2 = jet.subjets().at(1);
+    double sub1=9999, sub2=0;
+    if (disc=="btag_combinedSecondaryVertex") {    sub1 = nsubjet>0 ? subjet1.btag_combinedSecondaryVertex() :     9999; sub2 = nsubjet>1 ? subjet2.btag_combinedSecondaryVertex() : 0;}
+    if (disc=="btag_combinedSecondaryVertexMVA") { sub1 = nsubjet>0 ? subjet1.btag_combinedSecondaryVertexMVA() :  9999; sub2 = nsubjet>1 ? subjet2.btag_combinedSecondaryVertexMVA() : 0; }
+    if (disc=="btag_DeepJet") {                    sub1 = nsubjet>0 ? subjet1.btag_DeepJet() :                     9999; sub2 = nsubjet>1 ? subjet2.btag_DeepJet() : 0; }
+    if (disc=="btag_DeepCSV") {                    sub1 = nsubjet>0 ? subjet1.btag_DeepCSV() :                     9999; sub2 = nsubjet>1 ? subjet2.btag_DeepCSV() : 0; }
+    if (disc=="btag_DeepFlavour_bb") {             sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_bb() :              9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_bb() : 0; }
+    if (disc=="btag_DeepFlavour_b") {              sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_b() :               9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_b() : 0; }
+    if (disc=="btag_DeepFlavour_lepb") {           sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_lepb() :            9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_lepb() : 0; }
+    if (disc=="btag_DeepFlavour_uds") {            sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_uds() :             9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_uds() : 0; }
+    if (disc=="btag_DeepFlavour_g") {              sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_g() :               9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_g() : 0; }
+    if (disc=="btag_DeepFlavour_c") {              sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_c() :               9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_c() : 0; }
+    fill_H1(disc+"_subjet"+histSuffix, (sub1>sub2)?sub1:sub2, weight);
+    fill_H1(disc+"_subjet1"+histSuffix, sub1, weight);
+    fill_H1(disc+"_subjet2"+histSuffix, sub2, weight);
+    fill_H1(disc+"_subjet21"+histSuffix, sub2/(sub1+sub2), weight);
+    H2(disc+"_subjet12"+histSuffix)->Fill(sub1, sub2, weight);
+  }
+
+  for (std::string & disc : discriminators_Extra) {
+    double val=0;
+    if (disc=="btag_DeepBoosted_TvsQCD") val = jet.btag_DeepBoosted_TvsQCD();
+    if (disc=="btag_DeepBoosted_WvsQCD") val = jet.btag_DeepBoosted_WvsQCD();
+    if (disc=="btag_DeepBoosted_ZvsQCD") val = jet.btag_DeepBoosted_ZvsQCD();
+    if (disc=="btag_DeepBoosted_HbbvsQCD") val = jet.btag_DeepBoosted_HbbvsQCD();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_TvsQCD") val = jet.btag_MassDecorrelatedDeepBoosted_TvsQCD();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_WvsQCD") val = jet.btag_MassDecorrelatedDeepBoosted_WvsQCD();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD") val = jet.btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_ZvsQCD") val = jet.btag_MassDecorrelatedDeepBoosted_ZvsQCD();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_ZbbvsQCD") val = jet.btag_MassDecorrelatedDeepBoosted_ZbbvsQCD();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_HbbvsQCD") val = jet.btag_MassDecorrelatedDeepBoosted_HbbvsQCD();
+    if (disc=="btag_DeepBoosted_HbbvsHcc") val = jet.btag_DeepBoosted_probHbb()/(jet.btag_DeepBoosted_probHcc()+jet.btag_DeepBoosted_probHbb());
+    if (disc=="btag_DeepBoosted_HvsQCD") val = (jet.btag_DeepBoosted_probHcc()+jet.btag_DeepBoosted_probHbb())/(jet.btag_DeepBoosted_probHcc()+jet.btag_DeepBoosted_probHbb()+GetQCD(jet, false));
+    if (disc=="btag_DeepBoosted_ZbbvsQCD") val = jet.btag_DeepBoosted_ZbbvsQCD();
+    if (disc=="btag_BoostedDoubleSecondaryVertexAK8") val = jet.btag_BoostedDoubleSecondaryVertexAK8();
+    if (disc=="btag_BoostedDoubleSecondaryVertexCA15") val = jet.btag_BoostedDoubleSecondaryVertexCA15();
+    if (disc=="btag_DeepDoubleBvLJet_probHbb") val = jet.btag_DeepDoubleBvLJet_probHbb();
+    if (disc=="btag_DeepDoubleBvLJet_probQCD") val = jet.btag_DeepDoubleBvLJet_probQCD();
+    if (disc=="btag_DeepDoubleCvBJet_probHbb") val = jet.btag_DeepDoubleCvBJet_probHbb();
+    if (disc=="btag_DeepDoubleCvBJet_probHcc") val = jet.btag_DeepDoubleCvBJet_probHcc();
+    if (disc=="btag_DeepDoubleCvLJet_probHcc") val = jet.btag_DeepDoubleCvLJet_probHcc();
+    if (disc=="btag_DeepDoubleCvLJet_probQCD") val = jet.btag_DeepDoubleCvLJet_probQCD();
+    if (disc=="btag_MassIndependentDeepDoubleBvLJet_probHbb") val = jet.btag_MassIndependentDeepDoubleBvLJet_probHbb();
+    if (disc=="btag_MassIndependentDeepDoubleBvLJet_probQCD") val = jet.btag_MassIndependentDeepDoubleBvLJet_probQCD();
+    if (disc=="btag_MassIndependentDeepDoubleCvBJet_probHbb") val = jet.btag_MassIndependentDeepDoubleCvBJet_probHbb();
+    if (disc=="btag_MassIndependentDeepDoubleCvBJet_probHcc") val = jet.btag_MassIndependentDeepDoubleCvBJet_probHcc();
+    if (disc=="btag_MassIndependentDeepDoubleCvLJet_probHcc") val = jet.btag_MassIndependentDeepDoubleCvLJet_probHcc();
+    if (disc=="btag_MassIndependentDeepDoubleCvLJet_probQCD") val = jet.btag_MassIndependentDeepDoubleCvLJet_probQCD();
+    if (disc=="btag_DeepBoosted_probQCDb") val = jet.btag_DeepBoosted_probQCDb();
+    if (disc=="btag_DeepBoosted_probQCDbb") val = jet.btag_DeepBoosted_probQCDbb();
+    if (disc=="btag_DeepBoosted_probQCDc") val = jet.btag_DeepBoosted_probQCDc();
+    if (disc=="btag_DeepBoosted_probQCDcc") val = jet.btag_DeepBoosted_probQCDcc();
+    if (disc=="btag_DeepBoosted_probQCDothers") val = jet.btag_DeepBoosted_probQCDothers();
+    if (disc=="btag_DeepBoosted_probTbqq") val = jet.btag_DeepBoosted_probTbqq();
+    if (disc=="btag_DeepBoosted_probTbcq") val = jet.btag_DeepBoosted_probTbcq();
+    if (disc=="btag_DeepBoosted_probTbq") val = jet.btag_DeepBoosted_probTbq();
+    if (disc=="btag_DeepBoosted_probTbc") val = jet.btag_DeepBoosted_probTbc();
+    if (disc=="btag_DeepBoosted_probWqq") val = jet.btag_DeepBoosted_probWqq();
+    if (disc=="btag_DeepBoosted_probWcq") val = jet.btag_DeepBoosted_probWcq();
+    if (disc=="btag_DeepBoosted_probZcc") val = jet.btag_DeepBoosted_probZcc();
+    if (disc=="btag_DeepBoosted_probZqq") val = jet.btag_DeepBoosted_probZqq();
+    if (disc=="btag_DeepBoosted_probZbb") val = jet.btag_DeepBoosted_probZbb();
+    if (disc=="btag_DeepBoosted_probHbb") val = jet.btag_DeepBoosted_probHbb();
+    if (disc=="btag_DeepBoosted_probHcc") val = jet.btag_DeepBoosted_probHcc();
+    if (disc=="btag_DeepBoosted_probHqqqq") val = jet.btag_DeepBoosted_probHqqqq();
+    if (disc=="btag_DeepBoosted_raw_score_qcd") val = jet.btag_DeepBoosted_raw_score_qcd();
+    if (disc=="btag_DeepBoosted_raw_score_top") val = jet.btag_DeepBoosted_raw_score_top();
+    if (disc=="btag_DeepBoosted_raw_score_w") val = jet.btag_DeepBoosted_raw_score_w();
+    if (disc=="btag_DeepBoosted_raw_score_z") val = jet.btag_DeepBoosted_raw_score_z();
+    if (disc=="btag_DeepBoosted_raw_score_h") val = jet.btag_DeepBoosted_raw_score_h();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_bbvsLight") val = jet.btag_MassDecorrelatedDeepBoosted_bbvsLight();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_ccvsLight") val = jet.btag_MassDecorrelatedDeepBoosted_ccvsLight();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probHbb") val = jet.btag_MassDecorrelatedDeepBoosted_probHbb();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDc") val = jet.btag_MassDecorrelatedDeepBoosted_probQCDc();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDbb") val = jet.btag_MassDecorrelatedDeepBoosted_probQCDbb();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probTbqq") val = jet.btag_MassDecorrelatedDeepBoosted_probTbqq();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probTbcq") val = jet.btag_MassDecorrelatedDeepBoosted_probTbcq();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probTbq") val = jet.btag_MassDecorrelatedDeepBoosted_probTbq();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDothers") val = jet.btag_MassDecorrelatedDeepBoosted_probQCDothers();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDb") val = jet.btag_MassDecorrelatedDeepBoosted_probQCDb();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probTbc") val = jet.btag_MassDecorrelatedDeepBoosted_probTbc();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probWqq") val = jet.btag_MassDecorrelatedDeepBoosted_probWqq();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probQCDcc") val = jet.btag_MassDecorrelatedDeepBoosted_probQCDcc();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probHcc") val = jet.btag_MassDecorrelatedDeepBoosted_probHcc();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probZcc") val = jet.btag_MassDecorrelatedDeepBoosted_probZcc();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_proWcq") val = jet.btag_MassDecorrelatedDeepBoosted_proWcq();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probZqq") val = jet.btag_MassDecorrelatedDeepBoosted_probZqq();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probHqqqq") val = jet.btag_MassDecorrelatedDeepBoosted_probHqqqq();
+    if (disc=="btag_MassDecorrelatedDeepBoosted_probZbb") val = jet.btag_MassDecorrelatedDeepBoosted_probZbb();
+
+    fill_H1(disc+histSuffix, val, weight);
+  }
+
+  #define MYTAGFILL(mytag)\
+  fill_H1(disc+histSuffix, jet.mytag(),weight);\
 
   return;
 }
