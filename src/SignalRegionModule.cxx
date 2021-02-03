@@ -66,15 +66,21 @@ protected:
   // Define variables
 
   std::vector<std::string> histogram_tags = {"Selection", "ExtraCleaning",
-  "btag_DeepBoosted_H4qvsQCDmassdep_SR",      "btag_DeepBoosted_H4qvsQCDmassdep_CR",
-  "btag_DeepBoosted_H4qvsQCDmassdep_cc_SR",   "btag_DeepBoosted_H4qvsQCDmassdep_cc_CR",
-  "btag_DeepBoosted_H4qvsQCDmassdep_cc1_SR",  "btag_DeepBoosted_H4qvsQCDmassdep_cc1_CR",
-  "btag_DeepBoosted_H4qvsQCDmassdep_cc2_SR",  "btag_DeepBoosted_H4qvsQCDmassdep_cc2_CR",
-  "btag_DeepBoosted_H4qvsQCDmassdep_ccMD_SR", "btag_DeepBoosted_H4qvsQCDmassdep_ccMD_CR",
+  "DeepAk8_H4qvsQCD_SR",                      "DeepAk8_H4qvsQCD_CR",
+  "DeepAk8_H4qvsQCD_MD_SR",                   "DeepAk8_H4qvsQCD_MD_CR",
+  "DeepAk8_HccvsQCD_SR",                      "DeepAk8_HccvsQCD_CR",
+  "DeepAk8_HccvsQCD_MD_SR",                   "DeepAk8_HccvsQCD_MD_CR",
+  "DeepAk8_ZHccvsQCD_SR",                     "DeepAk8_ZHccvsQCD_CR",
+  "DeepAk8_ZHccvsQCD_MD_SR",                  "DeepAk8_ZHccvsQCD_MD_CR",
+  "DeepAk8_H4qvsQCD_massdep_SR",              "DeepAk8_H4qvsQCD_massdep_CR",
+  "DeepAk8_H4qvsQCD_massdep_HccvsQCD_SR",     "DeepAk8_H4qvsQCD_massdep_HccvsQCD_CR",
+  "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD_SR",  "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD_CR",
+  "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_SR",    "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_CR",
+  "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD_SR", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD_CR",
   "tau42_SR", "tau42_CR","tau21_SR", "tau21_CR"};
 
   std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "HDecay", "ZDecay", "ZprimeDecay"};
-  std::vector<std::string> Systematics =  {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco"};
+  std::vector<std::string> Systematics =  {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF"};
   std::vector<std::string> Variations = {"", "up", "down"};
 
 
@@ -86,8 +92,7 @@ protected:
 
   // Define selections
 
-  std::unique_ptr<Selection> btag_DeepBoosted_H4qvsQCDmassdep_SR_selection;
-  std::unique_ptr<Selection> btag_DeepBoosted_HccvsQCDmassdep_SR_selection;
+  std::unique_ptr<Selection> DeepAk8_H4qvsQCD_massdep_SR_selection;
   std::unique_ptr<Selection> tau42_SR_selection, tau21_SR_selection;
 
 };
@@ -226,8 +231,8 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
   h_topjets = ctx.get_handle<std::vector<TopJet>>(MS["topjetLabel"]);
   h_ZprimeCandidates = ctx.declare_event_input<std::vector<ZprimeCandidate>>("ZprimeCandidate");
 
-  btag_DeepBoosted_H4qvsQCDmassdep_SR_selection.reset(new TaggerCut(0, 1,  MassDependentCut_value, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
-  btag_DeepBoosted_HccvsQCDmassdep_SR_selection.reset(new TaggerCut(0, 1,  MassDependentCut_cc_value, "btag_DeepBoosted_HccvsQCD", h_ZprimeCandidates));
+  // TODO
+  DeepAk8_H4qvsQCD_massdep_SR_selection.reset(new TaggerCut(0, 1,  MassDependentCut_value, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
 
   std::string groom = MB["isHOTVR"]? "_groomed": "";
   tau42_SR_selection.reset(new TaggerCut(0.0, 0.5, -1, "tau42"+groom, h_ZprimeCandidates));
@@ -255,37 +260,52 @@ bool SignalRegionModule::process(uhh2::Event& event) {
 
   ZprimeCandidate cand = event.get(h_ZprimeCandidates)[0];
 
-  double cc_score = cand.H().btag_DeepBoosted_probHcc();
-  double qcd_score = cand.H().btag_DeepBoosted_probQCDb()+cand.H().btag_DeepBoosted_probQCDbb()+cand.H().btag_DeepBoosted_probQCDc()+cand.H().btag_DeepBoosted_probQCDcc()+cand.H().btag_DeepBoosted_probQCDothers();
-  double Hcc = cc_score/(cc_score+qcd_score);
-
-  bool H4qvsQCD_pass  = btag_DeepBoosted_H4qvsQCDmassdep_SR_selection->passes(event);
-  bool HccvsQCD_pass  = Hcc>0.8;
-  bool HccvsQCD_pass1 = Hcc>0.7;
-  bool HccvsQCD_pass2 = Hcc>0.9;
-
-  bool HccvsQCD_passMD = btag_DeepBoosted_HccvsQCDmassdep_SR_selection->passes(event);
-
-  if(!MB["invisiblechannel"]){ // Don't apply ExtraCleaning to invisiblechannel.
-    double delta_R_ll = deltaR(cand.leptons()[0], cand.leptons()[1]);
-    bool extraCleaning_pass = (fabs(cand.H().eta()-cand.Z().eta())>1.7) || (deltaR(cand.H(),cand.Z())<2) || (delta_R_ll>0.4);
+  // Don't apply ExtraCleaning to invisiblechannel.
+  if(!MB["invisiblechannel"]){
+    bool extraCleaning_pass = (fabs(cand.H().eta()-cand.Z().eta())>1.7) || (deltaR(cand.H(),cand.Z())<2) || (deltaR(cand.leptons()[0], cand.leptons()[1])>0.4);
     if (extraCleaning_pass) return false;
   }
 
   fill_histograms(event, "ExtraCleaning");
 
-  if(H4qvsQCD_pass) {
-    fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_SR");
-    if (HccvsQCD_pass)    fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_cc_SR");
-    if (HccvsQCD_pass1)   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_cc1_SR");
-    if (HccvsQCD_pass2)   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_cc2_SR");
-    if (HccvsQCD_passMD)  fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_ccMD_SR");
+  bool H4qvsQCD_massdep_pass  = DeepAk8_H4qvsQCD_massdep_SR_selection->passes(event);
+  bool H4qvsQCD_pass     = cand.discriminator("btag_DeepBoosted_H4qvsQCD")>TaggerThr;
+  bool H4qvsQCD_MD_pass  = cand.discriminator("btag_DeepBoosted_H4qvsQCD_MD")>TaggerThr;
+  bool HccvsQCD_pass     = cand.discriminator("btag_DeepBoosted_HccvsQCD")>TaggerThr;
+  bool HccvsQCD_MD_pass  = cand.discriminator("btag_DeepBoosted_HccvsQCD_MD")>TaggerThr;
+  bool ZHccvsQCD_pass    = cand.discriminator("btag_DeepBoosted_ZHccvsQCD")>TaggerThr;
+  bool ZHccvsQCD_MD_pass = cand.discriminator("btag_DeepBoosted_ZHccvsQCD_MD")>TaggerThr;
+
+  if(H4qvsQCD_pass) fill_histograms(event, "DeepAk8_H4qvsQCD_SR");
+  else fill_histograms(event, "DeepAk8_H4qvsQCD_CR");
+
+  if(H4qvsQCD_MD_pass) fill_histograms(event, "DeepAk8_H4qvsQCD_MD_SR");
+  else fill_histograms(event, "DeepAk8_H4qvsQCD_MD_CR");
+
+  if(HccvsQCD_pass) fill_histograms(event, "DeepAk8_HccvsQCD_SR");
+  else fill_histograms(event, "DeepAk8_HccvsQCD_CR");
+
+  if(HccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_HccvsQCD_MD_SR");
+  else fill_histograms(event, "DeepAk8_HccvsQCD_MD_CR");
+
+  if(ZHccvsQCD_pass) fill_histograms(event, "DeepAk8_ZHccvsQCD_SR");
+  else fill_histograms(event, "DeepAk8_ZHccvsQCD_CR");
+
+  if(ZHccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_ZHccvsQCD_MD_SR");
+  else fill_histograms(event, "DeepAk8_ZHccvsQCD_MD_CR");
+
+  if(H4qvsQCD_massdep_pass) {
+    fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_SR");
+    if (HccvsQCD_pass)     fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_HccvsQCD_SR");
+    if (HccvsQCD_MD_pass)  fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD_SR");
+    if (ZHccvsQCD_pass)    fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_SR");
+    if (ZHccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD_SR");
   } else {
-    fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_CR");
-    if (!HccvsQCD_pass)   fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_cc_CR");
-    if (!HccvsQCD_pass1)  fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_cc1_CR");
-    if (!HccvsQCD_pass2)  fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_cc2_CR");
-    if (!HccvsQCD_passMD) fill_histograms(event, "btag_DeepBoosted_H4qvsQCDmassdep_ccMD_CR");
+    fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_CR");
+    if (!HccvsQCD_pass)     fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_HccvsQCD_CR");
+    if (!HccvsQCD_MD_pass)  fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD_CR");
+    if (!ZHccvsQCD_pass)    fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_CR");
+    if (!ZHccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD_CR");
   }
 
   if(tau42_SR_selection->passes(event)) fill_histograms(event, "tau42_SR");
