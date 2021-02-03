@@ -39,6 +39,8 @@ const float min_ZH_mass = 700;
 const BTag::algo BTag_algo = BTag::DEEPCSV;
 const BTag::wp BTag_wp = BTag::WP_LOOSE;
 
+const double TaggerThr = 0.8;
+
 
 // Theory Corrections
 const bool do_EWK = true;
@@ -201,6 +203,7 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Electron_LooseID",         std::pair("Electron_ID_SF_2016_loose", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_2016", "EGamma_SF2D")},
     { "Electron_Trigger",         std::pair("Electron_Trigger_SF_2016", "SF_TH2F")},
+    { "Jet_Tagger",               std::pair("Tagger_SF_2016", "SF_Var_FlavX_2016")},
   }},
   { "2017", {
     { "Muon_Tracking",            std::pair("Muon_Tracking_SF_2017", "Tracking_SF")},
@@ -212,6 +215,7 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Electron_LooseID",         std::pair("Electron_ID_SF_2017_loose", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_2017", "EGamma_SF2D")},
     { "Electron_Trigger",         std::pair("Electron_Trigger_SF_2017", "SF_TH2F")},
+    { "Jet_Tagger",               std::pair("Tagger_SF_2017", "SF_Var_FlavX_2017")},
   }},
   { "2018", {
     { "Muon_Tracking",            std::pair("Muon_Tracking_SF_2018", "Tracking_SF")},
@@ -223,6 +227,7 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Electron_LooseID",         std::pair("Electron_ID_SF_2018_loose", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_2018", "EGamma_SF2D")},
     { "Electron_Trigger",         std::pair("Electron_Trigger_SF_2018", "SF_TH2F")},
+    { "Jet_Tagger",               std::pair("Tagger_SF_2017", "SF_Var_FlavX_2017")},
   }},
 };
 

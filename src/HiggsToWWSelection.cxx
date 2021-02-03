@@ -1,6 +1,7 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/common/include/Utils.h"
 #include "UHH2/VHResonances/include/HiggsToWWSelection.h"
+#include "UHH2/VHResonances/include/Utils.hpp"
 
 #include <stdexcept>
 #include <set>
@@ -160,7 +161,7 @@ bool TaggerCut::passes(const Event& event){
   else if (tagger.find("MC_")!=std::string::npos)tag = jet.get_tag(jet.tagname2tag(tagger));
   else if (tagger=="btag_DeepBoosted_H4qvsQCD")  tag = jet.btag_DeepBoosted_H4qvsQCD();
   else if (tagger=="btag_DeepBoosted_HbbvsQCD")  tag = jet.btag_DeepBoosted_HbbvsQCD();
-  else if (tagger=="btag_DeepBoosted_HccvsQCD")  tag = jet.btag_DeepBoosted_probHcc()/(jet.btag_DeepBoosted_probHcc()+jet.btag_DeepBoosted_probQCDb()+jet.btag_DeepBoosted_probQCDbb()+jet.btag_DeepBoosted_probQCDc()+jet.btag_DeepBoosted_probQCDcc()+jet.btag_DeepBoosted_probQCDothers());
+  else if (tagger=="btag_DeepBoosted_HccvsQCD")  tag = GetHccvsQCD(jet,false);
   else if (tagger=="btag_DeepBoosted_probHbb")   tag = jet.btag_DeepBoosted_probHbb();
   else if (tagger=="btag_DeepBoosted_probHqqqq") tag = jet.btag_DeepBoosted_probHqqqq();
   else if (tagger=="tau21") tag = (jet.tau1()!=0) ? (jet.tau2()/jet.tau1()) : -1;
@@ -180,6 +181,8 @@ bool TaggerCut::passes(const Event& event){
   if (pt_min == MassDependentCut_value)      return (cut_min<cut_max)? tag>MassDependentCut(jet.pt())     : tag<=MassDependentCut(jet.pt()); //TODO not too nice
   if (pt_min == MassDependentCut_old_value)  return (cut_min<cut_max)? tag>MassDependentCut_old(jet.pt()) : tag<=MassDependentCut_old(jet.pt()); //TODO not too nice
   if (pt_min == MassDependentCut_cc_value)   return (cut_min<cut_max)? tag>MassDependentCut_cc(jet.pt())  : tag<=MassDependentCut_cc(jet.pt()); //TODO not too nice
+  if (pt_min == MassDependentCut2_cc_value)  return (cut_min<cut_max)? tag>MassDependentCut2_cc(jet.pt()) : tag<=MassDependentCut2_cc(jet.pt()); //TODO not too nice
+  if (pt_min == MassDependentCut3_cc_value)  return (cut_min<cut_max)? tag>MassDependentCut3_cc(jet.pt()) : tag<=MassDependentCut3_cc(jet.pt()); //TODO not too nice
 
   return (cut_min < tag  && tag < cut_max);
 
