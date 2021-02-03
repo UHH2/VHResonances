@@ -22,11 +22,12 @@ class GenericPath:
 
 class VariablesBase(GenericPath):
     ''' Class container for list of objects '''
-    def __init__(self):
+    def __init__(self, isAnalysis=True):
         GenericPath.__init__(self)
+        self.isAnalysis         = isAnalysis
         self.PrefixrootFile     = "uhh2.AnalysisModuleRunner."
         self.Collections        = ["Puppi"]
-        self.Channels           = ["muon", "electron", "invisible"]
+        self.Channels           = ["muon", "electron", "invisible"] if self.isAnalysis else ["charm"]
         # self.Systematics        = ["nominal", "JER_up", "JER_down", "JEC_up", "JEC_down", "MuonScale_up", "MuonScale_down"]
         # self.Systematics_Scale  = [syst+"_"+var for syst in ["pu", "btag", "prefiring", "id", "tracking", "trigger", "reco"] for var in ["up","down"]]
         self.Systematics        = ["nominal", "JER", "JEC", "MuonScale"]
@@ -43,17 +44,29 @@ class VariablesBase(GenericPath):
         self.years              = sorted(self.RunPeriods_Dict.keys())
         self.AllRunPeriods      = list(set(itertools.chain.from_iterable(self.RunPeriods_Dict.values())))
 
-        self.Generic_SubSamples_Dict_ = {
-            "MC_DY"                 : [proc+subsample for proc in ["MC_DY_HT", "MC_DY_inv_HT"] for subsample in ["100to200", "200to400", "400to600", "600to800", "800to1200", "1200to2500", "2500toInf",]],
-            "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],
-            "MC_WW"                 : ["MC_WW"],
-            "MC_WZ"                 : ["MC_WZ"],
-            "MC_ZZ"                 : ["MC_ZZ"],
-            "MC_WJets"              : [proc+subsample for proc in ["MC_WJetsToLNu_HT"] for subsample in ["100To200", "200To400", "400To600", "600To800", "800To1200", "1200To2500", "2500ToInf",]],
-            "DATA_SingleElectron"   : ["DATA_SingleElectron_Run"+str(run) for run in self.AllRunPeriods]+["DATA_SinglePhoton_Run"+str(run) for run in self.AllRunPeriods],
-            "DATA_SingleMuon"       : ["DATA_SingleMuon_Run"+str(run) for run in self.AllRunPeriods],
-            "DATA_MET"              : ["DATA_MET_Run"+str(run) for run in self.AllRunPeriods],
-            self.Signal             : self.SignalSamples,
+        if self.isAnalysis:
+            self.Generic_SubSamples_Dict_ = {
+                "MC_DY"                 : [proc+subsample for proc in ["MC_DY_HT", "MC_DY_inv_HT"] for subsample in ["100to200", "200to400", "400to600", "600to800", "800to1200", "1200to2500", "2500toInf",]],
+                "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],
+                "MC_WW"                 : ["MC_WW"],
+                "MC_WZ"                 : ["MC_WZ"],
+                "MC_ZZ"                 : ["MC_ZZ"],
+                "MC_WJets"              : [proc+subsample for proc in ["MC_WJetsToLNu_HT"] for subsample in ["100To200", "200To400", "400To600", "600To800", "800To1200", "1200To2500", "2500ToInf",]],
+                "DATA_SingleElectron"   : ["DATA_SingleElectron_Run"+str(run) for run in self.AllRunPeriods]+["DATA_SinglePhoton_Run"+str(run) for run in self.AllRunPeriods],
+                "DATA_SingleMuon"       : ["DATA_SingleMuon_Run"+str(run) for run in self.AllRunPeriods],
+                "DATA_MET"              : ["DATA_MET_Run"+str(run) for run in self.AllRunPeriods],
+                self.Signal             : self.SignalSamples,
+            }
+        else:
+            self.Generic_SubSamples_Dict_ = {
+                "MC_QCD"                : [proc+subsample for proc in ["MC_QCD_HT"] for subsample in ["100to200", "200to300", "300to500", "500to700", "700to1000", "1000to1500", "1500to2000", "2000toInf"]],
+                "MC_TTbar"              : ["MC_TTTo2L2Nu", "MC_TTToHadronic", "MC_TTToSemiLeptonic"],
+                "MC_WW"                 : ["MC_WW"],
+                "MC_WZ"                 : ["MC_WZ"],
+                "MC_ZZ"                 : ["MC_ZZ"],
+                "MC_WJets"              : [proc+subsample for proc in ["MC_WJetsToQQ_HT"] for subsample in ["400to600", "600to800", "800toInf"]],
+                "MC_ZJets"              : [proc+subsample for proc in ["MC_ZJetsToQQ_HT"] for subsample in ["400to600", "600to800", "800toInf"]],
+                "DATA_JetHT"            : ["DATA_JetHT_Run"+str(run) for run in self.AllRunPeriods],
             }
 
         self.ExtractVariableFromConstants()
@@ -100,8 +113,9 @@ class VariablesBase(GenericPath):
                         loop_over.extend(["DATA_SinglePhoton_Run"+str(run) for run in self.RunPeriods_Dict[year]])
                 self.Samples_Year_Dict.setdefault(year, {}).setdefault(subsample+"_"+year, [el+"_"+year for el in sorted(loop_over)] )
                 self.Processes_Year_Dict.setdefault(year, []).append(subsample+"_"+year)
-            self.Processes_Year_Dict[year].remove(self.Signal+"_"+year)
-            self.Processes_Year_Dict[year].extend(self.Samples_Year_Dict[year][self.Signal+"_"+year])
+            if self.Signal+"_"+year in self.Processes_Year_Dict[year]:
+                self.Processes_Year_Dict[year].remove(self.Signal+"_"+year)
+                self.Processes_Year_Dict[year].extend(self.Samples_Year_Dict[year][self.Signal+"_"+year])
             self.SubSamples_Year_Dict.setdefault(year, sorted(list(dict.fromkeys([el for list_ in self.Samples_Year_Dict[year].values() for el in list_]))))
 
         # List of all sub sample for all years and all processes
@@ -114,8 +128,8 @@ class VariablesBase(GenericPath):
 
 class ModuleRunnerBase(VariablesBase):
     ''' Class container for list of objects for particular year '''
-    def __init__(self,year="2016"):
-        VariablesBase.__init__(self)
+    def __init__(self,year="2016", isAnalysis=True):
+        VariablesBase.__init__(self, isAnalysis=isAnalysis)
         self.year = year
         self.defineDirectories()
         self.lumi_fb  = round(float(self.lumi_map[self.year]["lumi_fb"]),1)

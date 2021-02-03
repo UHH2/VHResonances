@@ -9,8 +9,8 @@ from functions import *
 
 
 class ModuleRunner(ModuleRunnerBase):
-    def __init__(self,year="2017",controls=[""]):
-        ModuleRunnerBase.__init__(self,year)
+    def __init__(self,year="2017",controls=[""], isAnalysis=True):
+        ModuleRunnerBase.__init__(self,year,isAnalysis=isAnalysis)
         self.Module = ""
         self.ConfigFile = ""
         self.defineModules()
@@ -58,6 +58,7 @@ class ModuleRunner(ModuleRunnerBase):
                                     "Selection"          : {"sample": self.Processes_Dict, "all": self.AllProcesses_List},
                                     "SignalRegion"       : {"sample": self.Processes_Dict, "all": self.AllProcesses_List},
                                     "SF"                 : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
+                                    "HccSFSelection"     : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "LeptonIDStudies"    : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "VariableRStudies"   : {"sample": [x for x in self.SubSamples_Dict if not "DATA".lower() in x.lower()], "all": self.AllSubSamples_List},
                                     }
@@ -77,6 +78,8 @@ class ModuleRunner(ModuleRunnerBase):
         process.wait()
 
     def SetModule(self,module, Collections=[], Channels=[], Systematics=[]):
+        if ((self.isAnalysis) == ("HccSF" in module)):
+            raise Exception("You set: self.isAnalysis="+str(self.isAnalysis)+" and module="+module+". Are you sure about this??")
         self.Module     = module
         self.ModuleFile = self.Module + "Module.cxx"
         self.ConfigFile = self.Module + "Config.xml"

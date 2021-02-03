@@ -78,6 +78,8 @@ def newNumber(year,sample,ConfigFile,syst,channel):
                 newNumber = 100
             if any(x in sample for x in ["DATA_MET_RunC"]):
                 newNumber = 170
+            if any(x in sample for x in ["DATA_JetHT_RunA","DATA_JetHT_RunB","DATA_JetHT_RunC"]):
+                newNumber = 150
     if "MC_DY" in sample:
         newNumber = 60
         if any(x in sample for x in ["MC_DY_HT600to800_2016", "MC_DY_HT800to1200_2016", "MC_DY_HT800to1200_2017", "MC_DY_HT600to800_2017"]):
@@ -130,7 +132,7 @@ def newNumber(year,sample,ConfigFile,syst,channel):
         if any(x in sample for x in ["MC_WZTo2L2Q_2016"]):
             newNumber = 40
         if any(x in sample for x in ["MC_WJets"]):
-            newNumber = 13
+            newNumber = 13 if "inv" in channel else 30
         if any(x in sample for x in ["MC_WJetsToLNu_HT200To400_2018", "MC_WJetsToLNu_HT70To100_2018", "MC_WJetsToLNu_HT600To800_2016", "MC_WJetsToLNu_HT100To200_2017", "MC_WJetsToLNu_HT800To1200_2018"]):
             newNumber = 25
         if any(x in sample for x in ["MC_WJetsToLNu_HT1200To2500_2016", "MC_WJetsToLNu_HT2500ToInf_2016", "MC_WJetsToLNu_HT600To800_2018", "MC_WJetsToLNu_HT200To400_2016", "MC_WJetsToLNu_HT200To400_2017", "MC_WJetsToLNu_HT400To600_2016"]):
@@ -147,10 +149,12 @@ def newNumber(year,sample,ConfigFile,syst,channel):
             newNumber = 500 if "inv" in channel else 1000
         if any(x in sample for x in ["MC_ZZTo2L2Nu_2016"]):
             newNumber = 100 if "inv" in channel else 250
+    if "MC_ZJets" in sample:
+        newNumber = 40
     if "MC_QCD" in sample:
-        newNumber = 42
+        newNumber = 40
         if any(x in sample for x in ["MC_QCD_HT500to700", "MC_QCD_HT700to1000"]):
-            newNumber = 65
+            newNumber = 50
         if any(x in sample for x in ["MC_QCD_HT300to500"]):
             newNumber = 130
         if any(x in sample for x in ["MC_QCD_HT200to300"]):
@@ -262,6 +266,8 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                         changes.append(["<!ENTITY", "electronchannel",   '"false"', '"true"'])
                     if "invisible" in channel:
                         changes.append(["<!ENTITY", "invisiblechannel",   '"false"', '"true"'])
+                    if "charm" in channel:
+                        changes.append(["<!ENTITY", "charmchannel",   '"false"', '"true"'])
                     changes.append(["<!ENTITY", "YEAR", 'defaultValue', year])
                     changes.append(["<Cycle", "TargetLumi", 'defaultValue', str(lumi)])
                     for var in YearVars:
