@@ -19,7 +19,7 @@ typedef std::pair<std::string, int> mypair_I;
 
 double EfficiencyError(double count, double N);
 bool isCSRegion(std::string tag);
-void CalculateSignalEfficiencies(std::string histFolder ="btag_DeepBoosted_H4qvsQCD");
+void CalculateSignalEfficiencies(std::string histFolder ="DeepAk8_ZHccvsQCD_MD");
 
 
 int FindInVector(const std::vector<std::string>& vec, const std::string& el);

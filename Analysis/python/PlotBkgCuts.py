@@ -5,6 +5,8 @@ TDR.writeExtraText = True
 TDR.extraText  = "Simulation"
 TDR.extraText2 = "Work in progress"
 
+ForThesis(TDR)
+
 '''
 Module to plot Systematics
 
@@ -22,49 +24,29 @@ class PlotBkgCuts(VariablesBase):
         self.year = year
         self.channel = channel
         self.collection = collection
-        # self.histFolders = ["btag_DeepBoosted_H4qvsQCDmassdep_2",    "btag_DeepBoosted_H4qvsQCDmassdep_3",    "btag_DeepBoosted_H4qvsQCDmassdep",
-        #                     # "btag_DeepBoosted_H4qvsQCDmassdep_bb_2", "btag_DeepBoosted_H4qvsQCDmassdep_bb_3", "btag_DeepBoosted_H4qvsQCDmassdep_bb",
-        #                     "btag_DeepBoosted_H4qvsQCDmassdep_cc_2", "btag_DeepBoosted_H4qvsQCDmassdep_cc_3", "btag_DeepBoosted_H4qvsQCDmassdep_cc",
-        #                     # "btag_DeepBoosted_H4qvsQCDmassdep_gg_2", "btag_DeepBoosted_H4qvsQCDmassdep_gg_3", "btag_DeepBoosted_H4qvsQCDmassdep_gg"
-        #                     "btag_DeepBoosted_H4qvsQCDmassdep2_cc", "btag_DeepBoosted_H4qvsQCDmassdep3_cc",
-                            # ]
-        # self.histFolders = ["btag_DeepBoosted_H4qvsQCDmassdep", "btag_DeepBoosted_H4qvsQCDmassdep_2",
-        #                     "btag_DeepBoosted_H4qvsQCDmassdep_3", "btag_DeepBoosted_H4qvsQCDmassdep_cc",
-        #                     "btag_DeepBoosted_H4qvsQCDmassdep_cc_2", "btag_DeepBoosted_H4qvsQCDmassdep_cc_3",
-        #                     "btag_DeepBoosted_H4qvsQCDmassdep_cc2", "btag_DeepBoosted_H4qvsQCDmassdep_cc2_2", "btag_DeepBoosted_H4qvsQCDmassdep_cc2_3",
-        #                     ]
 
-        self.histFolders = ["Selection","ExtraCleaning", "btag_DeepBoosted_H4qvsQCDmassdep",
-                            "btag_DeepBoosted_H4qvsQCDmassdep_cc", "btag_DeepBoosted_H4qvsQCDmassdep_cc1",
-                            "btag_DeepBoosted_H4qvsQCDmassdep_cc2", "btag_DeepBoosted_H4qvsQCDmassdep_ccMD"]
+        # self.histFolders = ["Selection", "ExtraCleaning", "DeepAk8_H4qvsQCD_massdep",
+        #                     "DeepAk8_ZHccvsQCD_MD", "DeepAk8_HccvsQCD_MD", "DeepAk8_H4qvsQCD_MD",
+        #                     "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD", "DeepAk8_H4qvsQCD",
+        #                     "DeepAk8_HccvsQCD", "DeepAk8_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD",
+        #                     "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD"]
 
-        self.color  = {"btag_DeepBoosted_H4qvsQCDmassdep":      ROOT.kRed+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_bb":   ROOT.kGreen+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_cc":   ROOT.kViolet+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_gg":   ROOT.kAzure+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_2":    ROOT.kBlack,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_bb_2": ROOT.kOrange+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_cc_2": ROOT.kCyan+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_gg_2": ROOT.kMagenta+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_3":    ROOT.kBlue,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_bb_3": ROOT.kOrange-1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_cc_3": ROOT.kCyan+3,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_gg_3": ROOT.kMagenta+2,
+        self.histFolders = ["ExtraCleaning", "DeepAk8_H4qvsQCD_massdep", "DeepAk8_ZHccvsQCD_MD",
+                            "DeepAk8_HccvsQCD_MD", "DeepAk8_H4qvsQCD_MD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD"]
 
-                       "btag_DeepBoosted_H4qvsQCDmassdep2_cc":  ROOT.kGreen+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep2":     ROOT.kAzure+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep3_cc":  ROOT.kOrange+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep3":     ROOT.kCyan+1,
-                       "btag_DeepBoosted_HccvsQCDmassdep4_cc":  ROOT.kMagenta+1,
-                       "btag_DeepBoosted_HccvsQCDmassdep4":     ROOT.kBlue+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_cc2":  ROOT.kGreen+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_cc2_2":ROOT.kOrange+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_cc2_3":ROOT.kOrange-1,
-                       "Selection": ROOT.kBlack,
-                       "ExtraCleaning": ROOT.kMagenta+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_cc1": ROOT.kBlue+1,
-                       "btag_DeepBoosted_H4qvsQCDmassdep_ccMD": ROOT.kOrange+1,
-
+        self.color  = {"Selection":                             ROOT.kBlack,
+                       "ExtraCleaning":                         ROOT.kBlack,
+                       "DeepAk8_H4qvsQCD_massdep":              ROOT.kAzure+1,
+                       "DeepAk8_ZHccvsQCD_MD":                  ROOT.kGreen+3,
+                       "DeepAk8_HccvsQCD_MD":                   ROOT.kRed+1,
+                       "DeepAk8_H4qvsQCD_MD":                   ROOT.kAzure-7,
+                       "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD":  ROOT.kOrange+1,
+                       "DeepAk8_H4qvsQCD":                      ROOT.kCyan+3,
+                       "DeepAk8_HccvsQCD":                      ROOT.kViolet+1,
+                       "DeepAk8_ZHccvsQCD":                     ROOT.kCyan+1,
+                       "DeepAk8_H4qvsQCD_massdep_HccvsQCD":     ROOT.kOrange-1,
+                       "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD":    ROOT.kMagenta+2,
+                       "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD": ROOT.kGreen+1,
                        }
         self.outdir = self.Path_ANALYSIS+"Analysis/SignalEfficiencies/Bkg/"
         os.system("mkdir -p "+self.outdir)
@@ -75,11 +57,12 @@ class PlotBkgCuts(VariablesBase):
         file_ = ROOT.TFile(filename)
         self.histos = {}
         for histFolder in self.histFolders:
-            hname = "ZprimeCandidate_"+histFolder+"_SR/Zprime_mass_rebin30"
+            # hname = "ZprimeCandidate_"+histFolder+"_SR/Zprime_mass_rebin30"
             hname = "ZprimeCandidate_"+histFolder+"_SR/Zprime_mass_rebin100"
-            if not "btag" in hname : hname=hname.replace("_SR","")
+            if not "DeepAk8" in hname : hname=hname.replace("_SR","")
             print hname
             h_ = file_.Get(hname)
+            # h_.Rebin(4)
             h_.SetDirectory(0)
             self.histos[histFolder] = h_
         file_.Close()
@@ -87,14 +70,15 @@ class PlotBkgCuts(VariablesBase):
     def PlotHistos(self):
         self.LoadHistos()
         TDR.lumi_13TeV  = str(round(float(self.lumi_map[self.year]["lumi_fb"]),1))+" fb^{-1}"
-        canv = tdrCanvas("canv", 300, 4000, 1e-01, 3*1e3, "M_{Z'} (GeV)","Events")
+        canv = tdrCanvas("canv", 300, 4000, 1e-03, 6*1e4, "M_{Z'} (GeV)","Events")
         leg = tdrLeg(0.50,0.60,0.89,0.89, 0.030, 42, ROOT.kBlack);
-        leg.SetNColumns(3)
+        leg.SetNColumns(2)
         canv.SetLogy(1)
-        for hname,hist in self.histos.items():
+        for histFolder in self.histFolders:
+            hist = self.histos[histFolder]
             hist.SetLineWidth(2)
-            tdrDraw(hist, "hist", ROOT.kDot, self.color[hname], 1, self.color[hname], 0, self.color[hname])
-            leg.AddEntry(hist, hname.replace("btag_DeepBoosted_", "").replace("vsQCDmassdep",""), "l")
+            tdrDraw(hist, "hist", ROOT.kDot, self.color[histFolder], 1, self.color[histFolder], 0, self.color[histFolder])
+            leg.AddEntry(hist, histFolder.replace("DeepAk8_", "").replace("ExtraCleaning", "Selection").replace("vsQCD", "").replace("massdep", "mdc"), "l")
         canv.SaveAs(self.outdir+"Bkg_"+self.year+"_"+self.collection+"_"+self.channel+".pdf")
 
 
