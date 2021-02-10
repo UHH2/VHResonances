@@ -219,8 +219,11 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
 
   MS["topjetLabel"] = MB["isCHS"]? "topjets": (MB["isPuppi"]? "toppuppijets": (MB["isHOTVR"]? "hotvrPuppi": ""));
 
-  if(MB["electronchannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"tracking"));
-  if(MB["electronchannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"isolation"));
+  if(!MB["muonchannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"tracking"));
+  if(!MB["muonchannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"isolation"));
+  if(MB["invisiblechannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"id"));
+  if(MB["invisiblechannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"trigger"));
+  if(MB["invisiblechannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"reco"));
 
   // Set up histograms:
   book_histograms(ctx);

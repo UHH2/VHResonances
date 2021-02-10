@@ -177,6 +177,13 @@ void CreateRooWorkspace::SetEnv() {
       if (!FindInString("muon",channel) && FindInString("isolation",syst)) continue;
       if (!FindInString("muon",channel) && FindInString("tracking",syst)) continue;
       if (!FindInString("muon",channel) && FindInString("MuonScale",syst)) continue;
+      // Remove these when running with more systematics for the invisiblechannel
+      if (FindInString("invisible",channel) && FindInString("pu",syst)) continue;
+      if (FindInString("invisible",channel) && FindInString("btag",syst)) continue;
+      if (FindInString("invisible",channel) && FindInString("prefiring",syst)) continue;
+      if (FindInString("invisible",channel) && FindInString("id",syst)) continue;
+      if (FindInString("invisible",channel) && FindInString("trigger",syst)) continue;
+      if (FindInString("invisible",channel) && FindInString("reco",syst)) continue;
       for (std::string var: {"Up","Down"}) { // Be careful if you change it. It's needed as input to combine!!
       SystNames.push_back(syst+var);
     }
@@ -381,7 +388,7 @@ void CreateRooWorkspace::PrepocessHistos() {
     if (debug) std::cout << "rebin " << mode << "\t" << CalculateIntegral(x.second.get(),fit_lo,fit_hi,doBinWidth) << '\n';
 
     // Removing bins with low stat TODO
-    if (mode=="DY_SR" || mode=="DY_CR") {
+    if (mode=="DY_SR" || mode=="DY_CR" || mode=="bkg_pred") {
       for (int i = 0; i < x.second->GetNbinsX()+1; i++) {
         // if (x.second->GetBinContent(i)<2*1e-02) { histo_map[mode]->SetBinContent(i,0); histo_map[mode]->SetBinError(i,0); } // TODO
         if (x.second->GetBinContent(i)<5*1e-03) { histo_map[mode]->SetBinContent(i,0); histo_map[mode]->SetBinError(i,0); } // TODO
@@ -544,16 +551,32 @@ void CreateRooWorkspace::InitializePDFs() {
     fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_1_p1"+unique_name).c_str(), (mode+"_Exp_1_p1"+unique_name).c_str(), -4., -100, 100));
     Fits_map[mode]["Exp_1"].reset(new PolinomialExponent_1p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0]));
 
-    FitName = mode+"_Exp_2";
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p1"+unique_name).c_str(), (mode+"_Exp_2_p1"+unique_name).c_str(), -4., -100, 100));
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p2"+unique_name).c_str(), (mode+"_Exp_2_p2"+unique_name).c_str(), 0.4, -100, 100));
-    Fits_map[mode]["Exp_2"].reset(new PolinomialExponent_2p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
 
-    FitName = mode+"_Exp_3";
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p1"+unique_name).c_str(), (mode+"_Exp_3_p1"+unique_name).c_str(), -4., -100, 100));
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p2"+unique_name).c_str(), (mode+"_Exp_3_p2"+unique_name).c_str(), 0.4, -100, 100));
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p3"+unique_name).c_str(), (mode+"_Exp_3_p3"+unique_name).c_str(), -0.1, -100, 100));
-    Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
+    if (channel=="invisiblechannel"){
+
+      FitName = mode+"_Exp_2";
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p1"+unique_name).c_str(), (mode+"_Exp_2_p1"+unique_name).c_str(), -40., -100, 100));
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p2"+unique_name).c_str(), (mode+"_Exp_2_p2"+unique_name).c_str(), -4, -100, 100));
+      Fits_map[mode]["Exp_2"].reset(new PolinomialExponent_2p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
+
+      FitName = mode+"_Exp_3";
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p1"+unique_name).c_str(), (mode+"_Exp_3_p1"+unique_name).c_str(), -40., -100, 100));
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p2"+unique_name).c_str(), (mode+"_Exp_3_p2"+unique_name).c_str(), -10, -100, 100));
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p3"+unique_name).c_str(), (mode+"_Exp_3_p3"+unique_name).c_str(), 10, -100, 100));
+      Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
+
+    } else {
+      FitName = mode+"_Exp_2";
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p1"+unique_name).c_str(), (mode+"_Exp_2_p1"+unique_name).c_str(), -4., -100, 100));
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p2"+unique_name).c_str(), (mode+"_Exp_2_p2"+unique_name).c_str(), 0.4, -100, 100));
+      Fits_map[mode]["Exp_2"].reset(new PolinomialExponent_2p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
+
+      FitName = mode+"_Exp_3";
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p1"+unique_name).c_str(), (mode+"_Exp_3_p1"+unique_name).c_str(), -4., -100, 100));
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p2"+unique_name).c_str(), (mode+"_Exp_3_p2"+unique_name).c_str(), 0.4, -100, 100));
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p3"+unique_name).c_str(), (mode+"_Exp_3_p3"+unique_name).c_str(), -0.1, -100, 100));
+      Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
+    }
 
     FitName = mode+"_Exp_4";
     fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_4_p1"+unique_name).c_str(), (mode+"_Exp_4_p1"+unique_name).c_str(), 4., -100, 100));
@@ -654,6 +677,8 @@ void CreateRooWorkspace::DoFits() {
     fit_max[x.first] = GetRange(x.second.get(),fit_hi);
     // if ("DY_SR"==x.first) fit_min[x.first] = GetRange(x.second.get(),fit_SR);
     if ("DY_CR"==x.first) fit_max[x.first] = GetRange(x.second.get(),fit_max_DY_CR);
+    if ("bkg_pred"==x.first) fit_max[x.first] = GetRange(x.second.get(),fit_max_bkgpred);
+
     std::string mass = x.first;
     if (mass.compare(0,1,"M")==0) {
       CalculateSignalFittingRange(std::stoi(mass.substr(1, mass.find("_")-1)), fit_min[x.first], fit_max[x.first], plot_min[x.first], plot_max[x.first], y_max[x.first]); // TODO

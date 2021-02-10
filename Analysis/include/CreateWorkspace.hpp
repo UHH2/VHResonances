@@ -253,6 +253,7 @@ private:
   // double fit_hi   = 4500; DR_SR bin30
   double fit_SR   = 810;
   double fit_max_DY_CR = 5000;
+  double fit_max_bkgpred = 3500;
 
   bool debug = false;
   // bool debug = true;
