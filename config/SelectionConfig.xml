@@ -20,6 +20,9 @@
 <!ENTITY MCBtagEfficiencies         "defaultValue">
 <!ENTITY BTagCalibration            "defaultValue">
 <!ENTITY MuonScaleVariations        "nominal">
+<!ENTITY ScaleVariationMuR          "none">
+<!ENTITY ScaleVariationMuF          "none">
+
 
 <!-- MC Samples 2016 -->
 <!ENTITY MC_ZprimeToZH_M600_2016        SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2016.xml">
@@ -391,6 +394,8 @@
     <Item Name="MCBtagEfficiencies"         Value="&MCBtagEfficiencies;"/>
     <Item Name="BTagCalibration"            Value="&BTagCalibration;"/>
     <Item Name="MuonScaleVariations"        Value="&MuonScaleVariations;"/>
+    <Item Name="ScaleVariationMuR"          Value="&ScaleVariationMuR;"/>
+    <Item Name="ScaleVariationMuF"          Value="&ScaleVariationMuF;"/>
 
     <!-- the class name of the AnalysisModule subclasses to run: -->
     <Item Name="AnalysisModule"             Value="SelectionModule"/>
