@@ -47,7 +47,6 @@ class PrintEventNumber(VariablesBase):
     def ExtractInfo(self):
         info = {}
         for year, collection, channel, in list(itertools.product(self.years, self.Collections, self.Channels)):
-            if "invisible" in channel: continue #TODO
             info[year+collection+channel+"BKG_"+year] = 0
             info[year+collection+channel+"MC_VV_"+year] = 0
             for sample in self.Samples:
@@ -63,13 +62,11 @@ class PrintEventNumber(VariablesBase):
                         info[year+collection+channel+"MC_VV_"+year] += hist.GetBinContent(1)
                     info[year+collection+channel+"BKG_"+year] += hist.GetBinContent(1)
         for sample_ in self.Samples+["MC_VV","BKG"]:
-            if "MET" in sample_: continue #TODO
-            sample_ = sample_.replace("_2016","").replace("_SingleMuon","").replace("_SingleElectron","")
+            sample_ = sample_.replace("_2016","").replace("_SingleMuon","").replace("_SingleElectron","").replace("_MET","")
             print sample_, (" "*(20-len(sample_))),
             for year, collection, channel, in list(itertools.product(self.years, self.Collections, self.Channels)):
-                sample = sample_.replace("DATA", "DATA_SingleMuon" if "muon" in channel else ("DATA_SingleElectron" if "ele" in channel else ""))
+                sample = sample_.replace("DATA", "DATA_SingleMuon" if "muon" in channel else ("DATA_SingleElectron" if "ele" in channel else ("DATA_MET" if "inv" in channel else "")))
                 sample = sample+"_"+year
-                if "invisible" in channel: continue #TODO
                 if DoControl([""], year+channel+sample, channel, sample): continue
                 # var = str(round(info[year+collection+channel+sample],2))+channel[0]+year[-1]
                 var = str(round(info[year+collection+channel+sample],2))

@@ -204,7 +204,13 @@ class CreateDataCards(VariablesBase):
                 if not "muon"  in channel and "MuonScale" in sys: continue
                 if not "muon"  in channel and "isolation" in sys: continue
                 if not "muon"  in channel and "tracking"  in sys: continue
-                if not "muon"  in channel and "reco" in sys: continue
+                if not "muon"  in channel and "reco"      in sys: continue
+                if "invisible" in channel and "pu"        in sys: continue
+                if "invisible" in channel and "btag"      in sys: continue
+                if "invisible" in channel and "prefiring" in sys: continue
+                if "invisible" in channel and "id"        in sys: continue
+                if "invisible" in channel and "trigger"   in sys: continue
+
                 if nominal==0:#TODO Fix me
                     print channel, year,sys,signalName, nominal,varUp,varDown
                     continue
@@ -250,10 +256,12 @@ class CreateDataCards(VariablesBase):
     def CombineYear(self):
         for histFolder in self.histFolders:
             for collection in self.collections:
-                for channel in self.channels+["leptonchannel"]:
+                for channel in self.channels+(["leptonchannel"] if self.channels!=["invisiblechannel"] else []):
                     uniqueName = "fullRunII/"+collection+"/"+channel+"/"+histFolder
                     uniqueName, workingDir = self.GetWorkdirName(uniqueName)
-                    for signalName in self.RatesSignal[uniqueName.replace("fullRunII","2016").replace("leptonchannel","muonchannel")]:
+                    key = uniqueName.replace("fullRunII","2016").replace("leptonchannel","muonchannel")
+                    if (channels==["invisiblechannel"]): key = key.replace("muonchannel", "invisiblechannel")
+                    for signalName in self.RatesSignal[key]:
                         filename = self.DataCardName(uniqueName,signalName)
                         self.CombineCards(workingDir,filename,signalName,inputCards=" ".join([(lambda x,y: x if y!="leptonchannel" else x.replace("lepton","muon")+" "+x.replace("lepton","electron"))((channel+"_"+year+"="+workingDir+filename).replace("fullRunII",year),channel) for year in self.years if year!="RunII"]))
 
@@ -278,7 +286,11 @@ class CreateDataCards(VariablesBase):
 
 
 if __name__ == '__main__':
-    Method="AsymptoticLimits"
+    args = parse_arguments()
+
+    RunCombine    = (True if args.RunCombine=="True" else False)
+    print "RunCombine: " + str(RunCombine)
+
     # extraOptions = ["-t", "-1"]
     # extraOptionsText = "Asimov"
     extraOptions = ["--run", "expected"]
@@ -292,9 +304,6 @@ if __name__ == '__main__':
     if not RunSystematics: extraOptionsText += "NoSys"
     # if not RunSystematics: extraOptionsText += "NoSys0"
     # if RunSystematics: extraOptionsText += "Sys0"
-    # TODO Don't create datacards if not needed.
-    RunCombine = True
-    # RunCombine = False
     studies = "nominal"
     # studies = "noSignalFlatUncertainty"
 

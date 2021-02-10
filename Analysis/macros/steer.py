@@ -117,6 +117,7 @@ histFolders = ["btag_DeepBoosted_H4qvsQCDmassdep_cc"]
 # Modules.RunCommand("CreateWorkspace", histFolders=histFolders, Channels=["all"], years=["all"], Collections=["all"])
 # Modules.RunCommand("PlotSystematics", isPython=True, years=years, Channels=Channels, histFolders=histFolders, Systematics=Systematics, Collections=Collections)
 # Modules.RunCommand("CalculateSystematicEffects", isPython=True, years=years, Channels=Channels, histFolders=histFolders, Collections=Collections)
-# Modules.RunCommand("CreateDataCards", isPython=True)
+# Modules.RunCommand("CreateDataCards", isPython=True, RunCombine=False)
+# Modules.RunCommand("CreateDataCards", isPython=True, RunCombine=True)
 # Modules.RunCommand("CompareCombineInputs", isPython=True)
 # Modules.RunCommand("PlotLimits")
