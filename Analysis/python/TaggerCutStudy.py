@@ -48,21 +48,27 @@ class TaggerCutStudy(VariablesBase):
         self.isFast = True
         self.isFast = False
         self.fName = "TaggerVariables"
-        if not self.isFast: self.fName += "_all"
+        if not self.isFast: self.hfName += "_all"
         self.Samples = filter(lambda x: self.MainBkg in x or self.Signal in x, self.Processes_Year_Dict["2016"])
-        self.Ybins = sorted([x for x in np.arange(0,1,0.001)])
+        self.Ybins = sorted([x for x in np.arange(0.2,1,0.001)])
         self.Xbins = sorted([self.MassPoints[i] - (self.MassPoints[i]-self.MassPoints[i-1])/2 for i in range(1,len(self.MassPoints))]+[500,8500])
         print self.Xbins
         self.Xvars = ["Mass"]
-        self.Yvars = ["H4q", "Hcc", "H4q_SR", "Hcc_SR"]
+        # self.Yvars = ["H4q", "Hcc", "WH", "H4q_SR", "Hcc_SR", "WH_SR", "DeltaRll", "DeltaRll_SR"]
+        self.Yvars = [ "ZHcc", "ZHcc_MD", "DeltaRll", "DeltaRll_SR"]
 
         self.indir  = self.Path_ANALYSIS+"Analysis/OtherPlots/TaggerInfo/"
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/TaggerCutStudy/"
         os.system("mkdir -p "+self.outdir)
 
     def LoadVars(self):
-        self.df = joblib.load(self.indir+self.fName+".pkl")
-        self.df["jet_HccvsQCD"] = self.df["jet_Hcc"]/(self.df["jet_Hcc"]+self.df.loc[:,["jet_QCDb","jet_QCDbb", "jet_QCDc", "jet_QCDcc", "jet_QCDqq"]].sum(axis=1))
+        self.df = []
+        for sample in [self.Signal, self.MainBkg, "MC_TTbar"]:
+            self.df.append(joblib.load(self.indir+self.fName+"_"+sample+("_all" if not self.isFast else "")+".pkl"))
+        self.df = pd.concat(self.df)
+        self.df["jet_HccvsQCD"] = self.df["jet_Hcc"]/(self.df["jet_Hcc"]+self.df["jet_QCD"])
+        self.df["jet_W"] = self.df.loc[:,["jet_Wqq","jet_Wcq"]].sum(axis=1)
+        self.df["jet_WH"] = (self.df["jet_W"]+self.df["jet_Hqqqq"])/(self.df["jet_W"]+self.df["jet_Hqqqq"]+self.df["jet_QCD"])
 
     @timeit
     def CreateHistos(self):
@@ -74,7 +80,7 @@ class TaggerCutStudy(VariablesBase):
             if DoControl([""], year+channel+sample, channel, sample): continue
             name = Xvar+Yvar+year+channel+sample
             histos[name] = rt.TH2D(name,name,len(self.Xbins)-1,array('d',self.Xbins), len(self.Ybins)-1, array('d',self.Ybins))
-            histos[name+"bins"] = rt.TH2D(name+"bins", name+"bins", 1000, 0, 10000, 2000, 0, 1)
+            histos[name+"bins"] = rt.TH2D(name+"bins", name+"bins", 1000, 0, 10000, 2000, 0.2, 1)
             histos[name].SetDirectory(0)
             histos[name+"bins"].SetDirectory(0)
 
@@ -84,19 +90,21 @@ class TaggerCutStudy(VariablesBase):
             print year, channel, sample
 
             for ind, entry in self.df[(self.df["year"]==year) & (self.df["channel"]==channel) & (self.df["sample"]==sample)].iterrows():
-                sample, pt, mass, DB_H4q, DB_Hcc, w = (entry["sample"], entry["jet_pt"],entry["Zprime_mass"],entry["jet_H4qvsQCD"],entry["jet_HccvsQCD"],entry["weight_GLP"])
+                sample, pt, mass, w = (entry["sample"], entry["jet_pt"],entry["Zprime_mass"], entry["weight_GLP"])
+                DB_H4q, DB_Hcc, DB_WH, DeltaRll, DB_ZHcc, DB_ZHcc_MD = (entry["jet_H4qvsQCD"],entry["jet_HccvsQCD"],entry["jet_WH"], entry["Z_DeltaR_ll"], entry["jet_ZHccvsQCD"], entry["jet_ZHccvsQCD_MD"])
                 for Xvar in self.Xvars:
                     x_val = mass
                     for Yvar in self.Yvars:
-                        y_val = DB_H4q if "H4q" in Yvar else DB_Hcc
+                        y_val = DB_H4q if "H4q" in Yvar else (DB_Hcc if "Hcc" in Yvar else (DeltaRll if "DeltaR" in Yvar else DB_WH))
+                        if "ZHcc" in Yvar:
+                            y_val = DB_ZHcc_MD if "MD" in Yvar else DB_ZHcc
                         if "SR" in Yvar and DB_H4q<PtDependentCut(pt): continue
                         for y_ in [year, "RunII"]:
                             for c_ in [channel, "lepton"]:
                                 signal = self.Signal
                                 # Change signal name for the invisible channel
                                 if "invisible" in channel: signal =  signal + "_inv"
-                                if "invisible" in channel and c_=="lepton":
-                                    continue
+                                if "invisible" in channel and c_=="lepton": continue
                                 for s_ in [sample, signal]:
                                     if not signal in sample and s_==signal: continue
                                     histos[Xvar+Yvar+y_+c_+s_.replace(year,y_)].Fill(x_val, y_val, w)
@@ -137,7 +145,7 @@ class TaggerCutStudy(VariablesBase):
         err2         = {}
         histo = rt.TH2D("SensitivityScan","SensitivityScan",len(self.Xbins)-1,array('d',self.Xbins), len(self.Ybins)-1, array('d',self.Ybins))
         x_min = 0
-        x_max = 6500
+        x_max = 5300
         canv = tdrCanvas("canv", x_min, x_max, 0.0001, 10, Xvar, DB+"vsQCD")
         canv.SetLogy()
         leg = tdrLeg(0.40,0.70,0.95,0.89, 0.025, 42, rt.kBlack)
@@ -145,16 +153,21 @@ class TaggerCutStudy(VariablesBase):
         dic_gr = {}
         for year, channel in list(itertools.product(self.years+["RunII"], self.Channels +(["lepton"] if self.Channels!=["invisible"] else []))):
         # for year, channel in list(itertools.product(["RunII"],["lepton"])):
-
+            if channel=="invisible": continue
             h_sig = self.histos[Xvar+DB+year+channel+self.Signal+("_inv" if channel=="invisible" else "")]
             h_bkg = self.histos[Xvar+DB+year+channel+self.MainBkg+"_"+year]
             n_yBins = h_bkg.GetNbinsY()
 
             for xbin in range(1,h_bkg.GetNbinsX()+1):
-                mean = h_sig.GetXaxis().GetBinCenter(xbin)
+                mean = h_bkg.GetXaxis().GetBinCenter(xbin)
                 sigma = 1*(mean*0.02+20.) # 1-2-3 sigma is rather stable
-                xbin_lo = h_sig.GetXaxis().FindBin(mean-sigma)
-                xbin_hi = h_sig.GetXaxis().FindBin(mean+sigma)
+                mass = str(int(mean))
+                if mean==2075 : mass = "2000"
+                if mean==6125 : mass = "6000"
+                # print mean, sigma, mass
+                h_sig = self.histos[Xvar+DB+year+channel+self.Signal+"_M"+mass+"_"+year]
+                xbin_lo = h_bkg.GetXaxis().FindBin(mean-sigma)
+                xbin_hi = h_bkg.GetXaxis().FindBin(mean+sigma)
                 name = year+channel+str(mean)
                 significance.setdefault(name,[])
                 pt_max.setdefault(name,[])
@@ -176,7 +189,7 @@ class TaggerCutStudy(VariablesBase):
                 DB_cut[name] = np.array(DB_cut[name])
                 index = np.abs(significance[name] - significance[name].max()).argmin()
                 index_var = np.abs(significance[name] - significance[name].max()+significance[name].std()).argmin()
-                err[name] = abs(DB_cut[name][index]-DB_cut[name][index_var])/sqrt(12)
+                err[name] = abs(DB_cut[name][index]-DB_cut[name][index_var])
                 significance[name] = significance[name][index]
                 pt_max[name] = pt_max[name][index]
                 DB_cut[name] = DB_cut[name][index]
@@ -206,8 +219,9 @@ class TaggerCutStudy(VariablesBase):
                     values = [err2[x][0] for x in err2 if str(mean) in x and len(err2[x])==1]
                     if np.std(values)!=0:
                         values = list(filter(lambda x: x-np.mean(values)<2*np.std(values) and x>1e-04, values))
-                        filtered_err.append((np.max(values)-np.min(values))/2)
-                    else: filtered_err.append(values[0])
+                        filtered_err.append(sqrt(err[name]**2+((np.max(values)-np.min(values))/2)**2))
+                        # filtered_err.append(err[name])
+                    else: filtered_err.append(err[name])
             gr = rt.TGraph(len(all_DB_cut), array('d',all_pt_max), array('d',all_DB_cut))
             # gr = rt.TGraphErrors(len(all_DB_cut), array('d',all_pt_max), array('d',all_DB_cut), array('d',np.zeros(len(all_DB_cut))), array('d',all_err));
             dic_gr[year+channel] = gr
@@ -223,21 +237,34 @@ class TaggerCutStudy(VariablesBase):
                 funcs = {}
                 funcs["1/x3"] = rt.TF1("1/x3","[0]+[1]*TMath::Power(x,-3)",x_min, x_max)
                 funcs["1/x3"].SetLineColor(rt.kBlue+1)
+                funcs["1/x2"] = rt.TF1("1/x2","[0]+[1]*TMath::Power(x,-2)",x_min, x_max)
+                funcs["1/x2"].SetLineColor(rt.kOrange-1)
+                # funcs["1/x1"] = rt.TF1("1/x1","[0]+[1]*TMath::Power(x,-1)",x_min, x_max)
+                # funcs["1/x1"].SetLineColor(rt.kMagenta+1)
+                funcs["1/x1"] = rt.TF1("1/x1","[0]+exp([1]*x)",x_min, x_max)
+                funcs["1/x1"].SetLineColor(rt.kMagenta+1)
+                # funcs["1/x1x2"] = rt.TF1("1/x1x2","[0]+[1]*TMath::Power(x,-1)+[2]*TMath::Power(x,-2)",x_min, x_max)
+                # funcs["1/x1x2"].SetLineColor(rt.kGreen+1)
                 # funcs["1/x2x3"] = rt.TF1("1/x2x3","[0]+[1]*TMath::Power(x,-2)+[2]*TMath::Power(x,-3)",x_min, x_max)
                 # funcs["1/x2x3"].SetLineColor(rt.kOrange+1)
-                funcs["1/x1x3"] = rt.TF1("1/x1x3","[0]+[1]*TMath::Power(x,-1)+[2]*TMath::Power(x,-3)",x_min, x_max)
-                funcs["1/x1x3"].SetLineColor(rt.kRed+1)
+                # funcs["1/x1x3"] = rt.TF1("1/x1x3","[0]+[1]*TMath::Power(x,-1)+[2]*TMath::Power(x,-3)",x_min, x_max)
+                # funcs["1/x1x3"].SetLineColor(rt.kViolet+1)
                 if Xvar=="Mass":
-                    func_ref = rt.TF1("1/x3","[0]+[1]*TMath::Power(x/2,-3)",600,8000)
-                func_ref.SetParameters(5.08*1e-03,2.72*1e07)
-                func_ref2.SetParameters(2.52*1e-03, 1.39*1e07)
+                    func_ref = rt.TF1("1/x3","[0]+[1]*TMath::Power(x*2,-3)",600,8000)
+                # func_ref.SetParameters(5.08*1e-03,2.72*1e07)
+                func_ref2.SetParameters(2.52*1e-03,1.39*1e07)
+                # func_ref2.SetParameters(0.00238601739564,15407844.1061)
                 func_ref3.SetParameters(0.0032618254201,63499451.4601)
+                func_ref3.SetParameters(1.55*1e-01,1.15*1e08)
                 rt.gStyle.SetOptFit(0)
                 for func in funcs:
                     gr_forfit.Fit(funcs[func],"RQ")
                     funcs[func].Draw("same")
                     name = ""
                     if func=="1/x3":   name = "[0]+[1]*x^{-3}"
+                    if func=="1/x1":   name = "[0]+[1]*x^{-1}"
+                    if func=="1/x2":   name = "[0]+[1]*x^{-2}"
+                    if func=="1/x1x2": name = "[0]+[1]*x^{-1}+[2]*x^{-2}"
                     if func=="1/x2x3": name = "[0]+[1]*x^{-2}+[2]*x^{-3}"
                     if func=="1/x1x3": name = "[0]+[1]*x^{-1}+[2]*x^{-3}"
                     print "#"*50, "\n", func
@@ -249,10 +276,12 @@ class TaggerCutStudy(VariablesBase):
                 tdrDraw(gr_forfit, "P",  colors[channel], rt.kBlack, 2, rt.kBlack, 1000, rt.kBlack)
                 # tdrDraw(gr_forfit, "P",  colors[channel], colors[year], 2, colors[year], 1000, colors[year])
                 func_ref.SetLineColor(rt.kRed+1)
-                func_ref2.SetLineColor(rt.kGreen+2)
+                func_ref2.SetLineColor(rt.kRed+1)
                 func_ref2.SetLineStyle(2)
                 func_ref3.SetLineColor(rt.kOrange-1)
                 # func_ref.Draw("same")
+                func_ref2.Draw("same")
+                func_ref3.Draw("same")
 
                 if channel=="invisiblechannel":
                     # Draw the fit for the leptonchannel
@@ -268,15 +297,17 @@ class TaggerCutStudy(VariablesBase):
         canv.SetRightMargin(0.15)
         canv.SetLogy()
         histo.Draw("colz")
-        canv.SaveAs(self.outdir+"Significance"+Xvar+".pdf")
-        canv.SaveAs(self.outdir+"Significance"+Xvar+".root")
+        canv.SaveAs(self.outdir+"Significance"+Xvar+"_"+DB+".pdf")
+        canv.SaveAs(self.outdir+"Significance"+Xvar+"_"+DB+".root")
 
 
 def main():
     TCS = TaggerCutStudy()
-    # TCS.CreateHistos()
-    TCS.SensitivityScan()
-    TCS.SensitivityScan(DB="Hcc")
+    TCS.CreateHistos()
+    # TCS.SensitivityScan()
+    TCS.SensitivityScan(DB="DeltaRll")
+    # TCS.SensitivityScan(DB="Hcc")
+    # TCS.SensitivityScan(DB="WH")
 
 if __name__ == '__main__':
     main()

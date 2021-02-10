@@ -11,9 +11,14 @@ class Extractor(VariablesBase):
         VariablesBase.__init__(self)
         self.isFast = True
         self.isFast = False
-        self.fName = "TaggerVariables"
+        self.fName = "TaggerVariables_"+self.Signal
+        self.fName = "TaggerVariables_"+self.MainBkg
+        self.fName = "TaggerVariables_MC_TTbar"
         if not self.isFast: self.fName += "_all"
-        self.Samples = filter(lambda x: self.MainBkg in x or self.Signal in x, self.Processes_Year_Dict["2016"]) # 2016 as default. They are all the same
+        # self.Samples = filter(lambda x: "MC_TTbar" in x or self.MainBkg in x or self.Signal in x, self.Processes_Year_Dict["2016"]) # 2016 as default. They are all the same
+        if "MC_TTbar"   in self.fName: self.Samples = filter(lambda x: "MC_TTbar"   in x, self.Processes_Year_Dict["2016"]) # 2016 as default. They are all the same
+        if self.MainBkg in self.fName: self.Samples = filter(lambda x: self.MainBkg in x, self.Processes_Year_Dict["2016"]) # 2016 as default. They are all the same
+        if self.Signal  in self.fName: self.Samples = filter(lambda x: self.Signal  in x, self.Processes_Year_Dict["2016"]) # 2016 as default. They are all the same
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/TaggerInfo/"
         os.system("mkdir -p "+self.outdir)
 
@@ -47,32 +52,53 @@ class Extractor(VariablesBase):
                         vars.setdefault("HDecay",[]).append(rt.ZprimeDecayToString(int(ev.HDecay)))
                         vars.setdefault("ZDecay",[]).append(rt.ZprimeDecayToString(int(int(ev.ZDecay))))
                         vars.setdefault("ZprimeDecay",[]).append(rt.ZprimeDecayToString(int(int(ev.ZprimeDecay))))
+                        Z = zp.Z()
+                        vars.setdefault("Z_pt",        []).append(Z.pt())
+                        vars.setdefault("Z_DeltaR_ll", []).append(deltaR(zp.leptons()[0], zp.leptons()[1]))
                         jet = zp.H()
-                        vars.setdefault("jet_pt",        []).append(jet.pt())
-                        vars.setdefault("jet_QCDb",      []).append(jet.btag_DeepBoosted_probQCDb())
-                        vars.setdefault("jet_QCDbb",     []).append(jet.btag_DeepBoosted_probQCDbb())
-                        vars.setdefault("jet_QCDc",      []).append(jet.btag_DeepBoosted_probQCDc())
-                        vars.setdefault("jet_QCDcc",     []).append(jet.btag_DeepBoosted_probQCDcc())
-                        vars.setdefault("jet_QCDqq",     []).append(jet.btag_DeepBoosted_probQCDothers())
-                        vars.setdefault("jet_Tbqq",      []).append(jet.btag_DeepBoosted_probTbqq())
-                        vars.setdefault("jet_Tbcq",      []).append(jet.btag_DeepBoosted_probTbcq())
-                        vars.setdefault("jet_Tbq",       []).append(jet.btag_DeepBoosted_probTbq())
-                        vars.setdefault("jet_Tbc",       []).append(jet.btag_DeepBoosted_probTbc())
-                        vars.setdefault("jet_Wqq",       []).append(jet.btag_DeepBoosted_probWqq())
-                        vars.setdefault("jet_Wcq",       []).append(jet.btag_DeepBoosted_probWcq())
-                        vars.setdefault("jet_Zcc",       []).append(jet.btag_DeepBoosted_probZcc())
-                        vars.setdefault("jet_Zqq",       []).append(jet.btag_DeepBoosted_probZqq())
-                        vars.setdefault("jet_Zbb",       []).append(jet.btag_DeepBoosted_probZbb())
-                        vars.setdefault("jet_Hbb",       []).append(jet.btag_DeepBoosted_probHbb())
-                        vars.setdefault("jet_Hcc",       []).append(jet.btag_DeepBoosted_probHcc())
-                        vars.setdefault("jet_Hqqqq",     []).append(jet.btag_DeepBoosted_probHqqqq())
-                        vars.setdefault("jet_TvsQCD",    []).append(jet.btag_DeepBoosted_TvsQCD())
-                        vars.setdefault("jet_WvsQCD",    []).append(jet.btag_DeepBoosted_WvsQCD())
-                        vars.setdefault("jet_ZvsQCD",    []).append(jet.btag_DeepBoosted_ZvsQCD())
-                        vars.setdefault("jet_ZbbvsQCD",  []).append(jet.btag_DeepBoosted_ZbbvsQCD())
-                        vars.setdefault("jet_ZHbbvsQCD", []).append(jet.btag_DeepBoosted_ZHbbvsQCD())
-                        vars.setdefault("jet_HbbvsQCD",  []).append(jet.btag_DeepBoosted_HbbvsQCD())
-                        vars.setdefault("jet_H4qvsQCD",  []).append(jet.btag_DeepBoosted_H4qvsQCD())
+                        QCD = jet.btag_DeepBoosted_raw_score_qcd()
+                        Hcc = jet.btag_DeepBoosted_probHcc()
+                        Zcc = jet.btag_DeepBoosted_probZcc()
+                        Hcc_MD = jet.btag_MassDecorrelatedDeepBoosted_probHcc()
+                        Zcc_MD = jet.btag_MassDecorrelatedDeepBoosted_probZcc()
+                        HccvsQCD = (Hcc)/(Hcc+QCD) if (Hcc+QCD)!=0 else 9999
+                        HccvsQCD_MD = (Hcc_MD)/(Hcc_MD+QCD) if (Hcc_MD+QCD)!=0 else 9999
+                        ZccvsQCD = (Zcc )/(Zcc+QCD) if (Zcc+QCD)!=0 else 9999
+                        ZccvsQCD_MD = (Zcc_MD )/(Zcc_MD+QCD) if (Zcc_MD+QCD)!=0 else 9999
+                        ZHccvsQCD = (Zcc+Hcc)/(Zcc+Hcc+QCD) if (Zcc+Hcc+QCD)!=0 else 9999
+                        ZHccvsQCD_MD = (Zcc_MD+Hcc_MD)/(Zcc_MD+Hcc_MD+QCD) if (Zcc_MD+Hcc_MD+QCD)!=0 else 9999
+                        vars.setdefault("jet_pt",           []).append(jet.pt())
+                        vars.setdefault("jet_M",            []).append(jet.v4().M())
+                        vars.setdefault("jet_SD",           []).append(jet.softdropmass())
+                        vars.setdefault("jet_QCD",          []).append(QCD)
+                        vars.setdefault("jet_QCD_MD",       []).append(jet.btag_MassDecorrelatedDeepBoosted_raw_score_qcd())
+                        vars.setdefault("jet_Hcc",          []).append(Hcc)
+                        vars.setdefault("jet_Hcc_MD",       []).append(Hcc_MD)
+                        vars.setdefault("jet_Zcc",          []).append(Zcc)
+                        vars.setdefault("jet_Zcc_MD",       []).append(Zcc_MD)
+                        vars.setdefault("jet_Wqq",          []).append(jet.btag_DeepBoosted_probWqq())
+                        vars.setdefault("jet_Wqq_MD",       []).append(jet.btag_MassDecorrelatedDeepBoosted_probWqq())
+                        vars.setdefault("jet_Wcq",          []).append(jet.btag_DeepBoosted_probWcq())
+                        vars.setdefault("jet_Wcq_MD",       []).append(jet.btag_MassDecorrelatedDeepBoosted_proWcq())
+                        vars.setdefault("jet_Hbb",          []).append(jet.btag_DeepBoosted_probHbb())
+                        vars.setdefault("jet_Hbb_MD",       []).append(jet.btag_MassDecorrelatedDeepBoosted_probHbb())
+                        vars.setdefault("jet_Zbb",          []).append(jet.btag_DeepBoosted_probZbb())
+                        vars.setdefault("jet_Zbb_MD",       []).append(jet.btag_MassDecorrelatedDeepBoosted_probZbb())
+                        vars.setdefault("jet_bbvsL_MD",     []).append(jet.btag_MassDecorrelatedDeepBoosted_bbvsLight())
+                        vars.setdefault("jet_ccvsL_MD",     []).append(jet.btag_MassDecorrelatedDeepBoosted_ccvsLight())
+                        vars.setdefault("jet_Hqqqq",        []).append(jet.btag_DeepBoosted_probHqqqq())
+                        vars.setdefault("jet_Hqqqq_MD",     []).append(jet.btag_MassDecorrelatedDeepBoosted_probHqqqq())
+                        vars.setdefault("jet_ZbbvsQCD",     []).append(jet.btag_DeepBoosted_ZbbvsQCD())
+                        vars.setdefault("jet_ZHbbvsQCD",    []).append(jet.btag_DeepBoosted_ZHbbvsQCD())
+                        vars.setdefault("jet_HbbvsQCD",     []).append(jet.btag_DeepBoosted_HbbvsQCD())
+                        vars.setdefault("jet_H4qvsQCD",     []).append(jet.btag_DeepBoosted_H4qvsQCD())
+                        vars.setdefault("jet_HccvsQCD",     []).append(HccvsQCD)
+                        vars.setdefault("jet_HccvsQCD_MD",  []).append(HccvsQCD_MD)
+                        vars.setdefault("jet_ZccvsQCD",     []).append(ZccvsQCD)
+                        vars.setdefault("jet_ZccvsQCD_MD",  []).append(ZccvsQCD_MD)
+                        vars.setdefault("jet_ZHccvsQCD",    []).append(ZHccvsQCD)
+                        vars.setdefault("jet_ZHccvsQCD_MD", []).append(ZHccvsQCD_MD)
+
                         vars.setdefault("subjet_size",   []).append(jet.subjets().size())
                         for j in range(0,2):
                             bb, b, lepb, uds, g, c = (-1,-1,-1,-1,-1,-1)
@@ -90,6 +116,7 @@ class Extractor(VariablesBase):
                             vars.setdefault("subjet_"+str(j)+"_uds",  []).append(uds)
                             vars.setdefault("subjet_"+str(j)+"_g",    []).append(g)
                             vars.setdefault("subjet_"+str(j)+"_c",    []).append(c)
+
         df = pd.DataFrame(data=vars)
         joblib.dump(df, self.outdir+self.fName+".pkl")
 
