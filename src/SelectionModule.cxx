@@ -85,6 +85,7 @@ protected:
   std::unique_ptr<Selection> PTMassCut_selection, DeltaPhiJetMETCut_TopJets_selection, DeltaPhiJetMETCut_Jets_selection;
   std::unique_ptr<AnalysisModule> ZprimeCandidateReconstruction_module;
   std::unique_ptr<AnalysisModule> CollectionProducer_module;
+  std::unique_ptr<AnalysisModule> MCScaleVariation_module;
   std::unordered_map<std::string, std::unique_ptr<AnalysisModule>> ScaleFactors_module;
   std::unique_ptr<AnalysisModule> MuonScaleVariations_module;
 
@@ -183,6 +184,8 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
   //Scale factors
   MuonScaleVariations_module.reset(new MuonScaleVariations(ctx));
 
+  MCScaleVariation_module.reset(new MCScaleVariation(ctx));
+
   ScaleFactors_module["BTag"].reset(new MCBTagScaleFactor(ctx, BTag_algo, BTag_wp, MS["topjetLabel"], "nominal", "lt"));
   ScaleFactors_module["SFs"].reset(new ScaleFactorsManager(ctx, h_ZprimeCandidates));
 
@@ -247,6 +250,7 @@ bool SelectionModule::process(uhh2::Event& event) {
   if(!PTMassCut_selection->passes(event)) return false;
   fill_histograms(event, "PTMassCut");
 
+  MCScaleVariation_module->process(event);
   for (auto& el : ScaleFactors_module) el.second->process(event);
   fill_histograms(event, "ScaleFactors");
 

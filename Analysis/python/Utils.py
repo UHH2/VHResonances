@@ -2,6 +2,7 @@ import time, sys, os, glob
 import functools, argparse
 from sklearn.externals import joblib
 
+import math
 import numpy as np
 import pandas as pd
 from array import array
@@ -82,3 +83,39 @@ def parse_arguments():
 def PrintFormattedLine(listArgs=[], space=10):
     for x in listArgs: print x, " "*(space-len(str(x)) if space-len(str(x))>0 else 2*space-len(str(x))),
     print "\t"
+
+
+
+def deltaPhi(p1, p2):
+    deltaphi = math.fabs(p1.phi() - p2.phi())
+    if deltaphi > math.pi:
+        deltaphi = 2* math.pi - deltaphi
+    return deltaphi
+
+
+
+
+def deltaR(p1, p2):
+    deltaeta = p1.eta() - p2.eta()
+    dphi = deltaPhi(p1, p2)
+    return math.sqrt(deltaeta * deltaeta + dphi * dphi)
+
+
+
+
+# inline double deltaPhi(const T & p1, const U & p2){
+#     double deltaphi = fabs(p1.phi() - p2.phi());
+#     if(deltaphi > M_PI) deltaphi = 2* M_PI - deltaphi;
+#     return deltaphi;
+# }
+#
+# /// distance in eta-phi space. works for any types which have 'eta' and 'phi' routines
+# // T and U have to have a 'phi()' and an 'eta()' method, e.g. Particle, LorentzVector, etc.
+# template<typename T, typename U>
+# inline double deltaR(const T & p1, const U & p2){
+#     double deltaeta = p1.eta() - p2.eta();
+#     double dphi = deltaPhi(p1, p2);
+#     return sqrt(deltaeta * deltaeta + dphi * dphi);
+# }
+#
+# }
