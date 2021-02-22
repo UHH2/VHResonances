@@ -26,15 +26,17 @@ GenMatchHists::GenMatchHists(Context & ctx, const string & dname): HistsBase(ctx
 
   is_mc = ctx.get("dataset_type") == "MC";
 
-  vector<string> ParticleNames = {"Z", "Higgs", "Wplus", "Wminus", "t", "tbar"};
+  vector<string> ParticleNames = {"Z", "Higgs", "Wplus", "Wminus", "t", "tbar", "ZPrime"};
   for (auto& name : ParticleNames) {
     book_ParticleHist(name, name, 20, 1500);
     book_FamilyTree(name);
   }
 
-  book_TH1F("binningValues", "binning values", 100, 0, 3000);
+  book_TH1F("MET", "missing E_{T}", 200, 0, 2000);
+  book_TH1F("METphi", "missing E_{T} #phi", 200,-5,5);
   book_TH1F("qScale", "qScale", 100, 0, 3000);
   book_TH1F("PU_pT_hat_max", "PU p_T hat max", 100, 0, 3000);
+  book_TH1F("binningValues", "binning values", 100, 0, 3000);
   book_TH1F("HT", "H_T", 100, 0, 3000);
 
 }
@@ -43,25 +45,28 @@ void GenMatchHists::fill(const Event & event){
   if(!is_mc) return;
   assert(event.genparticles);
 
+  fill_H1("MET", event.met->pt(), event.weight);
+  fill_H1("METphi", event.met->phi(), event.weight);
+  fill_H1("qScale", event.genInfo->qScale(), event.weight);
+  fill_H1("PU_pT_hat_max", event.genInfo->PU_pT_hat_max(), event.weight);
+
   if (event.genInfo->binningValues().size() != 0){
     fill_H1("binningValues", event.genInfo->binningValues()[0], event.weight);
   }
-  fill_H1("qScale", event.genInfo->qScale(), event.weight);
-  fill_H1("PU_pT_hat_max", event.genInfo->PU_pT_hat_max(), event.weight);
 
   double ht=0;
   constexpr const int invalid_daughter = (unsigned short)(-1);
 
   for(const auto & gp : *event.genparticles){
-      if(gp.daughter1() != invalid_daughter || gp.daughter2() != invalid_daughter) continue;
-      // if we are here, it means we have a final state particle.
-      // Add to HT in case it is a parton (quark -- including b but not top -- or gluon).
-      // Note that the exact HT definition depends on the madgraph configuration, but this
-      // should cover the most common case.
-      int id = abs(gp.pdgId());
-      if((id >= 1 && id <= 5) || (id == 21)){
-          ht += gp.pt();
-      }
+    if(gp.daughter1() != invalid_daughter || gp.daughter2() != invalid_daughter) continue;
+    // if we are here, it means we have a final state particle.
+    // Add to HT in case it is a parton (quark -- including b but not top -- or gluon).
+    // Note that the exact HT definition depends on the madgraph configuration, but this
+    // should cover the most common case.
+    int id = abs(gp.pdgId());
+    if((id >= 1 && id <= 5) || (id == 21)){
+      ht += gp.pt();
+    }
   }
 
   fill_H1("HT", ht, event.weight);
@@ -69,12 +74,13 @@ void GenMatchHists::fill(const Event & event){
   string name;
   for( auto & gp : *event.genparticles){
     switch (gp.pdgId()) {
-      case ParticleID::Z  : name = "Z"; break;
-      case ParticleID::H  : name = "Higgs"; break;
-      case ParticleID::W  : name = "Wplus"; break;
-      case -ParticleID::W : name = "Wminus"; break;
-      case ParticleID::t  : name = "t"; break;
-      case -ParticleID::t : name = "tbar"; break;
+      case ParticleID::Z      : name = "Z";      break;
+      case ParticleID::H      : name = "Higgs";  break;
+      case ParticleID::W      : name = "Wplus";  break;
+      case -ParticleID::W     : name = "Wminus"; break;
+      case ParticleID::t      : name = "t";      break;
+      case -ParticleID::t     : name = "tbar";   break;
+      case ParticleID::ZPrime : name = "ZPrime"; break;
 
       default: continue;
     }
@@ -97,6 +103,7 @@ void GenMatchHists::book_ParticleHist(const string & histSuffix, const string & 
   book_TH1F("pt_"     +histSuffix, "p_{T} "     +axisSuffix, 50,minPt,maxPt);
   book_TH1F("eta_"    +histSuffix, "#eta "      +axisSuffix, 100,-5,5);
   book_TH1F("phi_"    +histSuffix, "#phi "      +axisSuffix, 50,-M_PI,M_PI);
+  //book_TH1F("mass_"   +histSuffix, "M "         +axisSuffix, (histSuffix=="ZPrime")? 10000 : 100, 0, (histSuffix=="ZPrime")? 10000 : 200);
   book_TH1F("mass_"   +histSuffix, "M "         +axisSuffix, 100, 0, 200);
   book_TH1F("flavor_" +histSuffix, "flavor "    +axisSuffix, 101, -50.5, 50.5);
   book_TH2F("DeltaRmaxvspt_"+histSuffix, 1000, 0, 1000, 100, 0., 2.);

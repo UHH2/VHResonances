@@ -76,6 +76,9 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   book_TH2F("delta_R_llvsZprime"+massPlotName, ";"+massType+"^{Zprime} [GeV/c^{2}];#Delta#R(l,l)", 330, 0, 9900, 15,  0, 1.5);
   book_TH2F("PtZvsZprime"+massPlotName,        ";"+massType+"^{Zprime} [GeV/c^{2}];#Delta#R(l,l)", 330, 0, 9900, 50,200, 2200);
 
+  book_TH2F("etaphi_H",  ";#eta^{H};#phi^{H}", 50,-2.4, 2.4, 60,-3, 3);
+  book_TH2F("etaphi_ll", ";#eta^{lep};#phi^{lep}", 50,-2.4, 2.4, 60,-3, 3);
+
   for (std::string & disc : discriminators) {
     if (FindInString("tau", disc)) {
       book_TH1F("H_"+disc,"#"+disc+"^{H}",30, -0.01, 1.01);
@@ -258,7 +261,10 @@ void HiggsToWWHists::fill(const Event & event){
       delta_phi_H_Z = fabs(deltaPhi(cand.H(), cand.Z()));
       delta_R_H_Z = deltaR(cand.H(), cand.Z());
       delta_R_ll = deltaR(cand.leptons()[0], cand.leptons()[1]);
+      H2("etaphi_ll")->Fill(cand.leptons()[0].eta(), cand.leptons()[0].phi(), weight);
+      H2("etaphi_ll")->Fill(cand.leptons()[1].eta(), cand.leptons()[1].phi(), weight);
     }
+    H2("etaphi_H")->Fill(cand.H().eta(), cand.H().phi(), weight);
 
     fill_H1("delta_eta_H_Z", delta_eta_H_Z, weight);
     fill_H1("delta_phi_H_Z", delta_phi_H_Z, weight);
@@ -482,6 +488,7 @@ HiggsToWWHistsSlim::HiggsToWWHistsSlim(Context& ctx, const string& dname, const 
     massPlotName = "mass_transversal";
   }
   // book all histograms here
+  book_TH1F("sum_event_weights",            "counting experiment", 1, 0.5, 1.5);
   book_TH1F("Zprime_"+massPlotName+"_rebin1",  massType + "^{Zprime} [GeV/c^{2}]", 9900, 0, 9900);
   book_TH1F("Zprime_"+massPlotName+"_rebin10", massType + "^{Zprime} [GeV/c^{2}]", 990,  0, 9900);
   book_TH1F("Zprime_"+massPlotName+"_rebin30", massType + "^{Zprime} [GeV/c^{2}]", 330,  0, 9900);
@@ -493,6 +500,7 @@ HiggsToWWHistsSlim::HiggsToWWHistsSlim(Context& ctx, const string& dname, const 
 void HiggsToWWHistsSlim::fill(const Event & event){
 
   auto weight = event.weight;
+  fill_H1("sum_event_weights", 1., weight);
   if (! event.is_valid(h_ZprimeCandidates)) return;
 
   vector<ZprimeCandidate> ZprimeCandidates = event.get(h_ZprimeCandidates);
