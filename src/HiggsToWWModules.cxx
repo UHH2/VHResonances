@@ -121,8 +121,9 @@ void ZprimeCandidateReconstruction::setDiscriminators(Event& event, ZprimeCandid
   candidate.set_Zprime(ZplusJet);
   candidate.set_Z(diLep);
   candidate.set_H(jet);
-  if (lepton == "invisible") candidate.set_Zprime_MT(sqrt(2*diLep.pt() * jet.pt() * (1-cos(deltaPhi(diLep, jet.v4())))));
+  double ET_jet = jet.energy() * jet.pt()/TMath::Sqrt(jet.energy()*jet.energy()-jet.softdropmass()*jet.softdropmass());
   if (lepton != "invisible") candidate.set_jets_leptonic({lep1,lep2});
+  else candidate.set_Zprime_MT(sqrt(2*diLep.pt() * ET_jet * (1-cos(deltaPhi(diLep, jet.v4())))));
   candidate.set_discriminators("MuonID1", i);
   candidate.set_discriminators("MuonID2", j);
   candidate.set_discriminators("chi2", chi2);
@@ -484,8 +485,8 @@ Decay JetTaggerSF::GetJetFlavor(uhh2::Event& event, const Jet& jet) {
     }
   }
 
-  if (n_b == 2) return Decay::bb;
-  if (n_c == 2) return Decay::cc;
+  if (n_b >= 1) return Decay::bb;
+  else if (n_c >= 1) return Decay::cc;
   return Decay::light;
 };
 
@@ -587,7 +588,7 @@ bool ScaleFactorsManager::process(uhh2::Event& event){
   if(event.get(h_ZprimeCandidates_).size() < 1 || event.isRealData) return true;
 
   auto cand = event.get(h_ZprimeCandidates_).at(0);
-  if (cand.leptons().at(0).pt() < cand.leptons().at(1).pt()) throw std::runtime_error("In ScaleFactorsManager.cxx: leptons not ordered in pt");
+  if (!invisiblechannel && cand.leptons().at(0).pt() < cand.leptons().at(1).pt()) throw std::runtime_error("In ScaleFactorsManager.cxx: leptons not ordered in pt");
   if (muonchannel) {
     SFs_muo["Muon_Trigger"]->process_onemuon(event,0);
     for(const auto & muid: {0, 1}){

@@ -68,7 +68,7 @@ protected:
 
   // Define variables
   std::string NameModule = "SelectionModule";
-  std::vector<std::string> histogram_tags = {"Preselection", "MuonScale", "ZprimeReco", "ZprimeSelection", "PTMassCut", "ScaleFactors"};
+  std::vector<std::string> histogram_tags = {"Preselection", "QCDRejection", "MuonScale", "ZprimeReco", "ZprimeSelection", "PTMassCut", "ScaleFactors"};
   std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "weight_pu", "weight_pu_up", "weight_pu_down", "HDecay", "ZDecay", "ZprimeDecay", "weight_btag","weight_btag_up", "weight_btag_down"};
 
   std::unordered_map<std::string, std::string> MS;
@@ -221,18 +221,16 @@ bool SelectionModule::process(uhh2::Event& event) {
 
   fill_histograms(event, "Preselection");
 
-  // QCD rejection, cut at Delta Phi between all jets and MET at min_Dphi_AK4jet_MET (0.5).
   if (MB["invisiblechannel"]){
+    // QCD rejection, cut at Delta Phi between all jets and MET at min_Dphi_AK4jet_MET (0.5).
     if (!DeltaPhiJetMETCut_Jets_selection->passes(event)) return false;
+    // Cut delta Phi between MET and all TopJets at min_Dphi_AK8jet_MET (2.0)
+    if (!DeltaPhiJetMETCut_TopJets_selection->passes(event)) return false;
   }
+  fill_histograms(event, "QCDRejection");
 
   MuonScaleVariations_module->process(event);
   fill_histograms(event, "MuonScale");
-
-  // Cut delta Phi between MET and all TopJets at min_Dphi_AK8jet_MET (2.0)
-  if (MB["invisiblechannel"]){
-    if (!DeltaPhiJetMETCut_TopJets_selection->passes(event)) return false;
-  }
 
   ZprimeCandidateReconstruction_module->process(event);
   fill_histograms(event, "ZprimeReco");
