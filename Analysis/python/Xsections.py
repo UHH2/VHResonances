@@ -23,10 +23,10 @@ class MCSampleValuesHelper():
     Example:
         from Xsections import *
         helper = MCSampleValuesHelper()
-        helper.get_lumi("TTTo2L2Nu","13TeV","2016")
-        helper.get_xs("TTTo2L2Nu","13TeV","2016")
-        helper.get_nevt("TTTo2L2Nu","13TeV","2016")
-        helper.get_br("TTTo2L2Nu","13TeV","2016")
+        helper.get_lumi("TTbarTo2L2Nu","13TeV","2016")
+        helper.get_xs("TTbarTo2L2Nu","13TeV","2016")
+        helper.get_nevt("TTbarTo2L2Nu","13TeV","2016")
+        helper.get_br("TTbarTo2L2Nu","13TeV","2016")
     """
 
     __years = ["2016","2017","2018"]
@@ -59,24 +59,24 @@ class MCSampleValuesHelper():
 
 
     __values_dict = {
-        "TT" : {
+        "TTbar" : {
             "CrossSection" :   XSValues(XSec_13TeV=831.8, XSec_2016=831.8, XSecSource_13TeV="PDG XS - http://pdg.lbl.gov/2019/reviews/rpp2018-rev-top-quark.pdf"),
             "BranchingRatio" : BRValues(BRat_13TeV=1., BRatSource_13TeV="PDG BR (t=tbar) - http://pdg.lbl.gov/2019/reviews/rpp2018-rev-top-quark.pdf"),
             "NEvents" :   NEventsValues(NEVT_2016=76738314),
         },
-        "TTTo2L2Nu" : {
+        "TTbarTo2L2Nu" : {
             "CrossSection" :   XSValues(XSec_13TeV=831.8, XSec_2017=831.8, XSec_2018=831.8, XSecSource_13TeV="PDG XS - http://pdg.lbl.gov/2019/reviews/rpp2018-rev-top-quark.pdf"),
             "BranchingRatio" : BRValues(BRat_13TeV=0.105, BRat_2017=0.105, BRat_2018=0.105, BRatSource_13TeV="PDG BR (t=tbar) - http://pdg.lbl.gov/2019/reviews/rpp2018-rev-top-quark.pdf"),
             "NEvents" :   NEventsValues(NEVT_2017=648729904, NEVT_2018=4635769526),
         },
 
-        "TTToSemiLeptonic" : {
+        "TTbarToSemiLeptonic" : {
             "CrossSection" :   XSValues(XSec_13TeV=831.8, XSec_2017=831.8, XSec_2018=831.8, XSecSource_13TeV="PDG XS - http://pdg.lbl.gov/2019/reviews/rpp2018-rev-top-quark.pdf"),
             "BranchingRatio" : BRValues(BRat_13TeV=0.438, BRat_2017=0.438, BRat_2018=0.438, BRatSource_13TeV="PDG BR (t=tbar) - http://pdg.lbl.gov/2019/reviews/rpp2018-rev-top-quark.pdf"),
             "NEvents" :   NEventsValues(NEVT_2017=12852869550, NEVT_2018=30513654675),
         },
 
-        "TTToHadronic" : {
+        "TTbarToHadronic" : {
             "CrossSection" :   XSValues(XSec_13TeV=831.8, XSec_2017=831.8, XSec_2018=831.8, XSecSource_13TeV="PDG XS - http://pdg.lbl.gov/2019/reviews/rpp2018-rev-top-quark.pdf"),
             "BranchingRatio" : BRValues(BRat_13TeV=0.457, BRat_2017=0.457, BRat_2018=0.457, BRatSource_13TeV="PDG BR (t=tbar) - http://pdg.lbl.gov/2019/reviews/rpp2018-rev-top-quark.pdf"),
             "NEvents" :   NEventsValues(NEVT_2017=41618896, NEVT_2018=41941925823),
@@ -138,6 +138,76 @@ class MCSampleValuesHelper():
             "kFactor" : kFactorValues( kFac_2016=1.2245,kFac_2017=1.1374,kFac_2018=1.1421, kFacSource_2016="XSDB NNLO/LO=6077.22/4963", kFacSource_2017="XSDB NNLO/LO=6077.22/5343", kFacSource_2018="XSDB NNLO/LO=6077.22/5321",),
             "Correction" : CorrValues( Corr_2017=1.015, Corr_2018=1.015,CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M", CorrSource_2018="Same as 2017"),
             "NEvents" : NEventsValues( NEVT_2016=399492, NEVT_2017=401334, NEVT_2018=415517),
+        },
+        "WJetsToLNu_HT-100to200" : {
+            "CrossSection" : XSValues( XSec_13TeV=1395,XSec_2016=1345, XSec_2017=1395, XSec_2018=1395, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.21,kFac_2017=1.21,kFac_2018=1.21,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=38593839, NEVT_2017=32948954, NEVT_2018=29611903),
+        },
+        "WJetsToLNu_HT-200to400" : {
+            "CrossSection" : XSValues( XSec_13TeV=407.9,XSec_2016=359.7, XSec_2017=407.9, XSec_2018=407.9, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.21,kFac_2017=1.21,kFac_2018=1.21,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=19069732, NEVT_2017=18463508, NEVT_2018=25468933),
+        },
+        "WJetsToLNu_HT-400to600" : {
+            "CrossSection" : XSValues( XSec_13TeV=57.48,XSec_2016=48.9, XSec_2017=57.48, XSec_2018=57.48, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.21,kFac_2017=1.21,kFac_2018=1.21,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=7759701, NEVT_2017=14313274, NEVT_2018=5932701),
+        },
+        "WJetsToLNu_HT-600to800" : {
+            "CrossSection" : XSValues( XSec_13TeV=12.87,XSec_2016=12.05, XSec_2017=12.87, XSec_2018=12.87, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.21,kFac_2017=1.21,kFac_2018=1.21,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=18687480, NEVT_2017=21709087, NEVT_2018=19771294),
+        },
+        "WJetsToLNu_HT-800to1200" : {
+            "CrossSection" : XSValues( XSec_13TeV=5.366,XSec_2016=5.501, XSec_2017=5.366, XSec_2018=5.366, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.21,kFac_2017=1.21,kFac_2018=1.21,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=7830536, NEVT_2017=11261008, NEVT_2018=8192251),
+        },
+        "WJetsToLNu_HT-1200to2500" : {
+            "CrossSection" : XSValues( XSec_13TeV=1.329,XSec_2016=1.329, XSec_2017=1.329, XSec_2018=1.329, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.21,kFac_2017=1.21,kFac_2018=1.21,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=6872441, NEVT_2017=39070488, NEVT_2018=7542264),
+        },
+        "WJetsToLNu_HT-2500toInf" : {
+            "CrossSection" : XSValues( XSec_13TeV=0.03216,XSec_2016=0.03216, XSec_2017=0.03216, XSec_2018=0.03216, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.21,kFac_2017=1.21,kFac_2018=1.21,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=2637821, NEVT_2017=20467960, NEVT_2018=3119311),
+        },
+        "ZJetsToNuNu_HT-100to200" : {
+            "CrossSection" : XSValues( XSec_13TeV=302.8,XSec_2016=280.35, XSec_2017=302.8, XSec_2018=302.8, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.23,kFac_2017=1.23,kFac_2018=1.23,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=19026540, NEVT_2017=22737266, NEVT_2018=23702894),
+        },
+        "ZJetsToNuNu_HT-200to400" : {
+            "CrossSection" : XSValues( XSec_13TeV=92.59,XSec_2016=77.67, XSec_2017=92.59, XSec_2018=92.59, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.23,kFac_2017=1.23,kFac_2018=1.23,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=5136083, NEVT_2017=21675916, NEVT_2018=23276346),
+        },
+        "ZJetsToNuNu_HT-400to600" : {
+            "CrossSection" : XSValues( XSec_13TeV=13.18,XSec_2016=10.73, XSec_2017=13.18, XSec_2018=13.18, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.23,kFac_2017=1.23,kFac_2018=1.23,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=8771480, NEVT_2017=9134120, NEVT_2018=10928927),
+        },
+        "ZJetsToNuNu_HT-600to800" : {
+            "CrossSection" : XSValues( XSec_13TeV=3.257,XSec_2016=2.559, XSec_2017=3.257, XSec_2018=3.257, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.23,kFac_2017=1.23,kFac_2018=1.23,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=5766322, NEVT_2017=5697594, NEVT_2018=5748975),
+        },
+        "ZJetsToNuNu_HT-800to1200" : {
+            "CrossSection" : XSValues( XSec_13TeV=1.49,XSec_2016=1.1796, XSec_2017=1.49, XSec_2018=1.49, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.23,kFac_2017=1.23,kFac_2018=1.23,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=2170137, NEVT_2017=2058077, NEVT_2018=2066798),
+        },
+        "ZJetsToNuNu_HT-1200to2500" : {
+            "CrossSection" : XSValues( XSec_13TeV=0.3419,XSec_2016=0.28833, XSec_2017=0.3419, XSec_2018=0.3419, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.23,kFac_2017=1.23,kFac_2018=1.23,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=143957, NEVT_2017=334332, NEVT_2018=343198),
+        },
+        "ZJetsToNuNu_HT-2500toInf" : {
+            "CrossSection" : XSValues( XSec_13TeV=0.006945,XSec_2016=0.006945, XSec_2017=0.006945, XSec_2018=0.006945, XSecSource_13TeV="XSDB (LO)", XSecSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns",XSecSource_2017="XSDB (LO)",XSecSource_2018="GenXSecAnalyzer"),
+            "kFactor" : kFactorValues( kFac_2016=1.23,kFac_2017=1.23,kFac_2018=1.23,kFacSource_2016="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2017="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns", kFacSource_2018="https://twiki.cern.ch/twiki/bin/view/CMS/SummaryTable1G25ns"),
+            "NEvents" : NEventsValues( NEVT_2016=405030, NEVT_2017=6446, NEVT_2018=350181),
         },
         "ZprimeToZHToZlepHinc-600": {
             "CrossSection" : XSValues( XSec_13TeV=1, XSecSource_13TeV="XSDB (LO)"),
@@ -360,130 +430,6 @@ class MCSampleValuesHelper():
             "NEvents" : NEventsValues( NEVT_2016=-1991645, NEVT_2017=5825566, NEVT_2018=-1),
         },
         #not yet verified
-        "WJetsToLNu_HT-70To100" : {
-            "CrossSection" : XSValues(
-                XSec_2016=1353, XSecSource_2016="XSDB (LO)",
-                XSec_2017=1292, XSecSource_2017="XSDB (LO)",
-                XSec_2018=1292, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.224, kFacSource_2016="XSDB NNLO/LO=61526.7/50260",
-                kFac_2017=1.162, kFacSource_2017="XSDB NNLO/LO=61526.7/52940",
-                kFac_2018=1.164, kFacSource_2018="XSDB NNLO/LO=61526.7/52850",
-            ),
-        },
-        "WJetsToLNu_HT-100To200" : {
-            "CrossSection" : XSValues(
-                XSec_2016=1346, XSecSource_2016="XSDB (LO)",
-                XSec_2017=1395, XSecSource_2017="XSDB (LO)",
-                XSec_2018=1393, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.224, kFacSource_2016="XSDB NNLO/LO=61526.7/50260",
-                kFac_2017=1.162, kFacSource_2017="XSDB NNLO/LO=61526.7/52940",
-                kFac_2018=1.164, kFacSource_2018="XSDB NNLO/LO=61526.7/52850",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=0.993, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=0.993, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "WJetsToLNu_HT-200To400" : {
-            "CrossSection" : XSValues(
-                XSec_2016=360.1, XSecSource_2016="XSDB (LO)",
-                XSec_2017=407.9, XSecSource_2017="XSDB (LO)",
-                XSec_2018=409.9, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.224, kFacSource_2016="XSDB NNLO/LO=61526.7/50260",
-                kFac_2017=1.162, kFacSource_2017="XSDB NNLO/LO=61526.7/52940",
-                kFac_2018=1.164, kFacSource_2018="XSDB NNLO/LO=61526.7/52850",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=1.002, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=1.002, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "WJetsToLNu_HT-400To600" : {
-            "CrossSection" : XSValues(
-                XSec_2016=48.8, XSecSource_2016="XSDB (LO)",
-                XSec_2017=57.48, XSecSource_2017="XSDB (LO)",
-                XSec_2018=57.80, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.224, kFacSource_2016="XSDB NNLO/LO=61526.7/50260",
-                kFac_2017=1.162, kFacSource_2017="XSDB NNLO/LO=61526.7/52940",
-                kFac_2018=1.164, kFacSource_2018="XSDB NNLO/LO=61526.7/52850",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=1.009, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=1.009, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "WJetsToLNu_HT-600To800" : {
-            "CrossSection" : XSValues(
-                XSec_2016=12.07, XSecSource_2016="XSDB (LO)",
-                XSec_2017=12.87, XSecSource_2017="XSDB (LO)",
-                XSec_2018=12.94, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.224, kFacSource_2016="XSDB NNLO/LO=61526.7/50260",
-                kFac_2017=1.162, kFacSource_2017="XSDB NNLO/LO=61526.7/52940",
-                kFac_2018=1.164, kFacSource_2018="XSDB NNLO/LO=61526.7/52850",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=1.120, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=1.120, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "WJetsToLNu_HT-800To1200" : {
-            "CrossSection" : XSValues(
-                XSec_2016=5.497, XSecSource_2016="XSDB (LO)",
-                XSec_2017=5.366, XSecSource_2017="XSDB (LO)",
-                XSec_2018=5.451, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.224, kFacSource_2016="XSDB NNLO/LO=61526.7/50260",
-                kFac_2017=1.162, kFacSource_2017="XSDB NNLO/LO=61526.7/52940",
-                kFac_2018=1.164, kFacSource_2018="XSDB NNLO/LO=61526.7/52850",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=1.202, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=1.202, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "WJetsToLNu_HT-1200To2500" : {
-            "CrossSection" : XSValues(
-                XSec_2016=1.329, XSecSource_2016="XSDB (LO)",
-                XSec_2017=1.074, XSecSource_2017="XSDB (LO)",
-                XSec_2018=1.085, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.224, kFacSource_2016="XSDB NNLO/LO=61526.7/50260",
-                kFac_2017=1.162, kFacSource_2017="XSDB NNLO/LO=61526.7/52940",
-                kFac_2018=1.164, kFacSource_2018="XSDB NNLO/LO=61526.7/52850",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=1.332, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=1.332, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "WJetsToLNu_HT-2500ToInf" : {
-            "CrossSection" : XSValues(
-                XSec_2016=0.03209, XSecSource_2016="XSDB (LO)",
-                XSec_2017=0.008001, XSecSource_2017="XSDB (LO)",
-                XSec_2018=0.008060, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.224, kFacSource_2016="XSDB NNLO/LO=61526.7/50260",
-                kFac_2017=1.162, kFacSource_2017="XSDB NNLO/LO=61526.7/52940",
-                kFac_2018=1.164, kFacSource_2018="XSDB NNLO/LO=61526.7/52850",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=4.200, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=4.200, CorrSource_2018="Same as 2017",
-            ),
-        },
         "WJetsToLNu" : {
             "CrossSection" : XSValues(
                 XSec_13TeV=61526.7, XSecSource_13TeV="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#W_jets NNLO (60430.0 @ NLO)",
@@ -510,7 +456,7 @@ class MCSampleValuesHelper():
                 XSec_2018=34.74, XSecSource_2018="GenXSecAnalyzer",
             ),
         },
-        "WJetsToQQ_HT-600ToInf" : {
+        "WJetsToQQ_HT-600toInf" : {
             "CrossSection" : XSValues(
                 XSec_2016=99.65, XSecSource_2016="XSDB (LO)"
             ),
@@ -519,147 +465,6 @@ class MCSampleValuesHelper():
         "DYJetsToLL_M-50" : {
             "CrossSection" : XSValues( XSec_13TeV=6077.22, XSecSource_13TeV="XSDB (NNLO)",),
         },
-
-
-        "ZJetsToNuNu_HT-100To200" : {
-            "CrossSection" : XSValues(
-                XSec_2016=280.35, XSecSource_2016="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#DY_Z",
-                XSec_2017=302.8, XSecSource_2017="XSDB (LO)",
-                XSec_2018=304, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.2245, kFacSource_2016="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/4963",
-                kFac_2017=1.1374, kFacSource_2017="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5343",
-                kFac_2018=1.1421, kFacSource_2018="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5321",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=0.994, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=0.994, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "ZJetsToNuNu_HT-200To400" : {
-            "NEvents" : NEventsValues( NEVT_2016=-1, NEVT_2017=21618510, NEVT_2018=-1),
-            "CrossSection" : XSValues(
-                XSec_2016=77.67, XSecSource_2016="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#DY_Z",
-                XSec_2017=92.59, XSecSource_2017="XSDB (LO)",
-                XSec_2018=91.68, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.2245, kFacSource_2016="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/4963",
-                kFac_2017=1.1374, kFacSource_2017="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5343",
-                kFac_2018=1.1421, kFacSource_2018="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5321",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=0.981, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=0.981, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "ZJetsToNuNu_HT-400To600" : {
-            "NEvents" : NEventsValues( NEVT_2016=-1, NEVT_2017=9094890, NEVT_2018=-1),
-            "CrossSection" : XSValues(
-                XSec_2016=10.73, XSecSource_2016="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#DY_Z",
-                XSec_2017=13.18, XSecSource_2017="XSDB (LO)",
-                XSec_2018=13.11, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.2245, kFacSource_2016="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/4963",
-                kFac_2017=1.1374, kFacSource_2017="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5343",
-                kFac_2018=1.1421, kFacSource_2018="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5321",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=0.977, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=0.977, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "ZJetsToNuNu_HT-600To800" : {
-            "NEvents" : NEventsValues( NEVT_2016=-1, NEVT_2017=5664642, NEVT_2018=-1),
-            "CrossSection" : XSValues(
-                XSec_2016=2.559, XSecSource_2016="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#DY_Z",
-                XSec_2017=3.257, XSecSource_2017="XSDB (LO)",
-                XSec_2018=3.245, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.2245, kFacSource_2016="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/4963",
-                kFac_2017=1.1374, kFacSource_2017="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5343",
-                kFac_2018=1.1421, kFacSource_2018="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5321",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=0.975, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=0.975, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "ZJetsToNuNu_HT-800To1200" : {
-            "NEvents" : NEventsValues( NEVT_2016=-1, NEVT_2017=2041779, NEVT_2018=-1),
-            "CrossSection" : XSValues(
-                XSec_2016=1.1796, XSecSource_2016="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#DY_Z",
-                XSec_2017=1.49,   XSecSource_2017="XSDB (LO)",
-                XSec_2018=1.497,  XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.2245, kFacSource_2016="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/4963",
-                kFac_2017=1.1374, kFacSource_2017="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5343",
-                kFac_2018=1.1421, kFacSource_2018="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5321",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=0.916, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=0.916, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "ZJetsToNuNu_HT-1200To2500" : {
-            "NEvents" : NEventsValues( NEVT_2016=-1, NEVT_2017=334332, NEVT_2018=-1),
-            "CrossSection" : XSValues(
-                XSec_2016=0.28833, XSecSource_2016="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#DY_Z",
-                XSec_2017=0.3419,  XSecSource_2017="XSDB (LO)",
-                XSec_2018=0.3425,  XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.2245, kFacSource_2016="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/4963",
-                kFac_2017=1.1374, kFacSource_2017="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5343",
-                kFac_2018=1.1421, kFacSource_2018="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5321",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=0.880, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=0.880, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "ZJetsToNuNu_HT-2500ToInf" : {
-            "NEvents" : NEventsValues( NEVT_2016=-1, NEVT_2017=6446, NEVT_2018=-1),
-            "CrossSection" : XSValues(
-                XSec_2016=0.006945, XSecSource_2016="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#DY_Z",
-                XSec_2017=0.005146, XSecSource_2017="XSDB (LO)",
-                XSec_2018=0.005263, XSecSource_2018="GenXSecAnalyzer",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.2245, kFacSource_2016="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/4963",
-                kFac_2017=1.1374, kFacSource_2017="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5343",
-                kFac_2018=1.1421, kFacSource_2018="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5321",
-            ),
-            "Correction" : CorrValues(
-                Corr_2017=1.276, CorrSource_2017="https://twiki.cern.ch/twiki/bin/viewauth/CMS/MCKnownIssues#WJetsToLNu_HT_and_DYJets_HT_LO_M",
-                Corr_2018=1.276, CorrSource_2018="Same as 2017",
-            ),
-        },
-        "ZJetsToNuNu_Zpt-100to200" : {
-            "CrossSection" : XSValues(
-                XSec_2016=35.99, XSecSource_2016="XSDB (LO)",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.2245, kFacSource_2016="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/4963",
-                kFac_2017=1.1374, kFacSource_2017="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5343",
-                kFac_2018=1.1421, kFacSource_2018="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5321",
-            ),
-        },
-        "ZJetsToNuNu_Zpt-200toInf" : {
-            "CrossSection" : XSValues(
-                XSec_2016=4.201, XSecSource_2016="XSDB (LO)",
-            ),
-            "kFactor" : kFactorValues(
-                kFac_2016=1.2245, kFacSource_2016="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/4963",
-                kFac_2017=1.1374, kFacSource_2017="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5343",
-                kFac_2018=1.1421, kFacSource_2018="XSDB DYJetsToLL_M-50 NNLO/LO=6077.22/5321",
-            ),
-        },
-
         "WWTo2L2Nu" : {
             "CrossSection" : XSValues(
                 XSec_13TeV=12.178, XSecSource_13TeV="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#Diboson, WW>2l2v NNLO",
