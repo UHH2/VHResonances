@@ -41,18 +41,22 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
     rangeLo = 0.7742*mass-113;
     rangeHi = 1.0857*mass+46;
 
-    if (mass==1000) { rangeLo = 700;  rangeHi = 1300;}
-    if (mass==1200) { rangeLo = 700;  rangeHi = 1600;}
-    if (mass==1400) { rangeLo = 800; rangeHi = 1800;}
-    if (mass==1600) { rangeLo = 900; rangeHi = 1900;}
-    if (mass==1800) { rangeLo = 1000; rangeHi = 2000;}
-    if (mass==2000) { rangeLo = 1000; rangeHi = 2200;}
-    if (mass==2500) { rangeLo = 1000; rangeHi = 2700;}
-    if (mass==3000) { rangeLo = 1500; rangeHi = 3500;}
-    if (mass==3500) { rangeLo = 1500; rangeHi = 3900;}
-    if (mass==4000) { rangeLo = 2000; rangeHi = 4400;}
-    if (mass==4500) { rangeLo = 2000; rangeHi = 4900;}
-    if (mass==5000) { rangeLo = 2000; rangeHi = 5400;}
+    if (mass==1000) { rangeLo = 1000; rangeHi = 1300;}
+    if (mass==1200) { rangeLo = 1000; rangeHi = 1700;}
+    if (mass==1400) { rangeLo = 1100; rangeHi = 1900;} // 1000- 1500
+    if (mass==1600) { rangeLo = 1000; rangeHi = 2100;}
+    if (mass==1800) { rangeLo = 1000; rangeHi = 2500;}
+    // if (mass==1800) { rangeLo = myMin; rangeHi = myMax;}
+    if (mass==2000) { rangeLo = 1200; rangeHi = 2600;} // 1300-2300 1500-2800
+    // if (mass==2000) { rangeLo = myMin; rangeHi = myMax;}
+    if (mass==2500) { rangeLo = 1000; rangeHi = 3400;}
+    if (mass==3000) { rangeLo = 2100; rangeHi = 3300;} // 21-22-2300
+    if (mass==3500) { rangeLo = 1100; rangeHi = 3900;} // 11-1200  38-3900
+    if (mass==4000) { rangeLo = 1800; rangeHi = 4800;}
+    if (mass==4500) { rangeLo = 1300; rangeHi = 4900;}
+    // if (mass==4500) { rangeLo = myMin; rangeHi = myMax;}
+    if (mass==5000) { rangeLo = 1400; rangeHi = 5900;} //6000
+    // if (mass==5000) { rangeLo = myMin; rangeHi = myMax;}
     if (mass==5500) { rangeLo = 2500; rangeHi = 6000;}
     if (mass==6000) { rangeLo = 2800; rangeHi = 7000;}
     if (mass==7000) { rangeLo = 3000; rangeHi = 7600;}
@@ -65,48 +69,48 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
     plotLo = mass*(1-20./28.);
     plotHi = mass*(1+20./28.);
 
-    ymax = 1.8;
+    if (FindInString("ZH",histFolder)) ymax = 5;
+    else ymax = 8;
 
   } else {
+    bool isEle = FindInString("ele",channel);
     rangeLo = 0.7742*mass-113;
     rangeHi = 1.0857*mass+46;
 
     if (mass==1000) { rangeLo = 700;  rangeHi = 1400;}
     if (mass==1200) { rangeLo = 700;  rangeHi = 1600;}
 
-    if (mass==1400) { rangeLo = 1000; rangeHi = 1800;}
-    if (mass==1600) { rangeLo = 1000; rangeHi = 1900;}
+    if (mass==1400) { rangeLo = 1000; rangeHi = isEle? 1600: 1800;} //OK-ish
+    if (mass==1600) { rangeLo = 1000; rangeHi = 1900;}//OK-ish TODO
     if (mass==1800) { rangeLo = 1100; rangeHi = 2000;}
-    if (mass==2000) { rangeLo = 1400; rangeHi = 2200;}
-    if (mass==2500) { rangeLo = 1800; rangeHi = 2700;}
-    if (mass==3000) { rangeLo = 2100; rangeHi = 3300;}
+    if (mass==2000) { rangeLo = 1200; rangeHi = 2200;}//OK //14-15-16 2200
+    // if (mass==2000) { rangeLo = myMin; rangeHi = myMax;}
+    if (mass==2500) { rangeLo = 1800; rangeHi = 2700;}//OK
+    if (mass==3000) { rangeLo = 2100; rangeHi = 3300;}//OK-ish
     if (mass==3500) { rangeLo = 2400; rangeHi = 3900;}
-    if (mass==4000) { rangeLo = 2800; rangeHi = 4400;}
-    if (mass==4500) { rangeLo = 3400; rangeHi = 4900;}
-    if (mass==5000) { rangeLo = 3800; rangeHi = 5400;}
+    // if (mass==4000) { rangeLo = isEle? 2900: 2800; rangeHi = isEle? 4400: 4400;}//2900-4400
+    if (mass==4000) { rangeLo = 3000; rangeHi = isEle?4400:4500;}//36-45 31-43 ele 30-42 38-43
+    if (mass==4500) { rangeLo = 3400; rangeHi = 4900;}//OK
+    if (mass==5000) { rangeLo = isEle? 4300: 3300; rangeHi = isEle? 5300: 5400;}//OK
+    // if (mass==4000) { rangeLo = myMin; rangeHi = myMax;}
     if (mass==5500) { rangeLo = 4400; rangeHi = 6000;}
     if (mass==6000) { rangeLo = 4600; rangeHi = 6600;}
     if (mass==7000) { rangeLo = 5700; rangeHi = 7600;}
     if (mass==8000) { rangeLo = 6800; rangeHi = 8800;}
 
-    // if (mass==1200) rangeLo = 790;
-    // if (mass==1200) rangeHi = 1390;
-
-
     plotLo = mass*(1-10./28.);
     plotHi = mass*(1+10./28.);
-    // ymax = (50-mass*1./100)*1.5;
-    // if (mass<1200) ymax = (-20+mass*6./100)*1.4;
-    // if (mass>3500) ymax = (30-mass*3./1000)*1.5;
 
-    ymax = 2.8;
+    ymax = 1.0;
+    if (FindInString("100",HistName)) ymax = 2.5;
+
+    if (FindInString("ZH",histFolder)) ymax = 2.5;
+    else ymax = 5;
 
   }
 
   ymax *= lumi_map.at(year).at("lumi_fb")/lumi_map.at("RunII").at("lumi_fb");
   if (year=="2017") ymax *= 1.1;
-
-  // ymax *= xsec_ref_/0.01;
 
   std::string hname = GetSgName(mass);
   rangeLo = GetRange(histo_map[hname].get(), rangeLo);
@@ -122,15 +126,16 @@ std::string GetSgName(int mass, std::string syst) {
 }
 
 
-CreateRooWorkspace::CreateRooWorkspace(std::string year_, std::string collection_, std::string channel_, std::string histFolder_) : year(year_), collection(collection_), channel(channel_), histFolder(histFolder_) {
+// CreateRooWorkspace::CreateRooWorkspace(std::string year_, std::string collection_, std::string channel_, std::string histFolder_) : year(year_), collection(collection_), channel(channel_), histFolder(histFolder_) {
+CreateRooWorkspace::CreateRooWorkspace(std::string year_, std::string collection_, std::string channel_, std::string histFolder_, std::string min_, std::string max_): year(year_), collection(collection_), channel(channel_), histFolder(histFolder_) {
   /*
-  #  ######   #######  ##    ##  ######  ######## ########  ##     ##  ######  ########  #######  ########
-  # ##    ## ##     ## ###   ## ##    ##    ##    ##     ## ##     ## ##    ##    ##    ##     ## ##     ##
-  # ##       ##     ## ####  ## ##          ##    ##     ## ##     ## ##          ##    ##     ## ##     ##
-  # ##       ##     ## ## ## ##  ######     ##    ########  ##     ## ##          ##    ##     ## ########
-  # ##       ##     ## ##  ####       ##    ##    ##   ##   ##     ## ##          ##    ##     ## ##   ##
-  # ##    ## ##     ## ##   ### ##    ##    ##    ##    ##  ##     ## ##    ##    ##    ##     ## ##    ##
-  #  ######   #######  ##    ##  ######     ##    ##     ##  #######   ######     ##     #######  ##     ##
+  &  &&&&&&   &&&&&&&  &&    &&  &&&&&&  &&&&&&&& &&&&&&&&  &&     &&  &&&&&&  &&&&&&&&  &&&&&&&  &&&&&&&&
+  & &&    && &&     && &&&   && &&    &&    &&    &&     && &&     && &&    &&    &&    &&     && &&     &&
+  & &&       &&     && &&&&  && &&          &&    &&     && &&     && &&          &&    &&     && &&     &&
+  & &&       &&     && && && &&  &&&&&&     &&    &&&&&&&&  &&     && &&          &&    &&     && &&&&&&&&
+  & &&       &&     && &&  &&&&       &&    &&    &&   &&   &&     && &&          &&    &&     && &&   &&
+  & &&    && &&     && &&   &&& &&    &&    &&    &&    &&  &&     && &&    &&    &&    &&     && &&    &&
+  &  &&&&&&   &&&&&&&  &&    &&  &&&&&&     &&    &&     &&  &&&&&&&   &&&&&&     &&     &&&&&&&  &&     &&
   */
 
 
@@ -141,8 +146,12 @@ CreateRooWorkspace::CreateRooWorkspace(std::string year_, std::string collection
   std::cout << "channel"    << std::string(15-7, ' ') << channel    << '\n';
   std::cout << "collection" << std::string(15-10,' ') << collection << '\n';
   std::cout << "histFolder" << std::string(15-10,' ') << histFolder << '\n';
+  std::cout << "myMin" << std::string(15-10,' ') << min_ << '\n';
+  std::cout << "myMax" << std::string(15-10,' ') << max_ << '\n';
   std::cout << "****************************************\n" << std::endl;
 
+  myMin = (min_=="")? 0 : stoi(min_);
+  myMax = (max_=="")? 0 : stoi(max_);
   SetEnv();
 
 };
@@ -168,83 +177,100 @@ void CreateRooWorkspace::SetEnv() {
   Path_STORAGE    = Path_NFS+"WorkingArea/File/Analysis/";
   PrefixrootFile  = "uhh2.AnalysisModuleRunner.";
 
+  if (myMin>0) studies = studies+"_M_"+std::to_string(myMin);
+  if (myMax>0) studies = studies+"_M_"+std::to_string(myMax);
+
   workingDir      = Path_ANALYSIS+"Analysis/"+(isHbb? "Limits/Hbb_": "Limits/")+studies+"/"+year+"/"+collection+"/"+channel+"/"+histFolder+"/";
   gSystem->Exec(("mkdir -p "+workingDir+"/datacards").c_str());
 
+  //Set up list of syst, including variations, for the correct channel
+  std::set_union(SystematicsScale.begin(), SystematicsScale.end(), SystematicsShape.begin(), SystematicsShape.end(), std::back_inserter(SystematicsAll));
   if (FindInVector(SystNames, "all")) {
     SystNames.erase(SystNames.begin()+FindInVector(SystNames,"all"));
-    for (std::string syst: {"JEC", "JER", "MuonScale", "pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco"}) {
-      if (!FindInString("muon",channel) && FindInString("isolation",syst)) continue;
+    for (std::string syst: SystematicsAll) {
       if (!FindInString("muon",channel) && FindInString("tracking",syst)) continue;
+      if (!FindInString("muon",channel) && FindInString("isolation",syst)) continue;
       if (!FindInString("muon",channel) && FindInString("MuonScale",syst)) continue;
-      for (std::string var: {"Up","Down"}) { // Be careful if you change it. It's needed as input to combine!!
-      SystNames.push_back(syst+var);
+      if (FindInString("invisible",channel) && FindInString("id",syst)) continue;
+      if (FindInString("invisible",channel) && FindInString("trigger",syst)) continue;
+      if (FindInString("invisible",channel) && FindInString("reco",syst)) continue;
+      // Be careful if you change it. It's needed as input to combine!!
+      for (std::string var: {"Up","Down"}) {
+        SystNames.push_back(syst+var);
+      }
     }
   }
-}
-if (debug) for (auto & syst : SystNames) std::cout << syst<< std::endl; //TODO print nicely
-
-Module    = "SignalRegion";
-Histtype  = "ZprimeCandidate";
-
-std::string massText = "mass";
-if (channel=="invisiblechannel") massText="mass_transversal";
-// HistName  = "Zprime_"+massText+"_rebin_full";
-// HistName  = "Zprime_"+massText+"";
-// HistName  = "Zprime_"+massText+"_rebin1";
-// HistName  = "Zprime_"+massText+"_rebin2";
-HistName  = "Zprime_"+massText+"_rebin30";
-// HistName  = "Zprime_"+massText+"_rebin100";
+  if (debug) for (auto & syst : SystNames) std::cout << syst<< std::endl; //TODO print nicely
 
 
-unique_name = "_"+channel+"_"+year;
-unique_name = TString(unique_name).ReplaceAll("channel","");
-unique_name_complete = unique_name.substr(1)+"_"+histFolder;
-filepath    = Path_STORAGE+year+"/"+Module+"/"+collection+"/"+channel+"/nominal/";
+  //Select hist name
+  Module    = "SignalRegion";
+  Histtype  = "ZprimeCandidate";
+  std::string massText = "mass";
+  if (channel=="invisiblechannel") massText="mass_transversal";
+  // HistName  = "Zprime_"+massText+"_rebin_full";
+  // HistName  = "Zprime_"+massText+"";
+  // HistName  = "Zprime_"+massText+"_rebin1";
+  // HistName  = "Zprime_"+massText+"_rebin2";
+  // HistName  = "Zprime_"+massText;
+  // HistName  = "Zprime_"+massText+"_rebin30";
+  HistName  = "Zprime_"+massText+"_rebin100";
 
-dataName  = channel.substr(0, channel.find("channel")); dataName[0] = toupper(dataName[0]) ; dataName = "DATA_Single"+dataName;
-if (channel=="invisiblechannel") dataName = "DATA_MET";
-dataFileName = PrefixrootFile+"DATA."+dataName+"_"+year+"_noTree.root";
+  fit_lo_SR = ranges.at("SR").at(channel).at("fit_lo");
+  fit_hi_SR = ranges.at("SR").at(channel).at("fit_hi");
+  fit_lo_CR = ranges.at("CR").at(channel).at("fit_lo");
+  fit_hi_CR = ranges.at("CR").at(channel).at("fit_hi");
 
-x_var.reset(new RooRealVar("x_var", "m_{Zprime} (GeV)", x_lo, x_hi));
-ws.reset(new RooWorkspace((unique_name.substr(1)).c_str()));
-DataCard.open (workingDir+"datacards/OutputFit_"+histFolder+".txt");
-DataCard << "=== RooFit data fit result to be entered in datacard === " << std::endl;
-if (doFtest) output.open(workingDir+"datacards/output_"+year+"_"+histFolder+".txt");
-SignalProperties.open(workingDir+"datacards/SignalProperties_"+year+"_"+histFolder+".txt");
+  unique_name = "_"+channel+"_"+year;
+  unique_name = TString(unique_name).ReplaceAll("channel","");
+  unique_name_complete = unique_name.substr(1)+"_"+histFolder;
+  filepath    = Path_STORAGE+year+"/"+Module+"/"+collection+"/"+channel+"/nominal/";
 
+  dataName  = channel.substr(0, channel.find("channel")); dataName[0] = toupper(dataName[0]) ; dataName = "DATA_Single"+dataName;
+  if (channel=="invisiblechannel") dataName = "DATA_MET";
+  dataFileName = PrefixrootFile+"DATA."+dataName+"_"+year+"_noTree.root";
 
+  x_var.reset(new RooRealVar("x_var", "m_{Zprime} (GeV)", x_lo, x_hi));
+  ws.reset(new RooWorkspace((unique_name.substr(1)).c_str()));
+  DataCard.open (workingDir+"datacards/OutputFit_"+histFolder+".txt");
+  DataCard << "=== RooFit data fit result to be entered in datacard === " << std::endl;
+  if (doFtest) output.open(workingDir+"datacards/output_"+year+"_"+histFolder+".txt");
+  SignalProperties.open(workingDir+"datacards/SignalProperties_"+year+"_"+histFolder+".txt");
 
-nameXaxis = "m(Z')";
-nameYaxis = doBinWidth? "Events/bin" :"Events";
-nameRatioaxis = doPlotRatio?"Hist/Fit": "Pull";
+  nameXaxis = "m(Z')";
+  nameYaxis = doBinWidth? "Events/bin" :"Events";
+  nameRatioaxis = doPlotRatio?"Hist/Fit": "Pull";
 
-// rebin = 30;
-rebin = 0;
-bin = 50;
-bin2 = 100;
-for (double i = 0; i < 1500; i+=bin) bins_Zprime_rebin.push_back(i);
-for (double i = 1500+bin; i <= 4000; i+=bin2) bins_Zprime_rebin.push_back(i);
-bins_Zprime_rebin.push_back(4000);
+  // rebin = 30;
+  rebin = 0;
+  bin = 50;
+  bin2 = 100;
+  for (double i = 0; i < 1500; i+=bin) bins_Zprime_rebin.push_back(i);
+  for (double i = 1500+bin; i <= 4000; i+=bin2) bins_Zprime_rebin.push_back(i);
+  bins_Zprime_rebin.push_back(4000);
 
-for (std::string name : NameSgPars) SgPars[name] = std::vector<double>(MyMassPoints.size(), 0);
+  for (std::string name : NameSgPars) SgPars[name] = std::vector<double>(MyMassPoints.size(), 0);
 
+  // xsec_ref_ = 0.1; // this is to mantain the signal strenght close to 1; (remember to multiply for this Normalization when plotting)
+  xsec_ref_ = (xsec_ref.find(histFolder) != xsec_ref.end())? xsec_ref.at(histFolder): xsec_ref.at("default_value"); // default_value = 1
+  DataCard << "xsec_ref " << " " << xsec_ref_ <<std::endl;
 
-// xsec_ref_ = 0.1; // this is to mantain the signal strenght close to 1; (remember to multiply for this Normalization when plotting)
-xsec_ref_ = (xsec_ref.find(histFolder) != xsec_ref.end())? xsec_ref.at(histFolder): xsec_ref.at("default_value"); // default_value = 1
-DataCard << "xsec_ref " << " " << xsec_ref_ <<std::endl;
+  if(channel!="invisiblechannel") {
+    Modes.erase(Modes.begin()+distance(Modes.begin(), std::find(Modes.begin(), Modes.end(), "WJets_SR")));
+    Modes.erase(Modes.begin()+distance(Modes.begin(), std::find(Modes.begin(), Modes.end(), "WJets_CR")));
+  }
 
+  for (auto x : Colors) { for (auto mode : Modes) doFits_map[mode][x.first]  = false; }
 
-for (auto x : Colors) { for (auto mode : Modes) doFits_map[mode][x.first]  = false; }
-
-// for (auto x : { "NO", "CB", "Exp_1", "Exp_2", "Exp_3", "Exp_4", "Exp_5", "Exp_6"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-// for (auto x : {"CB", "Exp_1", "Exp_2", "Exp_3" }) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-for (auto x : {"Exp_2", "Exp_3" }) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-// for (auto x : { "NO", "CB", "Exp_3"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-// BkgPdf4p, BkgPdf3p TODO
-// for (auto x : { "NO", "CB", "Exp_4"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-// for (auto x : { "CB"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
-
+  // for (auto x : { "NO", "CB", "Exp_1", "Exp_2", "Exp_3", "Exp_4", "Exp_5", "Exp_6"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+  // for (auto x : {"CB", "Exp_1", "Exp_2", "Exp_3" }) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+  // for (auto x : {"Exp_2", "Exp_3" }) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+  // for (auto x : { "NO", "CB", "Exp_2", "Exp_3"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+  // for (auto x : { "Exp_2", "Exp_3", "Exp_4"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+  for (auto x : { "Exp_2"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+  // BkgPdf4p, BkgPdf3p TODO
+  // for (auto x : { "NO", "CB", "Exp_4"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
+  // for (auto x : { "CB"}) { for (auto mode : Modes) doFits_map[mode][x]  = true; }
 
 };
 
@@ -253,13 +279,13 @@ for (auto x : {"Exp_2", "Exp_3" }) { for (auto mode : Modes) doFits_map[mode][x]
 
 void CreateRooWorkspace::LoadFiles() {
   /*
-  # ##        #######     ###    ########     ##     ## ####  ######  ########  #######   ######   ########     ###    ##     ##  ######
-  # ##       ##     ##   ## ##   ##     ##    ##     ##  ##  ##    ##    ##    ##     ## ##    ##  ##     ##   ## ##   ###   ### ##    ##
-  # ##       ##     ##  ##   ##  ##     ##    ##     ##  ##  ##          ##    ##     ## ##        ##     ##  ##   ##  #### #### ##
-  # ##       ##     ## ##     ## ##     ##    #########  ##   ######     ##    ##     ## ##   #### ########  ##     ## ## ### ##  ######
-  # ##       ##     ## ######### ##     ##    ##     ##  ##        ##    ##    ##     ## ##    ##  ##   ##   ######### ##     ##       ##
-  # ##       ##     ## ##     ## ##     ##    ##     ##  ##  ##    ##    ##    ##     ## ##    ##  ##    ##  ##     ## ##     ## ##    ##
-  # ########  #######  ##     ## ########     ##     ## ####  ######     ##     #######   ######   ##     ## ##     ## ##     ##  ######
+  & &&        &&&&&&&     &&&    &&&&&&&&     &&     && &&&&  &&&&&&  &&&&&&&&  &&&&&&&   &&&&&&   &&&&&&&&     &&&    &&     &&  &&&&&&
+  & &&       &&     &&   && &&   &&     &&    &&     &&  &&  &&    &&    &&    &&     && &&    &&  &&     &&   && &&   &&&   &&& &&    &&
+  & &&       &&     &&  &&   &&  &&     &&    &&     &&  &&  &&          &&    &&     && &&        &&     &&  &&   &&  &&&& &&&& &&
+  & &&       &&     && &&     && &&     &&    &&&&&&&&&  &&   &&&&&&     &&    &&     && &&   &&&& &&&&&&&&  &&     && && &&& &&  &&&&&&
+  & &&       &&     && &&&&&&&&& &&     &&    &&     &&  &&        &&    &&    &&     && &&    &&  &&   &&   &&&&&&&&& &&     &&       &&
+  & &&       &&     && &&     && &&     &&    &&     &&  &&  &&    &&    &&    &&     && &&    &&  &&    &&  &&     && &&     && &&    &&
+  & &&&&&&&&  &&&&&&&  &&     && &&&&&&&&     &&     && &&&&  &&&&&&     &&     &&&&&&&   &&&&&&   &&     && &&     && &&     &&  &&&&&&
   */
 
   std::unordered_map<std::string, std::unique_ptr<TFile>> f_map;
@@ -275,70 +301,148 @@ void CreateRooWorkspace::LoadFiles() {
   f_map["data"].reset(new TFile((filepath+dataFileName).c_str()));
 
   for (auto bkg: BkgNames) {
+    if (channel!="invisiblechannel" && bkg=="WJets") continue;
     std::string fname = filepath+PrefixrootFile+"MC.MC_"+bkg+"_"+year+"_noTree.root";
     if (debug) std::cout << "Opening\t" << fname << '\n';
     f_map[bkg].reset(new TFile(fname.c_str()));
-    histo_map[bkg+"_CR"].reset((TH1F*)((TH1F*)f_map[bkg]->Get((CRname).c_str()))->Clone((bkg+" CR").c_str()));
-    histo_map[bkg+"_SR"].reset((TH1F*)((TH1F*)f_map[bkg]->Get((SRname).c_str()))->Clone((bkg+" SR").c_str()));
-    histo_map[bkg+"_ratio"].reset((TH1F*)(histo_map[bkg+"_SR"])->Clone((bkg+"_ratio").c_str()));
+
     for (std::string reg: {"CR","SR"}) {
-      if (bkg==BkgName) {
-        histo_map["main_bkg_"+reg].reset((TH1F*)((TH1F*)f_map[BkgName]->Get((CRname).c_str()))->Clone(("main_bkg_"+reg+": "+BkgName).c_str()));
-        continue;
-      }
-      histo_map["main_bkg_"+reg]->Add(histo_map[bkg+"_"+reg].get());
-      histo_map["main_bkg_"+reg]->SetName((std::string(histo_map["main_bkg_"+reg]->GetName())+"+"+bkg).c_str());
-
-      if (bkg=="TTbar" || bkg=="WJets") {
-        histo_map["extra_bkg_"+reg].reset((TH1F*)((TH1F*)f_map[bkg]->Get((CRname).c_str()))->Clone(("extra_bkg_"+reg+": " + bkg).c_str()));
-
-        continue;
-      }
-      histo_map["extra_bkg_"+reg]->Add(histo_map[bkg+"_"+reg].get());
-      histo_map["extra_bkg_"+reg]->SetName((std::string(histo_map["main_bkg_"+reg]->GetName())+"+"+bkg).c_str());
-      if (bkg=="WZ") {
-        histo_map["VV_"+reg].reset((TH1F*)((TH1F*)f_map["WZ"]->Get((CRname).c_str()))->Clone(("extra_bkg_"+reg+": VV").c_str()));
-        continue;
-      }
-      histo_map["VV_"+reg]->Add(histo_map[bkg+"_"+reg].get());
+      std::string hname = reg=="SR"? SRname: CRname;
+      histo_map[bkg+"_"+reg].reset((TH1F*)((TH1F*)f_map[bkg]->Get((hname).c_str()))->Clone((bkg+" "+reg).c_str()));
+      //Create sum of all MC samples
+      if (histo_map.count("MC_"+reg)) histo_map["MC_"+reg]->Add(histo_map[bkg+"_"+reg].get());
+      else histo_map["MC_"+reg].reset((TH1F*)((TH1F*)f_map[bkg]->Get((hname).c_str()))->Clone(("MC_"+reg).c_str()));
     }
   }
 
   for (auto syst: SystNames) {
     for (const int & mass : MyMassPoints) {
 
-      std::string SgName = "M"+std::to_string(mass);
-      std::string fname  = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+(channel=="invisiblechannel"?"inv_" : "")+SgName+"_"+year+"_noTree.root";
+      // std::string SgName = "M"+std::to_string(mass);
+      std::string fname  = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+(channel=="invisiblechannel"?"inv_" : "")+"M"+std::to_string(mass)+"_"+year+"_noTree.root";
       std::string hmname = GetSgName(mass, syst);
       std::string hname  = SRname;
       if (!isNominalFolder(syst)) fname = TString(fname).ReplaceAll("nominal",syst).ReplaceAll("Up","_up").ReplaceAll("Down","_down"); // Be careful if you change it. It's needed as input to combine!!
       else if (!isNominalSyst(syst)) hname = TString(hname).ReplaceAll(Histtype,Histtype+"_"+syst).ReplaceAll("Up","_up").ReplaceAll("Down","_down"); // Be careful if you change it. It's needed as input to combine!!
+
+      if (FindInString("murmuf",syst)) continue;
+      if (FindInString("NNPDF",syst)) continue;
       if (debug) std::cout << "Opening\t" << fname << " " << hmname << " " << hname << '\n';
+
       f_map[hmname].reset(new TFile(fname.c_str()));
       histo_map[hmname].reset((TH1F*)((TH1F*)f_map[hmname]->Get((hname).c_str()))->Clone((hmname+" SR").c_str()));
-      // std::cout << "FIND ME " << hmname << " " << histo_map[hmname].get()->Integral()<< std::endl;
     }
   }
 
-  histo_map["norm"].reset((TH1F*)((TH1F*)f_map["data"]->Get((SRname).c_str()))->Clone("data: data SR"));
+  // Calculate QCD scale variations
+  if (FindInVector(SystNames, "murmufUp") && FindInVector(SystNames, "murmufDown")) {
+    for (const int & mass : MyMassPoints) {
+      std::string syst = "murmuf";
+      std::string fname  = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+(channel=="invisiblechannel"?"inv_" : "")+"M"+std::to_string(mass)+"_"+year+"_noTree.root";
+      std::string hname  = SRname;
+      std::string hmname = GetSgName(mass, syst);
+      std::string hmname_Up = GetSgName(mass, syst+"Up");
+      std::string hmname_Down = GetSgName(mass, syst+"Down");
+      if (!isNominalFolder(syst)) fname = TString(fname).ReplaceAll("nominal",syst).ReplaceAll("Up","_up").ReplaceAll("Down","_down"); // Be careful if you change it. It's needed as input to combine!!
 
-  if (doObs) histo_map["data"].reset((TH1F*)((TH1F*)f_map["data"]->Get((SRname).c_str()))->Clone("data: data SR"));
-  else histo_map["data"].reset((TH1F*)((TH1F*)f_map[BkgName]->Get((SRname).c_str()))->Clone(("h_data_fake: "+BkgName+" SR").c_str()));
+      f_map[hmname].reset(new TFile(fname.c_str()));
 
+      histo_map[hmname_Up].reset((TH1F*)((TH1F*)f_map[hmname]->Get((hname).c_str()))->Clone((hmname_Up+" SR").c_str()));
+      histo_map[hmname_Down].reset((TH1F*)((TH1F*)f_map[hmname]->Get((hname).c_str()))->Clone((hmname_Down+" SR").c_str()));
 
-  // bkg_pred = DY_SR for lepton channel
-  // bkg_pred = DY_SR + WJets_SR for invisiblechannel
-  histo_map["bkg_pred"].reset(((TH1F*) histo_map["DY_SR"]->Clone("bkg_pred_DY: SR") ));
-  histo_map["bkg_pred"]->SetName("bkg_pred (DY): SR");
+      std::unordered_map<std::string, std::unique_ptr<TH1F> > histos_temp;
+      for (auto var: Var_murmuf) {
+        std::string hname_ = TString(hname).ReplaceAll(Histtype,Histtype+"_"+syst+"_"+var).Data();
+        histos_temp[var].reset((TH1F*)((TH1F*)f_map[hmname]->Get((hname_).c_str()))->Clone((hname_+" SR").c_str()));
+      }
 
-  if (channel=="invisiblechannel"){
-    histo_map["bkg_pred"]->Add((TH1F*) histo_map["WJets_SR"]->Clone("bkg_pred_WJets: SR"));
-    histo_map["bkg_pred"]->SetName("bkg_pred (DY+WJets): SR");
+      for (int bin = 0; bin < histo_map[hmname_Up]->GetNbinsX()+1; bin++) {
+        std::vector<double> y_vals;
+        for (const auto& x : histos_temp) y_vals.push_back(x.second->GetBinContent(bin));
+        histo_map[hmname_Up]->SetBinContent(bin, *max_element(y_vals.begin(), y_vals.end()));
+        histo_map[hmname_Down]->SetBinContent(bin, *min_element(y_vals.begin(), y_vals.end()));
+      }
+    }
+  }
+
+  // Calculate PDF variations
+  if (FindInVector(SystNames, "NNPDFUp") && FindInVector(SystNames, "NNPDFDown")) {
+    for (const int & mass : MyMassPoints) {
+      std::string syst = "NNPDF";
+      std::string fname  = filepath+PrefixrootFile+"MC.MC_ZprimeToZH_"+(channel=="invisiblechannel"?"inv_" : "")+"M"+std::to_string(mass)+"_"+year+"_noTree.root";
+      std::string hname  = SRname;
+      std::string hmname = GetSgName(mass, syst);
+      std::string hmname_Up = GetSgName(mass, syst+"Up");
+      std::string hmname_Down = GetSgName(mass, syst+"Down");
+      if (!isNominalFolder(syst)) fname = TString(fname).ReplaceAll("nominal",syst).ReplaceAll("Up","_up").ReplaceAll("Down","_down"); // Be careful if you change it. It's needed as input to combine!!
+
+      f_map[hmname].reset(new TFile(fname.c_str()));
+
+      histo_map[hmname_Up].reset((TH1F*)((TH1F*)f_map[hmname]->Get((hname).c_str()))->Clone((hmname_Up+" SR").c_str()));
+      histo_map[hmname_Down].reset((TH1F*)((TH1F*)f_map[hmname]->Get((hname).c_str()))->Clone((hmname_Down+" SR").c_str()));
+
+      std::unordered_map<std::string, std::unique_ptr<TH1F> > histos_temp;
+      for (int var = 0; var < PDF_variations ; var++) {
+        std::string hname_ = TString(hname).ReplaceAll(Histtype,Histtype+"_"+syst+"_"+std::to_string(var)).Data();
+        histos_temp[std::to_string(var)].reset((TH1F*)((TH1F*)f_map[hmname]->Get((hname_).c_str()))->Clone((hname_+" SR").c_str()));
+        //TODO  normalize?
+      }
+
+      for (int bin = 0; bin < histo_map[hmname_Up]->GetNbinsX()+1; bin++) {
+        std::vector<double> y_vals;
+        for (const auto& x : histos_temp) y_vals.push_back(x.second->GetBinContent(bin));
+        double mean = 0.; double stdev=0;
+        for (const auto& x : y_vals) mean += x;
+        mean /= PDF_variations;
+        for (const auto& x : y_vals) stdev += (x-mean)*(x-mean);
+        stdev = TMath::Sqrt(stdev/PDF_variations);
+        histo_map[hmname_Up]->SetBinContent(bin,   histo_map[hmname_Up]->GetBinContent(bin) + stdev );
+        histo_map[hmname_Down]->SetBinContent(bin, histo_map[hmname_Down]->GetBinContent(bin) - stdev );
+      }
+    }
   }
 
 
 
-  for (std::string name : {"main", "extra"}) histo_map[name+"_bkg_ratio"].reset((TH1F*)(histo_map[name+"_bkg_SR"])->Clone((name+"_bkg_ratio").c_str()));
+  histo_map["data"].reset((TH1F*)((TH1F*)f_map["data"]->Get((SRname).c_str()))->Clone("data SR"));
+  histo_map["data_CR"].reset((TH1F*)((TH1F*)f_map["data"]->Get((CRname).c_str()))->Clone("data CR"));
+
+  histo_map["MC_fake_CR"].reset((TH1F*)(histo_map["MC_CR"]->Clone("MC fake CR")));
+
+  TRandom3 *r3=new TRandom3();
+
+  for (int i = 0; i < histo_map["MC_fake_CR"]->GetNbinsX()+1; i++) {
+    double start_val = histo_map["MC_fake_CR"]->GetBinContent(i);
+    double new_val =0 , new_err=0;
+
+    new_val = r3->PoissonD(start_val);
+    new_err = TMath::Sqrt(new_val);
+
+    if (new_val<2) {
+      start_val *= 1000;
+      new_val = r3->PoissonD(start_val);
+      new_val /= 1000;
+      new_err = TMath::Sqrt(new_val);
+    }
+
+    histo_map["MC_fake_CR"]->SetBinContent(i,new_val); histo_map["MC_fake_CR"]->SetBinError(i,new_err);
+
+
+  }
+
+
+  if (fitMC) {
+    //TODO are the the cases we want?
+    // bkg_pred = DY_SR for lepton channel
+    // bkg_pred = DY_SR + WJets_SR for invisiblechannel
+    histo_map["bkg_pred"].reset(((TH1F*)histo_map["DY_SR"]->Clone("bkg_pred: DY SR")));
+    if (channel=="invisiblechannel"){
+      histo_map["bkg_pred"]->Add(histo_map["WJets_SR"].get());
+      histo_map["bkg_pred"]->SetName("bkg_pred: DY+WJets SR");
+    }
+  } else {
+    histo_map["bkg_pred"].reset(((TH1F*) histo_map["data"]->Clone("bkg_pred: data SR") ));
+  }
 
   // Need to make the histogram available after closing the files.
   for (const auto& x : histo_map) x.second->SetDirectory(0);
@@ -347,7 +451,7 @@ void CreateRooWorkspace::LoadFiles() {
     std::cout << "----------------------------------------" << std::endl;
     std::cout << "CR hist_name:\t" << CRname << '\n';
     std::cout << "SR hist_name:\t" << SRname << '\n';
-    std::cout << "fitCR:\t"        << BoolToString(fitCR) << '\n';
+    std::cout << "fitMC:\t"        << BoolToString(fitMC) << '\n';
     std::cout << "doObs:\t"        << BoolToString(doObs) << '\n';
     std::cout << "bkg_pred on: "   << histo_map["bkg_pred"]->GetName() << '\n';
     std::cout << "data on: "       << histo_map["data"]->GetName() << '\n';
@@ -360,39 +464,40 @@ void CreateRooWorkspace::LoadFiles() {
 
 void CreateRooWorkspace::PrepocessHistos() {
   /*
-  # ########  ########  ######## ########   #######   ######  ########  ######   ######     ##     ## ####  ######  ########  #######   ######
-  # ##     ## ##     ## ##       ##     ## ##     ## ##    ## ##       ##    ## ##    ##    ##     ##  ##  ##    ##    ##    ##     ## ##    ##
-  # ##     ## ##     ## ##       ##     ## ##     ## ##       ##       ##       ##          ##     ##  ##  ##          ##    ##     ## ##
-  # ########  ########  ######   ########  ##     ## ##       ######    ######   ######     #########  ##   ######     ##    ##     ##  ######
-  # ##        ##   ##   ##       ##        ##     ## ##       ##             ##       ##    ##     ##  ##        ##    ##    ##     ##       ##
-  # ##        ##    ##  ##       ##        ##     ## ##    ## ##       ##    ## ##    ##    ##     ##  ##  ##    ##    ##    ##     ## ##    ##
-  # ##        ##     ## ######## ##         #######   ######  ########  ######   ######     ##     ## ####  ######     ##     #######   ######
+  & &&&&&&&&  &&&&&&&&  &&&&&&&& &&&&&&&&   &&&&&&&   &&&&&&  &&&&&&&&  &&&&&&   &&&&&&     &&     && &&&&  &&&&&&  &&&&&&&&  &&&&&&&   &&&&&&
+  & &&     && &&     && &&       &&     && &&     && &&    && &&       &&    && &&    &&    &&     &&  &&  &&    &&    &&    &&     && &&    &&
+  & &&     && &&     && &&       &&     && &&     && &&       &&       &&       &&          &&     &&  &&  &&          &&    &&     && &&
+  & &&&&&&&&  &&&&&&&&  &&&&&&   &&&&&&&&  &&     && &&       &&&&&&    &&&&&&   &&&&&&     &&&&&&&&&  &&   &&&&&&     &&    &&     &&  &&&&&&
+  & &&        &&   &&   &&       &&        &&     && &&       &&             &&       &&    &&     &&  &&        &&    &&    &&     &&       &&
+  & &&        &&    &&  &&       &&        &&     && &&    && &&       &&    && &&    &&    &&     &&  &&  &&    &&    &&    &&     && &&    &&
+  & &&        &&     && &&&&&&&& &&         &&&&&&&   &&&&&&  &&&&&&&&  &&&&&&   &&&&&&     &&     && &&&&  &&&&&&     &&     &&&&&&&   &&&&&&
   */
 
   for (const auto& x : histo_map) {
     std::string mode = x.first;
-    if (debug) std::cout << "pre " << mode << "\t" << CalculateIntegral(x.second.get(),fit_lo,fit_hi,doBinWidth) << '\n';
+    if (debug) std::cout << "pre " << mode << "\t" << CalculateIntegral(x.second.get(),fit_lo_SR,fit_hi_SR,doBinWidth) << '\n';
     if (dorebin) {
       if (rebin) histo_map[mode]->Rebin(rebin);
       else histo_map[mode].reset(dynamic_cast<TH1F*>(histo_map[mode]->Rebin(bins_Zprime_rebin.size()-1, x.second->GetName(), &bins_Zprime_rebin[0])));
 
       histo_map[mode]->Scale(1,doBinWidth?"width":"");
     }
-    if (debug) std::cout << "rebin " << mode << "\t" << CalculateIntegral(x.second.get(),fit_lo,fit_hi,doBinWidth) << '\n';
+    if (debug) std::cout << "rebin " << mode << "\t" << CalculateIntegral(x.second.get(),fit_lo_SR,fit_hi_SR,doBinWidth) << '\n';
 
-    // Removing bins with low stat TODO
-    if (mode=="DY_SR" || mode=="DY_CR") {
+    // Removing bins with low stats
+    if (mode=="DY_SR" || mode=="MC_SR" || (mode=="bkg_pred" && fitMC)) {//TODO Check for the invisiblechannel
       for (int i = 0; i < x.second->GetNbinsX()+1; i++) {
-        // if (x.second->GetBinContent(i)<2*1e-02) { histo_map[mode]->SetBinContent(i,0); histo_map[mode]->SetBinError(i,0); } // TODO
-        if (x.second->GetBinContent(i)<5*1e-03) { histo_map[mode]->SetBinContent(i,0); histo_map[mode]->SetBinError(i,0); } // TODO
-        // if (h->GetBinCenter(i)>1280 && h->GetBinCenter(i)<1320) { h->SetBinContent(i,0); h->SetBinError(i,0); }
+        if (x.second->GetBinContent(i)<2*1e-03) { histo_map[mode]->SetBinContent(i,0); histo_map[mode]->SetBinError(i,0); }
       }
     }
   }
 
+  //Create ratio of SR/CR for all samples. Do it only now otherwise you might have binning problems
   for (const auto& x : histo_map) {
-    if (x.first.find("ratio") != std::string::npos) {
-      histo_map[x.first]->Divide(histo_map[TString(histo_map[x.first]->GetName()).ReplaceAll("SR","CR").Data()].get());
+    if (x.first.find("_SR") != std::string::npos) {
+      std::string newName = TString(x.first).ReplaceAll("SR","ratio").Data();
+      histo_map[newName].reset((TH1F*)(x.second->Clone(newName.c_str())));
+      histo_map[newName]->Divide(histo_map[TString(x.first).ReplaceAll("SR","CR").Data()].get());
     }
   }
 
@@ -405,48 +510,57 @@ void CreateRooWorkspace::PrepocessHistos() {
 void CreateRooWorkspace::NormaliseData() {
 
   /*
-  # ########     ###    ########    ###              #######  ########   ######
-  # ##     ##   ## ##      ##      ## ##            ##     ## ##     ## ##    ##
-  # ##     ##  ##   ##     ##     ##   ##           ##     ## ##     ## ##
-  # ##     ## ##     ##    ##    ##     ##          ##     ## ########   ######
-  # ##     ## #########    ##    #########          ##     ## ##     ##       ##
-  # ##     ## ##     ##    ##    ##     ##          ##     ## ##     ## ##    ##
-  # ########  ##     ##    ##    ##     ##           #######  ########   ######
+  & &&&&&&&&     &&&    &&&&&&&&    &&&              &&&&&&&  &&&&&&&&   &&&&&&
+  & &&     &&   && &&      &&      && &&            &&     && &&     && &&    &&
+  & &&     &&  &&   &&     &&     &&   &&           &&     && &&     && &&
+  & &&     && &&     &&    &&    &&     &&          &&     && &&&&&&&&   &&&&&&
+  & &&     && &&&&&&&&&    &&    &&&&&&&&&          &&     && &&     &&       &&
+  & &&     && &&     &&    &&    &&     &&          &&     && &&     && &&    &&
+  & &&&&&&&&  &&     &&    &&    &&     &&           &&&&&&&  &&&&&&&&   &&&&&&
   */
 
   // Normalize h_MC_SR to h_Data_SR pretending it's data but has shape of bkg_pred in SR
-  // nEventsSR  = CalculateIntegral(histo_map["norm"].get(),fit_lo,fit_hi,doBinWidth);
-  nEventsSR  = CalculateIntegral(histo_map["bkg_pred"].get(),fit_lo,fit_hi,doBinWidth);
-  if (!doObs) {
-    // Normalization is taken such that it matches in the fitting range
-    histo_map["data"]->Scale(nEventsSR/CalculateIntegral(histo_map["data"].get(),fit_lo,fit_hi,doBinWidth));
-    histo_map["data"]->SetName((std::string(histo_map["data"]->GetName())+"*nEventsSR").c_str());
-  }
 
-  data_obs.reset(new RooDataHist("data_obs", histo_map["data"]->GetName(), RooArgList(*x_var), histo_map["data"].get()));//TODO check it's imported correctly
+  nEventsSR  = CalculateIntegral(histo_map["data"].get(),fit_lo_SR,fit_hi_SR,doBinWidth);
+
+  if (fitMC) {
+    // Normalization is taken such that it matches in the fitting range
+    histo_map["bkg_pred"]->Scale(nEventsSR/CalculateIntegral(histo_map["bkg_pred"].get(),fit_lo_SR,fit_hi_SR,doBinWidth));
+    histo_map["bkg_pred"]->SetName((std::string(histo_map["bkg_pred"]->GetName())+"*nEventsSR").c_str());
+  }
 
   if (debug) {
     std::cout << "----------------------------------------" << std::endl;
     std::cout << "data_obs\t"  << histo_map["data"]->GetName() << '\n';
+    std::cout << "bkg_pred\t"  << histo_map["bkg_pred"]->GetName() << '\n';
     std::cout << "nEventsSR\t" << nEventsSR << '\n';
-    std::cout << "norm_data\t" << CalculateIntegral(histo_map["data"].get(),fit_lo,fit_hi,doBinWidth) << '\n';
+    std::cout << "norm_data\t" << CalculateIntegral(histo_map["bkg_pred"].get(),fit_lo_SR,fit_hi_SR,doBinWidth) << '\n';
     std::cout << "----------------------------------------" << std::endl;
   }
 
-  DataCard << " Background number of events = " << nEventsSR << std::endl;
 
+  histo_map["data_obs"].reset((TH1F*)(histo_map["data"]->Clone("data_obs")));
+  for (int i = 0; i < histo_map["data_obs"]->GetNbinsX()+1; i++) {
+    if (histo_map["data_obs"]->GetXaxis()->GetBinUpEdge(i)<fit_lo_SR || histo_map["data_obs"]->GetXaxis()->GetBinLowEdge(i)>fit_hi_SR){
+      histo_map["data_obs"]->SetBinContent(i,0); histo_map["data_obs"]->SetBinError(i,0);
+
+    }
+  }
+
+  data_obs.reset(new RooDataHist("data_obs", histo_map["data_obs"]->GetName(), RooArgList(*x_var), histo_map["data_obs"].get()));
+  DataCard << " Background number of events = " << nEventsSR << " " << CalculateIntegral(histo_map["data"].get(),0,10000,doBinWidth) << std::endl;
 }
 
 
 void CreateRooWorkspace::DoRebin() {
   /*
-  # ########   #######     ########  ######## ########  #### ##    ##
-  # ##     ## ##     ##    ##     ## ##       ##     ##  ##  ###   ##
-  # ##     ## ##     ##    ##     ## ##       ##     ##  ##  ####  ##
-  # ##     ## ##     ##    ########  ######   ########   ##  ## ## ##
-  # ##     ## ##     ##    ##   ##   ##       ##     ##  ##  ##  ####
-  # ##     ## ##     ##    ##    ##  ##       ##     ##  ##  ##   ###
-  # ########   #######     ##     ## ######## ########  #### ##    ##
+  & &&&&&&&&   &&&&&&&     &&&&&&&&  &&&&&&&& &&&&&&&&  &&&& &&    &&
+  & &&     && &&     &&    &&     && &&       &&     &&  &&  &&&   &&
+  & &&     && &&     &&    &&     && &&       &&     &&  &&  &&&&  &&
+  & &&     && &&     &&    &&&&&&&&  &&&&&&   &&&&&&&&   &&  && && &&
+  & &&     && &&     &&    &&   &&   &&       &&     &&  &&  &&  &&&&
+  & &&     && &&     &&    &&    &&  &&       &&     &&  &&  &&   &&&
+  & &&&&&&&&   &&&&&&&     &&     && &&&&&&&& &&&&&&&&  &&&& &&    &&
   */
 
 
@@ -457,9 +571,9 @@ void CreateRooWorkspace::DoRebin() {
   double xmin = 1e6;
   double xmax = 0;
   for (int i=0; i<histo_map["bkg_pred"]->GetNbinsX()+1; ++i){
-    if (histo_map["bkg_pred"]->GetXaxis()->GetBinLowEdge(i)>=fit_lo){
+    if (histo_map["bkg_pred"]->GetXaxis()->GetBinLowEdge(i)>=fit_lo_SR){
       xmin = std::min(xmin, histo_map["bkg_pred"]->GetXaxis()->GetBinLowEdge(i));
-      if (histo_map["bkg_pred"]->GetXaxis()->GetBinUpEdge(i)<=fit_hi){
+      if (histo_map["bkg_pred"]->GetXaxis()->GetBinUpEdge(i)<=fit_hi_SR){
         xmax = std::max(xmax, histo_map["bkg_pred"]->GetXaxis()->GetBinUpEdge(i));
         ++Nbins;
       }
@@ -489,13 +603,13 @@ void CreateRooWorkspace::DoRebin() {
 
 void CreateRooWorkspace::InitializePDFs() {
   /*
-  # #### ##    ## #### ######## ####    ###    ##       #### ######## ########    ########  ########  ########  ######
-  #  ##  ###   ##  ##     ##     ##    ## ##   ##        ##       ##  ##          ##     ## ##     ## ##       ##    ##
-  #  ##  ####  ##  ##     ##     ##   ##   ##  ##        ##      ##   ##          ##     ## ##     ## ##       ##
-  #  ##  ## ## ##  ##     ##     ##  ##     ## ##        ##     ##    ######      ########  ##     ## ######    ######
-  #  ##  ##  ####  ##     ##     ##  ######### ##        ##    ##     ##          ##        ##     ## ##             ##
-  #  ##  ##   ###  ##     ##     ##  ##     ## ##        ##   ##      ##          ##        ##     ## ##       ##    ##
-  # #### ##    ## ####    ##    #### ##     ## ######## #### ######## ########    ##        ########  ##        ######
+  & &&&& &&    && &&&& &&&&&&&& &&&&    &&&    &&       &&&& &&&&&&&& &&&&&&&&    &&&&&&&&  &&&&&&&&  &&&&&&&&  &&&&&&
+  &  &&  &&&   &&  &&     &&     &&    && &&   &&        &&       &&  &&          &&     && &&     && &&       &&    &&
+  &  &&  &&&&  &&  &&     &&     &&   &&   &&  &&        &&      &&   &&          &&     && &&     && &&       &&
+  &  &&  && && &&  &&     &&     &&  &&     && &&        &&     &&    &&&&&&      &&&&&&&&  &&     && &&&&&&    &&&&&&
+  &  &&  &&  &&&&  &&     &&     &&  &&&&&&&&& &&        &&    &&     &&          &&        &&     && &&             &&
+  &  &&  &&   &&&  &&     &&     &&  &&     && &&        &&   &&      &&          &&        &&     && &&       &&    &&
+  & &&&& &&    && &&&&    &&    &&&& &&     && &&&&&&&& &&&& &&&&&&&& &&&&&&&&    &&        &&&&&&&&  &&        &&&&&&
   */
 
   std::string FitName;
@@ -511,14 +625,15 @@ void CreateRooWorkspace::InitializePDFs() {
         fitPars[FitName].emplace_back(new RooRealVar(("sg_p2"+ParName).c_str(), ("sg_p2_"+ParName).c_str(), 0.3, -2, 10));
         fitPars[FitName].emplace_back(new RooRealVar(("sg_p3"+ParName).c_str(), ("sg_p3_"+ParName).c_str(), 40, -50, 150));
       } else {
-        fitPars[FitName].emplace_back(new RooRealVar(("sg_p0"+ParName).c_str(), ("sg_p0_"+ParName).c_str(), mass, mass*0.8, mass*1.2));
-        fitPars[FitName].emplace_back(new RooRealVar(("sg_p1"+ParName).c_str(), ("sg_p1_"+ParName).c_str(), (mass>3000)? 150: 30, (mass>3000)? 120: 10., (mass>3000)? 400:110.));
-        fitPars[FitName].emplace_back(new RooRealVar(("sg_p2"+ParName).c_str(), ("sg_p2_"+ParName).c_str(), 1, -10, 10));
-        fitPars[FitName].emplace_back(new RooRealVar(("sg_p3"+ParName).c_str(), ("sg_p3_"+ParName).c_str(), 0.1, -10, 10));
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p0"+ParName).c_str(), ("sg_p0_"+ParName).c_str(), mass, mass*0.7, mass*1.3));
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p1"+ParName).c_str(), ("sg_p1_"+ParName).c_str(), mass*0.02+20., 10., 500));
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p2"+ParName).c_str(), ("sg_p2_"+ParName).c_str(), 0.7, 0, 10));
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p3"+ParName).c_str(), ("sg_p3_"+ParName).c_str(), 5.0, 0, 20));
       }
 
       Fits_map[FitName]["Gauss"].reset(new RooGaussian(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
       Fits_map[FitName]["CB"].reset(new RooCBShape(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+      // Fits_map[FitName]["CB_fit"].reset(new RooCBShape(FitName.c_str(), "Signal Prediction", *x_var_sig, *fitPars[(FitName"_fit").c_str()][0], *fitPars[(FitName"_fit").c_str()][1], *fitPars[(FitName"_fit").c_str()][2], *fitPars[(FitName"_fit").c_str()][3]));
     }
   }
 
@@ -526,11 +641,11 @@ void CreateRooWorkspace::InitializePDFs() {
   for (auto mode: Modes) {
 
     // Old functions
-    // FitName = mode+"_NO";
-    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_Novo_p1"+unique_name).c_str(), (mode+"_Novo_p1"+unique_name).c_str(),  500, 200,  1000.));
-    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_Novo_p2"+unique_name).c_str(), (mode+"_Novo_p2"+unique_name).c_str(),  100,  10,  200.));
-    // fitPars[FitName].emplace_back(new RooRealVar((mode+"_Novo_p3"+unique_name).c_str(), (mode+"_Novo_p3"+unique_name).c_str(), -0.6,  -2,  2. ));
-    // Fits_map[mode]["NO"].reset(new RooNovosibirsk((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
+    FitName = mode+"_NO";
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Novo_p1"+unique_name).c_str(), (mode+"_Novo_p1"+unique_name).c_str(),  500, 200,  1000.));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Novo_p2"+unique_name).c_str(), (mode+"_Novo_p2"+unique_name).c_str(),  100,  10,  200.));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Novo_p3"+unique_name).c_str(), (mode+"_Novo_p3"+unique_name).c_str(), -0.6,  -2,  2. ));
+    Fits_map[mode]["NO"].reset(new RooNovosibirsk((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
 
     //TODO To be put in the old functions
     FitName = mode+"_CB";
@@ -541,16 +656,16 @@ void CreateRooWorkspace::InitializePDFs() {
     Fits_map[mode]["CB"].reset(new RevCrystalBall((FitName+unique_name).c_str(), (FitName+unique_name).c_str(), *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
 
     FitName = mode+"_Exp_1";
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_1_p1"+unique_name).c_str(), (mode+"_Exp_1_p1"+unique_name).c_str(), -4., -100, 100));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_1_p1"+unique_name).c_str(), (mode+"_Exp_1_p1"+unique_name).c_str(), 0., -100, 100));
     Fits_map[mode]["Exp_1"].reset(new PolinomialExponent_1p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0]));
 
     FitName = mode+"_Exp_2";
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p1"+unique_name).c_str(), (mode+"_Exp_2_p1"+unique_name).c_str(), -4., -100, 100));
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p2"+unique_name).c_str(), (mode+"_Exp_2_p2"+unique_name).c_str(), 0.4, -100, 100));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p1"+unique_name).c_str(), (mode+"_Exp_2_p1"+unique_name).c_str(), 0., -4, 4));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p2"+unique_name).c_str(), (mode+"_Exp_2_p2"+unique_name).c_str(), 0., -10, 10));
     Fits_map[mode]["Exp_2"].reset(new PolinomialExponent_2p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
 
     FitName = mode+"_Exp_3";
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p1"+unique_name).c_str(), (mode+"_Exp_3_p1"+unique_name).c_str(), -4., -100, 100));
+    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p1"+unique_name).c_str(), (mode+"_Exp_3_p1"+unique_name).c_str(), 0., -4, 4));
     fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p2"+unique_name).c_str(), (mode+"_Exp_3_p2"+unique_name).c_str(), 0.4, -100, 100));
     fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p3"+unique_name).c_str(), (mode+"_Exp_3_p3"+unique_name).c_str(), -0.1, -100, 100));
     Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
@@ -591,7 +706,7 @@ void CreateRooWorkspace::InitializePDFs() {
     // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p1"+unique_name).c_str(), (mode+"_BkgPdf3p_p1"+unique_name).c_str(), -10., -11., -9.0));
     // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p2"+unique_name).c_str(), (mode+"_BkgPdf3p_p2"+unique_name).c_str(), +7.0, +6.0, +8.0));
     // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p3"+unique_name).c_str(), (mode+"_BkgPdf3p_p3"+unique_name).c_str(), +3.7, +3.0, +4.0));
-    //
+
     // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p1"+unique_name).c_str(), (mode+"_BkgPdf3p_p1"+unique_name).c_str(), -13.2, -1000, 1000));
     // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p2"+unique_name).c_str(), (mode+"_BkgPdf3p_p2"+unique_name).c_str(), +9.1, -1000, 1000));
     // fitPars[FitName].emplace_back(new RooRealVar((mode+"_BkgPdf3p_p3"+unique_name).c_str(), (mode+"_BkgPdf3p_p3"+unique_name).c_str(), +2.5, -100, 100));
@@ -607,14 +722,15 @@ void CreateRooWorkspace::InitializePDFs() {
 
 
 void CreateRooWorkspace::CreateRooDataHist() {
+
   /*
-  #  ######  ########  ########    ###    ######## ######## ########   #######   #######  ########     ###    ########    ###    ##     ## ####  ######  ########
-  # ##    ## ##     ## ##         ## ##      ##    ##       ##     ## ##     ## ##     ## ##     ##   ## ##      ##      ## ##   ##     ##  ##  ##    ##    ##
-  # ##       ##     ## ##        ##   ##     ##    ##       ##     ## ##     ## ##     ## ##     ##  ##   ##     ##     ##   ##  ##     ##  ##  ##          ##
-  # ##       ########  ######   ##     ##    ##    ######   ########  ##     ## ##     ## ##     ## ##     ##    ##    ##     ## #########  ##   ######     ##
-  # ##       ##   ##   ##       #########    ##    ##       ##   ##   ##     ## ##     ## ##     ## #########    ##    ######### ##     ##  ##        ##    ##
-  # ##    ## ##    ##  ##       ##     ##    ##    ##       ##    ##  ##     ## ##     ## ##     ## ##     ##    ##    ##     ## ##     ##  ##  ##    ##    ##
-  #  ######  ##     ## ######## ##     ##    ##    ######## ##     ##  #######   #######  ########  ##     ##    ##    ##     ## ##     ## ####  ######     ##
+  &  &&&&&&  &&&&&&&&  &&&&&&&&    &&&    &&&&&&&& &&&&&&&&             &&&&&&&&   &&&&&&&   &&&&&&&  &&&&&&&&     &&&    &&&&&&&&    &&&    &&     && &&&&  &&&&&&  &&&&&&&&
+  & &&    && &&     && &&         && &&      &&    &&                   &&     && &&     && &&     && &&     &&   && &&      &&      && &&   &&     &&  &&  &&    &&    &&
+  & &&       &&     && &&        &&   &&     &&    &&                   &&     && &&     && &&     && &&     &&  &&   &&     &&     &&   &&  &&     &&  &&  &&          &&
+  & &&       &&&&&&&&  &&&&&&   &&     &&    &&    &&&&&&               &&&&&&&&  &&     && &&     && &&     && &&     &&    &&    &&     && &&&&&&&&&  &&   &&&&&&     &&
+  & &&       &&   &&   &&       &&&&&&&&&    &&    &&                   &&   &&   &&     && &&     && &&     && &&&&&&&&&    &&    &&&&&&&&& &&     &&  &&        &&    &&
+  & &&    && &&    &&  &&       &&     &&    &&    &&                   &&    &&  &&     && &&     && &&     && &&     &&    &&    &&     && &&     &&  &&  &&    &&    &&
+  &  &&&&&&  &&     && &&&&&&&& &&     &&    &&    &&&&&&&&             &&     &&  &&&&&&&   &&&&&&&  &&&&&&&&  &&     &&    &&    &&     && &&     && &&&&  &&&&&&     &&
   */
 
 
@@ -627,7 +743,9 @@ void CreateRooWorkspace::CreateRooDataHist() {
       }
     }
   } else {
-    for (auto mode: Modes) rooHist_map[mode].reset(new RooDataHist(mode.c_str(), mode.c_str(), RooArgList(*x_var), histo_map[mode].get()));
+    for (auto mode: Modes) {
+      rooHist_map[mode].reset(new RooDataHist(mode.c_str(), mode.c_str(), RooArgList(*x_var), histo_map[mode].get()));
+    }
     for (auto syst: SystNames) {
       for (const int & mass : MyMassPoints) {
         std::string hname = GetSgName(mass,syst);
@@ -640,25 +758,31 @@ void CreateRooWorkspace::CreateRooDataHist() {
 
 void CreateRooWorkspace::DoFits() {
   /*
-  # ########   #######  ######## #### ########  ######
-  # ##     ## ##     ## ##        ##     ##    ##    ##
-  # ##     ## ##     ## ##        ##     ##    ##
-  # ##     ## ##     ## ######    ##     ##     ######
-  # ##     ## ##     ## ##        ##     ##          ##
-  # ##     ## ##     ## ##        ##     ##    ##    ##
-  # ########   #######  ##       ####    ##     ######
+  & &&&&&&&&   &&&&&&&              &&&&&&&& &&&& &&&&&&&&  &&&&&&
+  & &&     && &&     &&             &&        &&     &&    &&    &&
+  & &&     && &&     &&             &&        &&     &&    &&
+  & &&     && &&     &&             &&&&&&    &&     &&     &&&&&&
+  & &&     && &&     &&             &&        &&     &&          &&
+  & &&     && &&     &&             &&        &&     &&    &&    &&
+  & &&&&&&&&   &&&&&&&              &&       &&&&    &&     &&&&&&
   */
 
   for (const auto& x : histo_map) {
-    fit_min[x.first] = GetRange(x.second.get(),fit_lo);
-    fit_max[x.first] = GetRange(x.second.get(),fit_hi);
+    fit_min[x.first] = GetRange(x.second.get(),fit_lo_SR);
+    fit_max[x.first] = GetRange(x.second.get(),fit_hi_SR);
     // if ("DY_SR"==x.first) fit_min[x.first] = GetRange(x.second.get(),fit_SR);
-    if ("DY_CR"==x.first) fit_max[x.first] = GetRange(x.second.get(),fit_max_DY_CR);
+    // if ("DY_CR"==x.first) fit_min[x.first] = GetRange(x.second.get(),fit_lo_SR);
+    // if ("DY_CR"==x.first) fit_max[x.first] = GetRange(x.second.get(),fit_max_CR);
+    if (FindInString("CR", x.first)) fit_min[x.first] = GetRange(x.second.get(),1300);//TODO
+    if (FindInString("CR", x.first)) fit_max[x.first] = GetRange(x.second.get(),6000);
+    if (FindInString("data_CR", x.first)) fit_min[x.first] = GetRange(x.second.get(),fit_lo_CR);
+    if (FindInString("data_CR", x.first)) fit_max[x.first] = GetRange(x.second.get(),fit_hi_CR);
+
     std::string mass = x.first;
-    if (mass.compare(0,1,"M")==0) {
+    if (mass.compare(0,1,"M")==0 && mass.compare(0,2,"MC")!=0) {
       CalculateSignalFittingRange(std::stoi(mass.substr(1, mass.find("_")-1)), fit_min[x.first], fit_max[x.first], plot_min[x.first], plot_max[x.first], y_max[x.first]); // TODO
       // Normalization into the fitting range. Need to be corrected for the effected area of the PDF later.
-      nEventsSignal[x.first] = CalculateIntegral(histo_map[x.first].get(),fit_min[x.first],fit_max[x.first],doBinWidth);
+      nEventsSignal[x.first] = CalculateIntegral(histo_map[x.first].get(),fit_min[x.first],fit_max[x.first],doBinWidth);//TODO
     }
   }
 
@@ -680,8 +804,6 @@ void CreateRooWorkspace::DoFits() {
   }
 
   for (auto mode: Modes) {
-    // if (mode!="bkg_pred" && mode!="DY_CR" && mode!="DY_SR") continue;
-    if (mode=="main_bkg_CR") continue;
     for (auto const& [model,dofit] : doFits_map[mode] ) {
       if (!dofit) continue;
       if (mode=="data") {
@@ -709,30 +831,38 @@ void CreateRooWorkspace::DoFits() {
 
 void CreateRooWorkspace::ImportToWorkspace() {
   /*
-  # #### ##     ## ########   #######  ########  ######## ########  #######  ##      ##  #######  ########  ##    ##  ######  ########     ###     ######  ########
-  #  ##  ###   ### ##     ## ##     ## ##     ##    ##       ##    ##     ## ##  ##  ## ##     ## ##     ## ##   ##  ##    ## ##     ##   ## ##   ##    ## ##
-  #  ##  #### #### ##     ## ##     ## ##     ##    ##       ##    ##     ## ##  ##  ## ##     ## ##     ## ##  ##   ##       ##     ##  ##   ##  ##       ##
-  #  ##  ## ### ## ########  ##     ## ########     ##       ##    ##     ## ##  ##  ## ##     ## ########  #####     ######  ########  ##     ## ##       ######
-  #  ##  ##     ## ##        ##     ## ##   ##      ##       ##    ##     ## ##  ##  ## ##     ## ##   ##   ##  ##         ## ##        ######### ##       ##
-  #  ##  ##     ## ##        ##     ## ##    ##     ##       ##    ##     ## ##  ##  ## ##     ## ##    ##  ##   ##  ##    ## ##        ##     ## ##    ## ##
-  # #### ##     ## ##         #######  ##     ##    ##       ##     #######   ###  ###   #######  ##     ## ##    ##  ######  ##        ##     ##  ######  ########
+  & &&&& &&     && &&&&&&&&   &&&&&&&  &&&&&&&&  &&&&&&&& &&&&&&&&  &&&&&&&  &&      &&  &&&&&&&  &&&&&&&&  &&    &&  &&&&&&  &&&&&&&&     &&&     &&&&&&  &&&&&&&&
+  &  &&  &&&   &&& &&     && &&     && &&     &&    &&       &&    &&     && &&  &&  && &&     && &&     && &&   &&  &&    && &&     &&   && &&   &&    && &&
+  &  &&  &&&& &&&& &&     && &&     && &&     &&    &&       &&    &&     && &&  &&  && &&     && &&     && &&  &&   &&       &&     &&  &&   &&  &&       &&
+  &  &&  && &&& && &&&&&&&&  &&     && &&&&&&&&     &&       &&    &&     && &&  &&  && &&     && &&&&&&&&  &&&&&     &&&&&&  &&&&&&&&  &&     && &&       &&&&&&
+  &  &&  &&     && &&        &&     && &&   &&      &&       &&    &&     && &&  &&  && &&     && &&   &&   &&  &&         && &&        &&&&&&&&& &&       &&
+  &  &&  &&     && &&        &&     && &&    &&     &&       &&    &&     && &&  &&  && &&     && &&    &&  &&   &&  &&    && &&        &&     && &&    && &&
+  & &&&& &&     && &&         &&&&&&&  &&     &&    &&       &&     &&&&&&&   &&&  &&&   &&&&&&&  &&     && &&    &&  &&&&&&  &&        &&     &&  &&&&&&  &&&&&&&&
   */
 
-  for (auto syst: SystNames) { for (const int & mass : MyMassPoints) {ws->import(*Fits_map[GetSgName(mass,syst)][FitSignal], RooFit::Silence()); }}
-  for (auto mode: Modes) { for (auto const& [model,dofit] : doFits_map[mode] ) { if (dofit) ws->import(*Fits_map[mode][model], RooFit::Silence()); }}
+  // Reduce the x range to avoid strange fitting behaviour: very delicate!
+  x_var.reset(new RooRealVar("x_var", "m_{Zprime} (GeV)", x_lo_short, x_hi_short));
+  std::string FitName;
+  for (auto syst: SystNames) { for (const int & mass : MyMassPoints) {
+    FitName = GetSgName(mass,syst);
+    Fits_map[FitName]["CB"].reset(new RooCBShape(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+    ws->import(*Fits_map[FitName][FitSignal], RooFit::Silence());
+  }}
+  for (auto mode: Modes) { for (auto const& [model,dofit] : doFits_map[mode] ) {
+    if (dofit) {
+      FitName = mode+"_"+model;
+      if (model=="NO") Fits_map[mode]["NO"].reset(new RooNovosibirsk((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
+      if (model=="CB") Fits_map[mode]["CB"].reset(new RevCrystalBall((FitName+unique_name).c_str(), (FitName+unique_name).c_str(), *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+      if (model=="Exp_2") Fits_map[mode]["Exp_2"].reset(new PolinomialExponent_2p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
+      if (model=="Exp_3") Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
+      if (model=="Exp_4") Fits_map[mode]["Exp_4"].reset(new PolinomialExponent_4p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+
+      ws->import(*Fits_map[mode][model], RooFit::Silence());
+    }
+  }}
+  data_obs.reset(new RooDataHist("data_obs", histo_map["data_obs"]->GetName(), RooArgList(*x_var), histo_map["data_obs"].get()));
 
   ws->import(*data_obs.get());
-
-  //TODO decide weather to go for shaped analysis or not
-  // ws->import(*(new RooHistPdf(SgName.c_str(),"",*x_var,*rooHist_map[GetSgName(mass)])));
-  // for (auto [mode,h]: rooHist_map) {
-  //   // Store RooDataHist format for bkg_pred and data et all
-  //   ws->import(*h);
-  //   // Store TH1F format for bkg_pred and data et all
-  //   ws->import(*histo_map[mode],Form("h_%s",+h->GetName()));
-  //   // Store RooHistPdf format for bkg_pred and data et all
-  //   ws->import(*(new RooHistPdf( Form("hp_%s",+h->GetName()),"",RooArgSet(*x_var),*h)));
-  // }
 
   if (debug) ws->Print();
 }
@@ -740,13 +870,13 @@ void CreateRooWorkspace::ImportToWorkspace() {
 
 void CreateRooWorkspace::DoPlots() {
   /*
-  # ########   #######  ########  ##        #######  ########  ######
-  # ##     ## ##     ## ##     ## ##       ##     ##    ##    ##    ##
-  # ##     ## ##     ## ##     ## ##       ##     ##    ##    ##
-  # ##     ## ##     ## ########  ##       ##     ##    ##     ######
-  # ##     ## ##     ## ##        ##       ##     ##    ##          ##
-  # ##     ## ##     ## ##        ##       ##     ##    ##    ##    ##
-  # ########   #######  ##        ########  #######     ##     ######
+  & &&&&&&&&   &&&&&&&  &&&&&&&&  &&        &&&&&&&  &&&&&&&&  &&&&&&
+  & &&     && &&     && &&     && &&       &&     &&    &&    &&    &&
+  & &&     && &&     && &&     && &&       &&     &&    &&    &&
+  & &&     && &&     && &&&&&&&&  &&       &&     &&    &&     &&&&&&
+  & &&     && &&     && &&        &&       &&     &&    &&          &&
+  & &&     && &&     && &&        &&       &&     &&    &&    &&    &&
+  & &&&&&&&&   &&&&&&&  &&        &&&&&&&&  &&&&&&&     &&     &&&&&&
   */
 
   PlotBkgFit();
@@ -759,9 +889,9 @@ void CreateRooWorkspace::PlotBkgFit() {
   plotter.reset(x_var->frame(plot_lo,plot_hi));
 
   for (auto mode: Modes) {
-    if (mode!="bkg_pred" && mode!="DY_CR" && mode!="DY_SR" && mode!="WJets_CR" && mode!="WJets_SR") continue;
+    // if (mode!="bkg_pred" && mode!="DY_CR" && mode!="DY_SR" && mode!="WJets_CR" && mode!="WJets_SR") continue;
     // if (mode!="bkg_pred" && mode!="DY_CR") continue;
-    // if (mode!="bkg_pred") continue;
+    // if (mode=="data") continue;
 
     std::unordered_map<std::string, RooHist*> hpull;
     std::unordered_map<std::string, RooHist*> hratio;
@@ -772,6 +902,7 @@ void CreateRooWorkspace::PlotBkgFit() {
     // plotter = x_var->frame(plot_lo,plot_hi);
     plotter.reset(x_var->frame(plot_lo,plot_hi));
 
+    // if (mode=="DY_SR") rooHist_map["data"]->plotOn(plotter.get(), RooFit::LineColor(kRed+1), RooFit::DataError(RooAbsData::Poisson));
     if (mode=="data") rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::Poisson));
     else rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
     // rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
@@ -783,7 +914,7 @@ void CreateRooWorkspace::PlotBkgFit() {
       if (dofit) {
         int color = Colors[model];
         // if (!doFtest && model.Contains("Exp") && model!="Exp_2" && model!="Exp_3" && model!="Exp_4" ) continue;
-        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::LineColor(color), RooFit::Range(fit_min[mode]-100, fit_max[mode]+100, kFALSE));
+        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::LineColor(color), RooFit::Range(fit_min[mode], fit_max[mode], kFALSE));
         // Fits_map[mode][model]->plotOn(plotter, RooFit::LineColor(color), RooFit::Range(fit_min[mode], fit_max[mode], kFALSE));
 
         // CREATE RATIO BETWEEN CURVE AND HIST
@@ -810,7 +941,20 @@ void CreateRooWorkspace::PlotBkgFit() {
         chi2_map[model] = plotter->chiSquare(npf);
         double pv = TMath::Prob(chi2_map[model]*ndf, ndf)*100;
         TString name = model+std::string(7-model.size(), ' ' )+" #chi^{2}/n.d.f. = "+TString::Format("%.1f",chi2_map[model])+" p-value = "+TString::Format("%.2f",pv)+"\%";
-        // TString name = model+std::string(5-model.size(), ' ' )+"np="+TString::Format("%d",npf);
+
+        std::string isCR = FindInString("CR", mode) ? "CR" : "SR";
+
+        ranges.at("CR").at(channel).at("show_lo");
+        ranges.at("CR").at(channel).at("show_hi");
+
+        double show_lo = ranges.at(isCR).at(channel).at("show_lo");
+        double show_hi = ranges.at(isCR).at(channel).at("show_hi");
+        if (FindInString("data", mode) && FindInString("CR", mode)) {
+          show_hi = ranges.at("CR").at(channel).at("show_hi_data");
+        }
+        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::LineColor(color), RooFit::Range(show_lo, show_hi, kFALSE), RooFit::FillColor(color), RooFit::VisualizeError(*FitRes_map[mode][model], 0.7), RooFit::FillStyle(3001), RooFit::VLines());
+        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::LineColor(color), RooFit::Range(show_lo, show_hi, kFALSE));
+        hpull[model] = plotter->pullHist();
         hratio[model]->SetName(name);
         hratio[model]->SetMarkerColor(color);
         hratio[model]->SetLineColor(color);
@@ -825,8 +969,6 @@ void CreateRooWorkspace::PlotBkgFit() {
           hpull[model]->GetPoint(i,x,point);
           if (hpull[model]->GetErrorYlow(i)==0) hpull[model]->SetPoint(i,x,-10);
         }
-
-        Fits_map[mode][model]->plotOn(plotter.get(), RooFit::Range(fit_min[mode], fit_max[mode], kFALSE), RooFit::FillColor(color), RooFit::VisualizeError(*FitRes_map[mode][model], 1), RooFit::FillStyle(3001), RooFit::VLines());
       }
     }
 
@@ -949,6 +1091,7 @@ void CreateRooWorkspace::PlotSignals(std::string syst) {
     pave->SetBorderSize(0); pave->SetTextSize(0.03); pave->SetLineColor(1); pave->SetLineStyle(1);
     pave->SetLineWidth(2); pave->SetFillColor(0); pave->SetFillStyle(0);
     pave->AddText(TString::Format("Fit range = [%.0f,%.0f]", fit_min[SgName],fit_max[SgName]));
+    pave->AddText(TString::Format("Integral%.1f", nEventsSignal[SgName]));
     pave->AddText(TString::Format("#chi^{2}/n.d.f. = %.1f", chi2));
     pave->AddText(TString::Format("p-value = %.1f", pv));
     pave->AddText(TString::Format("#mu = %2.3f +- %2.3f", fitPars[SgName][0]->getVal(),fitPars[SgName][0]->getError()));
@@ -1053,13 +1196,13 @@ void CreateRooWorkspace::PlotSgPars() {
 
 void CreateRooWorkspace::PlotControl() {
   /*
-  #  ######  ##     ## ########  ######  ##    ##    ########  ##        #######  ########  ######
-  # ##    ## ##     ## ##       ##    ## ##   ##     ##     ## ##       ##     ##    ##    ##    ##
-  # ##       ##     ## ##       ##       ##  ##      ##     ## ##       ##     ##    ##    ##
-  # ##       ######### ######   ##       #####       ########  ##       ##     ##    ##     ######
-  # ##       ##     ## ##       ##       ##  ##      ##        ##       ##     ##    ##          ##
-  # ##    ## ##     ## ##       ##    ## ##   ##     ##        ##       ##     ##    ##    ##    ##
-  #  ######  ##     ## ########  ######  ##    ##    ##        ########  #######     ##     ######
+  &  &&&&&&  &&     && &&&&&&&&  &&&&&&  &&    &&    &&&&&&&&  &&        &&&&&&&  &&&&&&&&  &&&&&&
+  & &&    && &&     && &&       &&    && &&   &&     &&     && &&       &&     &&    &&    &&    &&
+  & &&       &&     && &&       &&       &&  &&      &&     && &&       &&     &&    &&    &&
+  & &&       &&&&&&&&& &&&&&&   &&       &&&&&       &&&&&&&&  &&       &&     &&    &&     &&&&&&
+  & &&       &&     && &&       &&       &&  &&      &&        &&       &&     &&    &&          &&
+  & &&    && &&     && &&       &&    && &&   &&     &&        &&       &&     &&    &&    &&    &&
+  &  &&&&&&  &&     && &&&&&&&&  &&&&&&  &&    &&    &&        &&&&&&&&  &&&&&&&     &&     &&&&&&
   */
 
   TCanvas* c_data_obs = tdrCanvas("data_obs", plot_lo, plot_hi, plot_ylo, 1e03, nameXaxis, nameYaxis);
@@ -1080,14 +1223,14 @@ void CreateRooWorkspace::PlotControl() {
   c_inputs->SetLogy(1);
   // histo_map["bkg_pred"]->SetLineColor(kBlue+1);
   // histo_map["data"]->SetLineColor(kRed+1);
-  // histo_map["main_bkg_SR"]->SetLineColor(kGreen+1);
+  // histo_map["MC_SR"]->SetLineColor(kGreen+1);
   histo_map["bkg_pred"]->Draw("same");
   histo_map["data"]->Draw("same");
-  histo_map["main_bkg_SR"]->Draw("same");
+  histo_map["MC_SR"]->Draw("same");
   std::unique_ptr<TLegend> leg_inputs(tdrLeg(0.50,0.70,0.78,0.9, 0.03));
   leg_inputs->AddEntry(histo_map["bkg_pred"].get(), Form("dofit: %s", histo_map["bkg_pred"]->GetName()) ,"lp");
   leg_inputs->AddEntry(histo_map["data"].get(), Form("extract obs. Limits: %s", histo_map["data"]->GetName()) ,"lp");
-  leg_inputs->AddEntry(histo_map["main_bkg_SR"].get(), Form("extract exp. Limits: %s", histo_map["main_bkg_SR"]->GetName()) ,"lp");
+  leg_inputs->AddEntry(histo_map["MC_SR"].get(), Form("extract exp. Limits: %s", histo_map["MC_SR"]->GetName()) ,"lp");
   leg_inputs->Draw("same");
   c_inputs->SaveAs((workingDir+"Plot_Inputs_"+histFolder+"."+plotting_mode).c_str());
   if (plotting_mode_2!="") c_inputs->SaveAs((workingDir+"Plot_Inputs_"+histFolder+"."+plotting_mode_2).c_str());
@@ -1144,7 +1287,7 @@ void CreateRooWorkspace::PlotControl() {
     if (BkgName == name) {
       DataCard << name+" rateParam " <<  f1->GetParameter(0) << std::endl;
       // Next number should be ~ 1
-      // DataCard << name+" rateParam " <<  f1->GetParameter(0)*CalculateIntegral(histo_map[name+"_CR"],fit_lo,fit_hi,doBinWidth)/CalculateIntegral(histo_map[name+"_SR"],fit_lo,fit_hi,doBinWidth) << std::endl;
+      // DataCard << name+" rateParam " <<  f1->GetParameter(0)*CalculateIntegral(histo_map[name+"_CR"],fit_lo_SR,fit_hi_SR,doBinWidth)/CalculateIntegral(histo_map[name+"_SR"],fit_lo_SR,fit_hi_SR,doBinWidth) << std::endl;
     }
     c_ratios->cd(1);
     tdrDraw(ratio.get(), "P0", kFullDotLarge, color, kSolid, color, 3004, color);
@@ -1217,22 +1360,22 @@ void CreateRooWorkspace::PlotTranferFunction() {
 
 void CreateRooWorkspace::InputDatacards(){
   /*
-  # #### ##    ## ########  ##     ## ######## ########     ###    ########    ###     ######     ###    ########  ########   ######
-  #  ##  ###   ## ##     ## ##     ##    ##    ##     ##   ## ##      ##      ## ##   ##    ##   ## ##   ##     ## ##     ## ##    ##
-  #  ##  ####  ## ##     ## ##     ##    ##    ##     ##  ##   ##     ##     ##   ##  ##        ##   ##  ##     ## ##     ## ##
-  #  ##  ## ## ## ########  ##     ##    ##    ##     ## ##     ##    ##    ##     ## ##       ##     ## ########  ##     ##  ######
-  #  ##  ##  #### ##        ##     ##    ##    ##     ## #########    ##    ######### ##       ######### ##   ##   ##     ##       ##
-  #  ##  ##   ### ##        ##     ##    ##    ##     ## ##     ##    ##    ##     ## ##    ## ##     ## ##    ##  ##     ## ##    ##
-  # #### ##    ## ##         #######     ##    ########  ##     ##    ##    ##     ##  ######  ##     ## ##     ## ########   ######
+  & &&&& &&    && &&&&&&&&  &&     && &&&&&&&& &&&&&&&&     &&&    &&&&&&&&    &&&     &&&&&&     &&&    &&&&&&&&  &&&&&&&&   &&&&&&
+  &  &&  &&&   && &&     && &&     &&    &&    &&     &&   && &&      &&      && &&   &&    &&   && &&   &&     && &&     && &&    &&
+  &  &&  &&&&  && &&     && &&     &&    &&    &&     &&  &&   &&     &&     &&   &&  &&        &&   &&  &&     && &&     && &&
+  &  &&  && && && &&&&&&&&  &&     &&    &&    &&     && &&     &&    &&    &&     && &&       &&     && &&&&&&&&  &&     &&  &&&&&&
+  &  &&  &&  &&&& &&        &&     &&    &&    &&     && &&&&&&&&&    &&    &&&&&&&&& &&       &&&&&&&&& &&   &&   &&     &&       &&
+  &  &&  &&   &&& &&        &&     &&    &&    &&     && &&     &&    &&    &&     && &&    && &&     && &&    &&  &&     && &&    &&
+  & &&&& &&    && &&         &&&&&&&     &&    &&&&&&&&  &&     &&    &&    &&     &&  &&&&&&  &&     && &&     && &&&&&&&&   &&&&&&
   */
 
 
   for (auto mode: Modes) {
     for (auto const& [model,dofit] : doFits_map[mode] ) {
       if (!dofit || (model.find("Exp")!= std::string::npos && model!="Exp_2" && model!="Exp_3" && model!="Exp_4") ) continue;
-      // double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_lo, fit_hi);
+      // double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_lo_SR, fit_hi_SR);
       double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_min[mode], fit_max[mode]);
-      if (debug) std::cout << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << " " << CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_lo, fit_hi) << std::endl;
+      if (debug) std::cout << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << " " << CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_min[mode], fit_max[mode]) << std::endl;
       DataCard  << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << std::endl;
 
 
@@ -1262,38 +1405,38 @@ void CreateRooWorkspace::InputDatacards(){
 
 void CreateRooWorkspace::Process() {
   /*
-  # ########  ########   #######   ######  ########  ######   ######
-  # ##     ## ##     ## ##     ## ##    ## ##       ##    ## ##    ##
-  # ##     ## ##     ## ##     ## ##       ##       ##       ##
-  # ########  ########  ##     ## ##       ######    ######   ######
-  # ##        ##   ##   ##     ## ##       ##             ##       ##
-  # ##        ##    ##  ##     ## ##    ## ##       ##    ## ##    ##
-  # ##        ##     ##  #######   ######  ########  ######   ######
+  & &&&&&&&&  &&&&&&&&   &&&&&&&   &&&&&&  &&&&&&&&  &&&&&&   &&&&&&
+  & &&     && &&     && &&     && &&    && &&       &&    && &&    &&
+  & &&     && &&     && &&     && &&       &&       &&       &&
+  & &&&&&&&&  &&&&&&&&  &&     && &&       &&&&&&    &&&&&&   &&&&&&
+  & &&        &&   &&   &&     && &&       &&             &&       &&
+  & &&        &&    &&  &&     && &&    && &&       &&    && &&    &&
+  & &&        &&     &&  &&&&&&&   &&&&&&  &&&&&&&&  &&&&&&   &&&&&&
   */
 
 
-  LoadFiles();
-  PrepocessHistos();
-  NormaliseData();
+  LoadFiles();//OK
+  PrepocessHistos();//OK
+  NormaliseData(); //OK
   DoRebin(); //TODO put it in the correct place
-  InitializePDFs();
-  CreateRooDataHist();
-  DoFits();
-  ImportToWorkspace();
-  InputDatacards();
+  InitializePDFs(); //OK
+  CreateRooDataHist(); //OK
+  DoFits(); //OK
   DoPlots();
+  ImportToWorkspace(); //OK
+  InputDatacards();
 };
 
 
 int main(int argc, char** argv){
   /*
-  # ##     ##    ###    #### ##    ##
-  # ###   ###   ## ##    ##  ###   ##
-  # #### ####  ##   ##   ##  ####  ##
-  # ## ### ## ##     ##  ##  ## ## ##
-  # ##     ## #########  ##  ##  ####
-  # ##     ## ##     ##  ##  ##   ###
-  # ##     ## ##     ## #### ##    ##
+  & &&     &&    &&&    &&&& &&    &&
+  & &&&   &&&   && &&    &&  &&&   &&
+  & &&&& &&&&  &&   &&   &&  &&&&  &&
+  & && &&& && &&     &&  &&  && && &&
+  & &&     && &&&&&&&&&  &&  &&  &&&&
+  & &&     && &&     &&  &&  &&   &&&
+  & &&     && &&     && &&&& &&    &&
   */
 
   gErrorIgnoreLevel = kFatal;
@@ -1304,35 +1447,34 @@ int main(int argc, char** argv){
   RooMsgService::instance().setGlobalKillBelow(RooFit::WARNING);
 
   bool isHbb = false;
-  // std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD"};
-  std::vector<std::string> histFolders = {"btag_DeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCDmassdep",
-  "btag_DeepBoosted_H4qvsQCDmassdep_2", "btag_DeepBoosted_H4qvsQCDmassdep_3", "btag_DeepBoosted_H4qvsQCDmassdep_bb",
-  "btag_DeepBoosted_H4qvsQCDmassdep_bb_2", "btag_DeepBoosted_H4qvsQCDmassdep_bb_3",
-  "btag_DeepBoosted_H4qvsQCDmassdep_cc", "btag_DeepBoosted_H4qvsQCDmassdep_gg",
-  "btag_DeepBoosted_H4qvsQCDmassdep_cc_2", "btag_DeepBoosted_H4qvsQCDmassdep_cc_3",
-  "btag_DeepBoosted_H4qvsQCDmassdep_gg_2", "btag_DeepBoosted_H4qvsQCDmassdep_gg_3",
-  "btag_DeepBoosted_H4qvsQCDmassdep_cc2_2", "btag_DeepBoosted_H4qvsQCDmassdep_cc2_3",
-  "btag_DeepBoosted_H4qvsQCDmassdep_cc2", "btag_DeepBoosted_H4qvsQCDmassdep_ccMD",
-  "btag_DeepBoosted_H4qvsQCDmassdep_cc1", "tau42"};
-  if (isHbb) histFolders = {"btag_DeepBoosted_HbbvsQCD", "btag_DeepBoosted_probHbb", "tau21" };
+  std::vector<std::string> histFolders = { "DeepAk8_H4qvsQCD_massdep", "DeepAk8_ZHccvsQCD_MD",
+  "DeepAk8_HccvsQCD_MD", "DeepAk8_H4qvsQCD_MD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD",
+  "DeepAk8_H4qvsQCD", "DeepAk8_HccvsQCD", "DeepAk8_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD",
+  "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD", "tau42",
+  "DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD2"};
+
+  if (isHbb) histFolders = {"tau21" };
   std::vector<std::string> collections = {"Puppi"};
   std::vector<std::string> channels = {"muonchannel", "electronchannel", "invisiblechannel"};
   std::vector<std::string> years = {"2016", "2017", "2018", "RunII"};
 
 
-
   std::unique_ptr<CreateRooWorkspace> roo;
 
+
   if (argc>1) {
-    std::string histFolder, channel, collection, year;
+    std::string histFolder, channel, collection, year, min="", max="";
     for (int i = 1; i < argc; i++) {
       if (std::find(collections.begin(), collections.end(), argv[i]) != collections.end() ) collection = argv[i];
       if (std::find(histFolders.begin(), histFolders.end(), argv[i]) != histFolders.end() ) histFolder = argv[i];
       if (std::find(channels.begin(), channels.end(), argv[i]) != channels.end() ) channel = argv[i];
       if (std::find(years.begin(), years.end(), argv[i]) != years.end() ) year = argv[i];
     }
-    std::cout << histFolder << " " << channel << " " << collection << " " << year << '\n';
-    roo.reset(new CreateRooWorkspace(year,collection, channel, histFolder));
+    if (argc>5) min = argv[5];
+    if (argc>6) max = argv[6];
+
+    std::cout << argc << " " << year << " " << collection << " " << channel << " " << histFolder << " " << min << " " << max << '\n';
+    roo.reset(new CreateRooWorkspace(year,collection, channel, histFolder, min, max));
     roo->Process();
 
   } else {
@@ -1341,7 +1483,7 @@ int main(int argc, char** argv){
       for (std::string collection: collections) {
         for (std::string channel: channels) {
           for (std::string histFolder: histFolders) {
-            roo.reset(new CreateRooWorkspace(year,collection, channel, histFolder));
+            // roo.reset(new CreateRooWorkspace(year,collection, channel, histFolder));
             roo->Process();
           }
         }
