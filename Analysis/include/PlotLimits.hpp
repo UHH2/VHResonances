@@ -16,7 +16,8 @@
 #include "UHH2/VHResonances/include/constants.hpp"
 #include "UHH2/VHResonances/Analysis/include/tdrstyle_all.hpp"
 
-const std::vector<double> MyMassPoints = {1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000};
+// const std::vector<double> MyMassPoints = {1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000};
+const std::vector<double> MyMassPoints = {1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000};
 
 extern const unsigned int nPoints=MyMassPoints.size();
 

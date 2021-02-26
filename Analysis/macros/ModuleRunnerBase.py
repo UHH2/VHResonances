@@ -28,14 +28,12 @@ class VariablesBase(GenericPath):
         self.PrefixrootFile     = "uhh2.AnalysisModuleRunner."
         self.Collections        = ["Puppi"]
         self.Channels           = ["muon", "electron", "invisible"] if self.isAnalysis else ["charm"]
-        # self.Systematics        = ["nominal", "JER_up", "JER_down", "JEC_up", "JEC_down", "MuonScale_up", "MuonScale_down"]
-        # self.Systematics_Scale  = [syst+"_"+var for syst in ["pu", "btag", "prefiring", "id", "tracking", "trigger", "reco"] for var in ["up","down"]]
         self.Systematics        = ["nominal", "JER", "JEC", "MuonScale"]
-        self.Systematics_Scale  = ["pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco"]
+        self.Systematics_Scale  = ["pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"]
         self.Signal             = "MC_ZprimeToZH"
         self.MainBkg            = "MC_DY"
         self.MassPoints         = [600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]
-        self.MassPointsReduced  = [1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]
+        self.MassPointsReduced  = [1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
         self.SignalSamples      = [self.Signal+mode+"_M"+str(mass) for mass in self.MassPoints for mode in ["","_inv"]]
         self.RunPeriods_Dict    = {"2016": ["B", "C", "D", "E", "F", "G", "H"],
                                    "2017": ["B", "C", "D", "E", "F"],
