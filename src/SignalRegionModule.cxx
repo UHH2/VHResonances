@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <chrono>
 
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Selection.h"
@@ -26,6 +27,7 @@
 #include "UHH2/common/include/LumiSelection.h"
 #include "UHH2/common/include/TriggerSelection.h"
 #include "UHH2/common/include/Utils.h"
+#include "UHH2/common/include/PDFWeights.h"
 
 #include "UHH2/VHResonances/include/ModuleBase.h"
 #include "UHH2/VHResonances/include/constants.hpp"
@@ -66,29 +68,40 @@ protected:
   // Define variables
 
   std::vector<std::string> histogram_tags = {"Selection", "ExtraCleaning",
-  "DeepAk8_H4qvsQCD_SR",                      "DeepAk8_H4qvsQCD_CR",
-  "DeepAk8_H4qvsQCD_MD_SR",                   "DeepAk8_H4qvsQCD_MD_CR",
-  "DeepAk8_HccvsQCD_SR",                      "DeepAk8_HccvsQCD_CR",
-  "DeepAk8_HccvsQCD_MD_SR",                   "DeepAk8_HccvsQCD_MD_CR",
-  "DeepAk8_ZHccvsQCD_SR",                     "DeepAk8_ZHccvsQCD_CR",
   "DeepAk8_ZHccvsQCD_MD_SR",                  "DeepAk8_ZHccvsQCD_MD_CR",
+  "DeepAk8_HccvsQCD_SR",                      "DeepAk8_HccvsQCD_CR",
+  "DeepAk8_H4qvsQCD_SR",                      "DeepAk8_H4qvsQCD_CR",
   "DeepAk8_H4qvsQCD_massdep_SR",              "DeepAk8_H4qvsQCD_massdep_CR",
   "DeepAk8_H4qvsQCD_massdep_HccvsQCD_SR",     "DeepAk8_H4qvsQCD_massdep_HccvsQCD_CR",
-  "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD_SR",  "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD_CR",
-  "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_SR",    "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_CR",
-  "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD_SR", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD_CR",
   "tau42_SR", "tau42_CR","tau21_SR", "tau21_CR"};
 
   std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "HDecay", "ZDecay", "ZprimeDecay"};
-  std::vector<std::string> Systematics =  {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF"};
-  std::vector<std::string> Variations = {"", "up", "down"};
+  std::vector<std::string> Systematics = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
 
+  std::vector<std::string> Var_murmuf = {"upup", "upnone", "noneup", "nonedown", "downnone", "downdown"};
+  std::vector<std::string> Variations = {"", "up", "down"};
+  int PDF_variations = 100; int pdfindex_shift = 9;
+  std::unordered_map<std::string, std::string> PFDs = {
+    {"NNPDF", "NNPDF31_nnlo_as_0118_nf_4_mc_hessian"},
+    // To keep as memo!
+    // {"NNPDF31_lo_as_0130", "NNPDF31_lo_as_0130"}, used for PDF reweight in invisiblechannel channel
+    // {"PDF4LHC15_nnlo_100", "PDF4LHC15_nnlo_100"},
+    // {"NNPDF31_nnlo_as_0118_mc_hessian_pdfas", "NNPDF31_nnlo_as_0118_mc_hessian_pdfas"},// same results as NNPDF31_nnlo_as_0118_nf_4_mc_hessian
+    // {"NNPDF31_nnlo_hessian_pdfas", "NNPDF31_nnlo_hessian_pdfas"},//This is the default stored in ntuples for the lepton channel
+    // {"PDF4LHC15_nlo_mc_pdfas", "PDF4LHC15_nlo_mc_pdfas"},
+    // {"PDF4LHC15_nlo_mc", "PDF4LHC15_nlo_mc"},
+    // {"PDF4LHC15_nnlo_mc_pdfas", "PDF4LHC15_nnlo_mc_pdfas"},
+    // {"PDF4LHC15_nnlo_mc", "PDF4LHC15_nnlo_mc"},
+  };
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
 
   Event::Handle<std::vector<TopJet> > h_topjets;
   Event::Handle<std::vector<ZprimeCandidate> > h_ZprimeCandidates;
+
+  std::unordered_map<std::string, std::vector<double> > PDF_weights;
+  std::unordered_map<std::string, std::unique_ptr<PDFWeights> > m_pdfweights;
 
   // Define selections
 
@@ -130,14 +143,13 @@ void SignalRegionModule::book_handles(uhh2::Context& ctx) {
   if (!MB["is_mc"]) return;
 
   for(const auto & syst : Systematics) {
-    for(const auto & var : Variations) {
+    if (FindInString("PDF", syst)) continue;
+    for(const auto & var : FindInString("murmuf", syst) ? Var_murmuf: Variations) {
       string tag = GetSystName(syst, var);
       book_WFolder(tag+"_in",  new Event::Handle< float >, ctx.declare_event_input< float >(tag));
       book_WFolder(tag+"_out", new Event::Handle< float >, ctx.declare_event_output< float >(tag));
     }
   }
-
-
 }
 
 
@@ -146,7 +158,8 @@ void SignalRegionModule::export_weights(uhh2::Event& event) {
   if (!MB["is_mc"]) return;
 
   for(const auto & syst : Systematics) {
-    for(const auto & var : Variations) {
+    if (FindInString("PDF", syst)) continue;
+    for(const auto & var : FindInString("murmuf", syst) ? Var_murmuf: Variations) {
       string tag = GetSystName(syst, var);
       event.set(WFolder(tag+"_out"), event.get(WFolder(tag+"_in")));
     }
@@ -157,33 +170,57 @@ void SignalRegionModule::export_weights(uhh2::Event& event) {
 void SignalRegionModule::book_histograms(uhh2::Context& ctx){
   for(const auto & tag : histogram_tags){
     string mytag;
+    mytag = "event_"              + tag; book_HFolder(mytag, new EventHists(ctx,mytag));
     mytag = "diLepton_"           + tag; book_HFolder(mytag, new DiLeptonHists(ctx,mytag, "", MS["topjetLabel"]));
     mytag = "ZprimeCandidate_"    + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
     mytag = "nTopJet_"            + tag; book_HFolder(mytag, new ExtJetHists(ctx,mytag, MS["topjetLabel"] ));
-
+    if (FindInString("_CR", tag)) continue;
     for (std::string& syst :  Systematics){
-      for (std::string& var : Variations){
-        if (var=="") continue;
-        mytag = "ZprimeCandidate_"+syst+"_"+var+"_"+tag; book_HFolder(mytag, new HiggsToWWHistsSlim(ctx,mytag));
+      if (FindInString("PDF", syst)) {
+        for(int i=0; i<PDF_variations; i++){
+          std::string var = to_string(i);
+          mytag = "ZprimeCandidate_"+syst+"_"+var+"_"+tag; book_HFolder(mytag, new HiggsToWWHistsSlim(ctx,mytag));
+        }
+      } else {
+        for (std::string& var : FindInString("murmuf", syst) ? Var_murmuf: Variations){
+          if (var=="") continue;
+          mytag = "ZprimeCandidate_"+syst+"_"+var+"_"+tag; book_HFolder(mytag, new HiggsToWWHistsSlim(ctx,mytag));
+        }
       }
     }
-
   }
 }
 
-void SignalRegionModule::fill_histograms(uhh2::Event& event, string tag){
-  std::vector<string> mytags = {"nTopJet_", "ZprimeCandidate_","diLepton_"};
+void SignalRegionModule::fill_histograms(uhh2::Event& event, string tag) {
+  std::vector<string> mytags = {"event_", "nTopJet_", "ZprimeCandidate_","diLepton_"};
   for (auto& mytag : mytags) HFolder(mytag+ tag)->fill(event);
   string mytag;
   float save_weight = event.weight;
+  if (FindInString("_CR", tag)) return;
+
+  if (MB["is_ZH"]) {for (std::pair<std::string, std::string> pdf : PFDs) PDF_weights[pdf.first] = m_pdfweights[pdf.first]->GetWeightList(event);}
+
   for (std::string& syst :  Systematics){
-    for (std::string& var : Variations){
-      if (var=="") continue;
-      if (!event.isRealData) event.weight = save_weight*event.get(WFolder(GetSystName(syst, var)+"_in"))/event.get(WFolder(GetSystName(syst, "")+"_in"));
-      mytag = "ZprimeCandidate_"+syst+"_"+var+"_"+tag; HFolder(mytag)->fill(event);
+    if (FindInString("PDF", syst)) {
+      for(int i=0; i<PDF_variations; i++){
+        if (MB["is_ZH"]) {
+          double weightFactor = (syst=="PDF")? event.genInfo->systweights().at(i+pdfindex_shift)/event.genInfo->systweights().at(pdfindex_shift) : PDF_weights[syst][i];
+          event.weight = save_weight*weightFactor;
+        } else {event.weight = save_weight;}
+        std::string var = to_string(i);
+        mytag = "ZprimeCandidate_"+syst+"_"+var+"_"+tag; HFolder(mytag)->fill(event);
+      }
+    } else {
+      for (std::string& var : FindInString("murmuf", syst) ? Var_murmuf: Variations){
+        if (var=="") continue;
+        if (!event.isRealData) {
+          if (FindInString("murmuf", syst)) event.weight = save_weight*event.get(WFolder(GetSystName(syst, var)+"_in"));
+          else event.weight = save_weight*event.get(WFolder(GetSystName(syst, var)+"_in"))/event.get(WFolder(GetSystName(syst, "")+"_in"));
+        }
+        mytag = "ZprimeCandidate_"+syst+"_"+var+"_"+tag; HFolder(mytag)->fill(event);
+      }
     }
   }
-
   event.weight = save_weight;
 }
 
@@ -214,13 +251,16 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
   MB["is_WW"]   = MS["dataset_version"].find("ToWW")!=std::string::npos;
   MB["is_else"] = MS["dataset_version"].find("_extra")!=std::string::npos;
 
-  if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In SelectionModule.cxx: Choose exactly one jet collection.");
-  if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In SelectionModule.cxx: Choose exactly one lepton channel.");
+  if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In SignalRegionModule.cxx: Choose exactly one jet collection.");
+  if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In SignalRegionModule.cxx: Choose exactly one lepton channel.");
 
   MS["topjetLabel"] = MB["isCHS"]? "topjets": (MB["isPuppi"]? "toppuppijets": (MB["isHOTVR"]? "hotvrPuppi": ""));
 
-  if(MB["electronchannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"tracking"));
-  if(MB["electronchannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"isolation"));
+  if(!MB["muonchannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"tracking"));
+  if(!MB["muonchannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"isolation"));
+  if(MB["invisiblechannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"id"));
+  if(MB["invisiblechannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"trigger"));
+  if(MB["invisiblechannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"reco"));
 
   // Set up histograms:
   book_histograms(ctx);
@@ -228,6 +268,7 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
   PrintInputs();
 
   // Set up selections
+  for (std::pair<std::string, std::string> pdf : PFDs) m_pdfweights[pdf.first].reset(new PDFWeights(pdf.second));
   h_topjets = ctx.get_handle<std::vector<TopJet>>(MS["topjetLabel"]);
   h_ZprimeCandidates = ctx.declare_event_input<std::vector<ZprimeCandidate>>("ZprimeCandidate");
 
@@ -252,60 +293,36 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
 bool SignalRegionModule::process(uhh2::Event& event) {
 
   event.weight = event.get(WFolder("weight_GLP_in"));
-
   fill_histograms(event, "Selection");
 
-  if (event.get(h_ZprimeCandidates).size()!=1) return false; // TODO!!!
+  if (event.get(h_ZprimeCandidates).size()!=1) return false;
   // if (event.get(h_ZprimeCandidates).size()!=1 && event.get(h_ZprimeCandidates)[0].discriminator("SDmass")<50) return false; // TODO!!!
 
   ZprimeCandidate cand = event.get(h_ZprimeCandidates)[0];
 
-  // Don't apply ExtraCleaning to invisiblechannel.
-  if(!MB["invisiblechannel"]){
-    bool extraCleaning_pass = (fabs(cand.H().eta()-cand.Z().eta())>1.7) || (deltaR(cand.H(),cand.Z())<2) || (deltaR(cand.leptons()[0], cand.leptons()[1])>0.4);
-    if (extraCleaning_pass) return false;
-  }
+  if(!MB["invisiblechannel"]){ if(deltaR(cand.leptons()[0], cand.leptons()[1])<0.45) return false;}
+  fill_histograms(event, "Extracleaning");
 
-  fill_histograms(event, "ExtraCleaning");
-
-  bool H4qvsQCD_massdep_pass  = DeepAk8_H4qvsQCD_massdep_SR_selection->passes(event);
-  bool H4qvsQCD_pass     = cand.discriminator("btag_DeepBoosted_H4qvsQCD")>TaggerThr;
-  bool H4qvsQCD_MD_pass  = cand.discriminator("btag_DeepBoosted_H4qvsQCD_MD")>TaggerThr;
-  bool HccvsQCD_pass     = cand.discriminator("btag_DeepBoosted_HccvsQCD")>TaggerThr;
-  bool HccvsQCD_MD_pass  = cand.discriminator("btag_DeepBoosted_HccvsQCD_MD")>TaggerThr;
-  bool ZHccvsQCD_pass    = cand.discriminator("btag_DeepBoosted_ZHccvsQCD")>TaggerThr;
   bool ZHccvsQCD_MD_pass = cand.discriminator("btag_DeepBoosted_ZHccvsQCD_MD")>TaggerThr;
-
-  if(H4qvsQCD_pass) fill_histograms(event, "DeepAk8_H4qvsQCD_SR");
-  else fill_histograms(event, "DeepAk8_H4qvsQCD_CR");
-
-  if(H4qvsQCD_MD_pass) fill_histograms(event, "DeepAk8_H4qvsQCD_MD_SR");
-  else fill_histograms(event, "DeepAk8_H4qvsQCD_MD_CR");
-
-  if(HccvsQCD_pass) fill_histograms(event, "DeepAk8_HccvsQCD_SR");
-  else fill_histograms(event, "DeepAk8_HccvsQCD_CR");
-
-  if(HccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_HccvsQCD_MD_SR");
-  else fill_histograms(event, "DeepAk8_HccvsQCD_MD_CR");
-
-  if(ZHccvsQCD_pass) fill_histograms(event, "DeepAk8_ZHccvsQCD_SR");
-  else fill_histograms(event, "DeepAk8_ZHccvsQCD_CR");
+  bool HccvsQCD_pass     = cand.discriminator("btag_DeepBoosted_HccvsQCD")>TaggerThr;
+  bool H4qvsQCD_pass     = cand.discriminator("btag_DeepBoosted_H4qvsQCD")>TaggerThr;
+  bool H4qvsQCD_massdep_pass  = DeepAk8_H4qvsQCD_massdep_SR_selection->passes(event);
 
   if(ZHccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_ZHccvsQCD_MD_SR");
   else fill_histograms(event, "DeepAk8_ZHccvsQCD_MD_CR");
 
+  if(HccvsQCD_pass) fill_histograms(event, "DeepAk8_HccvsQCD_SR");
+  else fill_histograms(event, "DeepAk8_HccvsQCD_CR");
+
+  if(H4qvsQCD_pass) fill_histograms(event, "DeepAk8_H4qvsQCD_SR");
+  else fill_histograms(event, "DeepAk8_H4qvsQCD_CR");
+
   if(H4qvsQCD_massdep_pass) {
     fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_SR");
     if (HccvsQCD_pass)     fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_HccvsQCD_SR");
-    if (HccvsQCD_MD_pass)  fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD_SR");
-    if (ZHccvsQCD_pass)    fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_SR");
-    if (ZHccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD_SR");
   } else {
     fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_CR");
     if (!HccvsQCD_pass)     fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_HccvsQCD_CR");
-    if (!HccvsQCD_MD_pass)  fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD_CR");
-    if (!ZHccvsQCD_pass)    fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_CR");
-    if (!ZHccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD_CR");
   }
 
   if(tau42_SR_selection->passes(event)) fill_histograms(event, "tau42_SR");
