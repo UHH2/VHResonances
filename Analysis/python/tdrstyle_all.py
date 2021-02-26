@@ -1,4 +1,5 @@
 import ROOT as rt
+from array import array
 
 #######################################
 # New CMS Style from 2014             #
@@ -16,6 +17,15 @@ def ExtraTextOff(TDR):
 def ForThesis(TDR):
     CMSOff(TDR)
     ExtraTextOff(TDR)
+
+def SetAlternative2DColor(h=None):
+    Red    = [ 0.00, 0.00, 1.00, 0.70]
+    Green  = [ 0.30, 0.50, 0.70, 0.00]
+    Blue   = [ 0.50, 0.40, 0.20, 0.15]
+    Length = [ 0.00, 0.15, 0.70, 1.00]
+    nb = 200
+    rt.TColor.CreateGradientColorTable(len(Length),array('d',Length),array('d',Red),array('d',Green),array('d',Blue),nb)
+    if h is not None: h.SetContour(nb)
 
 #############
 # tdrstyle  #
@@ -319,7 +329,7 @@ kRectangular = False
 
 # Give the macro an empty histogram for h.Draw("AXIS")
 # Create h after calling setTDRStyle to get all the settings right
-def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square=kRectangular, iPeriod=4, iPos=11):
+def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square=kRectangular, iPeriod=4, iPos=11, is2D=False, isExtraSpace=False):
   setTDRStyle()
   # writeExtraText = true       # if extra text
   # extraText  = extraText_  # default extra text is "Preliminary"
@@ -358,18 +368,18 @@ def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square
   canv.SetBorderMode(0)
   canv.SetFrameFillStyle(0)
   canv.SetFrameBorderMode(0)
-  canv.SetLeftMargin( L/W )
-  canv.SetRightMargin( R/W )
+  canv.SetLeftMargin( B/W if is2D else (L/W+0.03 if isExtraSpace else L/W) )
+  canv.SetRightMargin( B/W+0.01 if is2D else (R/W+0.01 if isExtraSpace else R/W) )
   canv.SetTopMargin( T/H )
-  canv.SetBottomMargin( B/H )
+  canv.SetBottomMargin(B/H+0.03 if isExtraSpace else B/H )
   # FOR JEC plots, prefer to keep ticks on both sides
   #canv.SetTickx(0)
   #canv.SetTicky(0)
   #
   # assert(h)
   h = canv.DrawFrame(x_min,y_min,x_max,y_max)
-  h.GetYaxis().SetTitleOffset(1.25 if square else 1.0)
-  h.GetXaxis().SetTitleOffset(1.0  if square else 0.9)
+  h.GetYaxis().SetTitleOffset((0.8 if is2D else 1.25) if square else (1.3 if isExtraSpace else 1.0))
+  h.GetXaxis().SetTitleOffset((0.9 if is2D else 1.0)  if square else (1.0 if isExtraSpace else 0.9))
   h.GetXaxis().SetTitle(nameXaxis)
   h.GetYaxis().SetTitle(nameYaxis)
   h.Draw("AXIS")
