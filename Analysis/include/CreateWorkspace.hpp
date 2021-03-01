@@ -39,6 +39,7 @@
 #include <RooHistPdf.h>
 #include <TError.h>
 #include <RooGlobalFunc.h>
+#include <TRandom3.h>
 
 #include "RooNovosibirsk.h"
 #include "HiggsAnalysis/CombinedLimit/interface/RevCrystalBall.hpp"
@@ -60,8 +61,9 @@
 ******************************************
 /         Background Estimation           /
 /-----------------------------------------/
-/  fitCR: bkg_pred= Data_CR* MC_SR/MC_CR  /
-/ !fitCR: bkg_pred= MC_SR* MC_SR/MC_SR    /
+/  fitMC: bkg_pred= MC_SR* Data_SR/MC_SR  /
+/ !fitMC: bkg_pred= Data_SR               /
+/  doObs: show Data_SR                    /
 /  doObs: data_obs= Data_SR               /
 / !doObs: data_obs= bkg_pred*Norm(Data_SR)/
 *******************************************
@@ -85,7 +87,9 @@
 */
 
 
-const std::vector<double> MyMassPoints = {1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000};
+// const std::vector<double> MyMassPoints = {1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000};
+
+const std::vector<double> MyMassPoints = {1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000};
 
 double GetRange(TH1F* h, double x);
 
@@ -104,16 +108,16 @@ std::unordered_map<std::string, int> Colors = {
   { "LN",          kRed+1},
   { "LE",          kBlue+1},
   { "GE",          kGreen+1},
-  { "BkgPdf3p",    kGreen+1},
-  { "BkgPdf4p",    kRed+1},
+  { "BkgPdf3p",    kAzure+7},
+  { "BkgPdf4p",    kMagenta+1},
 
-  { "NO",          kBlue+1},
+  { "NO",          kAzure+7},
   { "CB",          kOrange+1},
   { "Exp_1",       kMagenta+1},
   { "Exp_2",       kRed+1},
-  { "Exp_3",       kGreen+2},
-  { "Exp_4",       kGreen+1},
-  { "Exp_5",       kYellow+1},
+  { "Exp_3",       kGreen+3},
+  { "Exp_4",       kOrange+1},
+  { "Exp_5",       kAzure+7},
   { "Exp_6",       kBlack},
 
   { "bkg_pred",    kBlue+1},
@@ -145,7 +149,8 @@ std::unordered_map<std::string, int> Colors = {
 class CreateRooWorkspace {
 
 public:
-  CreateRooWorkspace(std::string year, std::string collection, std::string channel, std::string histFolder);
+  // CreateRooWorkspace(std::string year, std::string collection, std::string channel, std::string histFolder);
+  CreateRooWorkspace(std::string year, std::string collection, std::string channel, std::string histFolder, std::string min, std::string max);
   ~CreateRooWorkspace();
 
   void Process();
@@ -169,19 +174,30 @@ public:
   void CalculateSignalFittingRange(double mass, double& rangeLo, double& rangeHi, double& plotLo, double& plotHi, double& ymax);
   inline bool FindInVector(const std::vector<std::string>& vec, const std::string& str) {return (std::find(vec.begin(), vec.end(), str) != vec.end());};
   inline bool FindInString(const std::string& search, const std::string& str) {return str.find(search)!=std::string::npos ;}
-  inline bool isNominalFolder(std::string syst) {return (isNominalSyst(syst) || FindInString("pu",syst) || FindInString("btag",syst) || FindInString("prefiring",syst) || FindInString("id",syst) || FindInString("isolation",syst) || FindInString("tracking",syst) || FindInString("trigger",syst) || FindInString("reco",syst));};
   inline bool isNominalSyst(std::string syst) { return FindInString("nominal",syst);}; // TODO
+  inline bool isNominalFolder(std::string syst) { bool var = isNominalSyst(syst); for (const auto& e: SystematicsScale) var+=FindInString(e,syst); return var;};
+
 
 private:
+  int myMin, myMax;
+
   std::string year, collection, channel, histFolder;
   std::string user, Path_ANALYSIS, Path_NFS, Path_STORAGE, PrefixrootFile;
   std::string workingDir, unique_name_complete, unique_name, filepath;
   std::string SRname, CRname;
 
   std::vector<std::string> SystNames = {"nominal", "all"};
-  // std::vector<std::string> BkgNames = {"DY", "TTbar", "WZ", "WW", "ZZ", "WJets"};
-  std::vector<std::string> BkgNames = {"DY", "WJets"};
-  std::vector<std::string> Modes = {"bkg_pred", "data", "main_bkg_CR", "main_bkg_SR", "DY_CR", "DY_SR", "WJets_CR", "WJets_SR"};
+  // std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "mur", "muf", "murmuf" };
+  std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
+  std::vector<std::string> SystematicsShape = {"JEC", "JER", "MuonScale"};
+  std::vector<std::string> SystematicsAll;
+  std::vector<std::string> Var_murmuf = {"upup", "upnone", "noneup", "nonedown", "downnone", "downdown"};
+  const int PDF_variations = 100;
+
+
+  // std::vector<std::string> BkgNames = {"DY", "WJets", "TTbar", "VV", "WZ", "WW", "ZZ"};
+  std::vector<std::string> BkgNames = {"DY", "WJets", "TTbar"};
+  std::vector<std::string> Modes = {"bkg_pred", "data", "data_CR", "MC_CR", "MC_fake_CR", "MC_SR", "DY_CR", "DY_SR", "WJets_CR", "WJets_SR"};
 
   std::string dataName, dataFileName;
   std::string BkgName = "DY";
@@ -209,7 +225,7 @@ private:
 
   std::string studies="nominal";
   bool isHbb = false;
-  bool fitCR = true;
+  bool fitMC = true;
   // bool doObs = false;
   bool doObs = true; //TODO
 
@@ -235,15 +251,17 @@ private:
 
   TString extra_text = doFtest? "_Ftest_": "";
 
-  double x_lo     = 700;
+  double x_lo     = 1000;
   double x_hi     = 10000;
+  double x_lo_short = 1200;
+  double x_hi_short = 10000;
   double plot_lo  = 1000;
   double plot_hi  = 6000;
   double plot_ylo = 1.1*1e-03;
   double plot_yhi = 1e07;
   // double fit_lo   = 600;
-  double fit_lo   = 1230;
-  double fit_hi   = 3500;
+  // double fit_lo   = 1230;
+  // double fit_hi   = 3500;
 
   // double fit_lo   = 1360; DY_CR bin30 ok also for DR_SR 30
   // double fit_hi   = 5500; DY_CR bin30 ok also for DR_SR 30
@@ -251,21 +269,91 @@ private:
   // double fit_hi   = 4000; data_CR bin30
   // double fit_lo   = 1300; DR_SR bin30
   // double fit_hi   = 4500; DR_SR bin30
-  double fit_SR   = 810;
-  double fit_max_DY_CR = 5000;
-  double fit_max_bkgpred = 3500;
+
+
+// Begin: old code
+  // double fit_SR   = 810;
+  // double fit_max_DY_CR = 5000;
+  // double fit_max_bkgpred = 3500;
+// END: old code
+
+
+  // double fit_SR   = 810;
+  // double fit_min_CR = 1400;
+  // double fit_max_CR = 5000;
+
+  double fit_lo_SR;
+  double fit_lo_CR;
+  double fit_hi_SR;
+  double fit_hi_CR;
+  double show_lo_SR;
+  double show_hi_SR;
+  double show_lo_CR;
+  double show_hi_CR;
+
+  const std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, double>>> ranges = {
+    { "SR", {
+      { "muonchannel", {
+        { "fit_lo",  1200},
+        { "fit_hi",  4400},
+        { "show_lo", 1000},
+        { "show_hi", 4500},
+      }},
+      { "electronchannel", {
+        { "fit_lo",  1200},
+        { "fit_hi",  4200},
+        { "show_lo", 1000},
+        { "show_hi", 4500},
+      }},
+      { "invisiblechannel", {
+        { "fit_lo",  1200},
+        { "fit_hi",  4200},
+        { "show_lo", 1000},
+        { "show_hi", 4500},
+      }},
+    }},
+    { "CR", {
+      { "muonchannel", {
+        { "fit_lo",  1300},
+        { "fit_hi",  4200},
+        { "show_lo", 1200},
+        { "show_hi", 6000},
+        { "show_lo_data", 1200},
+        { "show_hi_data", 3500},
+      }},
+      { "electronchannel", {
+        { "fit_lo",  1300},
+        { "fit_hi",  3300},
+        { "show_lo", 1200},
+        { "show_hi", 6000},
+        { "show_lo_data", 1200},
+        { "show_hi_data", 4500},
+      }},
+      { "invisiblechannel", {
+        { "fit_lo",  1300},
+        { "fit_hi",  4200},
+        { "show_lo", 1200},
+        { "show_hi", 6000},
+        { "show_lo_data", 1200},
+        { "show_hi_data", 3500},
+      }},
+    }},
+  };
+
+  // double fit_SR   = 1000;
+  double fit_min_CR = 1400;
+  double fit_max_CR = 6000;
+>>>>>>> 729f915b8b5235840331edf1dddd4bb95bed2357
 
   bool debug = false;
   // bool debug = true;
-
-
 
   int rebin;
   int bin;
   int bin2;
   std::vector<double> bins_Zprime_rebin;
 
-  double nEventsSR, xsec_ref_;
+  double nEventsSR, nEventsSR_fit, xsec_ref_;
 
 
 };

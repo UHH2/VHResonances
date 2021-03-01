@@ -52,12 +52,12 @@ class ModuleRunner(ModuleRunnerBase):
     def defineModules(self):
         self.ModuleSamples_dict  = {"Test"               : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "GenericCleaning"    : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
-                                    "ProbeNN"            : {"sample": self.Processes_Dict, "all": self.AllProcesses_List},
-                                    "NeuralNetwork"      : {"sample": self.Processes_Dict, "all": self.AllProcesses_List},
+                                    "ProbeNN"            : {"sample": self.Processes_Dict,  "all": self.AllProcesses_List},
+                                    "NeuralNetwork"      : {"sample": self.Processes_Dict,  "all": self.AllProcesses_List},
                                     "PDFReweight"        : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "Preselection"       : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
-                                    "Selection"          : {"sample": self.Processes_Dict, "all": self.AllProcesses_List},
-                                    "SignalRegion"       : {"sample": self.Processes_Dict, "all": self.AllProcesses_List},
+                                    "Selection"          : {"sample": self.Processes_Dict,  "all": self.AllProcesses_List},
+                                    "SignalRegion"       : {"sample": self.Processes_Dict,  "all": self.AllProcesses_List},
                                     "SF"                 : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "HccSFSelection"     : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "LeptonIDStudies"    : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
@@ -70,11 +70,8 @@ class ModuleRunner(ModuleRunnerBase):
         process = subprocess.Popen("make -j 20", shell=True)
         process.wait()
         os.chdir(self.Path_ANALYSIS+"Analysis")
-        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/obj")
-        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/OtherPlots")
-        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/ScaleFactors/Electrons")
-        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/ScaleFactors/Muons")
-        os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/ScaleFactors/BTag")
+        for folder in ["obj", "OtherPlots", "ScaleFactors/Electrons", "ScaleFactors/Muons", "ScaleFactors/BTag", "ScaleFactors/Taggers"]:
+            os.system("mkdir -p "+self.Path_ANALYSIS+"Analysis/"+folder)
         process = subprocess.Popen("make -j 20", shell=True)
         process.wait()
 
@@ -100,7 +97,6 @@ class ModuleRunner(ModuleRunnerBase):
         if "Test" in self.Module or "GenericCleaning" in self.Module or "VariableRStudies" in self.Module:
             self.Collections = ["All"]
         if "PDFReweight" in self.Module:
-            self.Channels    = ["invisible"]
             self.Systematics = ["nominal"]
             self.Samples     = list(filter(lambda x: "Zprime" in x, self.Samples))
         if ( "GenericCleaning" in self.Module or "Test" in self.Module or "NeuralNetwork" in self.Module or "VariableRStudies" in self.Module ):
@@ -238,7 +234,7 @@ class ModuleRunner(ModuleRunnerBase):
         list_processes = []
         list_processes_merge = []
         list_processes_plots = []
-        for module in ["Preselection","Selection","SignalRegion", "LeptonIDStudies","SF"]:
+        for module in ["Preselection","Selection","SignalRegion", "LeptonIDStudies","PDFReweight"]:
             self.SetModule(module, Collections=Collections, Channels=Channels, Systematics=Systematics)
             for collection, channel, syst in self.SmartLoop():
                 if DoControl(self.controls,module+collection+channel+syst, channel, ""):
