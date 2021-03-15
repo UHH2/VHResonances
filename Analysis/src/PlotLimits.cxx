@@ -167,6 +167,7 @@ void PlotLimits(bool doObs, bool isHbb) {
           }
 
           for (auto [name,lims]: Limits[workingDir] ) {
+            if (channel!="invisiblechannel") continue;
             // if (name!="xsec") continue;
             std::cout << workingDir << " " << name << std::endl;
             for (size_t i = 0; i < lims.size(); i++) std::cout << lims[i] << ", ";
@@ -178,8 +179,7 @@ void PlotLimits(bool doObs, bool isHbb) {
     }
   }
 
-  TString nameXaxis = "m(Z') [GeV]";
-  // TString nameYaxis = "#sigma\(pp#rightarrowX\) #times Br\(Z'#rightarrowZ\(ll\) H\(WW\)\) \(fb\)";
+  TString nameXaxis = "M(Z') [GeV]";
   TString nameYaxis = "#sigma#left(pp#rightarrowZ'#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)";
 
   writeExtraText = true;       // if extra text
@@ -456,19 +456,28 @@ void PlotExpectedLines(TCanvas* canv, TLegend* leg, const std::vector<double> & 
 
 
 void PlotTheoryLines(TCanvas* canv, TLegend* leg) {
-  PlotExpectedLines(canv, leg, theo_mass, HVT_A_xsec, "HVT model A", kRed+2,    kSolid);
-  PlotExpectedLines(canv, leg, theo_mass, HVT_B_xsec, "HVT model B", kAzure+10, kSolid);
+  // PlotExpectedLines(canv, leg, theo_mass, HVT_A_xsec, "HVT model A", kRed+2,    kSolid);
+  // PlotExpectedLines(canv, leg, theo_mass, HVT_B_xsec, "HVT model B", kAzure+10, kSolid);
+
+  PlotExpectedLines(canv, leg, theo_mass, HVT_A_xsec, "HVT model A", kViolet-9, kSolid);
+  PlotExpectedLines(canv, leg, theo_mass, HVT_B_xsec, "HVT model B", kViolet-1, kSolid);
 }
 
 
 void PlotRefLines(TCanvas* canv, TLegend* leg) {
-  PlotExpectedLines(canv, leg, MassPoints_Hbb, expectedHbb,     "B2G-19-006 Hbb", kBlue+1,   kDotted);
-  PlotExpectedLines(canv, leg, MassPoints_Hbb, expectedHbb0b,   "B2G-19-006 H0b", kBlue+1,   kDashed);
+  // arXiv:2102.08198
+  // B2G-19-006
+  // PlotExpectedLines(canv, leg, MassPoints_Hbb, expectedHbb,     "B2G-19-006 Hbb", kViolet-9, kDashed);
+  // PlotExpectedLines(canv, leg, MassPoints_Hbb, expectedHbb0b,   "B2G-19-006 H0b", kViolet-1, kDashed);
+
+  // PlotExpectedLines(canv, leg, MassPoints_Hbb, expectedHbb,     "B2G-19-006 Hbb", kAzure+10, kDashed);
+  PlotExpectedLines(canv, leg, MassPoints_Hbb, expectedHbb,     "B2G-19-006 Hbb", kAzure, kDashed);
+  PlotExpectedLines(canv, leg, MassPoints_Hbb, expectedHbb0b,   "B2G-19-006 H0b", kRed+2, kDashed);
   // PlotExpectedLines(canv, leg, MassPoints_Hbb, expectedH0lll2b, "Hbb 0l2l2b", kOrange+1, kSolid);
   // PlotExpectedLines(canv, leg, MassPoints_Hbb, expectedH0lll0b, "Hbb 0l2l0b", kOrange+1, kSolid);
   // PlotExpectedLines(canv, leg, MassPoints_Hbb, expectedHcomb,   "Hbb comb",   kGreen+2,  kSolid);
 
-  PlotExpectedLines(canv, leg, ee_mass,        ee_xsec,   "B2G-19-006 (ZeeH0b)",   kBlue+1,  kDashDotted);
+  // PlotExpectedLines(canv, leg, ee_mass,        ee_xsec,   "B2G-19-006 (ZeeH0b)",   kBlue+1,  kDashDotted);
 
 }
 
@@ -498,12 +507,14 @@ void PlotLimitsFinal(){
   std::string Path_ANALYSIS = std::getenv("CMSSW_BASE"); Path_ANALYSIS += "/src/UHH2/VHResonances/Analysis/";
   std::string AnalysisDir = Path_ANALYSIS+"Limits/nominal/";
 
+  writeExtraText = true;       // if extra text
+  extraText  = "Work in progress" ;//"Preliminary";
   lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at("RunII").at("lumi_fb"));
 
-  TCanvas* canv = tdrCanvas("canv_final", 1000, 5200, 1e-01, 700, "m(Z') [GeV]", "#sigma#left(pp#rightarrowX#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)");
-  TLegend* leg_theo = tdrLeg(0.45, 0.7, 0.60, 0.85, 0.025, 42, kBlack);
-  TLegend* leg_comp = tdrLeg(0.45, 0.6, 0.60, 0.70, 0.025, 42, kBlack);
-  TLegend* leg = tdrLeg(0.65, 0.7, 0.9, 0.85, 0.025, 42, kBlack);
+  TCanvas* canv = tdrCanvas("canv_final", 1000, 5200, 1e-01, 700, "M(Z') [GeV]", "#sigma#left(pp#rightarrowZ'#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)");
+  TLegend* leg_theo = tdrLeg(0.40, 0.7, 0.60, 0.85, 0.035, 42, kBlack);
+  TLegend* leg_comp = tdrLeg(0.40, 0.5, 0.60, 0.70, 0.035, 42, kBlack);
+  TLegend* leg = tdrLeg(0.65, 0.7, 0.9, 0.85, 0.035, 42, kBlack);
   canv->SetLogy(1);
 
   // const std::vector<double> & x_val         = {1000.0,   1200.0,  1400.0, 1600.0,   1800.0, 2000.0, 2500.0, 3000.0, 3500.0, 4000.0, 4500.0, 5000.0, 5500.0, 6000.0, 7000.0, 8000.0};
@@ -639,16 +650,23 @@ void PlotLimitsFinal(){
   const std::vector<double> & y_val_lep_ZHcc_MD_obs = {17.4138, 20.3213, 5.5306, 3.654, 3.4059, 2.2769, 0.8467, 0.4447, 0.3163, 0.2579};
 
 
-// RunII/Puppi/leptonchannel/DeepAk8_ZHccvsQCD_MD2/ obs
 
-// RunII/Puppi/leptonchannel/DeepAk8_ZHccvsQCD_MD2/ xsecNeg1
-// 12.3728, 5.0547, 5.3968, 3.8594, 1.5916, 0.6769, 0.3443, 0.2202, 0.166, 0.1358,
-// RunII/Puppi/leptonchannel/DeepAk8_ZHccvsQCD_MD2/ xsecPos1
-// 21.8011, 10.0712, 10.772, 8.0458, 3.5701, 1.6458, 0.9457, 0.6706, 0.5406, 0.4633,
-// RunII/Puppi/leptonchannel/DeepAk8_ZHccvsQCD_MD2/ xsecPos2
-// 28.5497, 10.1111, 14.67, 11.1291, 5.1064, 2.4682, 1.4979, 1.106, 0.8999, 0.7579,
-// RunII/Puppi/leptonchannel/DeepAk8_ZHccvsQCD_MD2/ xsecNeg2
-// 9.9275, 5.0352, 4.0342, 2.803, 1.1169, 0.4644, 0.2279, 0.1365, 0.0997, 0.0801,
+  const std::vector<double> & y_val_inv_ZHcc_MD_2sigmaPos =  { 17.0103, 11.0799, 9.9665, 7.8853, 3.533, 1.7538, 1.1617, 0.9065, 0.734, 0.6171};
+  const std::vector<double> & y_val_inv_ZHcc_MD_1sigmaPos =  { 7.6921,  5.94, 4.5418, 3.5396, 1.5503, 0.738, 0.4739, 0.3591, 0.3025, 0.2639};
+  const std::vector<double> & y_val_inv_ZHcc_MD_1sigmaNeg =  { 5.4237,  2.9765, 3.1336, 2.4688, 1.0318, 0.4479, 0.2672, 0.196, 0.1631, 0.1395};
+  const std::vector<double> & y_val_inv_ZHcc_MD_2sigmaNeg =  { 8.9004,  6.896, 5.1423, 4, 1.6509, 0.6992, 0.4071, 0.2951, 0.2427, 0.2076};
+
+
+  // RunII/Puppi/leptonchannel/DeepAk8_ZHccvsQCD_MD2/ obs
+
+  // RunII/Puppi/leptonchannel/DeepAk8_ZHccvsQCD_MD2/ xsecNeg1
+  // 12.3728, 5.0547, 5.3968, 3.8594, 1.5916, 0.6769, 0.3443, 0.2202, 0.166, 0.1358,
+  // RunII/Puppi/leptonchannel/DeepAk8_ZHccvsQCD_MD2/ xsecPos1
+  // 21.8011, 10.0712, 10.772, 8.0458, 3.5701, 1.6458, 0.9457, 0.6706, 0.5406, 0.4633,
+  // RunII/Puppi/leptonchannel/DeepAk8_ZHccvsQCD_MD2/ xsecPos2
+  // 28.5497, 10.1111, 14.67, 11.1291, 5.1064, 2.4682, 1.4979, 1.106, 0.8999, 0.7579,
+  // RunII/Puppi/leptonchannel/DeepAk8_ZHccvsQCD_MD2/ xsecNeg2
+  // 9.9275, 5.0352, 4.0342, 2.803, 1.1169, 0.4644, 0.2279, 0.1365, 0.0997, 0.0801,
 
 
 
@@ -662,11 +680,11 @@ void PlotLimitsFinal(){
   std::string PlotName = "";
   if (true) {
     PlotName = "_SystScan";
-    canv = tdrCanvas(("canv_final"+PlotName).c_str(), 1200, 5200, 1e-01, 700, "m(Z') [GeV]", "#sigma#left(pp#rightarrowX#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)");
+    canv = tdrCanvas(("canv_final"+PlotName).c_str(), 1200, 5200, 1e-01, 700, "M(Z') [GeV]", "#sigma#left(pp#rightarrowZ'#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)");
     canv->SetLogy(1);
-    leg_theo = tdrLeg(0.45, 0.7, 0.60, 0.85, 0.025, 42, kBlack);
-    leg_comp = tdrLeg(0.45, 0.6, 0.60, 0.70, 0.025, 42, kBlack);
-    leg = tdrLeg(0.65, 0.7, 0.9, 0.85, 0.025, 42, kBlack);
+    leg_theo = tdrLeg(0.40, 0.7, 0.60, 0.85, 0.035, 42, kBlack);
+    leg_comp = tdrLeg(0.40, 0.5, 0.60, 0.70, 0.035, 42, kBlack);
+    leg = tdrLeg(0.65, 0.7, 0.9, 0.85, 0.035, 42, kBlack);
     // PlotExpectedLines(canv, leg_comp, x_val, y_val_cc_ns, "H4q+cc_noSys",kBlack, kSolid);
     // PlotExpectedLines(canv, leg_comp, x_val, y_val_cc_s0, "H4q+cc_s0",   kViolet+1, kSolid);
     // PlotExpectedLines(canv, leg_comp, x_val, y_val,       "H4q+cc_s1.5", kRed+1, kSolid);
@@ -689,7 +707,7 @@ void PlotLimitsFinal(){
     // PlotExpectedLines(canv, leg_comp, x_val, H4q_pd_ZHcc_MD_old, "H4q_pd_ZHcc_MD", kRed+1, kSolid);
 
     // PlotTheoryLines(canv,leg_theo);
-    PlotRefLines(canv,leg_theo);
+    // PlotRefLines(canv,leg_theo);
 
     canv->Update();
     canv->RedrawAxis();
@@ -701,11 +719,11 @@ void PlotLimitsFinal(){
 
   if (true) {
     PlotName = "_Channels";
-    canv = tdrCanvas(("canv_final"+PlotName).c_str(), 1200, 5200, 1e-01, 700, "m(Z') [GeV]", "#sigma#left(pp#rightarrowX#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)");
+    canv = tdrCanvas(("canv_final"+PlotName).c_str(), 1200, 5200, 1e-01, 700, "M(Z') [GeV]", "#sigma#left(pp#rightarrowZ'#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)");
     canv->SetLogy(1);
-    leg_theo = tdrLeg(0.45, 0.7, 0.60, 0.85, 0.025, 42, kBlack);
-    leg_comp = tdrLeg(0.45, 0.6, 0.60, 0.70, 0.025, 42, kBlack);
-    leg = tdrLeg(0.65, 0.7, 0.9, 0.85, 0.025, 42, kBlack);
+    leg_theo = tdrLeg(0.40, 0.7, 0.60, 0.85, 0.035, 42, kBlack);
+    leg_comp = tdrLeg(0.65, 0.6, 0.9, 0.85, 0.035, 42, kBlack);
+    leg = tdrLeg(0.65, 0.7, 0.9, 0.85, 0.035, 42, kBlack);
     // PlotExpectedError(canv, leg, x_val, y_val, y_1sigmaPos, y_1sigmaNeg, y_2sigmaPos, y_2sigmaNeg);
 
     // PlotExpectedLines(canv, leg_comp, x_val, y_val_cc_muo,  "H4q+cc (#mu ch.)", kRed+1, kSolid);
@@ -717,12 +735,20 @@ void PlotLimitsFinal(){
     // PlotExpectedLines(canv, leg_comp, x_val, y_obs_ele,  "obs e-channel",   kBlack, kDotted);
     // PlotExpectedLines(canv, leg_comp, x_val, y_obs,  "obs ",   kBlack, kSolid);
 
+    tdrHeader(leg_comp, "Channel");
+    // PlotExpectedLines(canv, leg_comp, x_val, y_val_muo_ZHcc_MD, "muon",            kRed+1,    kSolid);
+    // PlotExpectedLines(canv, leg_comp, x_val, y_val_ele_ZHcc_MD, "electron",        kViolet+1, kSolid);
+    // PlotExpectedLines(canv, leg_comp, x_val, y_val_chl_ZHcc_MD, "charged leptons", kGreen+2,  kSolid);
+    // PlotExpectedLines(canv, leg_comp, x_val, y_val_inv_ZHcc_MD, "invisible",       kOrange+1, kSolid);
+    // PlotExpectedLines(canv, leg_comp, x_val, y_val_lep_ZHcc_MD, "leptons",         kAzure+1,  kSolid);
 
-    PlotExpectedLines(canv, leg_comp, x_val, y_val_muo_ZHcc_MD, "muo",      kRed+1,    kSolid);
-    PlotExpectedLines(canv, leg_comp, x_val, y_val_ele_ZHcc_MD, "ele",      kViolet+1, kSolid);
-    PlotExpectedLines(canv, leg_comp, x_val, y_val_chl_ZHcc_MD, "ch. lep.", kGreen+2,  kSolid);
-    PlotExpectedLines(canv, leg_comp, x_val, y_val_inv_ZHcc_MD, "inv",      kOrange+1, kSolid);
-    PlotExpectedLines(canv, leg_comp, x_val, y_val_lep_ZHcc_MD, "lep.",     kAzure+1,  kSolid);
+
+    PlotExpectedLines(canv, leg_comp, x_val, y_val_muo_ZHcc_MD, "muon",            kOrange+1, kSolid);
+    PlotExpectedLines(canv, leg_comp, x_val, y_val_ele_ZHcc_MD, "electron",        kAzure+1,  kSolid);
+    PlotExpectedLines(canv, leg_comp, x_val, y_val_chl_ZHcc_MD, "charged leptons", kGreen+2,  kSolid);
+    PlotExpectedLines(canv, leg_comp, x_val, y_val_inv_ZHcc_MD, "invisible",       kViolet-3, kSolid);
+    PlotExpectedLines(canv, leg_comp, x_val, y_val_lep_ZHcc_MD, "leptons",         kRed+1,    kSolid);
+
 
     // PlotTheoryLines(canv,leg_theo);
     PlotRefLines(canv,leg_theo);
@@ -735,14 +761,14 @@ void PlotLimitsFinal(){
 
   if (true) {
     PlotName = "";
-    canv = tdrCanvas(("canv_final"+PlotName).c_str(), 1200, 5200, 5e-02, 700, "m(Z') [GeV]", "#sigma#left(pp#rightarrowX#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)");
+    canv = tdrCanvas(("canv_final"+PlotName).c_str(), 1200, 5200, 5e-02, 700, "M(Z') [GeV]", "#sigma#left(pp#rightarrowZ'#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)");
     canv->SetLogy(1);
-    leg_theo = tdrLeg(0.45, 0.7, 0.60, 0.85, 0.025, 42, kBlack);
-    leg_comp = tdrLeg(0.45, 0.6, 0.60, 0.70, 0.025, 42, kBlack);
-    leg = tdrLeg(0.65, 0.7, 0.9, 0.85, 0.025, 42, kBlack);
+    leg_theo = tdrLeg(0.40, 0.7, 0.60, 0.85, 0.035, 42, kBlack);
+    leg_comp = tdrLeg(0.40, 0.5, 0.60, 0.70, 0.035, 42, kBlack);
+    leg = tdrLeg(0.65, 0.7, 0.9, 0.85, 0.035, 42, kBlack);
     PlotExpectedError(canv, leg, x_val, y_val_lep_ZHcc_MD, y_val_lep_ZHcc_MD_1sigmaPos, y_val_lep_ZHcc_MD_1sigmaNeg, y_val_lep_ZHcc_MD_2sigmaPos, y_val_lep_ZHcc_MD_2sigmaNeg);
 
-// PlotExpectedLines(canv, leg_comp, x_val, y_val_lep_ZHcc_MD_obs,  "obs", kBlack, kSolid);
+    // PlotExpectedLines(canv, leg_comp, x_val, y_val_lep_ZHcc_MD_obs,  "obs", kBlack, kSolid);
 
 
     PlotTheoryLines(canv,leg_theo);
@@ -756,6 +782,30 @@ void PlotLimitsFinal(){
     canv->SaveAs((AnalysisDir+"UpperLimit_final"+PlotName+".C").c_str());
   }
 
+
+
+  if (true) {
+    PlotName = "_invisible";
+    canv = tdrCanvas(("canv_final"+PlotName).c_str(), 1200, 5200, 5e-02, 700, "M(Z') [GeV]", "#sigma#left(pp#rightarrowZ'#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)");
+    canv->SetLogy(1);
+    leg_theo = tdrLeg(0.40, 0.7, 0.60, 0.85, 0.035, 42, kBlack);
+    leg_comp = tdrLeg(0.40, 0.5, 0.60, 0.70, 0.035, 42, kBlack);
+    leg = tdrLeg(0.65, 0.7, 0.9, 0.85, 0.035, 42, kBlack);
+    PlotExpectedError(canv, leg, x_val, y_val_inv_ZHcc_MD, y_val_inv_ZHcc_MD_1sigmaPos, y_val_inv_ZHcc_MD_1sigmaNeg, y_val_inv_ZHcc_MD_2sigmaPos, y_val_inv_ZHcc_MD_2sigmaNeg);
+
+    // PlotExpectedLines(canv, leg_comp, x_val, y_val_lep_ZHcc_MD_obs,  "obs", kBlack, kSolid);
+
+
+    PlotTheoryLines(canv,leg_theo);
+    PlotRefLines(canv,leg_theo);
+
+
+    canv->Update();
+    canv->RedrawAxis();
+    canv->SaveAs((AnalysisDir+"UpperLimit_final"+PlotName+".pdf").c_str());
+    canv->SaveAs((AnalysisDir+"UpperLimit_final"+PlotName+".root").c_str());
+    canv->SaveAs((AnalysisDir+"UpperLimit_final"+PlotName+".C").c_str());
+  }
 
   // PlotExpectedError(canv, leg, x_val, y_val, y_1sigmaPos, y_1sigmaNeg, y_2sigmaPos, y_2sigmaNeg);
 

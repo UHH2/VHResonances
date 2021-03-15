@@ -29,25 +29,21 @@ class PlotNLOCorrections(VariablesBase):
         self.histFolder = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/Theory/"
         self.nameXaxis = "p_{T}^{V} (GeV)"
         self.nameYaxis = "Theory Corrections"
-        self.Xaxis_min = {"all": 30.0,   "qcd_nnlo": 30.0,
-                          "qcd": 100.0,  "ewk": 100.0,  "qcd_ewk": 100.0}
-        self.Xaxis_max = {"all": 2000.0, "qcd_nnlo": 6000.0,
-                          "qcd": 2100.0, "ewk": 1300.0, "qcd_ewk": 1300.0}
-        self.Yaxis_min = {"all": 0.3,    "qcd_nnlo": 1.02,
-                          "qcd": 0.3,    "ewk": 0.7,    "qcd_ewk": 0.3}
-        self.Yaxis_max = {"all": 1.6,    "qcd_nnlo": 1.20,
-                          "qcd": 1.6,    "ewk": 1.1,    "qcd_ewk": 1.6}
-        self.color = {"w_qcd_ewk":    (ROOT.kPink+1,      ROOT.kFullTriangleUp),
-                      "z_qcd_ewk":    (ROOT.kMagenta+1,   ROOT.kFullTriangleUp),
-                      "g_ewk":        (ROOT.kRed+1,       ROOT.kFullCross),
-                      "w_ewk":        (ROOT.kOrange+2,    ROOT.kFullCross),
-                      "z_ewk":        (ROOT.kOrange-1,    ROOT.kFullCross),
+        self.Xaxis_min = {"all": 30.0,   "qcd_nnlo": 30.0,   "qcd": 50.0,   "ewk": 50.0,   "nlo_simple": 100.0,  "nlo_pdfwgt": 50.0,   "qcd_ewk": 100.0}
+        self.Xaxis_max = {"all": 2100.0, "qcd_nnlo": 6000.0, "qcd": 2100.0, "ewk": 1300.0, "nlo_simple": 1260.0, "nlo_pdfwgt": 2100.0, "qcd_ewk": 1300.0}
+        self.Yaxis_min = {"all": 0.2,    "qcd_nnlo": 1.02,   "qcd": 0.2,    "ewk": 0.65,   "nlo_simple": 0.60,   "nlo_pdfwgt": 0.2,    "qcd_ewk": 0.2}
+        self.Yaxis_max = {"all": 1.65,   "qcd_nnlo": 1.20,   "qcd": 1.65,   "ewk": 1.15,   "nlo_simple": 1.60,   "nlo_pdfwgt": 1.65,   "qcd_ewk": 1.65}
+        self.color = {"z_qcd_ewk":    (ROOT.kMagenta+1,   ROOT.kFullTriangleUp),
+                      "w_qcd_ewk":    (ROOT.kPink+1,      ROOT.kFullTriangleUp),
+                      "z_ewk":        (ROOT.kRed+2,       ROOT.kFullSquare),
+                      "w_ewk":        (ROOT.kOrange+1,    ROOT.kFullSquare),
+                      "g_ewk":        (ROOT.kOrange+2,    ROOT.kFullSquare),
+                      "z_qcd":        (ROOT.kAzure+1,     ROOT.kFullCircle),
+                      "w_qcd":        (ROOT.kAzure-7,     ROOT.kFullCircle),
                       "g_qcd":        (ROOT.kViolet+1,    ROOT.kFullCircle),
-                      "w_qcd":        (ROOT.kAzure+10,    ROOT.kFullCircle),
-                      "z_qcd":        (ROOT.kBlue+1,      ROOT.kFullCircle),
-                      "dy_qcd_2017":  (ROOT.kCyan-7,      ROOT.kFullCircle),
-                      "znn_qcd_2017": (ROOT.kAzure-7,     ROOT.kFullCircle),
-                      "w_qcd_2017":   (ROOT.kBlue-9,      ROOT.kFullCircle),
+                      "dy_qcd_2017":  (ROOT.kAzure-2,     ROOT.kFullCircle),
+                      "w_qcd_2017":   (ROOT.kAzure+9,     ROOT.kFullCircle),
+                      "znn_qcd_2017": (ROOT.kBlue-9,    ROOT.kFullCircle),
                       "eej_qcd_nnlo": (ROOT.kGreen+1,     ROOT.kFullTriangleDown),
                       "evj_qcd_nnlo": (ROOT.kGreen+2,     ROOT.kFullTriangleDown),
                       "vvj_qcd_nnlo": (ROOT.kSpring-8,    ROOT.kFullTriangleDown),
@@ -80,7 +76,7 @@ class PlotNLOCorrections(VariablesBase):
 
     def ResetCanvas(self, name="all"):
         self.canv = tdrCanvas(name, self.Xaxis_min[name], self.Xaxis_max[name], self.Yaxis_min[name], self.Yaxis_max[name], self.nameXaxis, self.nameYaxis, iPeriod=0)
-        self.leg = tdrLeg(0.40, 0.70, 0.95, 0.89, 0.025, 42, ROOT.kBlack)
+        self.leg = tdrLeg(0.40, 0.70, 0.95, 0.89)
         if "all" == name:
             self.leg.SetNColumns(2)
         if "nnlo" in name:
@@ -92,8 +88,7 @@ class PlotNLOCorrections(VariablesBase):
         for [hname, hist] in self.histos.items():
             graph = ROOT.TGraph(hist)
             graphs.append(graph)
-            tdrDraw(graph, "CP", self.color[hname][1], self.color[hname]
-                    [0], 1, self.color[hname][0], 0, self.color[hname][0])
+            tdrDraw(graph, "CP", self.color[hname][1], self.color[hname][0], 1, self.color[hname][0], 0, self.color[hname][0])
             self.leg.AddEntry(graph, hname, "lp")
         self.leg.Draw("same")
         self.canv.SaveAs(self.histFolder+"all.pdf")
@@ -106,22 +101,55 @@ class PlotNLOCorrections(VariablesBase):
                     continue
                 graph = ROOT.TGraph(hist)
                 graphs.append(graph)
-                tdrDraw(graph, "CP", self.color[hname][1], self.color[hname]
-                        [0], 1, self.color[hname][0], 0, self.color[hname][0])
-                hname = hname.replace("vvj", "Z_{#nu#nu}+Jets").replace("eej",
-                                                                        "DY+Jets").replace("aj", "#gamma+Jets").replace("evj", "W+Jets")
+                graph.SetLineWidth(2)
+                tdrDraw(graph, "CP", self.color[hname][1], self.color[hname][0], 1, self.color[hname][0], 0, self.color[hname][0])
+                hname = hname.replace("vvj", "Z_{#nu#nu}+Jets").replace("eej","DY+Jets").replace("aj", "#gamma+Jets").replace("evj", "W+Jets")
                 self.leg.AddEntry(graph, hname, "lp")
             self.leg.Draw("same")
             self.canv.SaveAs(self.histFolder+corr+".pdf")
-         # if df['is_lo_w']:
-         #        all_weights["theory"] = evaluator["qcd_nlo_w_2017"](gen_v_pt) * evaluator["qcd_nnlo_w"](gen_v_pt)
-         #    elif df['is_lo_z']:
-         #        all_weights["theory"] = evaluator["qcd_nlo_z_2017"](gen_v_pt) * evaluator["qcd_nnlo_z"](gen_v_pt)
-         #    elif df['is_lo_g']:
-         #        all_weights["theory"] = evaluator["ewk_nlo_g"](gen_v_pt) * evaluator["qcd_nlo_g"](gen_v_pt) * evaluator["qcd_nnlo_g"](gen_v_pt)
-         #    else:
-         #        all_weights["theory"] = np.ones(df.size)
 
+        corr = "nlo_simple"
+        self.ResetCanvas(corr)
+        self.leg  = tdrLeg(0.60, 0.70, 0.77, 0.89, 0.05)
+        self.leg2 = tdrLeg(0.77, 0.70, 0.95, 0.89, 0.05)
+        tdrHeader(self.leg, "QCD",  textSize = 0.05)
+        tdrHeader(self.leg2, "EWK", textSize = 0.05)
+
+        for hname in ["z_qcd","z_ewk","w_qcd", "w_ewk"]:
+            hist = self.histos[hname]
+            graph = ROOT.TGraph(hist)
+            graphs.append(graph)
+            graph.SetLineWidth(5)
+            graph.SetMarkerSize(1.7)
+            color = self.color[hname][0]
+            linestyle = ROOT.kDashed if "w_" in hname else ROOT.kSolid
+            tdrDraw(graph, "CP", self.color[hname][1], color, linestyle, color)
+            nleg = hname.replace("_", " ").upper().split()[0]+"+jets"
+            if "qcd" in hname:
+                self.leg.AddEntry(graph, nleg, "lp")
+            else:
+                self.leg2.AddEntry(graph, nleg, "lp")
+        self.canv.SaveAs(self.histFolder+corr+".pdf")
+
+
+        corr = "nlo_pdfwgt"
+        self.ResetCanvas(corr)
+        self.leg = tdrLeg(0.70, 0.65, 0.95, 0.89, 0.05)
+        tdrHeader(self.leg, "QCD",  textSize = 0.05)
+        for hname in ["dy_qcd_2017","znn_qcd_2017","w_qcd_2017"]:
+            hist = self.histos[hname]
+            graph = ROOT.TGraph(hist)
+            graphs.append(graph)
+            graph.SetLineWidth(5)
+            graph.SetMarkerSize(1.7)
+            color = ROOT.kGreen+3 if "w_" in hname else (ROOT.kBlue-3 if "dy_" in hname else ROOT.kOrange+2)
+            linestyle = ROOT.kDashed if "w_" in hname else ROOT.kSolid
+            markerstyle = ROOT.kFullSquare if "w_" in hname else (ROOT.kFullTriangleUp if "dy_" in hname else ROOT.kFullTriangleDown)
+            tdrDraw(graph, "CP", markerstyle, color, linestyle, color)
+            nleg = hname.replace("_", " ").replace("dy", "z").upper().replace("ZNN", "Z(#nu#nu)").split()[0]+"+jets"
+            self.leg.AddEntry(graph, nleg, "lp")
+
+        self.canv.SaveAs(self.histFolder+corr+".pdf")
 
 if __name__ == '__main__':
     NLO = PlotNLOCorrections()
