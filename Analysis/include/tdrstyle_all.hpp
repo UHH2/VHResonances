@@ -26,7 +26,12 @@
 // Merged all macros into one           //
 //////////////////////////////////////////
 
-
+const std::string red("\x1b[0;31m");
+const std::string green("\x1b[0;32m");
+const std::string yellow("\x1b[0;33m");
+const std::string cyan("\x1b[0;36m");
+const std::string magenta("\x1b[0;35m");
+const std::string reset("\x1b[0m");
 
 extern float cmsTextFont;
 extern TString cmsText;
@@ -56,6 +61,9 @@ void CMSOff();
 void ExtraTextOff();
 
 void ForThesis();
+void WIP(bool isSimulation=false);
+void SetSimulation();
+void SetYear(TString year);
 
 // tdrGrid: Turns the grid lines on (true) or off (false)
 void tdrGrid(bool gridOn);
