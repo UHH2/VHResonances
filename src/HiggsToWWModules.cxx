@@ -338,8 +338,8 @@ double ScaleFactorsFromHistos::Evaluator(std::string hname, double var) {
 
   int firstBin = 1;
   int lastBin  = histos[hname]->GetNbinsX();
-  double h_min = histos[hname]->GetBinCenter(firstBin)-histos[hname]->GetBinError(firstBin);
-  double h_max = histos[hname]->GetBinCenter(lastBin)+histos[hname]->GetBinError(lastBin);
+  double h_min = histos[hname]->GetBinCenter(firstBin)-0.5*histos[hname]->GetBinWidth(firstBin);
+  double h_max = histos[hname]->GetBinCenter(lastBin)+0.5*histos[hname]->GetBinWidth(lastBin);
   double var_for_eval = var;
   var_for_eval = (var_for_eval > h_min) ? var_for_eval : h_min+0.001;
   var_for_eval = (var_for_eval < h_max) ? var_for_eval : h_max-0.001;
