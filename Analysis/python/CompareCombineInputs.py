@@ -29,7 +29,7 @@ class CompareCombineInputs(ModuleRunnerBase):
         self.max = 4000 #TODO take it from file
         self.nEventsSR = 1235. #TODO take it from file
         self.xsec_ref = 0.001 #TODO take it from file
-        self.normFroPlot = 0.01 #Used for display purposed
+        self.normForPlot = 0.01 #Used for display purposes
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/CompareCombineInputs/"
         os.system("mkdir -p "+self.outdir)
 
@@ -61,13 +61,13 @@ class CompareCombineInputs(ModuleRunnerBase):
             self.histos[massPoint] = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone(massPoint)
             self.histos[massPoint].SetDirectory(0)
             self.histos[massPoint].Scale(self.xsec_ref)
-            self.histos[massPoint].Scale(self.normFroPlot)
+            self.histos[massPoint].Scale(self.normForPlot)
             file_.Close()
             fileCombine = ROOT.TFile(self.histoPath.replace("SignalRegion","").replace("nominal","").replace(self.Path_STORAGE,self.Path_ANALYSIS+"Analysis/Limits/nominal/")+self.histFolder+"/datacards/fitDiagnostics"+massPoint.replace(self.Signal+"_","")+"_"+self.fitFunction+".root")
             self.histos[massPoint+"sign_prefit"] = fileCombine.Get("shapes_prefit/"+self.channel+"_"+self.year+"/total_signal")
             self.histos[massPoint+"sign_prefit"].SetDirectory(0)
             self.histos[massPoint+"sign_prefit"].Scale(self.histos[massPoint+"sign_prefit"].GetBinWidth(1))
-            self.histos[massPoint+"sign_prefit"].Scale(self.normFroPlot)
+            self.histos[massPoint+"sign_prefit"].Scale(self.normForPlot)
             self.histos["bkg_prefit"] = fileCombine.Get("shapes_prefit/"+self.channel+"_"+self.year+"/total_background")
             self.histos["bkg_prefit"].SetDirectory(0)
             self.histos["bkg_prefit"].Scale(self.histos["bkg_prefit"].GetBinWidth(1))
@@ -93,7 +93,7 @@ class CompareCombineInputs(ModuleRunnerBase):
             if not self.Signal in name or "bkg" in name: self.leg.AddEntry(hist, name.replace(self.Signal+"_",""), "l")
 
     def Save(self):
-        if self.normFroPlot!=1 : self.leg.AddEntry(0, "Signal x "+str(self.normFroPlot), "")
+        if self.normForPlot!=1 : self.leg.AddEntry(0, "Signal x "+str(self.normForPlot), "")
         self.leg.Draw("same")
         self.canv.SaveAs(self.outdir+"bkg_pred_signals_"+self.histFolder+"_"+self.year+"_"+self.channel+".pdf")
 

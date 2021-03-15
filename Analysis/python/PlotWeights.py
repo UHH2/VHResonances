@@ -231,4 +231,3 @@ if __name__ == '__main__':
         Plotter = PlotWeights(year=year, steps=steps, variables=ratioVariables, samples=ratioSamples, module=module, subfolder=ratioSubfolder)
         # Plotter.PlotHistos()
         Plotter.PlotRatioHistos()
-
