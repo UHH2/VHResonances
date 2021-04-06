@@ -78,6 +78,7 @@ def parse_arguments():
     parser.add_argument('--Collections',    action='append', dest="Collections",    default=[])
     parser.add_argument('--Channels',       action='append', dest="Channels",       default=[])
     parser.add_argument('--histFolders',    action='append', dest="histFolders",    default=[])
+    parser.add_argument('--RunCombine',     action='store',                         default="False")
     return parser.parse_args()
 
 def PrintFormattedLine(listArgs=[], space=10):
