@@ -34,10 +34,23 @@ bool kRectangular = false;
 
 void CMSOff() { cmsText = ""; }
 void ExtraTextOff() { writeExtraText = false;}
+void SetYear(TString year) {lumi_13TeV  = year;}
 
 void ForThesis(){
   CMSOff();
   ExtraTextOff();
+}
+
+void SetSimulation() {
+  writeExtraText = true;
+  extraText2 = extraText;
+  extraText  = "Simulation";
+}
+
+void WIP(bool isSimulation){
+  writeExtraText = true;
+  extraText = "Work in progress";
+  if (isSimulation) SetSimulation();
 }
 
 
@@ -434,7 +447,7 @@ TCanvas* tdrDiCanvas(const char* canvName, double x_min, double x_max, double y_
   // while keeping margins and text sizes as they were for a single pad
 
   int W_ref = (square ? 600 : 800);
-  int H_ref = (square ? 600 : 600);
+  int H_ref = (square ? 350 : 600);
 
   // Set bottom pad relative height and relative margin
   float F_ref = 1./3.;
@@ -443,7 +456,7 @@ TCanvas* tdrDiCanvas(const char* canvName, double x_min, double x_max, double y_
   // Set reference margins
   float T_ref = 0.07;
   float B_ref = 0.13;
-  float L = 0.15;
+  float L = square ? 0.12: 0.15;
   float R = 0.05;
 
   // Calculate total canvas size and pad heights
@@ -480,8 +493,8 @@ TCanvas* tdrDiCanvas(const char* canvName, double x_min, double x_max, double y_
 
   // Scale text sizes and margins to match normal size
   TH1F *hup = canv->cd(1)->DrawFrame(x_min,y_min,x_max,y_max);
-  hup->GetYaxis()->SetTitleOffset(1.25 * Hup / H_ref);
-  hup->GetXaxis()->SetTitleOffset(1.0);
+  hup->GetYaxis()->SetTitleOffset((square?0.9:1.1) * Hup / H_ref);
+  hup->GetXaxis()->SetTitleOffset(0.9);
   hup->SetTitleSize(hup->GetTitleSize("Y") * H_ref / Hup, "Y");
   hup->SetLabelSize(hup->GetLabelSize("Y") * H_ref / Hup, "Y");
   hup->GetYaxis()->SetTitle(nameYaxis);
@@ -503,12 +516,9 @@ TCanvas* tdrDiCanvas(const char* canvName, double x_min, double x_max, double y_
   gPad->SetBottomMargin( Bdw );
 
   TH1F *hdw = canv->cd(2)->DrawFrame(x_min,y_min2,x_max,y_max2);
-  hdw->GetYaxis()->SetTitleOffset(1.25);
-  hdw->GetXaxis()->SetTitleOffset(1.0);
-
   // Scale text sizes and margins to match normal size
-  hdw->GetYaxis()->SetTitleOffset(1.25 * Hdw / H_ref);
-  hdw->GetXaxis()->SetTitleOffset(1.0);
+  hdw->GetYaxis()->SetTitleOffset((square?0.9:1.1) * Hdw / H_ref);
+  hdw->GetXaxis()->SetTitleOffset(0.9);
   hdw->SetTitleSize(hdw->GetTitleSize("Y") * H_ref / Hdw, "Y");
   hdw->SetLabelSize(hdw->GetLabelSize("Y") * H_ref / Hdw, "Y");
   hdw->SetTitleSize(hdw->GetTitleSize("X") * H_ref / Hdw, "X");

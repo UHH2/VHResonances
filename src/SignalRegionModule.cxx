@@ -301,7 +301,7 @@ bool SignalRegionModule::process(uhh2::Event& event) {
   ZprimeCandidate cand = event.get(h_ZprimeCandidates)[0];
 
   if(!MB["invisiblechannel"]){ if(deltaR(cand.leptons()[0], cand.leptons()[1])<0.45) return false;}
-  fill_histograms(event, "Extracleaning");
+  fill_histograms(event, "ExtraCleaning");
 
   bool ZHccvsQCD_MD_pass = cand.discriminator("btag_DeepBoosted_ZHccvsQCD_MD")>TaggerThr;
   bool HccvsQCD_pass     = cand.discriminator("btag_DeepBoosted_HccvsQCD")>TaggerThr;
