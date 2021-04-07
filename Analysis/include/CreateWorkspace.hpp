@@ -269,15 +269,6 @@ private:
   // double fit_hi   = 4000; data_CR bin30
   // double fit_lo   = 1300; DR_SR bin30
   // double fit_hi   = 4500; DR_SR bin30
-
-
-// Begin: old code
-  // double fit_SR   = 810;
-  // double fit_max_DY_CR = 5000;
-  // double fit_max_bkgpred = 3500;
-// END: old code
-
-
   // double fit_SR   = 810;
   // double fit_min_CR = 1400;
   // double fit_max_CR = 5000;
@@ -343,7 +334,6 @@ private:
   // double fit_SR   = 1000;
   double fit_min_CR = 1400;
   double fit_max_CR = 6000;
->>>>>>> 729f915b8b5235840331edf1dddd4bb95bed2357
 
   bool debug = false;
   // bool debug = true;
