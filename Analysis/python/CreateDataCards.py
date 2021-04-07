@@ -337,7 +337,7 @@ if __name__ == '__main__':
 
     RunCombine    = (True if args.RunCombine=="True" else False)
     print "RunCombine: " + str(RunCombine)
-
+    Method="AsymptoticLimits"
     # extraOptions = ["-t", "-1"]
     # extraOptionsText = "Asimov"
     extraOptions = ["--run", "both"]

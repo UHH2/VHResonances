@@ -242,6 +242,7 @@ void CreateRooWorkspace::SetEnv() {
   SignalProperties.open(workingDir+"datacards/SignalProperties_"+year+"_"+histFolder+".txt");
 
   nameXaxis = "m(Z')";
+  if (channel=="invisiblechannel") nameXaxis = "m_{T}(Z')";
   nameYaxis = doBinWidth? "Events/bin" :"Events";
   nameRatioaxis = doPlotRatio?"Hist/Fit": "Pull";
 
@@ -488,13 +489,8 @@ void CreateRooWorkspace::PrepocessHistos() {
     }
     if (debug) std::cout << "rebin " << mode << "\t" << CalculateIntegral(x.second.get(),fit_lo_SR,fit_hi_SR,doBinWidth) << '\n';
 
-<<<<<<< HEAD
-    // Removing bins with low stat TODO
-    if (mode=="DY_SR" || mode=="DY_CR" || mode=="bkg_pred") {
-=======
     // Removing bins with low stats
     if (mode=="DY_SR" || mode=="MC_SR" || (mode=="bkg_pred" && fitMC)) {//TODO Check for the invisiblechannel
->>>>>>> 729f915b8b5235840331edf1dddd4bb95bed2357
       for (int i = 0; i < x.second->GetNbinsX()+1; i++) {
         if (x.second->GetBinContent(i)<2*1e-03) { histo_map[mode]->SetBinContent(i,0); histo_map[mode]->SetBinError(i,0); }
       }
@@ -668,10 +664,7 @@ void CreateRooWorkspace::InitializePDFs() {
     fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_1_p1"+unique_name).c_str(), (mode+"_Exp_1_p1"+unique_name).c_str(), 0., -100, 100));
     Fits_map[mode]["Exp_1"].reset(new PolinomialExponent_1p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0]));
 
-<<<<<<< HEAD
-
     if (channel=="invisiblechannel"){
-
       FitName = mode+"_Exp_2";
       fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p1"+unique_name).c_str(), (mode+"_Exp_2_p1"+unique_name).c_str(), -40., -100, 100));
       fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p2"+unique_name).c_str(), (mode+"_Exp_2_p2"+unique_name).c_str(), -4, -100, 100));
@@ -682,32 +675,18 @@ void CreateRooWorkspace::InitializePDFs() {
       fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p2"+unique_name).c_str(), (mode+"_Exp_3_p2"+unique_name).c_str(), -10, -100, 100));
       fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p3"+unique_name).c_str(), (mode+"_Exp_3_p3"+unique_name).c_str(), 10, -100, 100));
       Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
-
     } else {
       FitName = mode+"_Exp_2";
-      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p1"+unique_name).c_str(), (mode+"_Exp_2_p1"+unique_name).c_str(), -4., -100, 100));
-      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p2"+unique_name).c_str(), (mode+"_Exp_2_p2"+unique_name).c_str(), 0.4, -100, 100));
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p1"+unique_name).c_str(), (mode+"_Exp_2_p1"+unique_name).c_str(), 0., -4, 4));
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p2"+unique_name).c_str(), (mode+"_Exp_2_p2"+unique_name).c_str(), 0., -10, 10));
       Fits_map[mode]["Exp_2"].reset(new PolinomialExponent_2p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
 
       FitName = mode+"_Exp_3";
-      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p1"+unique_name).c_str(), (mode+"_Exp_3_p1"+unique_name).c_str(), -4., -100, 100));
+      fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p1"+unique_name).c_str(), (mode+"_Exp_3_p1"+unique_name).c_str(), 0., -4, 4));
       fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p2"+unique_name).c_str(), (mode+"_Exp_3_p2"+unique_name).c_str(), 0.4, -100, 100));
       fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p3"+unique_name).c_str(), (mode+"_Exp_3_p3"+unique_name).c_str(), -0.1, -100, 100));
       Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
     }
-=======
-    FitName = mode+"_Exp_2";
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p1"+unique_name).c_str(), (mode+"_Exp_2_p1"+unique_name).c_str(), 0., -4, 4));
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_2_p2"+unique_name).c_str(), (mode+"_Exp_2_p2"+unique_name).c_str(), 0., -10, 10));
-    Fits_map[mode]["Exp_2"].reset(new PolinomialExponent_2p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
-
-    FitName = mode+"_Exp_3";
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p1"+unique_name).c_str(), (mode+"_Exp_3_p1"+unique_name).c_str(), 0., -4, 4));
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p2"+unique_name).c_str(), (mode+"_Exp_3_p2"+unique_name).c_str(), 0.4, -100, 100));
-    fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p3"+unique_name).c_str(), (mode+"_Exp_3_p3"+unique_name).c_str(), -0.1, -100, 100));
-    Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
->>>>>>> 729f915b8b5235840331edf1dddd4bb95bed2357
-
     FitName = mode+"_Exp_4";
     fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_4_p1"+unique_name).c_str(), (mode+"_Exp_4_p1"+unique_name).c_str(), 4., -100, 100));
     fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_4_p2"+unique_name).c_str(), (mode+"_Exp_4_p2"+unique_name).c_str(), -10, -100,  10));
@@ -809,17 +788,12 @@ void CreateRooWorkspace::DoFits() {
     fit_min[x.first] = GetRange(x.second.get(),fit_lo_SR);
     fit_max[x.first] = GetRange(x.second.get(),fit_hi_SR);
     // if ("DY_SR"==x.first) fit_min[x.first] = GetRange(x.second.get(),fit_SR);
-<<<<<<< HEAD
-    if ("DY_CR"==x.first) fit_max[x.first] = GetRange(x.second.get(),fit_max_DY_CR);
-    if ("bkg_pred"==x.first) fit_max[x.first] = GetRange(x.second.get(),fit_max_bkgpred);
-=======
     // if ("DY_CR"==x.first) fit_min[x.first] = GetRange(x.second.get(),fit_lo_SR);
     // if ("DY_CR"==x.first) fit_max[x.first] = GetRange(x.second.get(),fit_max_CR);
     if (FindInString("CR", x.first)) fit_min[x.first] = GetRange(x.second.get(),1300);//TODO
     if (FindInString("CR", x.first)) fit_max[x.first] = GetRange(x.second.get(),6000);
     if (FindInString("data_CR", x.first)) fit_min[x.first] = GetRange(x.second.get(),fit_lo_CR);
     if (FindInString("data_CR", x.first)) fit_max[x.first] = GetRange(x.second.get(),fit_hi_CR);
->>>>>>> 729f915b8b5235840331edf1dddd4bb95bed2357
 
     std::string mass = x.first;
     if (mass.compare(0,1,"M")==0 && mass.compare(0,2,"MC")!=0) {
@@ -947,9 +921,13 @@ void CreateRooWorkspace::PlotBkgFit() {
 
     // if (mode=="DY_SR") rooHist_map["data"]->plotOn(plotter.get(), RooFit::LineColor(kRed+1), RooFit::DataError(RooAbsData::Poisson));
     if (mode=="data") rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::Poisson));
-    else rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
+    else rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2), RooFit::Name(mode.c_str()));
     // rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
     // rooHist_map[mode]->plotOn(plotter.get());
+
+    std::unique_ptr<TLegend>leg_bg(tdrLeg(0.40,0.55,0.7,0.85, 0.032));
+    tdrHeader(leg_bg.get(), histo_map[mode]->GetName(), 12, 0.04, 42, kBlack, true);
+    if (strcmp(mode.c_str(),"bkg_pred")==0) leg_bg->AddEntry(plotter.get()->findObject(mode.c_str()),"MC","p");
 
     std::unique_ptr<RooCurve> curve;
     std::unique_ptr<RooHist> hist_;
@@ -1017,9 +995,6 @@ void CreateRooWorkspace::PlotBkgFit() {
 
     plotter->Draw("same");
 
-    std::unique_ptr<TLegend>leg_bg(tdrLeg(0.40,0.55,0.7,0.85, 0.032));
-    tdrHeader(leg_bg.get(), histo_map[mode]->GetName(), 12, 0.04, 42, kBlack, true);
-
     std::unique_ptr<RooPlot> Pullplotter_bkg(x_var->frame(RooFit::Range(plot_lo,plot_hi), RooFit::Name("bkg")));
     for (auto x : doPlotRatio?hratio:hpull) {
       std::string model = x.first;
@@ -1084,6 +1059,8 @@ void CreateRooWorkspace::PlotSignals(std::string syst) {
 
     if (debug) std::cout << "plotting mass:" << mass << "\t" << plot_min[SgName] << " -- " << plot_max[SgName] << "\tymax " << y_max[SgName] << '\n';
 
+    std::unique_ptr<TLegend> leg_sig(tdrLeg(0.7,0.60,0.9,0.78, 0.05));
+
     if (isNominalSyst(syst)) {
       std::unique_ptr<RooPlot> plotter_syst(x_var->frame(RooFit::Range(plot_min[SgName],plot_max[SgName]), RooFit::Name("signal_syst")));
       std::unique_ptr<TLegend> leg_syst(tdrLeg(0.75,0.50,0.9,0.7, 0.035));
@@ -1096,7 +1073,7 @@ void CreateRooWorkspace::PlotSignals(std::string syst) {
       }
       Fits_map[SgName][FitSignal]->plotOn(plotter_syst.get(), RooFit::VisualizeError(*FitRes_map[SgName][FitSignal], 1), RooFit::FillColor(kRed-7), RooFit::FillStyle(3001));
       Fits_map[SgName][FitSignal]->plotOn(plotter_syst.get(), RooFit::VisualizeError(*FitRes_map[SgName][FitSignal], 2), RooFit::FillColor(kRed-9), RooFit::FillStyle(3001));
-      Fits_map[SgName][FitSignal]->plotOn(plotter_syst.get(), RooFit::LineColor(Colors["nominal"]));
+      Fits_map[SgName][FitSignal]->plotOn(plotter_syst.get(), RooFit::LineColor(Colors["nominal"]), RooFit::Name((SgName+FitSignal+"fit").c_str()));
       leg_syst->Draw("same");
       plotter_syst->Draw("same");
       c_sg_syst->SaveAs(workingDir+"Fit_Sg"+TString(SgName).ReplaceAll("nominal","syst")+"_"+histFolder+extra_text+"."+plotting_mode);
@@ -1130,7 +1107,7 @@ void CreateRooWorkspace::PlotSignals(std::string syst) {
     nEventsSignal[SgName] /= CalculateFractionAreaPDF(Fits_map[SgName][FitSignal].get(), *x_var.get(), fit_min[SgName], fit_max[SgName]);
     SignalProperties << SgName+" signal number of events corrected = " << nEventsSignal[SgName] << std::endl;
 
-    std::unique_ptr<TPaveText> pave(new TPaveText(0.7,0.6,0.8,0.8,"NDC"));
+    std::unique_ptr<TPaveText> pave(new TPaveText(0.7,0.3,0.8,0.6,"NDC"));
     pave->SetBorderSize(0); pave->SetTextSize(0.03); pave->SetLineColor(1); pave->SetLineStyle(1);
     pave->SetLineWidth(2); pave->SetFillColor(0); pave->SetFillStyle(0);
     pave->AddText(TString::Format("Fit range = [%.0f,%.0f]", fit_min[SgName],fit_max[SgName]));
@@ -1157,8 +1134,13 @@ void CreateRooWorkspace::PlotSignals(std::string syst) {
     SgPars["fit_min"].at(i_mass)      = fit_min[SgName];
     SgPars["fit_max"].at(i_mass)      = fit_max[SgName];
 
-    Fits_map[SgName][FitSignal]->plotOn(plotter_all.get(), RooFit::LineColor(kRed));
+    Fits_map[SgName][FitSignal]->plotOn(plotter_all.get(), RooFit::LineColor(kRed), RooFit::Name((SgName+FitSignal).c_str()));
     c_sg->cd(1);
+
+    leg_sig->AddEntry(plotter_all.get()->findObject((SgName+FitSignal).c_str()),"Signal sample","p");
+    leg_sig->AddEntry(plotter_all.get()->findObject((SgName+FitSignal).c_str()),"Fit","l");
+    leg_sig->Draw("same");
+
     plotter->Draw("same");
     histo_map[SgName]->Draw("same");
     pave->Draw("same");

@@ -1,7 +1,6 @@
 from Utils import *
 
 import tdrstyle_all as TDR
-import math
 
 from ROOT import *
 
@@ -51,6 +50,7 @@ class CompareCombineInputs(ModuleRunnerBase):
 
         # load WJets for invisible channel
         if "invisible" in self.channel:
+            print "Loading W+Jets background as well"
             file_ = ROOT.TFile(self.histoPath+self.PrefixrootFile+"MC.MC_WJets_"+self.year+"_noTree.root")
             histo_bkg_WJets_SR = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone("bkg_SR")
             histo_bkg_WJets_SR.SetDirectory(0)
@@ -103,11 +103,6 @@ class CompareCombineInputs(ModuleRunnerBase):
                 ratio = 0.0
                 if (self.histos[massPoint].GetBinContent(self.histos[massPoint].GetXaxis().FindBin( self.histos[massPoint+"sign_prefit"].GetXaxis().GetBinCenter(i)))<>0):
                     ratio = self.histos[massPoint+"_ratio"].GetBinContent(i) /  self.histos[massPoint].GetBinContent(self.histos[massPoint].GetXaxis().FindBin( self.histos[massPoint+"sign_prefit"].GetXaxis().GetBinCenter(i)))
-
-                # Verification that the offset works
-                # print self.histos[massPoint+"sign_prefit"].GetBinCenter(i), " " , self.histos[massPoint].GetBinCenter(i+offsetNbins)
-
-
                 self.histos[massPoint+"_ratio"].SetBinContent(i, ratio)
 
             self.histos[massPoint+"_ratio"].GetYaxis().SetRangeUser(0,10)
@@ -120,7 +115,6 @@ class CompareCombineInputs(ModuleRunnerBase):
             legend.Draw()
 
             self.canv_ratio.SaveAs(self.outdir+"ratio_"+massPoint+"_signals_"+self.histFolder+"_"+self.year+"_"+self.channel+".pdf")
-
             fileCombine.Close()
 
 
@@ -135,8 +129,8 @@ class CompareCombineInputs(ModuleRunnerBase):
         for name,hist in self.histos.items():
 
             # Skip the ratio plots
-            if "ratio" in name:
-                continue
+            if "ratio" in name:  continue
+
 
             col = ROOT.kRed+1 if "Zprime" in name else ROOT.kBlue+1 if "DATA_CR" in name else ROOT.kBlack
             if "bkg_SR" in name : col = ROOT.kGreen+2
