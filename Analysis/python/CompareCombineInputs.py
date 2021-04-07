@@ -17,7 +17,7 @@ class CompareCombineInputs(ModuleRunnerBase):
     def __init__(self, year="RunII", histFolder="btag_DeepBoosted_H4qvsQCDmassdep_x3", channel="muonchannel"):
         VariablesBase.__init__(self)
         self.year           = year
-        self.histoName      = "Zprime_mass_rebin30"
+        self.histoName      = ("Zprime_mass_transversal_rebin30" if channel=="invisiblechannel" else "Zprime_mass_rebin30")
         # self.histoName      = "Zprime_mass_rebin100"
         self.fitFunction    = "Exp_2"
         self.histFolder     = histFolder
@@ -26,7 +26,7 @@ class CompareCombineInputs(ModuleRunnerBase):
         self.histos         = {}
         self.min = 600 #TODO take it from file
         self.max = 4000 #TODO take it from file
-        self.nEventsSR = 1235. #TODO take it from file
+        self.nEventsSR =  (42.9022 if channel=="invisiblechannel" else 1235.) #TODO take it from file
         self.xsec_ref = 0.001 #TODO take it from file
         self.normForPlot = 0.01 # Used for display purposes
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/CompareCombineInputs/"
