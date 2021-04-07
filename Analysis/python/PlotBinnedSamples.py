@@ -11,52 +11,54 @@ Script to plot binned samples, such as the DY sample, which is binned in HT.
 '''
 
 class PlotBinnedSamples(VariablesBase):
-    def __init__(self,year, steps):
+    def __init__(self,year, steps, samples, sampleName, channel, debug=False):
         VariablesBase.__init__(self)
         self.year = year
         self.steps = steps
         TDR.lumi_13TeV  = str(round(float(self.lumi_map[self.year]["lumi_fb"]),1))+" fb^{-1}"
         self.module = module
         self.histFolders = histFolders
+        self.samples = samples
+        self.sampleName = sampleName
+        self.channel = channel
+        self.debug = debug
+        self.selectionModule = "JetFlavour"
+
+        if self.debug: print "SelectionModule", self.selectionModule
+
+        if not self.debug: ROOT.gROOT.ProcessLine("gErrorIgnoreLevel = " + str(ROOT.kError) + ";")
+
         if Channels!="": self.Channels = Channels
         self.histos = {}
         self.color  = {0:       ROOT.kBlack,
-                       1:       ROOT.kRed+1,
-                       2:       ROOT.kRed,
-                       3:       ROOT.kGreen+2,
-                       4:       ROOT.kGreen+1,
-                       5:       ROOT.kBlue+1,
-                       6:       ROOT.kAzure+10,
-                       7:       ROOT.kViolet-3,
-                       8:       ROOT.kMagenta+1,
+                       1:       ROOT.kRed,
+                       2:       ROOT.kGreen,
+                       3:       ROOT.kBlue,
+                       4:       ROOT.kYellow,
+                       5:       ROOT.kRed   +2,
+                       6:       ROOT.kGreen +2,
+                       7:       ROOT.kBlue  +2,
+                       8:       ROOT.kYellow+2,
                        }
-        # self.HistType = {"Preselection": "nTopJet", "Selection": "ZprimeCandidate"}
-        # self.HistName = {"Preselection": "pt_jet",  "Selection": "Zprime_mass_rebin30"}
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/BinnedSamples/"
         os.system("mkdir -p "+self.outdir)
-        print("Files will be written to : " + self.outdir)
+        if self.debug: print("Files will be written to : " + self.outdir)
 
     def PlotHistos(self):
-
-        self.samples = ["MC_DY", "MC_DY_inv_HT200to400", "MC_DY_inv_HT400to600", "MC_DY_inv_HT600to800", "MC_DY_inv_HT800to1200", "MC_DY_inv_HT1200to2500", "MC_DY_inv_HT2500toInf"]
-        # self.samples = ["MC_DY", "MC_DY_HT200to400", "MC_DY_HT400to600", "MC_DY_HT600to800", "MC_DY_HT800to1200", "MC_DY_HT1200to2500", "MC_DY_HT2500toInf"]
-
-        extraText = ""
 
         ymin = 1
         ymax = 10**8
 
-        commonpath = self.Path_STORAGE+self.year+"/"+"Preselection"+"/"+"Puppi/invisiblechannel/"
+        commonpath = self.Path_STORAGE+self.year+"/"+self.selectionModule+"/"+"Puppi/" + self.channel + "/"
 
         # sampleName = "pt_Z"
         sampleName = "HT"
 
-        print "Will load from " + commonpath+"nominal"+"/"
+        if self.debug: print "Will load from " + commonpath+"nominal"+"/"
 
-        numberSample = 0
         for step in steps:
-            canv = tdrCanvas("canv_"+"MC_DY_inv+"+step+"extraText", 0, 4000, ymin, ymax , sampleName, "Events")
-            # canv = tdrCanvas("canv_"+"MC_DY_muon+"+step+"extraText", 0, 2000, ymin, ymax , "p_T Z", "Events")
+            numberSample = 0
+            canv = tdrCanvas("canv"+self.sampleName+step+self.year+self.channel, 0, 4000, ymin, ymax , sampleName + " | " + step, "Events")
             leg = tdrLeg(0.60,0.40,0.89,0.89, 0.030, 42, ROOT.kBlack);
             canv.SetLogy(True)
             self.histos={}
@@ -66,25 +68,24 @@ class PlotBinnedSamples(VariablesBase):
                 suffix = ("_noTree.root" if "HT" in sample else "_noTree_merge.root")
                 filename = commonpath+"nominal"+"/"+self.PrefixrootFile+mode+"."+sample+"_"+year+suffix
 
-                print "Loading: " + sample
+                if self.debug: print "Loading: " + sample
                 file_ = ROOT.TFile(filename)
 
                 h_ = file_.Get("gen_"+step+"/"+sampleName)
 
                 h_.SetDirectory(0) # .setdefault(sample, {})
-                self.histos.setdefault("MC_DY_inv",{}).setdefault("gen_"+step, {})["MC_DY"] = h_
-                tdrDraw(self.histos["MC_DY_inv"]["gen_"+step]["MC_DY"], "hist", ROOT.kDot, self.color[numberSample], 1, self.color[numberSample], 0, self.color[numberSample])
-                leg.AddEntry(self.histos["MC_DY_inv"]["gen_"+step]["MC_DY"], sample, "l")
+                self.histos.setdefault(self.sampleName,{}).setdefault("gen_"+step, {})[self.sampleName] = h_
+                tdrDraw(self.histos[self.sampleName]["gen_"+step][self.sampleName], "hist", ROOT.kDot, self.color[numberSample], 1,  self.color[numberSample], 0, self.color[numberSample])
+                self.histos[self.sampleName]["gen_"+step][self.sampleName].SetLineWidth(3)
+                leg.AddEntry(self.histos[self.sampleName]["gen_"+step][self.sampleName], sample, "l")
                 numberSample += 1
                 if numberSample == 9: numberSample = 0
                 file_.Close()
             leg.Draw("same")
 
-            canv.SaveAs(self.outdir+"MC_DY_inv_gen_"+step+"_"+sampleName+"_"+extraText+".pdf")
-            print "Saved in " + self.outdir+"MC_DY_inv_gen_"+step+"_"+sampleName+"_"+extraText+".pdf"
-
-            # canv.SaveAs(self.outdir+"MC_DY_muon_gen_"+step+"_"+sampleName+"_"+extraText+".pdf")
-            # print "Saved in " + self.outdir+"MC_DY_muon_gen_"+step+"_"+sampleName+"_"+extraText+".pdf"
+            filename = self.outdir+self.sampleName+"_"+sampleName+"_"+step+"_"+self.year+"_"+self.channel+".pdf"
+            canv.SaveAs(filename)
+            if self.debug: print "Saved in", filename
 
 
 if __name__ == '__main__':
@@ -95,7 +96,7 @@ if __name__ == '__main__':
 
     studies = "nominal"
     module = "PlotBinnedSamples"
-    years = ["2016"]
+    years = ["2016", "2017", "2018"]
     # years = ["RunII"]
 
     steps = ["nocuts", "weights", "JetDiLeptonPhiAngular"]
@@ -103,6 +104,12 @@ if __name__ == '__main__':
     print "Years: " + str(years)
     print "Steps: " + str(steps)
 
+    samples = ["MC_DY_inv_HT100to200", "MC_DY_inv_HT200to400", "MC_DY_inv_HT400to600", "MC_DY_inv_HT600to800", "MC_DY_inv_HT800to1200", "MC_DY_inv_HT1200to2500", "MC_DY_inv_HT2500toInf"]
+    sampleName = "MC_DY"
+    channel = "invisiblechannel"
+
+    debug = False
+
     for year in years:
-        PlotSyst = PlotBinnedSamples(year=year, steps=steps)
+        PlotSyst = PlotBinnedSamples(year=year, steps=steps, samples=samples, sampleName=sampleName, channel=channel, debug=debug)
         PlotSyst.PlotHistos()
