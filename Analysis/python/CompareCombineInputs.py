@@ -1,9 +1,6 @@
 from Utils import *
 
 import tdrstyle_all as TDR
-import math
-
-from ROOT import *
 
 TDR.writeExtraText = True
 TDR.extraText = "Work in progress"

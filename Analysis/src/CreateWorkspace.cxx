@@ -191,10 +191,6 @@ void CreateRooWorkspace::SetEnv() {
       if (!FindInString("muon",channel) && FindInString("tracking",syst)) continue;
       if (!FindInString("muon",channel) && FindInString("isolation",syst)) continue;
       if (!FindInString("muon",channel) && FindInString("MuonScale",syst)) continue;
-      // Remove some of these when running with more systematics for the invisiblechannel
-      if (FindInString("invisible",channel) && FindInString("pu",syst)) continue;
-      if (FindInString("invisible",channel) && FindInString("btag",syst)) continue;
-      if (FindInString("invisible",channel) && FindInString("prefiring",syst)) continue;
       if (FindInString("invisible",channel) && FindInString("id",syst)) continue;
       if (FindInString("invisible",channel) && FindInString("trigger",syst)) continue;
       if (FindInString("invisible",channel) && FindInString("reco",syst)) continue;
