@@ -21,7 +21,7 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
 
   massType = "m"; massPlotName = "mass";
   if (isInvisible){
-    massType =  "m_T";
+    massType =  "m_{T}";
     massPlotName = "mass_transversal";
   }
 
@@ -54,27 +54,27 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
 
   // Zprime reconstruction
 
-  book_TH1F("Zprime_"+massPlotName+"_rebin1",  massType + "^{Zprime} [GeV]", 9900, 0, 9900);
-  book_TH1F("Zprime_"+massPlotName+"_rebin10", massType + "^{Zprime} [GeV]", 990,  0, 9900);
-  book_TH1F("Zprime_"+massPlotName+"_rebin30", massType + "^{Zprime} [GeV]", 330,  0, 9900);
-  book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV]", 100,  0,10000);
+  book_TH1F("Zprime_"+massPlotName+"_rebin1",  massType + "^{Zprime} [GeV/c^{2}]", 9900, 0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin10", massType + "^{Zprime} [GeV/c^{2}]", 990,  0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin30", massType + "^{Zprime} [GeV/c^{2}]", 330,  0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV/c^{2}]", 100,  0,10000);
 
   for (const string & name: {"Zprime","Z","H"}) {
-    if (name=="Zprime")   book_TH1F(name+"_"+massPlotName, massType + "^"+name+" [GeV]", 40 ,700, 4700);
-    else if (name=="Z")   book_TH1F(name+"_mass", "m^"+name+" [GeV]",  21, 80.5, 101.5);
-    else if ((name=="H")) book_TH1F(name+"_mass",  "m^"+name+" [GeV]", 40,  0.,  200.);
-    book_TH1F(name+"_pt",      "p_{T}^"   +name+" [GeV]",  500,  0,  5000);
-    book_TH1F(name+"_energy",  "energy^"  +name+" [GeV]",  40,  200, 2200);
-    book_TH1F(name+"_eta",     "#eta"     +name,           100,  -5,    5);
-    book_TH1F(name+"_phi",     "#phi"     +name,           50,   -5,    5);
+    if (name=="Zprime")   book_TH1F(name+"_"+massPlotName, massType + "^{"+name+"} [GeV/c^{2}]", 40 ,700, 5200);
+    else if (name=="Z")   book_TH1F(name+"_mass", "m^{"+name+"} [GeV/c^{2}]",  21, 80.5, 101.5);
+    else if ((name=="H")) book_TH1F(name+"_mass",  "m^{"+name+"} [GeV/c^{2}]", 40,  0.,  200.);
+    book_TH1F(name+"_pt",     "p_{T}^{"   +name+"} [GeV/c]", 25,   0, 1000);
+    book_TH1F(name+"_energy", "energy^{"  +name+"} [GeV]",   40, 200, 2200);
+    book_TH1F(name+"_eta",    "#eta^{"    +name+"}",        100,  -5,    5);
+    book_TH1F(name+"_phi",    "#phi^{"    +name+"}",         50,  -5,    5);
   }
 
   book_TH1F("delta_eta_H_Z", "#Delta#eta(H,Z)", 50, 0.0, 5.0);
   book_TH1F("delta_phi_H_Z", "#Delta#phi(H,Z)", 20, 1.5, 3.5);
   book_TH1F("delta_R_H_Z",   "#Delta R(H,Z)",   35, 1.5, 5.0);
   book_TH1F("delta_R_ll",    "#Delta R(l,l)",   15, 0.0, 1.5);
-  book_TH2F("delta_R_llvsZprime"+massPlotName, ";"+massType+"^{Zprime} [GeV];#Delta#R(l,l)", 330, 0, 9900, 15,  0, 1.5);
-  book_TH2F("PtZvsZprime"+massPlotName,        ";"+massType+"^{Zprime} [GeV];#Delta#R(l,l)", 330, 0, 9900, 50,200, 2200);
+  book_TH2F("delta_R_llvsZprime"+massPlotName, ";"+massType+"^{Zprime} [GeV/c^{2}];#Delta#R(l,l)", 330, 0, 9900, 15,  0, 1.5);
+  book_TH2F("PtZvsZprime"+massPlotName,        ";"+massType+"^{Zprime} [GeV/c^{2}];#Delta#R(l,l)", 330, 0, 9900, 50,200, 2200);
 
   book_TH2F("etaphi_H",  ";#eta^{H};#phi^{H}", 50,-2.4, 2.4, 60,-3, 3);
   book_TH2F("etaphi_ll", ";#eta^{lep};#phi^{lep}", 50,-2.4, 2.4, 60,-3, 3);
@@ -82,14 +82,14 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   for (std::string & disc : discriminators) {
     if (FindInString("tau", disc)) {
       book_TH1F("H_"+disc,"#"+disc+"^{H}",30, -0.01, 1.01);
-      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );
+      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );
     }
     else if (FindInString("btag", disc)) {
       book_TH1F("H_"+disc, disc+"^{H}",30, -0.01, 1.01);
-      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );
+      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );
     }
     else if (FindInString("chi2", disc)) book_TH1F("H_"+disc, disc+"^{H}",35,0,70);
-    else book_TH1F("H_"+disc, disc+"^{H} [GeV]",40,  0.,  200.);
+    else book_TH1F("H_"+disc, disc+"^{H} [GeV/c^{2}]",40,  0.,  200.);
   }
 
   book_TH1F("H_chitot","#chi_{TOT}",35,0,70);
@@ -128,7 +128,7 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   if (!isInvisible){
     book_TH1F("Zprime_ptinv"+massPlotName, "p_{T}^{ll}/"+massType+"(jet,ll)", 10, 0, 1);
   } else {
-    book_TH1F("Zprime_ptinv"+massPlotName, "missing E_{T}/"+massType+"(Z')", 10, 0, 1);
+    book_TH1F("Zprime_ptinv"+massPlotName, "E_{T}^{miss}/"+massType+"(Z')", 10, 0, 1);
   }
 
   for (const std::string & disc : {"Hcc", "HccMD"}) {
@@ -151,7 +151,7 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   book_TH1F("HT_Zprime", "HT_Zprime", 50, 0, 3000);
   book_TH1F("ST_Zprime", "ST_Zprime", 50, 0, 3000);
 
-  book_TH2F("ST_ZprimevsZprime"+massPlotName, ";ST_Zprime;"+massType+"^{Zprime} [GeV]", 50, 0, 3000, 330, 0, 9900);
+  book_TH2F("ST_ZprimevsZprime"+massPlotName, ";ST_Zprime;"+massType+"^{Zprime} [GeV/c^{2}]", 50, 0, 3000, 330, 0, 9900);
   book_TH2F("ST_ZprimevsDeepBoosted",         ";ST_Zprime;btag_DeepBoosted_H4qvsQCD",         50, 0, 3000,  30, -0.01, 1.01);
 
   for (std::string & disc : discriminators_subjets) {
@@ -164,7 +164,7 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
 
   for (std::string & disc : discriminators_Extra) {
     book_TH1F("H_"+disc, disc+"^{H}",30, -0.01, 1.01);
-    book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );
+    book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );
   }
   book_TH2F("H_btag_DeepBoosted_HbbvsHcc_2D", ";DeepBoosted_Hbb;DeepBoosted_Hcc", 30, -0.01, 1.01, 30, -0.01, 1.01 );
 
@@ -489,10 +489,6 @@ HiggsToWWHistsSlim::HiggsToWWHistsSlim(Context& ctx, const string& dname, const 
   }
   // book all histograms here
   book_TH1F("sum_event_weights",            "counting experiment", 1, 0.5, 1.5);
-  book_TH1F("Zprime_"+massPlotName+"_rebin1",  massType + "^{Zprime} [GeV]", 9900, 0, 9900);
-  book_TH1F("Zprime_"+massPlotName+"_rebin10", massType + "^{Zprime} [GeV]", 990,  0, 9900);
-  book_TH1F("Zprime_"+massPlotName+"_rebin30", massType + "^{Zprime} [GeV]", 330,  0, 9900);
-  book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV]", 100,  0,10000);
 
   for (const string & name: {"Zprime","Z","H"}) {
     if (name=="Zprime")   book_TH1F(name+"_"+massPlotName, massType + "^"+name+" [GeV]", 40 ,700, 4700);
@@ -506,6 +502,10 @@ HiggsToWWHistsSlim::HiggsToWWHistsSlim(Context& ctx, const string& dname, const 
 
   book_TH1F("H_btag_MassDecorrelatedDeepBoosted_ZH4qvsQCD", "ZH4qvsQCD", 30, -0.01, 1.01);
   book_TH1F("H_btag_DeepBoosted_H4qvsQCD", "H4qvsQCD", 30, -0.01, 1.01);
+  book_TH1F("Zprime_"+massPlotName+"_rebin1",  massType + "^{Zprime} [GeV/c^{2}]", 9900, 0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin10", massType + "^{Zprime} [GeV/c^{2}]", 990,  0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin30", massType + "^{Zprime} [GeV/c^{2}]", 330,  0, 9900);
+  book_TH1F("Zprime_"+massPlotName+"_rebin100",massType + "^{Zprime} [GeV/c^{2}]", 100,  0,10000);
 
 }
 

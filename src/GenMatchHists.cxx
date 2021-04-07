@@ -6,6 +6,7 @@
 #include "UHH2/VHResonances/include/GenMatchHists.h"
 
 #include "TH1F.h"
+#include "TH2F.h"
 #include <type_traits>
 #include <iostream>
 
@@ -38,7 +39,7 @@ GenMatchHists::GenMatchHists(Context & ctx, const string & dname): HistsBase(ctx
   book_TH1F("PU_pT_hat_max", "PU p_T hat max", 100, 0, 3000);
   book_TH1F("binningValues", "binning values", 100, 0, 3000);
   book_TH1F("HT", "H_T", 100, 0, 3000);
-
+  book_TH2F("MET_METphi", ";missing E_{T};missing E_{T} #phi", 200,0, 2000, 200,-5,5);
 }
 
 void GenMatchHists::fill(const Event & event){
@@ -70,6 +71,7 @@ void GenMatchHists::fill(const Event & event){
   }
 
   fill_H1("HT", ht, event.weight);
+  H2("MET_METphi")->Fill(event.met->pt(), event.met->phi(), event.weight);
 
   string name;
   for( auto & gp : *event.genparticles){
