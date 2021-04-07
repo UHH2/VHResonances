@@ -16,6 +16,7 @@ class ModuleRunner(ModuleRunnerBase):
         self.defineModules()
         self.CompileModules()
         self.controls = controls
+        self.RunCombine=False # default value
     def RunCommand(self,command="", isPython=False, **kwargs):
 
         def LoopOver(arg, defaultList):
@@ -33,7 +34,7 @@ class ModuleRunner(ModuleRunnerBase):
                 for collection in LoopOver("Collections", self.Collections):
                     for channel in LoopOver("Channels", self.Channels):
                         for histFolder in LoopOver("histFolders", [""]):
-                            if isPython: list_processes.append(["python", "python/"+command+".py", "--histFolders="+histFolder,"--Channels="+channel+"channel" if channel!="" else "--Channels="+channel,"--Collections="+collection,"--years="+year])
+                            if isPython: list_processes.append(["python", "python/"+command+".py", "--histFolders="+histFolder,"--Channels="+channel+"channel" if channel!="" else "--Channels="+channel,"--Collections="+collection,"--years="+year,"--RunCombine="+(str(kwargs["RunCombine"]) if "RunCombine" in kwargs else "")])
                             else: list_processes.append(["./"+command,histFolder,channel+"channel" if channel!="" else channel,collection,year])
                             list_logfiles.append("log_"+str(i)+".txt")
                             i +=1
