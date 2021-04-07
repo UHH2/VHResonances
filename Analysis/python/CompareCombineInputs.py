@@ -2,6 +2,8 @@ from Utils import *
 
 import tdrstyle_all as TDR
 
+from ROOT import *
+
 TDR.writeExtraText = True
 TDR.extraText = "Work in progress"
 
@@ -128,6 +130,7 @@ class CompareCombineInputs(ModuleRunnerBase):
 
             # Skip the ratio plots
             if "ratio" in name:  continue
+
 
             col = ROOT.kRed+1 if "Zprime" in name else ROOT.kBlue+1 if "DATA_CR" in name else ROOT.kBlack
             if "bkg_SR" in name : col = ROOT.kGreen+2
