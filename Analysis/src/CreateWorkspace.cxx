@@ -683,7 +683,7 @@ void CreateRooWorkspace::InitializePDFs() {
       fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_3_p3"+unique_name).c_str(), (mode+"_Exp_3_p3"+unique_name).c_str(), -0.1, -100, 100));
       Fits_map[mode]["Exp_3"].reset(new PolinomialExponent_3p((FitName+unique_name).c_str(), (FitName+unique_name).c_str(),*x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2]));
     }
-    
+
     FitName = mode+"_Exp_4";
     fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_4_p1"+unique_name).c_str(), (mode+"_Exp_4_p1"+unique_name).c_str(), 4., -100, 100));
     fitPars[FitName].emplace_back(new RooRealVar((mode+"_Exp_4_p2"+unique_name).c_str(), (mode+"_Exp_4_p2"+unique_name).c_str(), -10, -100,  10));
