@@ -504,7 +504,7 @@ HiggsToWWHistsSlim::HiggsToWWHistsSlim(Context& ctx, const string& dname, const 
     book_TH1F(name+"_phi",     "#phi"     +name,           50,   -5,    5);
   }
 
-  book_TH1F("H_btag_MassDecorrelatedDeepBoosted_ZH4qvsQCD", "ZH4qvsQCD", 30, -0.01, 1.01);
+  book_TH1F("H_btag_MassDecorrelatedDeepBoosted_ZHccvsQCD", "ZHccvsQCD", 30, -0.01, 1.01);
   book_TH1F("H_btag_DeepBoosted_H4qvsQCD", "H4qvsQCD", 30, -0.01, 1.01);
 
 }
@@ -553,7 +553,7 @@ void HiggsToWWHistsSlim::fill(const Event & event){
     fill_H1("H_eta",         cand.H().eta(),    weight);
     fill_H1("H_phi",         cand.H().phi(),    weight);
 
-    fill_H1("H_btag_MassDecorrelatedDeepBoosted_ZH4qvsQCD", cand.H().btag_MassDecorrelatedDeepBoosted_H4qvsQCD(), weight);
+    fill_H1("H_btag_MassDecorrelatedDeepBoosted_ZHccvsQCD", cand.H().btag_MassDecorrelatedDeepBoosted_ZHccvsQCD(), weight);
     fill_H1("H_btag_DeepBoosted_H4qvsQCD", cand.H().btag_DeepBoosted_H4qvsQCD(), weight);
 
   }

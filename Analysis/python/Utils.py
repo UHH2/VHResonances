@@ -67,7 +67,10 @@ def DoControl(controls, control_, channel, sample):
     if not "muon"  in channel and "MuonScale" in control_: check = True
     if not "muon"  in channel and "isolation" in control_: check = True
     if not "muon"  in channel and "tracking"  in control_: check = True
-    if not "muon"  in channel and "reco"      in control_: check = True
+    if "invisible" in channel and "id"        in control_: check = True
+    if "invisible" in channel and "trigger"   in control_: check = True
+    if "invisible" in channel and "reco"      in control_: check = True
+
     return check
 
 

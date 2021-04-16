@@ -62,7 +62,7 @@ void Plotter::SetEnv() {
     PrintInfo("outputdir",outputdir);
   }
 
-  if(GetChannel()!="muonchannel") systematics.erase(systematics.begin()+distance(systematics.begin(), std::find(systematics.begin(), systematics.end(), "MuonScale")));
+  if(GetChannel()!="muonchannel" && FindInVector(systematics,"MuonScale")) systematics.erase(systematics.begin()+distance(systematics.begin(), std::find(systematics.begin(), systematics.end(), "MuonScale")));
   if (module=="SignalRegion") {
     for (const auto& syst: SystematicsScale) {
       if (!FindInString("muon",GetChannel()) && FindInString("tracking",syst)) continue;
@@ -74,12 +74,15 @@ void Plotter::SetEnv() {
     }
   }
 
+  if (!plotSyst) systematics.clear();
+
   WIP();
   SetYear(TString::Format("%.1f fb^{-1}", lumi_map.at(year).at("lumi_fb")));
 
   lumi_unc = lumi_map.at(year).at("uncertainty");
 
   stack.reset(new THStack(("stack"+relPath+hname).c_str(), "" ));
+  stack_unc.reset(new THStack(("stack_unc"+relPath+hname).c_str(), "" ));
   for (const auto& syst: systematics){
     if (debug) PrintInfo("syst",syst);
     for (const auto& var: {"up","down"}){
@@ -87,7 +90,6 @@ void Plotter::SetEnv() {
     }
   }
 }
-
 
 
 void Plotter::LoadHists(){
@@ -100,27 +102,105 @@ void Plotter::LoadHists(){
     histos[sample].reset((TH1D*)f_->Get(hname.c_str()));
     histos[sample]->SetDirectory(0);
     histos[sample]->Scale(Samples[sample]->GetWeight());
+    histos[sample]->Rebin(GetRebin());
+    f_->Close();
     if(binwidth==0) binwidth = histos[sample]->GetBinWidth(1);
     if(nbins==1) nbins = histos[sample]->GetNbinsX();
     else if(nbins != histos[sample]->GetNbinsX()) {PrintGreen(nbins);PrintGreen(histos[sample]->GetNbinsX()); throw std::runtime_error("Hists have different binning. Be carreful.");}
     if (!Samples[sample]->GetIsToStack()) continue;
-    uncertainties[sample]["lumiup"].reset((TH1D*)(histos[sample]->Clone((sample+"_lumiup").c_str())));
-    uncertainties[sample]["lumidown"].reset((TH1D*)(histos[sample]->Clone((sample+"_lumidown").c_str())));
-    uncertainties[sample]["lumiup"]->Scale(1+lumi_unc/100);
-    uncertainties[sample]["lumidown"]->Scale(1-lumi_unc/100);
-    uncertainties[sample]["lumiup"]->SetDirectory(0);
-    uncertainties[sample]["lumidown"]->SetDirectory(0);
     for (const auto& syst: systematics){
-      if(syst=="lumi") continue;
-      for (const auto& var: {"up","down"}){
-        if (debug) PrintGreen(syst);
+      if(syst=="lumi") {
+        for (const auto& var: {"up","down"}){
+          uncertainties[sample][syst+var].reset((TH1D*)(histos[sample]->Clone((sample+"_"+syst+var).c_str())));
+          uncertainties[sample][syst+var]->SetDirectory(0);
+          uncertainties[sample][syst+var]->Scale(Samples[sample]->GetWeight());
+        }
+        uncertainties[sample][syst+"up"]->Scale(1+lumi_unc/100);
+        uncertainties[sample][syst+"down"]->Scale(1-lumi_unc/100);
+      } else if(syst=="murmuf") {
         TString fname_ = inputdir+PrefixrootFile+Samples[sample]->GetFileName();
-        TString hname_ = hname;
-        if (!isNominalFolder(syst)) fname_ = fname_.ReplaceAll("nominal",syst+"_"+var);
-        else if (!isNominalSyst(syst)) hname_ = hname_.ReplaceAll(Split(hname,0,"_"), Split(hname,0,"_")+"_"+syst+"_"+var);
+        if (debug) PrintGreen(syst);
+        if (debug) PrintGreen(fname_);
+        if (debug) PrintGreen(hname);
         std::unique_ptr<TFile> f_sys; f_sys.reset(new TFile(fname_));
-        uncertainties[sample][syst+var].reset((TH1D*)f_sys->Get(hname_));
-        uncertainties[sample][syst+var]->SetDirectory(0);
+        uncertainties[sample][syst+"up"].reset((TH1D*)((TH1D*)f_sys->Get(hname.c_str()))->Clone((syst+"up").c_str()));
+        uncertainties[sample][syst+"down"].reset((TH1D*)((TH1D*)f_sys->Get(hname.c_str()))->Clone((syst+"down").c_str()));
+        uncertainties[sample][syst+"up"]->SetDirectory(0);
+        uncertainties[sample][syst+"down"]->SetDirectory(0);
+        uncertainties[sample][syst+"up"]->Scale(Samples[sample]->GetWeight());
+        uncertainties[sample][syst+"down"]->Scale(Samples[sample]->GetWeight());
+        uncertainties[sample][syst+"up"]->Rebin(GetRebin());
+        uncertainties[sample][syst+"down"]->Rebin(GetRebin());
+
+        std::unordered_map<std::string, std::unique_ptr<TH1F> > histos_temp;
+        for (auto var: Var_murmuf) {
+          TString hname_ = TString(hname).ReplaceAll(Split(hname,0,"_"), Split(hname,0,"_")+"_"+syst+"_"+var);
+          histos_temp[var].reset((TH1F*)f_sys->Get(hname_));
+          histos_temp[var]->SetDirectory(0);
+          histos_temp[var]->Scale(Samples[sample]->GetWeight());
+          histos_temp[var]->Rebin(GetRebin());
+        }
+
+        for (int bin = 0; bin < uncertainties[sample][syst+"up"]->GetNbinsX()+1; bin++) {
+          std::vector<double> y_vals;
+          for (const auto& x : histos_temp) y_vals.push_back(x.second->GetBinContent(bin));
+          uncertainties[sample][syst+"up"]->SetBinContent(bin, *max_element(y_vals.begin(), y_vals.end()));
+          uncertainties[sample][syst+"down"]->SetBinContent(bin, *min_element(y_vals.begin(), y_vals.end()));
+        }
+        f_sys->Close();
+      } else if(syst=="NNPDF") {
+        TString fname_ = inputdir+PrefixrootFile+Samples[sample]->GetFileName();
+        if (debug) PrintGreen(syst);
+        if (debug) PrintGreen(fname_);
+        if (debug) PrintGreen(hname);
+        std::unique_ptr<TFile> f_sys; f_sys.reset(new TFile(fname_));
+        uncertainties[sample][syst+"up"].reset((TH1D*)((TH1D*)f_sys->Get(hname.c_str()))->Clone((syst+"up").c_str()));
+        uncertainties[sample][syst+"down"].reset((TH1D*)((TH1D*)f_sys->Get(hname.c_str()))->Clone((syst+"down").c_str()));
+        uncertainties[sample][syst+"up"]->SetDirectory(0);
+        uncertainties[sample][syst+"down"]->SetDirectory(0);
+        uncertainties[sample][syst+"up"]->Scale(Samples[sample]->GetWeight());
+        uncertainties[sample][syst+"down"]->Scale(Samples[sample]->GetWeight());
+        uncertainties[sample][syst+"up"]->Rebin(GetRebin());
+        uncertainties[sample][syst+"down"]->Rebin(GetRebin());
+
+        std::unordered_map<std::string, std::unique_ptr<TH1F> > histos_temp;
+        for (int var = 0; var < PDF_variations ; var++) {
+          TString hname_ = TString(hname).ReplaceAll(Split(hname,0,"_"), Split(hname,0,"_")+"_"+syst+"_"+std::to_string(var));
+          histos_temp[std::to_string(var)].reset((TH1F*)f_sys->Get(hname_));
+          histos_temp[std::to_string(var)]->SetDirectory(0);
+          histos_temp[std::to_string(var)]->Scale(Samples[sample]->GetWeight());
+          histos_temp[std::to_string(var)]->Rebin(GetRebin());
+          //TODO  normalize?
+        }
+
+        for (int bin = 0; bin < uncertainties[sample][syst+"up"]->GetNbinsX()+1; bin++) {
+          std::vector<double> y_vals;
+          for (const auto& x : histos_temp) y_vals.push_back(x.second->GetBinContent(bin));
+          double mean = 0.; double stdev=0;
+          for (const auto& x : y_vals) mean += x;
+          mean /= PDF_variations;
+          for (const auto& x : y_vals) stdev += (x-mean)*(x-mean);
+          stdev = TMath::Sqrt(stdev/PDF_variations);
+          uncertainties[sample][syst+"up"]->SetBinContent(bin, uncertainties[sample][syst+"up"]->GetBinContent(bin) + stdev );
+          uncertainties[sample][syst+"down"]->SetBinContent(bin, uncertainties[sample][syst+"down"]->GetBinContent(bin) - stdev );
+        }
+        f_sys->Close();
+      } else {
+        for (const auto& var: {"up","down"}){
+          TString fname_ = inputdir+PrefixrootFile+Samples[sample]->GetFileName();
+          TString hname_ = hname;
+          if (!isNominalFolder(syst)) fname_ = fname_.ReplaceAll("nominal",syst+"_"+var);
+          else if (!isNominalSyst(syst)) hname_ = hname_.ReplaceAll(Split(hname,0,"_"), Split(hname,0,"_")+"_"+syst+"_"+var);
+          if (debug) PrintGreen(syst);
+          if (debug) PrintGreen(fname_);
+          if (debug) PrintGreen(hname_);
+          std::unique_ptr<TFile> f_sys; f_sys.reset(new TFile(fname_));
+          uncertainties[sample][syst+var].reset((TH1D*)f_sys->Get(hname_));
+          uncertainties[sample][syst+var]->SetDirectory(0);
+          uncertainties[sample][syst+var]->Scale(Samples[sample]->GetWeight());
+          uncertainties[sample][syst+var]->Rebin(GetRebin());
+          f_sys->Close();
+        }
       }
     }
   }
@@ -172,11 +252,26 @@ void Plotter::MakeStackHist(){
     histos[sample]->SetFillColor(Samples[sample]->GetColor());
     histos[sample]->SetLineWidth(0);
     stack->Add(histos[sample].get());
+    stack_unc->Add(histos[sample].get());
     for (const auto& systematic: systematics){
       for (const auto& var: {"up","down"}){
         stacksts[systematic+var]->Add(uncertainties[sample][systematic+var].get());
       }
     }
+  }
+  h_err.reset(new TH1F(*(TH1F*)(stack->GetStack()->Last())));
+  if (!plotSyst) return;
+  h_err_syst.reset(new TH1F(*(TH1F*)(stack_unc->GetStack()->Last())));
+  for (int bin = 0; bin < h_err_syst->GetNbinsX()+1; bin++) {
+    double err_up = h_err_syst->GetBinError(bin)*h_err_syst->GetBinError(bin);
+    double err_down = h_err_syst->GetBinError(bin)*h_err_syst->GetBinError(bin);
+    for (const auto& x : stacksts) {
+      TH1F* h_ = new TH1F(*(TH1F*)(x.second->GetStack()->Last()));
+      double err = TMath::Abs(h_->GetBinContent(bin)-h_err_syst->GetBinContent(bin));
+      if (FindInString("down",x.first)) err_down += err*err;
+      else err_up += err*err;
+    }
+    h_err_syst->SetBinError(bin, (err_up>err_down)? TMath::Sqrt(err_up) : TMath::Sqrt(err_down));
   }
 }
 
@@ -191,8 +286,8 @@ void Plotter::MakePlot(){
   stack->Draw("hist same");
 
   // draw uncertainty of stack
-  TH1F* h_err = new TH1F(*(TH1F*)(stack->GetStack()->Last()));
-  tdrDraw(h_err, "E2", 0, kGray+1, 0, kGray+1, 3005, kGray+1);
+  tdrDraw(h_err.get(), "E2", 0, kGray+1, 0, kGray+1, 3005, kGray+1);
+  if(plotSyst) tdrDraw(h_err_syst.get(), "E2", 0, kGray+2, 0, kGray+2, 3005, kGray+2);
 
   std::string name_hist_ratio;
   for (const auto& sample: histnames){
@@ -243,9 +338,9 @@ void Plotter::MakePlot(){
       for (const auto& systematic: systematics){
         double x;
         x = fabs(h_ratiosyst[systematic+"up"]->GetBinContent(j)-val_d);
-        systup += x*x;
+        if (!isnan(x)) systup += x*x;
         x = fabs(h_ratiosyst[systematic+"down"]->GetBinContent(j)-val_d);
-        systdown += x*x;
+        if (!isnan(x)) systdown += x*x;
       }
       h_ratiotot->SetPoint(j, x_center, 1);
       double x_up = h_ratio->GetXaxis()->GetBinUpEdge(j)-x_center;
@@ -272,7 +367,7 @@ void Plotter::MakePlot(){
   if (plotSyst) leg_ratio->AddEntry(h_ratiotot,"Stat. #oplus Syst.","f");
   fixOverlay();
 
-  canvas->SaveAs((outputdir+year+"_"+module+"_"+collections+"_"+channel+"_nominal_"+Split(hname,0)+"_"+Split(hname,1)+".pdf").c_str());
+  canvas->SaveAs((outputdir+year+"_"+module+"_"+collections+"_"+channel+"_nominal_"+Split(hname,0)+"_"+Split(hname,1)+(plotSyst?"_syst":"")+".pdf").c_str());
 
 }
 
@@ -296,6 +391,7 @@ Plotter::Plotter(std::string module_, std::string hname_, std::string year_, std
 }
 
 void Plotter::Process(){
+  if (year!="RunII" && plotSyst) return;
   if (debug) PrintGreen("--> Process");
   LoadHists();
   FindRanges();
@@ -353,6 +449,7 @@ void PlotDistribution(std::string ch, std::string year, std::string module, std:
   plotter->SetXRange(xmin,xmax);
   plotter->SetYRange(ymin, ymax);
   plotter->SetXTitle(xtitle);
+  if(FindInString("_pt", hname)) plotter->SetRebin(5);
   plotter->Process();
 }
 
@@ -390,8 +487,8 @@ void PlotPt(std::string ch="muonchannel", std::string year="RunII", std::string 
   std::string hname="ZprimeCandidate_ScaleFactors/"+hname_;
   if (module=="SignalRegion") hname = TString(hname).ReplaceAll("ScaleFactors","Selection").Data();
   bool isInv = ch=="invisiblechannel";
-  double ymax = isInv? 7.01e6 :2.01e5;
-  PlotDistribution(ch, year, module, hname, 200, 5000, 1.5e-02, ymax, xname);
+  double ymax = isInv? 4.01e7 :8.01e5;
+  PlotDistribution(ch, year, module, hname, 200, 2500, 1.5e-02, ymax, xname);
 }
 
 void PlotEtaPhi(std::string ch="muonchannel", std::string year="RunII", std::string module="Selection", std::string hname_="Z_eta", std::string xname="#eta") {
@@ -407,7 +504,8 @@ void PlotHDistributions(std::string  ch="muonchannel", std::string year="RunII",
   PlotPt(ch,  year, module, "H_pt",  "p_{T}^{"+extra+"} [GeV]");
   PlotEtaPhi(ch, year, module, "H_phi", "#phi^{"+extra+"}" );
   PlotEtaPhi(ch, year, module, "H_eta", "#eta^{"+extra+"}" );
-  PlotTagger(ch, year, module, "ZHccvsQCD", true);
+
+  if (module=="Selection") PlotTagger(ch, year, module, "ZHccvsQCD", true);
   PlotTagger(ch, year, module, "H4qvsQCD", false);
 }
 
@@ -423,13 +521,14 @@ void PlotZDistributions(std::string  ch="muonchannel", std::string year="RunII",
 
 
 
+
 int main(){
   gErrorIgnoreLevel = kError;
-  for (const auto& year: {"2016","2017","2018","RunII"}) {
-    for (const auto& ch: {"muonchannel","electronchannel","invisiblechannel"}) {
+  for (const auto& ch: {"muonchannel","electronchannel","invisiblechannel"}) {
+    for (const auto& year: {"2016","2017","2018","RunII"}) {
       for (const auto& module: {"Selection","SignalRegion"}) {
+        PrintGreen<std::string>({ch,year,module});
         PlotZprimeMass(ch,year,module);
-        if (module!="Selection") continue;
         PlotCount(ch,year,module);
         PlotHDistributions(ch,year,module);
         PlotZDistributions(ch,year,module);
