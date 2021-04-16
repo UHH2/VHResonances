@@ -17,6 +17,8 @@
 
 typedef std::pair<std::string, int> mypair_I;
 
+const std::vector<double> MyMassPoints = {1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000};
+
 double EfficiencyError(double count, double N);
 bool isCSRegion(std::string tag);
 void CalculateSignalEfficiencies(std::string histFolder ="DeepAk8_ZHccvsQCD_MD");

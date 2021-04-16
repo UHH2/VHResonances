@@ -53,14 +53,14 @@ void CalculateSignalEfficiencies(std::string histFolder) {
   // std::vector<std::string> years =  {"RunII"};
   // std::vector<std::string> collections =  {"Puppi", "CHS", "HOTVR"};
   std::vector<std::string> collections =  {"Puppi"};
-  std::vector<std::string> channels =  {"muonchannel", "electronchannel", "leptonchannel" };
+  std::vector<std::string> channels =  {"muonchannel", "electronchannel", "leptonchannel", "invisiblechannel" };
   // std::vector<std::string> channels =  {"muonchannel"};
   std::vector<std::string> decaymodes =  {"bb", "WW", "else", "Inc" };
 
-  double x_min = 300;
-  double x_max = 8500;
-  double y_min = 0.001;
-  double y_max = 30;
+  double x_min = 800;
+  double x_max = 5200;
+  double y_min = 0.01;
+  double y_max = 10;
   TString x_name = "M_{Z'} (GeV)";
   TString y_name = "Selection efficiency";
 
@@ -68,24 +68,26 @@ void CalculateSignalEfficiencies(std::string histFolder) {
   extraText  = "Simulation";
   extraText2 = "Work in progress";
   lumi_13TeV  = "";
-  ForThesis();
+  // ForThesis();
 
   std::map<std::string, mypair_I > Cuts;
 
   // Cuts.insert(std::pair<std::string, mypair_I>("0_nocuts",                              mypair_I("weights",kBlack))); // only as control
-  Cuts.insert(std::pair<std::string, mypair_I>("1_N_{l} #geq 2",                        mypair_I("NLeptonSel",                    kOrange-2)));
-  // Cuts.insert(std::pair<std::string, mypair_I>("2_#it{p}_{T}^{#it{jet}} #geq 200 GeV",  mypair_I("NBoostedJet",                   kOrange-2)));
-  Cuts.insert(std::pair<std::string, mypair_I>("3_#Delta R(ll) < 1.0",                  mypair_I("DeltaRDiLepton",                kOrange+1)));
+  Cuts.insert(std::pair<std::string, mypair_I>("1_Triggers",                            mypair_I("Trigger",                       kRed+1)));
+  Cuts.insert(std::pair<std::string, mypair_I>("2_Lepton selection",                    mypair_I("NLeptonSel",                    kOrange+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("3_#Delta R(ll) < 1.0",                  mypair_I("DeltaRDiLepton",                kOrange+1)));
   // Cuts.insert(std::pair<std::string, mypair_I>("4_#Delta#phi(ll,#it{jet}) #geq #pi/2",  mypair_I("JetDiLeptonPhiAngular",         kGreen+1)));
   // Cuts.insert(std::pair<std::string, mypair_I>("5_preselection",                        mypair_I("Preselection",                  kBlack))); // only as control
-  Cuts.insert(std::pair<std::string, mypair_I>("6_Triggers",                            mypair_I("Trigger",                       kRed+1)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("5_preselection",                        mypair_I("Preselection",                  kBlack))); // only as control
+  Cuts.insert(std::pair<std::string, mypair_I>("5_Angular cuts",                           mypair_I("MuonScale",                  kOrange-2)));
   // Cuts.insert(std::pair<std::string, mypair_I>("7_Z' Reconstruction",                   mypair_I("ZprimeReco",                    kGreen+2))); // only as control
-  Cuts.insert(std::pair<std::string, mypair_I>("7_Z' Selection",                        mypair_I("ZprimeSelection",               kBlue+1)));
+  Cuts.insert(std::pair<std::string, mypair_I>("7_b tag veto",                          mypair_I("ZprimeSelection",               kBlue+1)));
   // Cuts.insert(std::pair<std::string, mypair_I>("8_#it{p}_{T}^{#it{ll}}/m_{Z'} #geq 0.2",mypair_I("PTMassCut",                     kBlue+1))); //Very similar to ZprimeSelection
   // Cuts.insert(std::pair<std::string, mypair_I>("11_FullSelection",                       mypair_I("ExtraCleaning",                 kOrange-1))); // TODO The SFs here play a role
 
-  Cuts.insert(std::pair<std::string, mypair_I>("99_H4qvsQCD_PD",                        mypair_I("DeepAk8_H4qvsQCD_massdep_SR",              kAzure+1)));
-  Cuts.insert(std::pair<std::string, mypair_I>("99_ZHccvsQCD_MD",                       mypair_I("DeepAk8_ZHccvsQCD_MD_SR",                  kGreen+3)));
+  Cuts.insert(std::pair<std::string, mypair_I>("99_H4qvsQCD",                           mypair_I("DeepAk8_H4qvsQCD_massdep_SR",              kGreen+3)));
+  // Cuts.insert(std::pair<std::string, mypair_I>("99_HccvsQCD",                           mypair_I("DeepAk8_HccvsQCD2_SR",                  kGreen+3)));
+  Cuts.insert(std::pair<std::string, mypair_I>("99_ZHccvsQCD",                         mypair_I("DeepAk8_ZHccvsQCD_MD2_SR",              kAzure+1)));
   // Cuts.insert(std::pair<std::string, mypair_I>("99_Hcc_MD",                             mypair_I("DeepAk8_HccvsQCD_MD_SR",                   kRed+1)));
   // Cuts.insert(std::pair<std::string, mypair_I>("99_H4q_MD",                             mypair_I("DeepAk8_H4qvsQCD_MD_SR",                   kAzure-7)));
   // Cuts.insert(std::pair<std::string, mypair_I>("99_H4q_PD_Hcc_MD",                      mypair_I("DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD_SR",  kOrange+1)));
@@ -104,13 +106,14 @@ void CalculateSignalEfficiencies(std::string histFolder) {
   std::map<std::string, TGraph* > Plot_ComparisonFinal;
   std::map<std::string, std::vector<double> > SignalEfficiencies;
   std::vector<std::string> order_norm;
-  std::vector<double> dummy(MassPoints.size(),0.001);
+  std::vector<double> dummy(MyMassPoints.size(),0.001);
 
   for (std::string year: years) {
     for (std::string collection: collections) {
       for (std::string channel: channels) {
         for (std::string decaymode: decaymodes) {
           std::string namePlot = decaymode+"_"+collection+"_"+channel+"_"+year+"_"+histFolder;
+          std::cout << namePlot << std::endl;
           TString namePlotShort = "Hto"+namePlot; namePlotShort.ReplaceAll("Puppi_","").ReplaceAll("muon","#mu-").ReplaceAll("electron","e-").ReplaceAll("lepton","l-").ReplaceAll("_"," ");
 
           bool isInc = decaymode=="Inc";
@@ -138,7 +141,7 @@ void CalculateSignalEfficiencies(std::string histFolder) {
 
           for (std::pair<std::string, mypair_I> element : Cuts) {
             if (!isCSRegion(element.first)) order_norm.push_back(element.first);
-            SignalEfficiencies[element.first] = std::vector<double>(MassPoints.size(), 0);
+            SignalEfficiencies[element.first] = std::vector<double>(MyMassPoints.size(), 0);
           }
 
           // To Load the leptonhisto we loop over muon and electron channels
@@ -151,7 +154,7 @@ void CalculateSignalEfficiencies(std::string histFolder) {
           for (int lep = 0; lep < loop ; lep++) {
 
             int Mass_index = 0;
-            for (int MassPoint : MassPoints) {
+            for (int MassPoint : MyMassPoints) {
               std::string MassName  = std::to_string((int)MassPoint);
               TString fn_presel = PresectionStorePath+prefix+"MC_ZprimeToZH"+additionalText+"_M"+MassName+"_"+year+"_noTree.root";
               TString fn_sel    = SectionStorePath+prefix+"MC_ZprimeToZH"+additionalText+"_M"+MassName+"_"+year+"_noTree.root";
@@ -197,6 +200,12 @@ void CalculateSignalEfficiencies(std::string histFolder) {
                 else h_sel = (TH1F*)file_csr->Get("ZprimeCandidate_"+cut+"/"+hname); //In case the hist in the SignalRegion file (eg. 9_Hcc)
 
                 double sel_event = h_sel->GetBinContent(1);
+
+                if (!(h_preselection) && ! (h_selection)) {//Remove effect of Scale Factors
+                  TH1F* h_SFs = (TH1F*)file_sel->Get("ZprimeCandidate_ScaleFactors/"+hname);
+                  TH1F* h_noSFs = (TH1F*)file_sel->Get("ZprimeCandidate_PTMassCut/"+hname);
+                  sel_event *= h_noSFs->GetBinContent(1)/h_SFs->GetBinContent(1);
+                }
                 SignalEfficiencies[tag][Mass_index] += sel_event/tot_event;
               }
               file_presel->Close(); file_sel->Close(); file_csr->Close();
@@ -207,22 +216,24 @@ void CalculateSignalEfficiencies(std::string histFolder) {
           // Plot efficiencies
           lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at(year).at("lumi_fb"));
 
-          y_max = 30;
+          y_max = 10;
           TCanvas* canv_eff = tdrCanvas(("canv_eff"+namePlot).c_str(), x_min, x_max, y_min, y_max, x_name, y_name);
           canv_eff->SetLogy(1);
           TCanvas* canv_eff_SR = tdrCanvas(("canv_eff_SR"+namePlot).c_str(), x_min, x_max, y_min, y_max, x_name, y_name);
           canv_eff_SR->SetLogy(1);
-          TLegend *leg_eff = tdrLeg(0.50,0.68,0.89,0.89, 0.030, 42, kBlack);
-          leg_eff->SetNColumns(2);
-          TLegend *leg_eff_SR = tdrLeg(0.40,0.70,0.89,0.89, 0.030, 42, kBlack);
-          leg_eff_SR->SetNColumns(2);
+          // TLegend *leg_eff = tdrLeg(0.50,0.68,0.89,0.89, 0.030, 42, kBlack);
+          TLegend *leg_eff = tdrLeg(0.40,0.68,0.89,0.89, 0.030, 42, kBlack);
+          leg_eff->SetNColumns(3);
+          // TLegend *leg_eff_SR = tdrLeg(0.40,0.70,0.89,0.89, 0.030, 42, kBlack);
+          TLegend *leg_eff_SR = tdrLeg(0.40,0.68,0.89,0.89, 0.030, 42, kBlack);
+          leg_eff_SR->SetNColumns(3);
 
           for (std::pair<std::string, mypair_I> element : Cuts) {
             std::string tag = element.first;
             if (tag.find("CR")!=std::string::npos) continue; // TODO plot also CR
             int color = element.second.second;
             bool isCSR = isCSRegion(tag);
-            TGraph* gr_eff = new TGraphErrors(MassPoints.size(), &(MassPoints[0]), &(SignalEfficiencies[tag][0]));
+            TGraph* gr_eff = new TGraphErrors(MyMassPoints.size(), &(MyMassPoints[0]), &(SignalEfficiencies[tag][0]));
             gr_eff->SetLineWidth(2);
             if (isCSR) canv_eff_SR->cd();
             else canv_eff->cd();
@@ -231,7 +242,7 @@ void CalculateSignalEfficiencies(std::string histFolder) {
             else leg_eff->AddEntry(gr_eff, tag.substr(tag.find("_")+1).c_str(),"lp");
 
             //Save graph for further usage. We care only about the SR eff.
-            if(tag=="99_ZHccvsQCD_MD") Plot_ComparisonFinal[namePlot] = gr_eff;
+            if(tag=="99_ZHccvsQCD") Plot_ComparisonFinal[namePlot] = gr_eff;
           }
 
           canv_eff->cd();
@@ -248,16 +259,17 @@ void CalculateSignalEfficiencies(std::string histFolder) {
           // NB. This is nothing related to e_x^norm
           y_max = 1.5;
           TCanvas* canv_eff_norm = tdrCanvas(("canv_eff_norm"+namePlot).c_str(), x_min, x_max, y_min, y_max, x_name, y_name);
-          TLegend *leg_eff_norm = tdrLeg(0.50,0.68,0.89,0.89, 0.030, 42, kBlack);
-          leg_eff_norm->SetNColumns(2);
+          // TLegend *leg_eff_norm = tdrLeg(0.50,0.68,0.89,0.89, 0.030, 42, kBlack);
+          TLegend *leg_eff_norm = tdrLeg(0.40,0.68,0.89,0.89, 0.030, 42, kBlack);
+          leg_eff_norm->SetNColumns(3);
 
           for (unsigned int i = 0; i < order_norm.size(); i++) {
             std::string tag = order_norm[i];
             std::string tag_norm = order_norm[std::max((int)(i-1),0)];
             int color = Cuts[tag].second;
-            std::vector<double> eff_norm(MassPoints.size(), 0);
-            for (unsigned int m = 0; m < MassPoints.size(); m++) eff_norm[m] = SignalEfficiencies[tag][m]/SignalEfficiencies[tag_norm][m];
-            TGraph* gr_eff = new TGraphErrors(MassPoints.size(), &(MassPoints[0]), &(eff_norm[0]));
+            std::vector<double> eff_norm(MyMassPoints.size(), 0);
+            for (unsigned int m = 0; m < MyMassPoints.size(); m++) eff_norm[m] = SignalEfficiencies[tag][m]/SignalEfficiencies[tag_norm][m];
+            TGraph* gr_eff = new TGraphErrors(MyMassPoints.size(), &(MyMassPoints[0]), &(eff_norm[0]));
             gr_eff->SetLineWidth(2);
             tdrDraw(gr_eff, "lp", kFullDotLarge, color, kSolid, color, 1000, color);
             leg_eff_norm->AddEntry(gr_eff, tag.substr(tag.find("_")+1).c_str(),"lp");
@@ -271,7 +283,8 @@ void CalculateSignalEfficiencies(std::string histFolder) {
           y_max = 1.5;
           TCanvas* canv_eff_rel = tdrCanvas(("canv_rel_eff"+namePlot).c_str(), x_min, x_max, y_min, y_max, x_name, y_name);
           // canv_eff_rel->SetLogy(1);
-          TLegend *leg_eff_rel = tdrLeg(0.50,0.68,0.89,0.89, 0.030, 42, kBlack);
+          // TLegend *leg_eff_rel = tdrLeg(0.50,0.68,0.89,0.89, 0.030, 42, kBlack);
+          TLegend *leg_eff_rel = tdrLeg(0.40,0.68,0.89,0.89, 0.030, 42, kBlack);
           leg_eff_rel->SetNColumns(2);
 
           for (std::pair<std::string, mypair_I> element : Cuts) {
@@ -279,16 +292,16 @@ void CalculateSignalEfficiencies(std::string histFolder) {
             if (isCSRegion(tag)) continue; //Interested only in the selection part.
             if (tag.find("CR")!=std::string::npos) continue; // TODO plot also CR
             int color = element.second.second;
-            std::vector<double> eff_rel(MassPoints.size(), 0);
+            std::vector<double> eff_rel(MyMassPoints.size(), 0);
             TString BRname = hname;
             BRname.ReplaceAll("sum_event_weights_","");
             double BR = (BRname!="sum_event_weights")? BRs.at(BRname.Data()) : 1;
-            for (unsigned int m = 0; m < MassPoints.size(); m++) {
+            for (unsigned int m = 0; m < MyMassPoints.size(); m++) {
               eff_rel[m] = SignalEfficiencies[tag][m]/BR;
               // This happens only because of the finite approximation of the BR. Force it to 1.
               if (eff_rel[m] > 1) eff_rel[m] = round(eff_rel[m]);
             }
-            TGraph* gr_eff = new TGraphErrors(MassPoints.size(), &(MassPoints[0]), &(eff_rel[0]));
+            TGraph* gr_eff = new TGraphErrors(MyMassPoints.size(), &(MyMassPoints[0]), &(eff_rel[0]));
             gr_eff->SetLineWidth(2);
             canv_eff_rel->cd();
             tdrDraw(gr_eff, "lp", kFullDotLarge, color, kSolid, color, 1000, color);
@@ -346,7 +359,7 @@ void CalculateSignalEfficiencies(std::string histFolder) {
   lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at("RunII").at("lumi_fb"));
   canv_ComparisonFinal = tdrCanvas("canv_ComparisonFinal_Inc", x_min, x_max, y_min, y_max, x_name, y_name);
   canv_ComparisonFinal->SetLogy(1);
-  leg_ComparisonFinal = tdrLeg(0.40,0.68,0.89,0.89, 0.025, 42, kBlack);
+  leg_ComparisonFinal = tdrLeg(0.30,0.68,0.89,0.89, 0.025, 42, kBlack);
   leg_ComparisonFinal->SetNColumns(3);
 
   for (std::string year: years) {
@@ -413,7 +426,8 @@ int main(int argc, char** argv){
   std::vector<std::string> histFolders = { "DeepAk8_H4qvsQCD_massdep", "DeepAk8_ZHccvsQCD_MD",
   "DeepAk8_HccvsQCD_MD", "DeepAk8_H4qvsQCD_MD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD",
   "DeepAk8_H4qvsQCD", "DeepAk8_HccvsQCD", "DeepAk8_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD",
-  "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD", "tau42"};
+  "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD",
+  "DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD2", "tau42"};
 
   if (argc>1) {
     std::string histFolder;

@@ -101,7 +101,10 @@ public:
   void SetYmax(double x) {ymax = x; ymax_set=ymax>0;};
   void SetXRange(double min, double max) {SetXmin(min); SetXmax(max);};
   void SetYRange(double min, double max) {SetYmin(min); SetYmax(max);};
-  void SetXTitle(std::string x) {xTitle = x;};
+  void SetXTitle(std::string x) {xTitle = TString(x);};
+
+  void SetRebin(int x) {rebin = x;};
+  int  GetRebin() const {return rebin;};
 
   bool IsSetXmin() {return xmin_set;};
   bool IsSetXmax() {return xmax_set;};
@@ -136,6 +139,9 @@ private:
   std::vector<std::string> histnames;
   std::vector<std::string> histstacknames;
   std::unique_ptr<THStack> stack;
+  std::unique_ptr<THStack> stack_unc;
+  std::unique_ptr<TH1F> h_err;
+  std::unique_ptr<TH1F> h_err_syst;
   std::unordered_map<std::string, std::unique_ptr<THStack>> stacksts;
 
   TString xTitle;
@@ -146,18 +152,21 @@ private:
   double ymax=-std::numeric_limits<double>::max();
 
   std::vector<std::string> systematics = {"lumi", "JEC", "JER","MuonScale"};
-  // std::vector<std::string> systematics = {"lumi"};
-  // std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
-  std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF"};
+  std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
+  std::vector<std::string> Var_murmuf = {"upup", "upnone", "noneup", "nonedown", "downnone", "downdown"};
+  const int PDF_variations = 100;
   bool xmin_set = false;
   bool xmax_set = false;
   bool ymin_set = false;
   bool ymax_set = false;
+  int rebin=1;
   int nbins=1;
   double binwidth=0;
 
 
+  // bool debug=true;
   bool debug=false;
-  bool plotSyst=true;
+  bool plotSyst=false;
+  // bool plotSyst=true;
 
 };

@@ -105,8 +105,8 @@ void GenMatchHists::book_ParticleHist(const string & histSuffix, const string & 
   book_TH1F("pt_"     +histSuffix, "p_{T} "     +axisSuffix, 50,minPt,maxPt);
   book_TH1F("eta_"    +histSuffix, "#eta "      +axisSuffix, 100,-5,5);
   book_TH1F("phi_"    +histSuffix, "#phi "      +axisSuffix, 50,-M_PI,M_PI);
-  //book_TH1F("mass_"   +histSuffix, "M "         +axisSuffix, (histSuffix=="ZPrime")? 10000 : 100, 0, (histSuffix=="ZPrime")? 10000 : 200);
-  book_TH1F("mass_"   +histSuffix, "M "         +axisSuffix, 100, 0, 200);
+  book_TH1F("mass_"   +histSuffix, "M "         +axisSuffix, (histSuffix=="ZPrime")? 1000 : 100, 0, (histSuffix=="ZPrime")? 10000 : 200);
+  // book_TH1F("mass_"   +histSuffix, "M "         +axisSuffix, 100, 0, 200);
   book_TH1F("flavor_" +histSuffix, "flavor "    +axisSuffix, 101, -50.5, 50.5);
   book_TH2F("DeltaRmaxvspt_"+histSuffix, 1000, 0, 1000, 100, 0., 2.);
   book_TH2F("DeltaR1vspt_"  +histSuffix, 1000, 0, 1000, 100, 0., 2.);
