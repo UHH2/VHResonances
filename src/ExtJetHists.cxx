@@ -97,11 +97,11 @@ void ExtJetHists::fill_internal(const Event & event, vector<T> jets){
 }
 
 void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuffix, double minPt, double maxPt, bool isTop){
-  book_TH1F("mass"+histSuffix,"M "+axisSuffix+" [GeV/c^{2}]",100,0,300);
-  book_TH1F("mT"+histSuffix,"m_{T} "+axisSuffix+" [GeV/c^{2}]",100,0,1000);
-  book_TH1F("pt"+histSuffix,"p_{T} "+axisSuffix+" [GeV]",50,minPt,maxPt);
-  book_TH1F("eta"+histSuffix,"#eta "+axisSuffix,100,-5,5);
-  book_TH1F("phi"+histSuffix,"#phi "+axisSuffix,50,-M_PI,M_PI);
+  book_TH1F("mass"+histSuffix,"M^{"+axisSuffix+"} [GeV/c^{2}]",100,0,300);
+  book_TH1F("mT"+histSuffix,"m_{T}^{"+axisSuffix+"} [GeV/c^{2}]",100,0,1000);
+  book_TH1F("pt"+histSuffix,"p_{T}^{"+axisSuffix+"} [GeV/c]",50,minPt,maxPt);
+  book_TH1F("eta"+histSuffix,"#eta^{"+axisSuffix+"}",100,-5,5);
+  book_TH1F("phi"+histSuffix,"#phi^{"+axisSuffix+"}",50,-M_PI,M_PI);
   book_TH2F("etaphi"+histSuffix,";#eta^"+axisSuffix+";#phi^"+axisSuffix, 50, -5, 5,50,-3, 3);
   book_TH1F("csv"+histSuffix,"csv-disriminator "+axisSuffix,50,0,1);
   book_TH1F("DeepCSV"+histSuffix,"DeepCSV-disriminator "+axisSuffix,50,0,1);

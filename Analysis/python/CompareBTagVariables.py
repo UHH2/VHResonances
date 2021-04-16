@@ -17,153 +17,170 @@ TDR.writeExtraText = True
 TDR.extraText = "Work in progress"
 
 colors = {  "invisible"  : ROOT.kBlue+1,
-            "muon"  : ROOT.kRed+1,
-            "electron"  : ROOT.kOrange+1,
+            "muon"  :      ROOT.kRed+1,
+            "electron"  :  ROOT.kOrange+1,
             }
 
 class CompareBTagVariables(ModuleRunnerBase):
-    def __init__(self, year="RunII", match="incl", histoName="btag_MassDecorrelatedDeepBoosted_ZHccvsQCD"):
-        print "** CompareBTagVariables**"
+    def __init__(self, match="incl", histoName="btag_MassDecorrelatedDeepBoosted_ZHccvsQCD", debug=False):
         VariablesBase.__init__(self)
-        self.year           = year
+        self.years          = ["2016", "2017", "2018"] # include all years
         self.match          = (match if match!="" else "incl")
-        self.histFolders    = ["nocuts", "weights", "Trigger", "HEM", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular", "QCDRejection"]
-        self.histoPath      = self.Path_STORAGE+self.year+"/JetFlavour/Puppi/"
+        # self.histFolders    = ["nocuts", "weights", "Trigger", "HEM", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular", "QCDRejection"]
+        self.histFolders    = ["nocuts", "weights", "QCDRejection"]
+        self.histoPath      = self.Path_STORAGE+"YEAR/JetFlavour/Puppi/"
         self.histoName      = histoName
         self.histos         = {}
         self.canv_ratio     = {}
         self.legend         = {}
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/CompareBTagVariables/"
         self.samples = ["MC_DY", "MC_ZprimeToZH_M2000", "MC_ZprimeToZH_inv_M2000"]
+        self.debug          = debug
+
         os.system("mkdir -p "+self.outdir)
-        print "Will store the output to:", self.outdir
+        if self.debug: self.samples, match, histoName
 
-    def RunAll(self):
-        self.LoadHistos()
-        self.normalizeAndRatio()
-        self.plotHistos()
+    def doAll(self):
 
+        for year, channel, sample in list(itertools.product(["2016", "2017", "2018"], ["muon", "electron", "invisible"], self.samples)):
+            prefixSample = "DATA" if "DATA" in sample else "MC"
 
-    def LoadHistos(self):
-        print ""
-        print "Loading histograms from", self.histoPath
-        print "year:", self.year
-        print "match:", self.match
-        print "steps:", self.histFolders
-        print "histogram:", self.histoName
+            sample_names_data ={"electron": "DATA_SingleElectron", "muon": "DATA_SingleMuon", "invisible": "DATA_MET"}
+            if "DATA" in sample: sample = sample_names_data[channel]
 
-        for channel in ["electron", "muon", "invisible"]:
-            for sample in self.samples:
-                for histFolder in self.histFolders:
-                    # skip the samples for invisiblechannel in lepton channel
-                    if "inv" in sample and not "invisible" in channel: continue
-                    if not "inv" in sample and "invisible" in channel and "Zprime" in sample: continue
-                    suffix = ("_merge" if "DY" in sample else "")
-                    match_rootFileName = (self.match if self.match !="incl" else "")
-                    file_ = ROOT.TFile(self.histoPath+channel+"channel/nominal/"+""+self.PrefixrootFile+"MC."+sample+"_"+self.year+"_noTree"+suffix+".root")
-                    # print "Loading file", self.histoPath+channel+"channel/nominal/"+""+self.PrefixrootFile+"MC."+sample+"_"+self.year+"_noTree"+suffix+".root"
-                    self.histos[channel+"_"+sample.replace("_inv","")+"_"+histFolder+"_"+self.year+"_"+self.match] = file_.Get("nTopJet"+match_rootFileName+"_"+histFolder+"/"+self.histoName+"_jet").Clone(channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match)
-                    self.histos[channel+"_"+sample.replace("_inv","")+"_"+histFolder+"_"+self.year+"_"+self.match].SetDirectory(0)
-                    file_.Close()
-        print "Loaded files."
+            # skip the samples for invisiblechannel in lepton channel
+            if "inv" in sample and not "invisible" in channel: continue
+            if not "inv" in sample and "invisible" in channel and "Zprime" in sample: continue
+            suffix = ("_merge" if ("DY" in sample or "DATA" in sample or "WJets" in sample) else "")
+            match_rootFileName = (self.match if self.match !="incl" else "")
 
-        # Proof that the files are loaded:
-        # for channel in ["electron", "muon", "invisible"]:
-        #     for sample in self.samples:
-        #         for histFolder in self.histFolders:
-        #             if "inv" in sample and not "invisible" in channel: continue
-        #             if not "inv" in sample and "invisible" in channel and "Zprime" in sample: continue
-        #             print "Value of bin 0 of histogram", channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match, "is", self.histos[channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match].GetBinContent(0)
+            filepath = self.histoPath.replace("YEAR", year)+channel+"channel/nominal/"+""+self.PrefixrootFile+prefixSample+"."+sample+"_"+year+"_noTree"+suffix+".root"
 
+            # WJets is only available for the invisible channel, do other denominators: Use the DY sample, either invisiblechannel or electronchannel as a denominator.
+            # Do this by changing the filename of the file to load, in order to maintain all other strings (sample, channel, ...)
+            if "WJets" in sample and "electron" in channel: filepath = self.histoPath.replace("YEAR", year)+channel+"channel/nominal/"+""+self.PrefixrootFile+prefixSample+".MC_DY_"+year+"_noTree_merge.root"
+            if "WJets" in sample and "muon" in channel: filepath = self.histoPath.replace("YEAR", year)+"invisiblechannel/nominal/"+""+self.PrefixrootFile+prefixSample+".MC_DY_"+year+"_noTree_merge.root"
 
-    def normalizeAndRatio(self):
+            file_ = ROOT.TFile(filepath)
+            if self.debug: print "Loading file", filepath
 
-    # Normalize area to 1
-        for channel in ["electron", "muon", "invisible"]:
-            for sample in self.samples:
-                if "inv" in sample: continue # always skip the inv samples
-                for histFolder in self.histFolders:
-                    # print "Normalizing ", sample, histFolder, "Channel:",channel
+            if "DATA" in sample: sample = "DATA"
 
-                    # print "Value of bin 0 of histogram", channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match, "is", self.histos[channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match].GetBinContent(0)
+            # normalise
+            for histFolder in self.histFolders:
+                self.histos[channel+sample.replace("_inv", "")+histFolder+year+self.match] = file_.Get("nTopJet"+match_rootFileName+"_"+histFolder+"/"+self.histoName+"_jet").Clone(channel+sample+histFolder+year+self.match)
+                self.histos[channel+sample.replace("_inv", "")+histFolder+year+self.match].SetDirectory(0)
 
-                    # Compute the integral over the whole range
-                    area = self.histos[channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match].Integral()
-                    if (area == 0): print "Area is 0 for ", channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match, "skipping normalization"
-                    if (area == 0): continue
+                if "inv" in sample: continue #  skip the inv samples (e.g. the signal)
 
-                    # Scale according to documentation:
-                    # "One can scale an histogram such that the bins integral is equal to the normalization parameter via TH1::Scale(Double_t norm), where norm is the desired normalization divided by the integral of the histogram."
-                    self.histos[channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match].Scale(1/area)
-                    # print "Value of bin 0 of histogram", channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match, "is", self.histos[channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match].GetBinContent(0)
+                histoName = channel+sample+histFolder+year+self.match
+                area = self.histos[histoName].Integral()
+                if (area == 0): print "Area is 0 for ", histoName, "skipping normalization"
+                if (area == 0): continue
 
-                    # TODO check next line
-                    # self.histos["bkg_prefit"].Scale(self.histos["bkg_prefit"].GetBinWidth(1))
+                self.histos[histoName].Scale(1/area)
+            file_.Close()
 
         # Create the ratio relative to muon histogram
-        for channel in ["electron", "muon", "invisible"]:
-            for sample in self.samples:
-                if "inv" in sample: continue
-                for histFolder in self.histFolders:
-                    histTitle = channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match
-
-                    self.histos[histTitle+"_ratio"] = self.histos[histTitle].Clone(histTitle+"_ratio")
-
-                    # divide by the muon histogram: replace then channel with "muon" and delete the "_inv"
-                    self.histos[histTitle+"_ratio"].Divide(self.histos[histTitle.replace(channel, "muon").replace("_inv","")])
-        print "Normalized histos and calculated ratios."
-
-
-    def plotHistos(self):
-
-        # Create the canvas, skip for invisiblechannel
-        for sample in self.samples:
+        for year, channel, sample in list(itertools.product(["2016", "2017", "2018"], ["electron", "muon", "invisible"], self.samples)):
+            if "WJets" in sample: continue # treat this special case later
             if "inv" in sample: continue
             for histFolder in self.histFolders:
-                TDR.lumi_13TeV  = str(round(float(self.lumi_map[self.year]["lumi_fb"]),1))+" fb^{-1}"
-                self.canv_ratio[sample+"_"+self.year+"_"+histFolder+self.match] = tdrCanvas("canv_ratio_"+sample+"_"+self.year+"_"+histFolder+"_"+self.match, 0, 1, -1, 10, self.histoName, "ratio")
-                self.legend[sample+"_"+self.year+"_"+self.histoName+"_"+histFolder] = tdrLeg(0.30,0.80,0.89,0.89, 0.030, 42, ROOT.kBlack)
+                histTitle = channel+sample+histFolder+year+self.match
+                self.histos[histTitle+"ratio"] = self.histos[histTitle].Clone(histTitle+"ratio")
+                # divide by the muon histogram
+                self.histos[histTitle+"ratio"].Divide(self.histos[histTitle.replace(channel, "muon").replace("inv","")])
 
-        # Loop over all samples (skipping the invisiblechannel samples), create
-        # the plots and store them
-        for sample in self.samples:
-            if "inv" in sample: continue
+        # WJets with different denominators
+        channel = "invisible"
+        for year in ["2016", "2017", "2018"]:
+            if not "MC_Jets" in self.samples: continue
+            sample = "MC_WJets"
 
             for histFolder in self.histFolders:
+                histTitle = channel+sample+histFolder+year+self.match
+                self.histos[histTitle+"D1ratio"] = self.histos[histTitle].Clone(histTitle+"D1ratio")
+                self.histos[histTitle+"D2ratio"] = self.histos[histTitle].Clone(histTitle+"D2ratio")
 
-                for channel in ["electron", "muon", "invisible"]:
-                    histTitle = channel+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match
+                # Use D1 (DY of electronchannel) as a denominator and WJets of invisiblechannel as numerator, D1 is stored in WJets for the electronchannel.
+                self.histos[histTitle+"D1ratio"].Divide(self.histos[histTitle.replace(channel, "electron")])
 
-                    # Change canvas
-                    self.canv_ratio[sample+"_"+self.year+"_"+histFolder+self.match].cd()
+                # Use D2 (DY of invisiblechannel) as a denominator and WJets of invisiblechannel as numerator, D2 is stored in WJets for the muonchannel.
+                self.histos[histTitle+"D2ratio"].Divide(self.histos[histTitle.replace(channel, "muon")])
 
-                    colorHistogram = colors[channel]
+        # Create the canvas, skip for samples of invisiblechannel (like signal sample)
+        for year, sample in list(itertools.product(self.years, self.samples)):
+            if "inv" in sample: continue
+            for histFolder in self.histFolders:
+                TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}"
+                self.canv_ratio[sample+year+histFolder+self.match] = tdrCanvas("canvratio"+sample+year+histFolder+self.match, 0, 1, -1, 10, self.histoName, "ratio")
+                self.legend[sample+year+self.histoName+histFolder] = tdrLeg(0.30,0.80,0.89,0.89, 0.030, 42, ROOT.kBlack)
 
-                    tdrDraw(self.histos[histTitle+"_ratio"], "hist", ROOT.kFullDotLarge, colorHistogram, colorHistogram, colorHistogram, 0, colorHistogram)
+        # Loop over all samples (skipping the samples with "inv" in the name, such as the signal samples), create the plots and store them
+        for year, sample, histFolder in list(itertools.product(self.years, self.samples, self.histFolders)):
+            if "inv" in sample: continue
 
-                    self.legend[sample+"_"+self.year+"_"+self.histoName+"_"+histFolder].AddEntry(self.histos[histTitle+"_ratio"], "ratio " + histTitle,"l")
+            for channel in ["electron", "muon", "invisible"]:
+                histTitle = channel+sample+histFolder+year+self.match
+                colorHistogram = colors[channel]
 
-                self.canv_ratio[sample+"_"+self.year+"_"+histFolder+self.match].cd()
-                self.legend[sample+"_"+self.year+"_"+self.histoName+"_"+histFolder].Draw()
-                self.canv_ratio[sample+"_"+self.year+"_"+histFolder+self.match].SaveAs(self.outdir+"ratio_"+self.histoName+"_"+sample+"_"+histFolder+"_"+self.year+"_"+self.match+".pdf")
-        print "Plotted and stored histos."
+                # Plots with different nominators for WJets
+                if "WJets" in sample:
+                    if "invisible" in channel: continue
+                    denominatorSuffix = ("D1" if "electron" in channel else "D2")
+                    channel = "invisible"
+                    histTitle = channel+sample+histFolder+year+self.match+denominatorSuffix
 
+                # Change canvas
+                self.canv_ratio[sample+year+histFolder+self.match].cd()
+
+                tdrDraw(self.histos[histTitle+"ratio"], "p", ROOT.kFullDotLarge, colorHistogram, colorHistogram, colorHistogram, 0, colorHistogram)
+                tdrDraw(self.histos[histTitle+"ratio"], "hist", ROOT.kFullDotLarge, colorHistogram, colorHistogram, colorHistogram, 0, colorHistogram)
+
+                self.legend[sample+year+self.histoName+histFolder].AddEntry(self.histos[histTitle+"ratio"], "ratio " + histTitle,"l")
+
+            self.canv_ratio[sample+year+histFolder+self.match].cd()
+            self.legend[sample+year+self.histoName+histFolder].Draw()
+            self.canv_ratio[sample+year+histFolder+self.match].SaveAs(self.outdir+"ratio_"+self.histoName.replace("MassDecorrelated", "MD").replace("DeepBoosted", "DB")+"_"+sample+"_"+histFolder+"_"+year+"_"+self.match+".pdf")
+
+        # Take 2017 of a channel as denominator and 2016 or 2018 as nominator of same channel.
+        # histograms are normalised
+        TDR.lumi_13TeV  = ""
+        for channel, sample, histFolder in list(itertools.product(["electron","muon", "invisible"], self.samples, self.histFolders)):
+            if "inv" in sample: continue
+            histo_den = self.histos[channel+sample+histFolder+"2017"+self.match]
+            for year in ["2016", "2018"]:
+                canvas = tdrCanvas("canvas", 0, 1, 0.001, 10, self.histoName, "ratio")
+                canvas.SetLogy()
+                legend = tdrLeg(0.30,0.80,0.89,0.89, 0.030, 42, ROOT.kBlack)
+                histo_nom = self.histos[channel+sample+histFolder+year+self.match]
+                histo_ratio = histo_nom.Clone("ratio")
+                histo_ratio.Divide(histo_den)
+                colorHistogram = ROOT.kOrange; tdrDraw(histo_nom  , "p", ROOT.kFullDotLarge, colorHistogram, colorHistogram, colorHistogram, 0, colorHistogram)
+                colorHistogram = ROOT.kRed;    tdrDraw(histo_den  , "p", ROOT.kFullDotLarge, colorHistogram, colorHistogram, colorHistogram, 0, colorHistogram)
+                colorHistogram = ROOT.kBlack;  tdrDraw(histo_ratio, "p", ROOT.kFullDotLarge, colorHistogram, colorHistogram, colorHistogram, 0, colorHistogram)
+                legend.AddEntry(histo_nom, channel+ " "+sample+ " "+ histFolder + " " + year,"l")
+                legend.AddEntry(histo_den, channel+ " "+sample+ " "+ histFolder + " 2017","l")
+                legend.AddEntry(histo_ratio, channel+ " "+sample+ " "+ histFolder + " ratio "+year+"/2017","l")
+                canvas.SaveAs(self.outdir+"ratio_"+channel+"_"+self.histoName.replace("MassDecorrelated", "MD").replace("DeepBoosted", "DB")+"_"+sample+"_"+histFolder+"_ratio_"+year+"_to_2017.pdf")
 
 def main():
-    # Settings - also change them in the definition of CompareBTagVariables
-    # years = ["2018"]
-    years = ["2016", "2017", "2018"]
-    histoNames = ["btag_DeepBoosted_ZHccvsQCD"]
-    # histoNames = ["btag_DeepBoosted_HccvsQCD"]
-    # histoNames = ["btag_MassDecorrelatedDeepBoosted_ZHccvsQCD"]
-    # histoNames = ["btag_MassDecorrelatedDeepBoosted_HccvsQCD"]
-    # histoNames = ["btag_MassDecorrelatedDeepBoosted_HccvsQCD", "btag_MassDecorrelatedDeepBoosted_ZHccvsQCD", "btag_DeepBoosted_HccvsQCD", "btag_DeepBoosted_ZHccvsQCD"]
-    matches = ["", "Hbb", "Hcc", "Hqq", "HWW"]
+    print("Using silent ROOT mode.")
+    ROOT.gROOT.ProcessLine("gErrorIgnoreLevel = " + str(ROOT.kError) + ";")
 
-    for year in years:
-        for histoName in histoNames:
-            for match in matches:
-                CompareBTagVariables(year=year, match=match, histoName=histoName).RunAll()
+    histoNames = ["btag_MassDecorrelatedDeepBoosted_ZHccvsQCD"]
+    histoNames = ["btag_MassDecorrelatedDeepBoosted_HccvsQCD", "btag_MassDecorrelatedDeepBoosted_ZHccvsQCD", "btag_DeepBoosted_HccvsQCD", "btag_DeepBoosted_ZHccvsQCD"]
+
+    # matches = ["", "Hbb", "Hcc", "Hqq", "HWW"]
+    matches = [""]
+
+    debug = False
+    debug = True
+
+
+    for histoName in histoNames:
+        for match in matches:
+            CompareBTagVariables(match=match, histoName=histoName, debug=debug).doAll()
 
 if __name__ == '__main__':
     main()

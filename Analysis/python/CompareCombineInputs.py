@@ -1,7 +1,6 @@
 from Utils import *
 
 import tdrstyle_all as TDR
-import math
 
 TDR.writeExtraText = True
 TDR.extraText = "Work in progress"
@@ -18,7 +17,7 @@ class CompareCombineInputs(ModuleRunnerBase):
     def __init__(self, year="RunII", histFolder="btag_DeepBoosted_H4qvsQCDmassdep_x3", channel="muonchannel"):
         VariablesBase.__init__(self)
         self.year           = year
-        self.histoName      = "Zprime_mass_rebin30"
+        self.histoName      = ("Zprime_mass_transversal_rebin30" if channel=="invisiblechannel" else "Zprime_mass_rebin30")
         # self.histoName      = "Zprime_mass_rebin100"
         self.fitFunction    = "Exp_2"
         self.histFolder     = histFolder
@@ -27,9 +26,9 @@ class CompareCombineInputs(ModuleRunnerBase):
         self.histos         = {}
         self.min = 600 #TODO take it from file
         self.max = 4000 #TODO take it from file
-        self.nEventsSR = 1235. #TODO take it from file
+        self.nEventsSR =  (42.9022 if channel=="invisiblechannel" else 1235.) #TODO take it from file
         self.xsec_ref = 0.001 #TODO take it from file
-        self.normForPlot = 0.01 #Used for display purposes
+        self.normForPlot = 0.01 # Used for display purposes
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/CompareCombineInputs/"
         os.system("mkdir -p "+self.outdir)
 
@@ -46,24 +45,40 @@ class CompareCombineInputs(ModuleRunnerBase):
         self.histos["bkg_CR"] = file_.Get("ZprimeCandidate_"+self.histFolder+"_CR/"+self.histoName).Clone("bkg_CR")
         self.histos["bkg_CR"].SetDirectory(0)
         file_.Close()
-        dataName = "DATA_SingleMuon" if "muon" in self.channel else "DATA_SingleElectron"
+
+        # load WJets for invisible channel
+        if "invisible" in self.channel:
+            print "Loading W+Jets background as well"
+            file_ = ROOT.TFile(self.histoPath+self.PrefixrootFile+"MC.MC_WJets_"+self.year+"_noTree.root")
+            histo_bkg_WJets_SR = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone("bkg_SR")
+            histo_bkg_WJets_SR.SetDirectory(0)
+            histo_bkg_WJets_CR = file_.Get("ZprimeCandidate_"+self.histFolder+"_CR/"+self.histoName).Clone("bkg_CR")
+            histo_bkg_WJets_CR.SetDirectory(0)
+            file_.Close()
+
+        dataName = "DATA_SingleMuon" if "muon" in self.channel else "DATA_SingleElectron" if "electron" in self.channel else "DATA_MET"
         file_ = ROOT.TFile(self.histoPath+self.PrefixrootFile+"DATA."+dataName+"_"+self.year+"_noTree.root")
         self.histos["DATA_CR"] = file_.Get("ZprimeCandidate_"+self.histFolder+"_CR/"+self.histoName).Clone("DATA_CR")
         self.histos["DATA_CR"].SetDirectory(0)
-        self.histos["DATA_SR"] = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone("DATA_SR")
-        self.histos["DATA_SR"].SetDirectory(0)
+        # self.histos["DATA_SR"] = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone("DATA_SR")
+        # self.histos["DATA_SR"].SetDirectory(0)
         file_.Close()
         for massPoint in self.SignalSamples:
-            if "inv" in massPoint: continue
-            if massPoint=="MC_ZprimeToZH_M600": continue
-            if massPoint=="MC_ZprimeToZH_M800": continue
+            if "inv" in massPoint and self.channel != "invisible": continue
+            if not "inv" in massPoint and self.channel == "invisible": continue
+            if massPoint.replace("_inv", "")=="MC_ZprimeToZH_M600": continue
+            if massPoint.replace("_inv", "")=="MC_ZprimeToZH_M800": continue
             file_ = ROOT.TFile(self.histoPath+self.PrefixrootFile+"MC."+massPoint+"_"+self.year+"_noTree.root")
             self.histos[massPoint] = file_.Get("ZprimeCandidate_"+self.histFolder+"_SR/"+self.histoName).Clone(massPoint)
             self.histos[massPoint].SetDirectory(0)
             self.histos[massPoint].Scale(self.xsec_ref)
             self.histos[massPoint].Scale(self.normForPlot)
+            # Clone histogram for ratio (after applying normForPlot)
+            self.histos[massPoint+"_ratio"] = self.histos[massPoint].Clone(massPoint+"_ratio")
+            self.histos[massPoint+"_ratio"].SetDirectory(0)
+
             file_.Close()
-            fileCombine = ROOT.TFile(self.histoPath.replace("SignalRegion","").replace("nominal","").replace(self.Path_STORAGE,self.Path_ANALYSIS+"Analysis/Limits/nominal/")+self.histFolder+"/datacards/fitDiagnostics"+massPoint.replace(self.Signal+"_","")+"_"+self.fitFunction+".root")
+            fileCombine = ROOT.TFile(self.histoPath.replace("SignalRegion","").replace("nominal","").replace(self.Path_STORAGE,self.Path_ANALYSIS+"Analysis/Limits/nominal/")+self.histFolder+"/datacards/fitDiagnostics"+massPoint.replace(self.Signal+"_","").replace("inv_","")+"_"+self.fitFunction+".root")
             self.histos[massPoint+"sign_prefit"] = fileCombine.Get("shapes_prefit/"+self.channel+"_"+self.year+"/total_signal")
             self.histos[massPoint+"sign_prefit"].SetDirectory(0)
             self.histos[massPoint+"sign_prefit"].Scale(self.histos[massPoint+"sign_prefit"].GetBinWidth(1))
@@ -71,24 +86,55 @@ class CompareCombineInputs(ModuleRunnerBase):
             self.histos["bkg_prefit"] = fileCombine.Get("shapes_prefit/"+self.channel+"_"+self.year+"/total_background")
             self.histos["bkg_prefit"].SetDirectory(0)
             self.histos["bkg_prefit"].Scale(self.histos["bkg_prefit"].GetBinWidth(1))
-            fileCombine.Close()
 
+            # Create the ratio
+            # Calculate the offset in the number of bins
+            offsetNbins = self.histos[massPoint].GetNbinsX() - self.histos[massPoint+"sign_prefit"].GetNbinsX()
+
+            # Clone the histogram (divide entries in the loop)
+            self.histos[massPoint+"_ratio"] = self.histos[massPoint+"sign_prefit"].Clone(massPoint+"_ratio")
+
+            TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
+            self.canv_ratio = tdrCanvas("canv_ratio_"+massPoint, 0, 10000, -1, 10, "M(Z')", "ratio")
+
+            for i in range(self.histos[massPoint+"sign_prefit"].GetNbinsX()-1):
+                ratio = 0.0
+                if (self.histos[massPoint].GetBinContent(self.histos[massPoint].GetXaxis().FindBin( self.histos[massPoint+"sign_prefit"].GetXaxis().GetBinCenter(i)))<>0):
+                    ratio = self.histos[massPoint+"_ratio"].GetBinContent(i) /  self.histos[massPoint].GetBinContent(self.histos[massPoint].GetXaxis().FindBin( self.histos[massPoint+"sign_prefit"].GetXaxis().GetBinCenter(i)))
+                self.histos[massPoint+"_ratio"].SetBinContent(i, ratio)
+
+            self.histos[massPoint+"_ratio"].GetYaxis().SetRangeUser(0,10)
+            self.histos[massPoint+"_ratio"].GetXaxis().SetRangeUser(self.histos[massPoint+"sign_prefit"].GetXaxis().GetXmin(), self.histos[massPoint+"sign_prefit"].GetXaxis().GetXmax())
+
+            tdrDraw(self.histos[massPoint+"_ratio"], "hist", ROOT.kFullDotLarge, ROOT.kBlack, ROOT.kBlack, ROOT.kBlack, 0, ROOT.kBlack)
+
+            legend = tdrLeg(0.50,0.80,0.89,0.89, 0.030, 42, ROOT.kBlack)
+            legend.AddEntry(self.histos[massPoint+"_ratio"], "ratio " + massPoint,"l")
+            legend.Draw()
+
+            self.canv_ratio.SaveAs(self.outdir+"ratio_"+massPoint+"_signals_"+self.histFolder+"_"+self.year+"_"+self.channel+".pdf")
+            fileCombine.Close()
 
 
     def CreateCanvas(self):
         TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
-        self.canv = tdrCanvas("canv", 300, 10000, 1e-3, 1e06, "M(Z')", "Events")
+        self.canv = tdrCanvas("canv", 300, 5000, 1e-3, 1e06, "M(Z')", "Events")
         self.canv.SetLogy(1)
         self.leg = tdrLeg(0.40,0.70,0.89,0.89, 0.030, 42, ROOT.kBlack)
         self.leg.SetNColumns(4)
 
     def Plot(self):
         for name,hist in self.histos.items():
+
+            # Skip the ratio plots
+            if "ratio" in name:  continue
+
             col = ROOT.kRed+1 if "Zprime" in name else ROOT.kBlue+1 if "DATA_CR" in name else ROOT.kBlack
             if "bkg_SR" in name : col = ROOT.kGreen+2
-            if "bkg_CR" in name : col = ROOT.kViolet+1
+            if "bkg_CR" in name : col = ROOT.kYellow+1
             if "bkg_prefit" in name : col = ROOT.kOrange+1
             line = ROOT.kDashed if not "fit" else ROOT.kSolid
+            if "bkg_prefit" in name : line = ROOT.kDotted
             tdrDraw(hist,  "hist", ROOT.kFullDotLarge, col, line, col, 0, col)
             if not self.Signal in name or "bkg" in name: self.leg.AddEntry(hist, name.replace(self.Signal+"_",""), "l")
 
