@@ -400,17 +400,116 @@ def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square
 
 
 
+def tdrDiCanvas(canvName, x_min, x_max, y_min, y_max, y_min2, y_max2, nameXaxis, nameYaxis, nameYaxis2, square=kRectangular, iPeriod=4, iPos=11):
+  setTDRStyle()
+
+  W_ref = 600 if square else 800
+  H_ref = 350 if square else 600
+
+  # Set bottom pad relative height and relative margin
+  F_ref = 1./3.
+  M_ref = 0.03
+
+  # Set reference margins
+  T_ref = 0.07
+  B_ref = 0.13
+  L = 0.12 if square else 0.15
+  R = 0.05
+
+  # Calculate total canvas size and pad heights
+  W = W_ref
+  H = int(H_ref * (1 + (1-T_ref-B_ref)*F_ref+M_ref))
+  Hup = H_ref * (1-B_ref)
+  Hdw = H - Hup
+
+  # references for T, B, L, R
+  Tup = T_ref * H_ref / Hup
+  Tdw = M_ref * H_ref / Hdw
+  Bup = 0.01
+  Bdw = B_ref * H_ref / Hdw
+
+  canv = rt.TCanvas(canvName,canvName,50,50,W,H)
+  canv.SetFillColor(0)
+  canv.SetBorderMode(0)
+  canv.SetFrameFillStyle(0)
+  canv.SetFrameBorderMode(0)
+  canv.SetFrameLineColor(0)
+  canv.SetFrameLineWidth(0)
+  # FOR JEC plots, prefer to keep ticks on both sides
+  #canv.SetTickx(0)
+  #canv.SetTicky(0)
+  canv.Divide(1,2)
+
+  canv.cd(1)
+  rt.gPad.SetPad(0, Hdw / H, 1, 1)
+  rt.gPad.SetLeftMargin( L )
+  rt.gPad.SetRightMargin( R )
+  rt.gPad.SetTopMargin( Tup )
+  rt.gPad.SetBottomMargin( Bup )
+
+  # assert(h)
+  hup = canv.cd(1).DrawFrame(x_min,y_min,x_max,y_max)
+  hup.GetYaxis().SetTitleOffset((0.9 if square else 1.1) * Hup / H_ref)
+  hup.GetXaxis().SetTitleOffset(0.9)
+  hup.SetTitleSize(hup.GetTitleSize("Y") * H_ref / Hup, "Y")
+  hup.SetLabelSize(hup.GetLabelSize("Y") * H_ref / Hup, "Y")
+  hup.GetYaxis().SetTitle(nameYaxis)
+  #
+  # writing the lumi information and the CMS "logo"
+  if iPeriod>0: CMS_lumi( rt.gPad, iPeriod, iPos )
+
+  canv.cd(2)
+  rt.gPad.SetPad(0, 0, 1, Hdw / H)
+  rt.gPad.SetLeftMargin( L )
+  rt.gPad.SetRightMargin( R )
+  rt.gPad.SetTopMargin( Tdw )
+  rt.gPad.SetBottomMargin( Bdw )
+
+  hdw = canv.cd(2).DrawFrame(x_min,y_min2,x_max,y_max2)
+  # Scale text sizes and margins to match normal size
+  hdw.GetYaxis().SetTitleOffset((0.9 if square else 1.1) * Hdw / H_ref)
+  hdw.GetXaxis().SetTitleOffset(0.9)
+  hdw.SetTitleSize(hdw.GetTitleSize("Y") * H_ref / Hdw, "Y")
+  hdw.SetLabelSize(hdw.GetLabelSize("Y") * H_ref / Hdw, "Y")
+  hdw.SetTitleSize(hdw.GetTitleSize("X") * H_ref / Hdw, "X")
+  hdw.SetLabelSize(hdw.GetLabelSize("X") * H_ref / Hdw, "X")
+  hdw.GetXaxis().SetTitle(nameXaxis)
+  hdw.GetYaxis().SetTitle(nameYaxis2)
+
+  # Set tick lengths to match original (these are fractions of axis length)
+  hdw.SetTickLength(hdw.GetTickLength("Y") * H_ref / Hup, "Y") #?? ok if 1/3
+  hdw.SetTickLength(hdw.GetTickLength("X") * H_ref / Hdw, "X")
+
+  # Reduce divisions to match smaller height (default n=510, optim=kTRUE)
+  hdw.GetYaxis().SetNdivisions(505)
+  hdw.Draw("AXIS")
+  canv.cd(0)
+
+  canv.Update()
+  canv.RedrawAxis()
+  canv.GetFrame().Draw()
+  #
+  return canv
+
+###################
+# end tdrDiCanvas #
+###################
+
+
+
+
 def setNewTitle(name = "new title"):
   gStyle.SetOptTitle(0)
   title = rt.TPaveLabel(.11,.95,.35,.99,name,"brNDC")
   title.Draw()
 
-def tdrDraw(h, opt, marker=rt.kFullCircle, mcolor=rt.kBlack, lstyle=rt.kSolid, lcolor=-1, fstyle=1001, fcolor=rt.kYellow+1):
+def tdrDraw(h, opt, marker=rt.kFullCircle, mcolor=rt.kBlack, lstyle=rt.kSolid, lcolor=-1, fstyle=1001, fcolor=rt.kYellow+1, alpha=-1):
   h.SetMarkerStyle(marker)
   h.SetMarkerColor(mcolor)
   h.SetLineStyle(lstyle)
   h.SetLineColor(mcolor if lcolor==-1 else lcolor)
   h.SetFillStyle(fstyle)
+  if alpha>0: h.SetFillColorAlpha(fcolor, alpha)
   h.SetFillColor(fcolor)
   h.Draw(opt+"SAME")
 

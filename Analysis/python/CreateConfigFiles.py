@@ -174,6 +174,8 @@ def newNumber(year,sample,ConfigFile,syst,channel):
         newNumber = int(0.9*newNumber)
     if "LeptonIDStudies" in ConfigFile:
         if not "MC_ZprimeToZH" in sample: newNumber = int(newNumber/3)
+    if "HEMIssueStudy" in ConfigFile:
+        newNumber = int(250)
     # if "2017" in ConfigFile:
     #     isFast = False
     #     isFast = True

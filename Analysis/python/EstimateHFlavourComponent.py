@@ -26,6 +26,18 @@ class EstimateHFlavorComponent(VariablesBase):
         elif (n_c >= 1): return rt.cc
         else: return rt.light
 
+    def GetQuarkComponent(self,event, jet, radius=0.8):
+        n_c = 0
+        n_b = 0
+        n_l = 0
+        for gp in event.GenParticles:
+            if deltaR(jet,gp)<=radius:
+                if (abs(gp.pdgId()) == rt.b ): n_b+=1
+                if (abs(gp.pdgId()) == rt.c ): n_c+=1
+                if (abs(gp.pdgId()) <= rt.s ): n_l+=1
+                if (abs(gp.pdgId()) == rt.g ): n_l+=1
+        return (n_c,n_b,n_l)
+
 
     def GetJetFlavor2(self,event, jet, radius=0.8):
         list_ = []
@@ -37,36 +49,38 @@ class EstimateHFlavorComponent(VariablesBase):
 
     def GetFlavourComposition(self):
         vars = {}
-        elses = {}
+        sels = {}
+        print "year\tchannel\tmass\t",
         for decay in ["Hcc","Hbb","HWW","Hgg","Helse","nomatch"]:
             for flav in ["", "_bb","_cc","_LL"]:
                 print decay+flav+"\t",
         print ""
-        for year, channel, mass in list(itertools.product(["2018"], self.Channels, self.MassPointsReduced)):
+        vars["tot"] = []
+        for year, channel, mass in list(itertools.product(["2016","2017","2018"], self.Channels, self.MassPointsReduced)):
             sample = self.Signal+("_inv" if "inv" in channel else "")+"_M"+str(mass)+"_"+year
             if DoControl([""], year+channel+sample, channel, sample): continue
             # print year,channel,sample
             vars.setdefault(year,{}).setdefault(channel,{}).setdefault(sample,[])
-            elses.setdefault(year,{}).setdefault(channel,{}).setdefault(sample,[])
+            sels.setdefault(year,{}).setdefault(channel,{}).setdefault(sample,[])
             for filename in glob.glob(self.Path_STORAGE+year+"/Selection/Puppi/"+channel+"channel/nominal/workdir_Selection_"+sample+"/*.root"):
                 f_ = ROOT.TFile(filename)
                 t_ = f_.Get("AnalysisTree")
                 i = 0
+                notmatched = 0
                 for ev in t_:
                     if ev.ZprimeCandidate.size()!=1 :
                         print "Unexpected number of ZprimeCandidate."
                         continue
                     for zp in ev.ZprimeCandidate:
                         jet = zp.H()
-                        # num = jet.btag_MassDecorrelatedDeepBoosted_probHcc()+jet.btag_MassDecorrelatedDeepBoosted_probZcc()
+                        num = jet.btag_MassDecorrelatedDeepBoosted_probHcc()+jet.btag_MassDecorrelatedDeepBoosted_probZcc()
                         # num = jet.btag_DeepBoosted_probHcc()
-                        # score = (num)/(num+jet.btag_DeepBoosted_raw_score_qcd())
-                        # if score<0.8: continue
-                        # vars[year][channel][sample].append(self.GetJetFlavor(ev,zp.H()))
+                        den = num+jet.btag_DeepBoosted_raw_score_qcd()
+                        score = num/den if den!=0 else 0
                         decay = rt.ZprimeDecayToString(int(ev.HDecay))
-                        flavour = self.GetJetFlavor(ev,zp.H())
-                        # if decay=="Helse" and flavour==rt.cc:
-                        #     elses[year][channel][sample].append(self.GetJetFlavor2(ev,zp.H()))
+                        if abs(zp.H().hadronFlavour()) == 5: flavour = rt.bb
+                        elif abs(zp.H().hadronFlavour()) == 4: flavour = rt.cc
+                        else: flavour = rt.light
                         store = decay
                         if flavour==rt.bb:
                             store += "_bb"
@@ -74,20 +88,33 @@ class EstimateHFlavorComponent(VariablesBase):
                             store += "_cc"
                         if flavour==rt.light:
                             store += "_LL"
+                        if store=="Hgg_cc" or store=="Helse_cc":
+                            c_, b_, l_ = self.GetQuarkComponent(ev, jet)
+                            print c_, b_, l_
                         vars[year][channel][sample].append(store)
+                        if score<0.8: continue
+                        sels[year][channel][sample].append(store)
+            # print mass, i, notmatched
             var = vars[year][channel][sample]
-            els = list(itertools.chain(*elses[year][channel][sample]))
-            tot = len(var)
-            if tot==0: continue
-            print sorted(set(els))
-            # tot_c = len(list(filter(lambda x: x ==rt.cc , var)))
-            # tot_b = len(list(filter(lambda x: x ==rt.bb , var)))
-            # print round(tot_c*100./tot,2), round(tot_b*100./tot,2), round((tot-tot_c-tot_b)*100./tot,2)
+            vars["tot"].extend(var)
+            sel = sels[year][channel][sample]
+            tot_var = len(var)
+            tot_sel = len(sel)
+            if tot_var==0: continue
+            if tot_sel==0: continue
+            print year, "\t", channel, "\t", mass, "\t",
             for decay in ["Hcc","Hbb","HWW","Hgg","Helse","nomatch"]:
                 for flav in ["", "_bb","_cc","_LL"]:
-                    tot_df = len(list(filter(lambda x: decay in x and flav in x , var)))
-                    print round(tot_df*100./tot,2), "\t",
+                    skim_var = len(list(filter(lambda x: decay in x and flav in x , var)))
+                    skim_sel = len(list(filter(lambda x: decay in x and flav in x , sel)))
+                    print round(skim_var*100./tot_var,2), "\t", round(skim_sel*100./tot_sel,2), "\t", round(skim_sel*100./skim_var if skim_var!=0 else 0,2), " -- ",
             print ""
+        tot = len( vars["tot"])
+        for decay in ["Hcc","Hbb","HWW","Hgg","Helse","nomatch"]:
+            for flav in ["", "_bb","_cc","_LL"]:
+                tot_df = len(list(filter(lambda x: decay in x and flav in x , vars["tot"])))
+                print round(tot_df*100./tot,2), "\t",
+        print ""
 
     def GetSFEffect(self):
         vars = {}

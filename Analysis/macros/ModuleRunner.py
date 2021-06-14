@@ -56,6 +56,7 @@ class ModuleRunner(ModuleRunnerBase):
                                     "NeuralNetwork"      : {"sample": self.Processes_Dict,  "all": self.AllProcesses_List},
                                     "PDFReweight"        : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "Preselection"       : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
+                                    "HEMIssueStudy"      : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
                                     "Selection"          : {"sample": self.Processes_Dict,  "all": self.AllProcesses_List},
                                     "SignalRegion"       : {"sample": self.Processes_Dict,  "all": self.AllProcesses_List},
                                     "SF"                 : {"sample": self.SubSamples_Dict, "all": self.AllSubSamples_List},
@@ -88,6 +89,9 @@ class ModuleRunner(ModuleRunnerBase):
         self.Collections = Collections if Collections else self.Collections
         self.Channels = Channels if Channels else self.Channels
         self.Systematics = Systematics if Systematics else self.Systematics
+        if "HEMIssueStudy" in self.Module:
+            self.Systematics = ["nominal"]
+            self.Samples     = list(filter(lambda x: "RunC" in x or "RunD" in x, self.Samples))
         if "LeptonIDStudies" in self.Module:
             self.Systematics = ["nominal"]
             self.Samples     = list(filter(lambda x: "Zprime" in x or "DY" in x, self.Samples))

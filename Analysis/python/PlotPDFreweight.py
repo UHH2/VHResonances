@@ -3,9 +3,10 @@ from Utils import *
 import tdrstyle_all as TDR
 import datetime
 TDR.writeExtraText = True
-TDR.extraText  = ""
+TDR.extraText  = "Simulation"
+TDR.extraText2 = "Private work"
 
-ForThesis(TDR)
+#ForThesis(TDR)
 
 '''
 Module to plot the effect of PDFReweight on the invisiblechannel
@@ -20,6 +21,7 @@ class PlotHistograms(VariablesBase):
         self.years = years
         self.module = "PDFReweight"
         self.Modes = ["nocuts", "weights"]
+	self.Norm = True
         self.Variables = ["pt_jet","eta_jet"]
         self.MassPoints = [str(m) for m in self.MassPoints ]
         self.histos = {}
@@ -58,13 +60,17 @@ class PlotHistograms(VariablesBase):
     def CreateCanvas(self, nameVar):
         xName = "#eta^{jet}" if "eta" in nameVar else "p_{T}^{jet}"
         xMin = -3 if "eta" in nameVar else 50
-        xMax =  3 if "eta" in nameVar else 5000
+        xMax =  3 if "eta" in nameVar else 4500
 
-        yMin = -8000 if "eta" in nameVar else -10000
-        yMax =  10000 if "eta" in nameVar else 30000
+	if self.Norm:
+	    yMin = -0.1 if "eta" in nameVar else -0.15
+            yMax =  0.15 if "eta" in nameVar else 0.35
+	else:
+            yMin = -8000 if "eta" in nameVar else -10000
+            yMax =  10000 if "eta" in nameVar else 30000
 
-        self.canv = tdrCanvas("canv_"+nameVar, xMin,xMax,yMin,yMax, xName, "Events", isExtraSpace=True)
-        self.leg = tdrLeg(0.78, 0.55, 0.89, 0.85, 0.045, 42, ROOT.kBlack)
+        self.canv = tdrCanvas("canv_"+nameVar, xMin,xMax,yMin,yMax, xName, "A.U." if self.Norm else "Events", isExtraSpace=True)
+        self.leg = tdrLeg(0.77, 0.55, 0.95, 0.85, 0.045, 42, ROOT.kBlack)
         self.leg2 = tdrLeg(0.6, 0.75, 0.7, 0.85, 0.045, 42, ROOT.kBlack)
 
     def PlotHistos(self, isReduced=True):
@@ -80,6 +86,7 @@ class PlotHistograms(VariablesBase):
                         lineStyle = rt.kSolid if "weights" in mode else rt.kDashed
                         h = self.histos[year+mass+mode+var]
                         h.SetLineWidth(2)
+                        if self.Norm: h.Scale(1./self.histos[year+mass+"weights"+var].Integral())
                         tdrDraw(h, "hist" , rt.kFullCircle, self.color[mass], lineStyle, self.color[mass], 0, self.color[mass])
                         if "weights" in mode:
                             self.leg.AddEntry(h, "Z' "+mass.replace("000","").replace("00","0").replace("50",".5")+"TeV", "l")

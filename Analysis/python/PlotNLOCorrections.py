@@ -110,8 +110,8 @@ class PlotNLOCorrections(VariablesBase):
 
         corr = "nlo_simple"
         self.ResetCanvas(corr)
-        self.leg  = tdrLeg(0.60, 0.70, 0.77, 0.89, 0.05)
-        self.leg2 = tdrLeg(0.77, 0.70, 0.95, 0.89, 0.05)
+        self.leg  = tdrLeg(0.50, 0.70, 0.77, 0.89, 0.05)
+        self.leg2 = tdrLeg(0.70, 0.70, 0.95, 0.89, 0.05)
         tdrHeader(self.leg, "QCD",  textSize = 0.05)
         tdrHeader(self.leg2, "EWK", textSize = 0.05)
 
@@ -134,7 +134,7 @@ class PlotNLOCorrections(VariablesBase):
 
         corr = "nlo_pdfwgt"
         self.ResetCanvas(corr)
-        self.leg = tdrLeg(0.70, 0.65, 0.95, 0.89, 0.05)
+        self.leg = tdrLeg(0.65, 0.65, 0.95, 0.89, 0.05)
         tdrHeader(self.leg, "QCD",  textSize = 0.05)
         for hname in ["dy_qcd_2017","znn_qcd_2017","w_qcd_2017"]:
             hist = self.histos[hname]

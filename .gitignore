@@ -26,5 +26,7 @@ config/SubmittedJobs*
 Analysis/CalculateSignalEfficiencies
 Analysis/CreateWorkspace
 Analysis/PlotLimits
+Analysis/Plotter
+Analysis/OtherPlots
 
 AN-20-128

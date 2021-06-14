@@ -475,18 +475,22 @@ h_taggerSF_weight_down_(ctx.declare_event_output<float>("weight_taggerSF_down"))
 
 Decay JetTaggerSF::GetJetFlavor(uhh2::Event& event, const Jet& jet) {
 
-  int n_c = 0, n_b = 0, n_l = 0;
-  for(const auto & gp : *event.genparticles) {
-    if (deltaR(jet,gp)<=radius) {
-      if (fabs(gp.pdgId()) == ParticleID::b ) n_b++;
-      if (fabs(gp.pdgId()) == ParticleID::c ) n_c++;
-      if (fabs(gp.pdgId()) <= ParticleID::s ) n_l++;
-      if (fabs(gp.pdgId()) == ParticleID::g ) n_l++;
-    }
-  }
+  // int n_c = 0, n_b = 0, n_l = 0;
+  // for(const auto & gp : *event.genparticles) {
+  //   if (deltaR(jet,gp)<=radius) {
+  //     if (fabs(gp.pdgId()) == ParticleID::b ) n_b++;
+  //     if (fabs(gp.pdgId()) == ParticleID::c ) n_c++;
+  //     if (fabs(gp.pdgId()) <= ParticleID::s ) n_l++;
+  //     if (fabs(gp.pdgId()) == ParticleID::g ) n_l++;
+  //   }
+  // }
+  //
+  // if (n_b >= 1) return Decay::bb;
+  // else if (n_c >= 1) return Decay::cc;
+  // return Decay::light;
 
-  if (n_b >= 1) return Decay::bb;
-  else if (n_c >= 1) return Decay::cc;
+  if (fabs(jet.hadronFlavour()) == 5) return Decay::bb;
+  else if (fabs(jet.hadronFlavour()) == 4) return Decay::cc;
   return Decay::light;
 };
 
