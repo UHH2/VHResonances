@@ -194,7 +194,7 @@ if __name__ == '__main__':
     args = parse_arguments()
     years       = args.years if len(args.years)!=0 else ["2016","2017", "2018"]
     histFolders = args.histFolders if len(args.histFolders)!=0 else []
-    Channels    = args.Channels if len(args.Channels)!=0 else ["muonchannel","electronchannel"]
+    Channels    = args.Channels if len(args.Channels)!=0 else ["muonchannel","electronchannel", "invisiblechannel"]
     Collections = args.Collections if len(args.Collections)!=0 else ["Puppi"]
 
     PEN = PrintEventNumber(years=years, Channels=Channels, Collections=Collections, histFolders= histFolders)

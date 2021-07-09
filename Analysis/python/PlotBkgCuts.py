@@ -25,24 +25,20 @@ class PlotBkgCuts(VariablesBase):
         self.channel = channel
         self.collection = collection
 
-        # self.histFolders = ["Selection", "ExtraCleaning", "DeepAk8_H4qvsQCD_massdep",
-        #                     "DeepAk8_ZHccvsQCD_MD", "DeepAk8_HccvsQCD_MD", "DeepAk8_H4qvsQCD_MD",
-        #                     "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD", "DeepAk8_H4qvsQCD",
-        #                     "DeepAk8_HccvsQCD", "DeepAk8_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD",
-        #                     "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD"]
-
-        self.histFolders = ["ExtraCleaning", "DeepAk8_H4qvsQCD_massdep", "DeepAk8_ZHccvsQCD_MD",
-                            "DeepAk8_HccvsQCD_MD", "DeepAk8_H4qvsQCD_MD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD"]
+        # self.histFolders = ["DeepAk8_H4qvsQCD_massdep", "DeepAk8_ZHccvsQCD_MD",
+        #                     "DeepAk8_HccvsQCD_MD", "DeepAk8_H4qvsQCD_MD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD"]
+        self.histFolders = ["Selection", "DeepAk8_HccvsQCD", "DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD", "DeepAk8_ZHccvsQCD_MD2"]
 
         self.color  = {"Selection":                             ROOT.kBlack,
-                       "ExtraCleaning":                         ROOT.kBlack,
                        "DeepAk8_H4qvsQCD_massdep":              ROOT.kAzure+1,
                        "DeepAk8_ZHccvsQCD_MD":                  ROOT.kGreen+3,
+                       "DeepAk8_ZHccvsQCD_MD2":                 ROOT.kOrange+1,
                        "DeepAk8_HccvsQCD_MD":                   ROOT.kRed+1,
                        "DeepAk8_H4qvsQCD_MD":                   ROOT.kAzure-7,
                        "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD":  ROOT.kOrange+1,
                        "DeepAk8_H4qvsQCD":                      ROOT.kCyan+3,
                        "DeepAk8_HccvsQCD":                      ROOT.kViolet+1,
+                       "DeepAk8_HccvsQCD2":                     ROOT.kMagenta+2,
                        "DeepAk8_ZHccvsQCD":                     ROOT.kCyan+1,
                        "DeepAk8_H4qvsQCD_massdep_HccvsQCD":     ROOT.kOrange-1,
                        "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD":    ROOT.kMagenta+2,
@@ -78,7 +74,7 @@ class PlotBkgCuts(VariablesBase):
             hist = self.histos[histFolder]
             hist.SetLineWidth(2)
             tdrDraw(hist, "hist", ROOT.kDot, self.color[histFolder], 1, self.color[histFolder], 0, self.color[histFolder])
-            leg.AddEntry(hist, histFolder.replace("DeepAk8_", "").replace("ExtraCleaning", "Selection").replace("vsQCD", "").replace("massdep", "mdc"), "l")
+            leg.AddEntry(hist, histFolder.replace("DeepAk8_", "").replace("vsQCD", "").replace("massdep", "mdc"), "l")
         canv.SaveAs(self.outdir+"Bkg_"+self.year+"_"+self.collection+"_"+self.channel+".pdf")
 
 

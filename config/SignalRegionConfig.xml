@@ -15,7 +15,6 @@
 <!ENTITY electronchannel            "false">  <!--true/false -->
 <!ENTITY invisiblechannel           "false">  <!--true/false -->
 
-
 <!-- MC Samples 2016 -->
 <!ENTITY MC_ZprimeToZH_M600_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2016.xml">
 <!ENTITY MC_ZprimeToZH_M800_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Selection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2016.xml">
@@ -348,7 +347,6 @@
       <Item Name="TopJetCollection"           Value="jetsAk8CHSSubstructure_SoftDropCHS"/>
       <Item Name="TopPuppiJetCollection"      Value="jetsAk8PuppiSubstructure_SoftDropPuppi"/>
       <Item Name="METName"                    Value="slimmedMETs"/>
-
 
       <Item Name="additionalBranchesPuppi"    Value="jetsAk4Puppi"/>
       <Item Name="additionalBranches"         Value="hotvrGen hotvrPuppi jetsAk4Puppi"/>

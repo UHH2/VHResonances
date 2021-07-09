@@ -69,7 +69,7 @@ protected:
 
   // Define variables
   std::string NameModule = "PreselectionModule";
-  std::vector<std::string> histogram_tags = { "nocuts", "weights", "Trigger", "HEM", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
+  std::vector<std::string> histogram_tags = { "nocuts", "PDFReweight", "weights", "Trigger", "HEM", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
@@ -218,8 +218,7 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   /* metfilters_selection->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter"); TODO Not recommended, under review.*/
 
   //Quick fix for Detector issues
-  if (MB["invisiblechannel"]) HEMEventCleaner_Selection.reset(new HEMCleanerSelection(ctx, MS["jetLabel"], MS["topjetLabel"], true, true));
-  else HEMEventCleaner_Selection.reset(new AndSelection(ctx)); // HEM important for inv channel only. DiLep selection reduces prob drastically
+  HEMEventCleaner_Selection.reset(new HEMCleanerSelection(ctx, MS["jetLabel"], MS["topjetLabel"], true, false));
 
   GJC.reset( new GenericJetCleaner(ctx, MS["jetLabel"],    false, jetId, topjetId, muoId, eleId));
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
@@ -250,8 +249,6 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   }
 
   DeltaRDiLepton_selection.reset(new DeltaRDiLepton(min_DR_dilep, max_DR_dilep, MS["leptons"]));
-
-  // min_Dphi_AK8jet_MET = 2.0
   JetDiLeptonPhiAngularSel.reset(new JetDiLeptonPhiAngularSelection(min_dilep_pt, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, min_Dphi_AK8jet_MET, MS["leptons"], h_topjets));
   VetoLeptonSel.reset(new VetoSelection(NoLeptonSel));
 
@@ -274,10 +271,11 @@ bool PreselectionModule::process(uhh2::Event& event) {
 
   if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In "+NameModule+".cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
 
-  if (MB["invisiblechannel"] && FindInString("MC_ZprimeToZH_inv", MS["dataset_version"])) PDFReweight_module->process(event);
-
   auto weight_gen = event.weight;
   fill_histograms(event, "nocuts");
+
+  if (FindInString("MC_ZprimeToZH", MS["dataset_version"])) PDFReweight_module->process(event);
+  fill_histograms(event, "PDFReweight");
 
   if(event.isRealData && MB["lumisel"]) if(!lumi_selection->passes(event)) return false;
 

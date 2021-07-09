@@ -95,6 +95,9 @@ public:
   void FindRanges();
   void Process();
 
+  void swapLegend(bool x) {swapLegend_ = x;};
+  bool isToSwapLegend() {return swapLegend_;};
+
   void SetXmin(double x) {xmin = x; xmin_set=xmin>0;};
   void SetXmax(double x) {xmax = x; xmax_set=xmax>0;};
   void SetYmin(double x) {ymin = x; ymin_set=ymin>0;};
@@ -112,6 +115,8 @@ public:
   bool IsSetYmax() {return ymax_set;};
 
   std::string GetChannel() const {return channel;};
+  std::string GetModule() const {return module;};
+  std::string GetYear() const {return year;};
 
   inline bool isNominalSyst(std::string syst) { return FindInString("nominal",syst);};
   inline bool isNominalFolder(std::string syst) { bool var = isNominalSyst(syst); for (const auto& e: SystematicsScale) var+=FindInString(e,syst); return var;};
@@ -151,8 +156,12 @@ private:
   double ymin=std::numeric_limits<double>::max();
   double ymax=-std::numeric_limits<double>::max();
 
+  bool swapLegend_ = false;
+
   std::vector<std::string> systematics = {"lumi", "JEC", "JER","MuonScale"};
+  // std::vector<std::string> systematics = {"lumi"};
   std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
+  // std::vector<std::string> SystematicsScale = {};
   std::vector<std::string> Var_murmuf = {"upup", "upnone", "noneup", "nonedown", "downnone", "downdown"};
   const int PDF_variations = 100;
   bool xmin_set = false;

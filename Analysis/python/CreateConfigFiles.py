@@ -175,7 +175,7 @@ def newNumber(year,sample,ConfigFile,syst,channel):
     if "LeptonIDStudies" in ConfigFile:
         if not "MC_ZprimeToZH" in sample: newNumber = int(newNumber/3)
     if "HEMIssueStudy" in ConfigFile:
-        newNumber = int(250)
+        newNumber = int(100)
     # if "2017" in ConfigFile:
     #     isFast = False
     #     isFast = True
@@ -243,6 +243,10 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     changes.append(["<ConfigSGE", "Workdir", "workdir_"+outdir, "workdir_"+outdir+"_"+sample])
                     changes.append(["<ConfigParse", 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile,syst,channel)+'"'])
                     changes.append(["<!ENTITY", "OUTDIR", outdir , outdir+"/"+folders])
+                    if "Preselection" in ConfigFile or "PDFReweight" in ConfigFile or "HEMIssueStudy" in ConfigFile:
+                        if "invisible" in channel:
+                            changes.append(["<!ENTITY", "original_pdfname", "defaultValue" , "NNPDF31_nnlo_as_0118_nf_4"])
+                        else: changes.append(["<!ENTITY", "original_pdfname", "defaultValue" , "NNPDF31_lo_as_0130"])
                     if "Selection" in ConfigFile:
                         changes.append(["<!ENTITY", "SYSTEM", "Preselection/All/leptonchannel/nominal/" , "Preselection/"+folders.replace("MuonScale_up","nominal").replace("MuonScale_down","nominal")])
                         changes.append(["<!ENTITY", "SYSTEM", "Preselection/All/invisiblechannel/nominal/" , "Preselection/"+folders.replace("MuonScale_up","nominal").replace("MuonScale_down","nominal")])

@@ -95,8 +95,8 @@ void PlotLimits(bool doObs, bool isHbb) {
   // "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD"};
   // std::vector<std::string> histFolders = {"DeepAk8_ZHccvsQCD_MD"};
   // std::vector<std::string> histFolders = {"DeepAk8_HccvsQCD", "DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD", "DeepAk8_ZHccvsQCD_MD2"};
-  std::vector<std::string> histFolders = {"DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD2"};
-  // std::vector<std::string> histFolders = {"DeepAk8_ZHccvsQCD_MD2"};
+  // std::vector<std::string> histFolders = {"DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD2"};
+  std::vector<std::string> histFolders = {"DeepAk8_ZHccvsQCD_MD"};
 
   // // if (isHbb) histFolders = {"btag_DeepBoosted_HbbvsQCD", "btag_DeepBoosted_probHbb", "tau42", "tau32", "tau21" };
 
@@ -837,7 +837,7 @@ void PlotLimitsFinal(){
 
 
 int main(){
-  // PlotLimits();
+  PlotLimits();
   PlotLimitsFinal();
   return 0;
 }

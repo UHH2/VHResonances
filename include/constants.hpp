@@ -266,7 +266,7 @@ enum ParticleID { H=25, W=24, Z=23, t=6, b=5, c=4, s=3, d=2, u=1, g=21, ZPrime=9
 enum Matching { unknown=-1, noMatch=0, gluonMatch=1, qMatch=2, HMatch=3, HbbMatch=4, HWWMatch=5, HccMatch=6, HqqMatch=7, HggMatch=8, HtautauMatch=9, HZZMatch=10, topMatch=11, tWbMatch=12, WMatch=13, WqqMatch=14, WllMatch=15, ZMatch=16, ZqqMatch=17, ZllMatch=18};
 enum MatchingStatus { Unknown=-1, NotMatched=0, MotherMatched=1, DaughterMatched=2, Hadronic=3, Hadronic1=4, Hadronic2=5, Hadronic3=6, SemiLep=7, FullLep=8, SemiMatched=9 };
 enum Decay {nodecay, leptonic, semileptonic, hadronic, gluon, light, cc, bb, Wb, WW, ZZ, ee, mumu, tautau, ll, nunu, HWWfullLep, HWWfullHad, HWWsemiLep, ZH};
-enum ZprimeDecay {nomatch=0, Zee=1, Zmumu=2, Zelse=3, HWW=10, Hbb=20, Hcc=30, Hgg=40, Helse=50, ZeeHWW=11, ZmumuHWW=12, ZelseHWW=13, ZeeHbb=21, ZmumuHbb=22, ZelseHbb=23, ZeeHcc=31, ZmumuHcc=32, ZelseHcc=33, ZeeHgg=41, ZmumuHgg=42, ZelseHgg=43, ZeeHelse=51, ZmumuHelse=52, ZelseHelse=53};
+enum ZprimeDecay {nomatch=0, Zee=1, Zmumu=2, Zelse=3, HWW=10, Hbb=20, Hcc=30, Hgg=40, Htautau= 60, Helse=50, ZeeHWW=11, ZmumuHWW=12, ZelseHWW=13, ZeeHbb=21, ZmumuHbb=22, ZelseHbb=23, ZeeHcc=31, ZmumuHcc=32, ZelseHcc=33, ZeeHgg=41, ZmumuHgg=42, ZelseHgg=43, ZeeHelse=51, ZmumuHelse=52, ZelseHelse=53, ZeeHtautau=61, ZmumuHtautau=62, ZelseHtautau=63};
 
 inline std::string DecayToString(const int & tagname) {
   if(tagname == nodecay)      return "nodecay";
@@ -374,29 +374,33 @@ inline MatchingStatus StringToMatchingStatus(const std::string & tagname) {
 
 
 inline std::string ZprimeDecayToString(const int & tagname) {
-  if(tagname == nomatch)     return "nomatch";
-  if(tagname == Zee)         return "Zee";
-  if(tagname == Zmumu)       return "Zmumu";
-  if(tagname == Zelse)       return "Zelse";
-  if(tagname == HWW)         return "HWW";
-  if(tagname == Hbb)         return "Hbb";
-  if(tagname == Hcc)         return "Hcc";
-  if(tagname == Hgg)         return "Hgg";
-  if(tagname == Helse)       return "Helse";
-  if(tagname == ZeeHWW)      return "ZeeHWW";
-  if(tagname == ZmumuHWW)    return "ZmumuHWW";
-  if(tagname == ZelseHWW)    return "ZelseHWW";
-  if(tagname == ZeeHbb)      return "ZeeHbb";
-  if(tagname == ZmumuHbb)    return "ZmumuHbb";
-  if(tagname == ZelseHbb)    return "ZelseHbb";
-  if(tagname == ZeeHcc)      return "ZeeHcc";
-  if(tagname == ZmumuHcc)    return "ZmumuHcc";
-  if(tagname == ZelseHcc)    return "ZelseHcc";
-  if(tagname == ZeeHgg)      return "ZeeHgg";
-  if(tagname == ZmumuHgg)    return "ZmumuHgg";
-  if(tagname == ZelseHgg)    return "ZelseHgg";
-  if(tagname == ZeeHelse)    return "ZeeHelse";
-  if(tagname == ZmumuHelse)  return "ZmumuHelse";
-  if(tagname == ZelseHelse)  return "ZelseHelse";
+  if(tagname == nomatch)      return "nomatch";
+  if(tagname == Zee)          return "Zee";
+  if(tagname == Zmumu)        return "Zmumu";
+  if(tagname == Zelse)        return "Zelse";
+  if(tagname == HWW)          return "HWW";
+  if(tagname == Hbb)          return "Hbb";
+  if(tagname == Hcc)          return "Hcc";
+  if(tagname == Hgg)          return "Hgg";
+  if(tagname == Htautau)      return "Htautau";
+  if(tagname == Helse)        return "Helse";
+  if(tagname == ZeeHWW)       return "ZeeHWW";
+  if(tagname == ZmumuHWW)     return "ZmumuHWW";
+  if(tagname == ZelseHWW)     return "ZelseHWW";
+  if(tagname == ZeeHbb)       return "ZeeHbb";
+  if(tagname == ZmumuHbb)     return "ZmumuHbb";
+  if(tagname == ZelseHbb)     return "ZelseHbb";
+  if(tagname == ZeeHcc)       return "ZeeHcc";
+  if(tagname == ZmumuHcc)     return "ZmumuHcc";
+  if(tagname == ZelseHcc)     return "ZelseHcc";
+  if(tagname == ZeeHgg)       return "ZeeHgg";
+  if(tagname == ZmumuHgg)     return "ZmumuHgg";
+  if(tagname == ZelseHgg)     return "ZelseHgg";
+  if(tagname == ZeeHtautau)   return "ZeeHtautau";
+  if(tagname == ZmumuHtautau) return "ZmumuHtautau";
+  if(tagname == ZelseHtautau) return "ZelseHtautau";
+  if(tagname == ZeeHelse)     return "ZeeHelse";
+  if(tagname == ZmumuHelse)   return "ZmumuHelse";
+  if(tagname == ZelseHelse)   return "ZelseHelse";
   return "unknown";
 }

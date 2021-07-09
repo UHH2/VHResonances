@@ -34,12 +34,12 @@ Double_t ExpGaussExp::evaluate() const {
   Double_t std=(x-p0)/p1;
   Double_t result=0;
 
-  if (std>p2){
-    result=exp(p2*p2/2.-p2*std);
-  } else if (std<=p2 && std>-p3){
+  if (std<-p2){
+    result=exp(p2*p2/2.+p2*std);
+  } else if (-p2<=std && std<p3){
     result=exp(-0.5*pow(std, 2));
-  } else if (std<=-p3){
-    result=exp(p3*p3/2.+p3*std);
+  } else {
+    result=exp(p3*p3/2.-p3*std);
   }
   
   return result;

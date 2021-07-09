@@ -69,19 +69,19 @@ protected:
 
   // Define variables
   std::string NameModule = "HEMIssueStudyModule";
-  std::vector<std::string> histogram_tags = { "nocuts", "weights", "Trigger", "HEM", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
+  std::vector<std::string> histogram_tags = { "nocuts", "weights", "HEM", "cleaned", "JetDiLeptonPhiAngular", "QCDRejection", "ScaleFactors", "ExtraCleaning", "DeepAk8_ZHccvsQCD_MD_SR"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
 
   Event::Handle<std::vector<Jet> > h_jets;
   Event::Handle<std::vector<TopJet> > h_topjets;
+  Event::Handle<std::vector<ZprimeCandidate> > h_ZprimeCandidates;
   // Define common modules
   std::unique_ptr<uhh2::Selection> lumi_selection;
   std::vector<std::unique_ptr<AnalysisModule>> weightsmodules, modules;
   std::unique_ptr<uhh2::AndSelection> metfilters_selection;
   std::unique_ptr<GenericJetCleaner> GJC, GTJC;
-  std::unique_ptr<AnalysisModule> PDFReweight_module;
 
   // Define selections
   std::unordered_map<std::string, std::unique_ptr<Selection>> Trigger_selection;
@@ -89,6 +89,13 @@ protected:
   std::shared_ptr<VetoSelection> VetoLeptonSel;
   std::shared_ptr<Selection> NoLeptonSel, NLeptonSel, DeltaRDiLepton_selection, JetDiLeptonPhiAngularSel;
   std::unique_ptr<Selection> HEMEventCleaner_Selection;
+
+  std::unique_ptr<Selection> PTMassCut_selection, DeltaPhiJetMETCut_TopJets_selection, DeltaPhiJetMETCut_Jets_selection;
+  std::unique_ptr<AnalysisModule> ZprimeCandidateReconstruction_module;
+  std::unique_ptr<AnalysisModule> CollectionProducer_module;
+  std::unique_ptr<AnalysisModule> MCScaleVariation_module;
+  std::unordered_map<std::string, std::unique_ptr<AnalysisModule>> ScaleFactors_module;
+  std::unique_ptr<AnalysisModule> MuonScaleVariations_module;
 
 
 };
@@ -161,6 +168,8 @@ HEMIssueStudyModule::HEMIssueStudyModule(uhh2::Context& ctx){
   MB["tauid"]             = string2bool(ctx.get("tauid"));
   MB["metfilters"]        = string2bool(ctx.get("metfilters"));
 
+  MB["doHEM"]             = string2bool(ctx.get("doHEM"));
+
   if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In "+NameModule+".cxx: Choose exactly one jet collection.");
   if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In "+NameModule+".cxx: Choose exactly one lepton channel.");
 
@@ -173,6 +182,7 @@ HEMIssueStudyModule::HEMIssueStudyModule(uhh2::Context& ctx){
 
   h_jets = ctx.get_handle<std::vector<Jet>>(MS["jetLabel"]);
   h_topjets = ctx.get_handle<std::vector<TopJet>>(MS["topjetLabel"]);
+  h_ZprimeCandidates = ctx.get_handle<std::vector<ZprimeCandidate>>("ZprimeCandidate");
 
   // Set up histograms:
 
@@ -218,13 +228,10 @@ HEMIssueStudyModule::HEMIssueStudyModule(uhh2::Context& ctx){
   /* metfilters_selection->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter"); TODO Not recommended, under review.*/
 
   //Quick fix for Detector issues
-  if (!MB["invisiblechannel"]) HEMEventCleaner_Selection.reset(new HEMCleanerSelection(ctx, MS["jetLabel"], MS["topjetLabel"], true, true));
-  else HEMEventCleaner_Selection.reset(new AndSelection(ctx)); // HEM important for inv channel only. DiLep selection reduces prob drastically
+  HEMEventCleaner_Selection.reset(new HEMCleanerSelection(ctx, MS["jetLabel"], MS["topjetLabel"], true, false));
 
   GJC.reset( new GenericJetCleaner(ctx, MS["jetLabel"],    false, jetId, topjetId, muoId, eleId));
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
-
-  PDFReweight_module.reset(new PDFReweight(ctx));
 
   for (auto& t : Trigger_run_validity.at(MS["year"])) {
     if (MB["muonchannel"] && !FindInString("Mu", t.first) ) continue;
@@ -257,6 +264,28 @@ HEMIssueStudyModule::HEMIssueStudyModule(uhh2::Context& ctx){
     // do not run the DeltaRDiLepton_selection on the invisiblechannel
     DeltaRDiLepton_selection.reset(new AndSelection(ctx));
   }
+
+  //Scale factors
+  MuonScaleVariations_module.reset(new MuonScaleVariations(ctx));
+
+  MCScaleVariation_module.reset(new MCScaleVariation(ctx));
+
+  ScaleFactors_module["BTag"].reset(new MCBTagScaleFactor(ctx, BTag_algo, BTag_wp, MS["topjetLabel"], "nominal", "lt"));
+  ScaleFactors_module["SFs"].reset(new ScaleFactorsManager(ctx, h_ZprimeCandidates));
+
+  ZprimeCandidateReconstruction_module.reset(new ZprimeCandidateReconstruction(ctx, min_dilep_pt, min_DR_dilep, max_DR_dilep, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, MS["leptons"], MS["topjetLabel"]));
+  CollectionProducer_module.reset(new CollectionProducer<ZprimeCandidate>( ctx, "ZprimeCandidate", "ZprimeCandidate", (ZprimeCandidate_ID)ZprimeCandidateID(h_ZprimeCandidates)));
+
+  float min_Z_pt_ZH_mass_cut = min_Z_pt_ZH_mass;
+  if (MS["leptons"]=="invisible"){min_Z_pt_ZH_mass_cut = min_Z_pt_ZH_mass_invisible;}
+  PTMassCut_selection.reset(new PTMassCut(min_Z_pt_ZH_mass_cut, h_ZprimeCandidates, MS["leptons"]));
+
+  // Delta Phi cut between MET and all TopJets at 2.0
+  DeltaPhiJetMETCut_TopJets_selection.reset(new DeltaPhiJetMETCut(ctx, MS["topjetLabel"], min_Dphi_AK8jet_MET, 0, -1));
+
+  // Delta Phi cut between MET and all Jets at 0.5 (QCD rejection)
+  DeltaPhiJetMETCut_Jets_selection.reset(new DeltaPhiJetMETCut(ctx, MS["jetLabel"], min_Dphi_AK4jet_MET, 0, -1));
+
 }
 
 
@@ -271,8 +300,6 @@ HEMIssueStudyModule::HEMIssueStudyModule(uhh2::Context& ctx){
 bool HEMIssueStudyModule::process(uhh2::Event& event) {
 
   if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In "+NameModule+".cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
-
-  if (FindInString("MC_ZprimeToZH", MS["dataset_version"])) PDFReweight_module->process(event);
 
   auto weight_gen = event.weight;
   fill_histograms(event, "nocuts");
@@ -309,11 +336,9 @@ bool HEMIssueStudyModule::process(uhh2::Event& event) {
   }
   if (!pass_triggers_OR || pass_Ele_triggers_Photon_Dataset) return false;
 
-  fill_histograms(event, "Trigger");
-
-  //Effective in 2018 only apply for muon/electron channel only
+  //Effective in 2018 only.
   // Here the assumption is that it should check for cleaned jets to avoid overlap with leptons (Tight WP recommanded).
-  if(!HEMEventCleaner_Selection->passes(event)) return false;
+  if(MB["doHEM"] && !HEMEventCleaner_Selection->passes(event)) return false;
   fill_histograms(event, "HEM");
 
   // PrimaryVertexCleaner, ElectronCleaner, MuonCleaner
@@ -332,24 +357,57 @@ bool HEMIssueStudyModule::process(uhh2::Event& event) {
   fill_histograms(event, "cleaned");
 
   if(!VetoLeptonSel->passes(event)) return false;
-  fill_histograms(event, "Veto");
 
   if(!NLeptonSel->passes(event)) return false;
-  fill_histograms(event, "NLeptonSel");
 
   if(!NBoostedJetSel->passes(event)) return false;
-  fill_histograms(event, "NBoostedJet");
 
   if (MB["invisiblechannel"]) {
     if(event.met->pt()<min_MET_pt) return false;
   }
-  fill_histograms(event, "METCut");
 
   if(!DeltaRDiLepton_selection->passes(event)) return false;
-  fill_histograms(event, "DeltaRDiLepton");
 
   if(!JetDiLeptonPhiAngularSel->passes(event)) return false;
   fill_histograms(event, "JetDiLeptonPhiAngular");
+
+  if (MB["invisiblechannel"]){
+    // QCD rejection, cut at Delta Phi between all jets and MET at min_Dphi_AK4jet_MET (0.5).
+    if (!DeltaPhiJetMETCut_Jets_selection->passes(event)) return false;
+    // Cut delta Phi between MET and all TopJets at min_Dphi_AK8jet_MET (2.0)
+    if (!DeltaPhiJetMETCut_TopJets_selection->passes(event)) return false;
+  }
+  fill_histograms(event, "QCDRejection");
+
+  MuonScaleVariations_module->process(event);
+
+  ZprimeCandidateReconstruction_module->process(event);
+
+  CollectionProducer_module->process(event);
+  if(event.get(h_ZprimeCandidates).size()<1) return false;
+  if(event.get(h_ZprimeCandidates).size()>1) {
+    for(const auto & cand: event.get(h_ZprimeCandidates)) {
+      if (cand.discriminator("SDmass") > cand.H().v4().M()) return false;
+      if (cand.discriminator("SDmass") < 60) return false;
+    }
+  }
+
+  if(!PTMassCut_selection->passes(event)) return false;
+
+  MCScaleVariation_module->process(event);
+  for (auto& el : ScaleFactors_module) el.second->process(event);
+  fill_histograms(event, "ScaleFactors");
+
+  if (event.get(h_ZprimeCandidates).size()!=1) return false;
+  // if (event.get(h_ZprimeCandidates).size()!=1 && event.get(h_ZprimeCandidates)[0].discriminator("SDmass")<50) return false; // TODO!!!
+
+  ZprimeCandidate cand = event.get(h_ZprimeCandidates)[0];
+  if (cand.Zprime_mass()<800) return false;
+  if(!MB["invisiblechannel"]){ if(deltaR(cand.leptons()[0], cand.leptons()[1])>0.45) return false;}
+  fill_histograms(event, "ExtraCleaning");
+
+  bool ZHccvsQCD_MD_pass = cand.discriminator("btag_DeepBoosted_ZHccvsQCD_MD")>TaggerThr;
+  if(ZHccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_ZHccvsQCD_MD_SR");
 
   return true;
 }

@@ -11,6 +11,7 @@ sys.path.append(os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/macros
 from ModuleRunnerBase import *
 
 from tdrstyle_all import *
+from StatisticFunctions import *
 
 import ROOT
 ROOT.gInterpreter.ProcessLine('#include "'+os.environ["CMSSW_BASE"]+'/src/UHH2/VHResonances/include/constants.hpp"')

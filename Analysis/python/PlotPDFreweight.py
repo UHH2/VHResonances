@@ -21,7 +21,7 @@ class PlotHistograms(VariablesBase):
         self.years = years
         self.module = "PDFReweight"
         self.Modes = ["nocuts", "weights"]
-	self.Norm = True
+        self.Norm = True
         self.Variables = ["pt_jet","eta_jet"]
         self.MassPoints = [str(m) for m in self.MassPoints ]
         self.histos = {}
@@ -46,11 +46,13 @@ class PlotHistograms(VariablesBase):
                        }
 
     def LoadHistos(self):
-        for year in (self.years):
+        for year in self.years:
             for mass in self.MassPoints:
                 filename = self.Path_STORAGE+year+"/"+self.module+"/"+"Puppi/invisiblechannel/"+"nominal"+"/"+self.PrefixrootFile+"MC."+self.Signal+"_inv_M"+mass+"_"+year+"_noTree.root"
+                # filename = self.Path_STORAGE+year+"/"+self.module+"/"+"Puppi/muonchannel/"+"nominal"+"/"+self.PrefixrootFile+"MC."+self.Signal+"_M"+mass+"_"+year+"_noTree.root"
                 file_ = ROOT.TFile(filename)
                 for mode in self.Modes:
+                    print year, mass, mode, file_.Get("nTopJet_"+mode+"/sum_event_weights").Integral()
                     for var in self.Variables:
                         h_ = file_.Get("nTopJet_"+mode+"/"+var)
                         h_.SetDirectory(0)
@@ -61,11 +63,10 @@ class PlotHistograms(VariablesBase):
         xName = "#eta^{jet}" if "eta" in nameVar else "p_{T}^{jet}"
         xMin = -3 if "eta" in nameVar else 50
         xMax =  3 if "eta" in nameVar else 4500
-
-	if self.Norm:
-	    yMin = -0.1 if "eta" in nameVar else -0.15
+        if self.Norm:
+            yMin = -0.1 if "eta" in nameVar else -0.15
             yMax =  0.15 if "eta" in nameVar else 0.35
-	else:
+        else:
             yMin = -8000 if "eta" in nameVar else -10000
             yMax =  10000 if "eta" in nameVar else 30000
 
@@ -87,6 +88,7 @@ class PlotHistograms(VariablesBase):
                         h = self.histos[year+mass+mode+var]
                         h.SetLineWidth(2)
                         if self.Norm: h.Scale(1./self.histos[year+mass+"weights"+var].Integral())
+                        # if self.Norm: h.Scale(1./h.Integral())
                         tdrDraw(h, "hist" , rt.kFullCircle, self.color[mass], lineStyle, self.color[mass], 0, self.color[mass])
                         if "weights" in mode:
                             self.leg.AddEntry(h, "Z' "+mass.replace("000","").replace("00","0").replace("50",".5")+"TeV", "l")

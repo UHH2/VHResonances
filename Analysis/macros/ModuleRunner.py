@@ -206,7 +206,7 @@ class ModuleRunner(ModuleRunnerBase):
             out.close()
 
     @timeit
-    def MakePlots(self):
+    def MakePlots(self, doPlots=True):
         list_processes = []
         for collection, channel, syst in self.SmartLoop():
             for mode in ["", "incl_"]:
@@ -221,6 +221,7 @@ class ModuleRunner(ModuleRunnerBase):
 
         print "Number of processes", len(list_processes)
         parallelise(list_processes, 20)
+        if not doPlots: return
 
         cwd = os.getcwd()
         os.chdir(self.Path_SPlotter)

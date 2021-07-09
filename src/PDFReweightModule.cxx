@@ -70,13 +70,14 @@ protected:
   // Define variables
   std::string NameModule = "PDFReweightModule";
   std::vector<std::string> histogram_tags = { "nocuts", "weights"};
-  std::vector<std::string> Systematics = {"PDF", "NNPDF", "NNPDF31_lo_as_0130", "PDF4LHC15_nnlo_100"};
+  std::vector<std::string> Systematics = {"PDF", "NNPDF", "NNPDF31_lo_as_0130", "PDF4LHC15_nnlo_100", "NNPDF31_nnlo_hessian_pdfas"};
 
   int PDF_variations = 100; int pdfindex_shift = 9;
   std::unordered_map<std::string, std::string> PFDs = {
     {"NNPDF", "NNPDF31_nnlo_as_0118_nf_4_mc_hessian"},
     {"NNPDF31_lo_as_0130", "NNPDF31_lo_as_0130"},
     {"PDF4LHC15_nnlo_100", "PDF4LHC15_nnlo_100"},
+    {"NNPDF31_nnlo_hessian_pdfas", "NNPDF31_nnlo_hessian_pdfas"},
   };
 
   std::unordered_map<std::string, std::string> MS;
@@ -189,7 +190,7 @@ bool PDFReweightModule::process(uhh2::Event& event) {
 
   fill_histograms(event, "nocuts");
 
-  if (MB["invisiblechannel"] && FindInString("MC_ZprimeToZH_inv", MS["dataset_version"])) PDFReweight_module->process(event);
+  PDFReweight_module->process(event);
 
   fill_histograms(event, "weights");
 

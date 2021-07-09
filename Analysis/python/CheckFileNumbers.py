@@ -57,10 +57,11 @@ if __name__ == '__main__':
     Systematics = ["nominal", "JEC_up", "JEC_down", "JER_up", "JER_down", "MuonScale_up", "MuonScale_down"]
     Modules     = ["Preselection", "Selection", "SignalRegion"]
 
-    years       = ["2016", "2018"]
-    Channels    = ["invisiblechannel"]
+    # years       = ["2017"]
+    # Channels    = ["invisiblechannel"]
+    Channels    = ["muonchannel", "electronchannel"]
     # Systematics = ["nominal"]
-    Modules     = ["Preselection"]
+    Modules     = ["Selection"]
 
     for year in years:
         for channel in Channels:

@@ -106,7 +106,7 @@ void Plotter::LoadHists(){
     f_->Close();
     if(binwidth==0) binwidth = histos[sample]->GetBinWidth(1);
     if(nbins==1) nbins = histos[sample]->GetNbinsX();
-    else if(nbins != histos[sample]->GetNbinsX()) {PrintGreen(nbins);PrintGreen(histos[sample]->GetNbinsX()); throw std::runtime_error("Hists have different binning. Be carreful.");}
+    else if(nbins != histos[sample]->GetNbinsX()) {PrintGreen(nbins);PrintGreen(histos[sample]->GetNbinsX()); throw std::runtime_error("Hists have different binning. Be careful.");}
     if (!Samples[sample]->GetIsToStack()) continue;
     for (const auto& syst: systematics){
       if(syst=="lumi") {
@@ -526,7 +526,8 @@ int main(){
   gErrorIgnoreLevel = kError;
   for (const auto& ch: {"muonchannel","electronchannel","invisiblechannel"}) {
     for (const auto& year: {"2016","2017","2018","RunII"}) {
-      for (const auto& module: {"Selection","SignalRegion"}) {
+      for (const auto& module: {"Selection"}) {
+      //for (const auto& module: {"Selection","SignalRegion"}) {
         PrintGreen<std::string>({ch,year,module});
         PlotZprimeMass(ch,year,module);
         PlotCount(ch,year,module);

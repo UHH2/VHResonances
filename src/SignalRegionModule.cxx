@@ -1,6 +1,5 @@
 #include <iostream>
 #include <memory>
-#include <chrono>
 
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Selection.h"
@@ -14,6 +13,7 @@
 #include "UHH2/common/include/ElectronIds.h"
 #include "UHH2/common/include/ObjectIdUtils.h"
 #include "UHH2/common/include/JetIds.h"
+#include "UHH2/common/include/JetHists.h"
 #include "UHH2/common/include/JetCorrections.h"
 #include "UHH2/common/include/CleaningModules.h"
 #include "UHH2/common/include/CommonModules.h"
@@ -27,6 +27,8 @@
 #include "UHH2/common/include/LumiSelection.h"
 #include "UHH2/common/include/TriggerSelection.h"
 #include "UHH2/common/include/Utils.h"
+#include "UHH2/common/include/CollectionProducer.h"
+#include "UHH2/common/include/DetectorCleaning.h"
 #include "UHH2/common/include/PDFWeights.h"
 
 #include "UHH2/VHResonances/include/ModuleBase.h"
@@ -36,9 +38,9 @@
 #include "UHH2/VHResonances/include/GenMatchHists.h"
 #include "UHH2/VHResonances/include/GenLevelJetMatch.h"
 #include "UHH2/VHResonances/include/HiggsToWWSelection.h"
-#include "UHH2/VHResonances/include/DiLeptonHists.h"
 #include "UHH2/VHResonances/include/HiggsToWWModules.h"
 #include "UHH2/VHResonances/include/HiggsToWWHists.h"
+#include "UHH2/VHResonances/include/DiLeptonHists.h"
 
 using namespace std;
 
@@ -67,8 +69,10 @@ protected:
 
   // Define variables
 
+  std::string NameModule = "SignalRegionModule";
   std::vector<std::string> histogram_tags = {"Selection", "ExtraCleaning",
   "DeepAk8_ZHccvsQCD_MD_SR",                  "DeepAk8_ZHccvsQCD_MD_CR",
+  "DeepAk8_ZHccvsQCD_MD2_SR",                 "DeepAk8_ZHccvsQCD_MD2_CR",
   "DeepAk8_HccvsQCD_SR",                      "DeepAk8_HccvsQCD_CR",
   "DeepAk8_H4qvsQCD_SR",                      "DeepAk8_H4qvsQCD_CR",
   "DeepAk8_H4qvsQCD_massdep_SR",              "DeepAk8_H4qvsQCD_massdep_CR",
@@ -82,7 +86,8 @@ protected:
   std::vector<std::string> Variations = {"", "up", "down"};
   int PDF_variations = 100; int pdfindex_shift = 9;
   std::unordered_map<std::string, std::string> PFDs = {
-    {"NNPDF", "NNPDF31_nnlo_as_0118_nf_4_mc_hessian"},
+    {"NNPDF", "NNPDF31_lo_as_0130"},
+    // {"NNPDF", "NNPDF31_nnlo_as_0118_nf_4_mc_hessian"},
     // To keep as memo!
     // {"NNPDF31_lo_as_0130", "NNPDF31_lo_as_0130"}, used for PDF reweight in invisiblechannel channel
     // {"PDF4LHC15_nnlo_100", "PDF4LHC15_nnlo_100"},
@@ -235,9 +240,8 @@ void SignalRegionModule::fill_histograms(uhh2::Event& event, string tag) {
 SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
 
   // Set up variables
-
-  MS["dataset_version"]   = ctx.get("dataset_version");
   MS["year"]              = ctx.get("year");
+  MS["dataset_version"]   = ctx.get("dataset_version");
   MB["is_mc"]             = ctx.get("dataset_type") == "MC";
   MB["isPuppi"]           = string2bool(ctx.get("isPuppi"));
   MB["isCHS"]             = string2bool(ctx.get("isCHS"));
@@ -251,8 +255,8 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
   MB["is_WW"]   = MS["dataset_version"].find("ToWW")!=std::string::npos;
   MB["is_else"] = MS["dataset_version"].find("_extra")!=std::string::npos;
 
-  if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In SignalRegionModule.cxx: Choose exactly one jet collection.");
-  if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In SignalRegionModule.cxx: Choose exactly one lepton channel.");
+  if ((MB["isPuppi"] && MB["isCHS"]) || (MB["isPuppi"] && MB["isHOTVR"]) || (MB["isCHS"] && MB["isHOTVR"]) ) throw std::runtime_error("In "+NameModule+".cxx: Choose exactly one jet collection.");
+  if ((MB["muonchannel"] && MB["electronchannel"]) || (MB["muonchannel"] && MB["invisiblechannel"]) || (MB["electronchannel"] && MB["invisiblechannel"])) throw std::runtime_error("In "+NameModule+".cxx: Choose exactly one lepton channel.");
 
   MS["topjetLabel"] = MB["isCHS"]? "topjets": (MB["isPuppi"]? "toppuppijets": (MB["isHOTVR"]? "hotvrPuppi": ""));
 
@@ -262,6 +266,9 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
   if(MB["invisiblechannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"trigger"));
   if(MB["invisiblechannel"]) Systematics.erase(Systematics.begin()+FindInVector(Systematics,"reco"));
 
+  h_topjets = ctx.get_handle<std::vector<TopJet>>(MS["topjetLabel"]);
+  h_ZprimeCandidates = ctx.declare_event_input<std::vector<ZprimeCandidate>>("ZprimeCandidate");
+
   // Set up histograms:
   book_histograms(ctx);
   book_handles(ctx);
@@ -269,8 +276,7 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
 
   // Set up selections
   for (std::pair<std::string, std::string> pdf : PFDs) m_pdfweights[pdf.first].reset(new PDFWeights(pdf.second));
-  h_topjets = ctx.get_handle<std::vector<TopJet>>(MS["topjetLabel"]);
-  h_ZprimeCandidates = ctx.declare_event_input<std::vector<ZprimeCandidate>>("ZprimeCandidate");
+
 
   // TODO
   DeepAk8_H4qvsQCD_massdep_SR_selection.reset(new TaggerCut(0, 1,  MassDependentCut_value, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
@@ -299,8 +305,8 @@ bool SignalRegionModule::process(uhh2::Event& event) {
   // if (event.get(h_ZprimeCandidates).size()!=1 && event.get(h_ZprimeCandidates)[0].discriminator("SDmass")<50) return false; // TODO!!!
 
   ZprimeCandidate cand = event.get(h_ZprimeCandidates)[0];
-
-  if(!MB["invisiblechannel"]){ if(deltaR(cand.leptons()[0], cand.leptons()[1])<0.45) return false;}
+  if (cand.Zprime_mass()<800) return false;
+  if(!MB["invisiblechannel"]){ if(deltaR(cand.leptons()[0], cand.leptons()[1])>0.45) return false;}
   fill_histograms(event, "ExtraCleaning");
 
   bool ZHccvsQCD_MD_pass = cand.discriminator("btag_DeepBoosted_ZHccvsQCD_MD")>TaggerThr;
@@ -310,6 +316,9 @@ bool SignalRegionModule::process(uhh2::Event& event) {
 
   if(ZHccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_ZHccvsQCD_MD_SR");
   else fill_histograms(event, "DeepAk8_ZHccvsQCD_MD_CR");
+
+  if(ZHccvsQCD_MD_pass && cand.H().softdropmass()>30) fill_histograms(event, "DeepAk8_ZHccvsQCD_MD2_SR");
+  else fill_histograms(event, "DeepAk8_ZHccvsQCD_MD2_CR");
 
   if(HccvsQCD_pass) fill_histograms(event, "DeepAk8_HccvsQCD_SR");
   else fill_histograms(event, "DeepAk8_HccvsQCD_CR");

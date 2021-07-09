@@ -41,6 +41,7 @@ class VariablesBase(GenericPath):
                                    }
         self.years              = sorted(self.RunPeriods_Dict.keys())
         self.AllRunPeriods      = list(set(itertools.chain.from_iterable(self.RunPeriods_Dict.values())))
+        self.BRs                = {"invisible": 0.2, "muon": 0.1, "electron": 0.1, "chargedlepton":0.1}
 
         if self.isAnalysis:
             self.Generic_SubSamples_Dict_ = {

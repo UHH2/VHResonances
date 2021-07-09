@@ -43,6 +43,7 @@
 
 #include "RooNovosibirsk.h"
 #include "HiggsAnalysis/CombinedLimit/interface/RevCrystalBall.hpp"
+#include "HiggsAnalysis/CombinedLimit/interface/ExpGaussExp.hpp"
 #include "HiggsAnalysis/CombinedLimit/interface/PolinomialExponent_1p.hpp"
 #include "HiggsAnalysis/CombinedLimit/interface/PolinomialExponent_2p.hpp"
 #include "HiggsAnalysis/CombinedLimit/interface/PolinomialExponent_3p.hpp"
@@ -171,7 +172,7 @@ public:
   void PlotControl();
   void PlotTranferFunction();
   void InputDatacards();
-  void CalculateSignalFittingRange(double mass, double& rangeLo, double& rangeHi, double& plotLo, double& plotHi, double& ymax);
+  void CalculateSignalFittingRange(double mass, double& rangeLo, double& rangeHi, double& plotLo, double& plotHi, double& ymax, std::string& name);
   inline bool FindInVector(const std::vector<std::string>& vec, const std::string& str) {return (std::find(vec.begin(), vec.end(), str) != vec.end());};
   inline bool FindInString(const std::string& search, const std::string& str) {return str.find(search)!=std::string::npos ;}
   inline bool isNominalSyst(std::string syst) { return FindInString("nominal",syst);}; // TODO
@@ -252,12 +253,12 @@ private:
   TString extra_text = doFtest? "_Ftest_": "";
 
   double x_lo     = 1000;
-  double x_hi     = 10000;
-  double x_lo_short = 1200;
-  double x_hi_short = 10000;
+  double x_hi     = 6000;
+  double x_lo_short = 1000;
+  double x_hi_short = 6000;
   double plot_lo  = 1000;
   double plot_hi  = 6000;
-  double plot_ylo = 1.1*1e-03;
+  double plot_ylo = 0.101;
   double plot_yhi = 1e07;
   // double fit_lo   = 600;
   // double fit_lo   = 1230;
@@ -297,10 +298,10 @@ private:
         { "show_hi", 4500},
       }},
       { "invisiblechannel", {
-        { "fit_lo",  1200},
-        { "fit_hi",  4200},
-        { "show_lo", 1000},
-        { "show_hi", 4500},
+        { "fit_lo",  1000},
+        { "fit_hi",  3000},
+        { "show_lo", 700},
+        { "show_hi", 3150},
       }},
     }},
     { "CR", {

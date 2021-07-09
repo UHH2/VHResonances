@@ -26,7 +26,7 @@ void CalculateChiSquare(double& chi2, int& nbins, RooHist* hpull, double xmin, d
 }
 
 
-void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeLo, double& rangeHi, double& plotLo, double& plotHi, double& ymax) {
+void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeLo, double& rangeHi, double& plotLo, double& plotHi, double& ymax, std::string& name) {
 
 
   // rangeLo = mass*(1-5./28.);
@@ -43,24 +43,67 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
 
     if (mass==1000) { rangeLo = 1000; rangeHi = 1300;}
     if (mass==1200) { rangeLo = 1000; rangeHi = 1700;}
-    if (mass==1400) { rangeLo = 1100; rangeHi = 1900;} // 1000- 1500
-    if (mass==1600) { rangeLo = 1000; rangeHi = 2100;}
-    if (mass==1800) { rangeLo = 1000; rangeHi = 2500;}
-    // if (mass==1800) { rangeLo = myMin; rangeHi = myMax;}
-    if (mass==2000) { rangeLo = 1200; rangeHi = 2600;} // 1300-2300 1500-2800
-    // if (mass==2000) { rangeLo = myMin; rangeHi = myMax;}
-    if (mass==2500) { rangeLo = 1000; rangeHi = 3400;}
-    if (mass==3000) { rangeLo = 2100; rangeHi = 3300;} // 21-22-2300
-    if (mass==3500) { rangeLo = 1100; rangeHi = 3900;} // 11-1200  38-3900
-    if (mass==4000) { rangeLo = 1800; rangeHi = 4800;}
-    if (mass==4500) { rangeLo = 1300; rangeHi = 4900;}
+    if (mass==1400) { rangeLo = 1000; rangeHi = 1800;}
+    if (mass==1600) { rangeLo = 1200; rangeHi = 2000;}
+    if (mass==1800) { rangeLo = 1200; rangeHi = 2600;}
+    if (mass==2000) { rangeLo = 1100; rangeHi = 2500;}
+    if (mass==2500) { rangeLo = 1300; rangeHi = 3200;}
+    if (mass==3000) { rangeLo = 1000; rangeHi = 3600;}
+    if (mass==3500) { rangeLo = 1400; rangeHi = 4200;}
+    if (mass==4000) { rangeLo = 1700; rangeHi = 4900;}
+    // if (mass==4000) { rangeLo = myMin; rangeHi = myMax;}
+    if (mass==4500) { rangeLo = 2000; rangeHi = 5900;}
     // if (mass==4500) { rangeLo = myMin; rangeHi = myMax;}
-    if (mass==5000) { rangeLo = 1400; rangeHi = 5900;} //6000
-    // if (mass==5000) { rangeLo = myMin; rangeHi = myMax;}
+    if (mass==5000) { rangeLo = 1600; rangeHi = 6000;}
     if (mass==5500) { rangeLo = 2500; rangeHi = 6000;}
     if (mass==6000) { rangeLo = 2800; rangeHi = 7000;}
     if (mass==7000) { rangeLo = 3000; rangeHi = 7600;}
     if (mass==8000) { rangeLo = 4000; rangeHi = 8800;}
+
+    if (FindInVector({"M1400taggerSFUp"}, name)) rangeHi = 1700;
+    if (FindInVector({"M1400JECDown","M1400JERUp","M1400NNPDFUp","M1400prefiringUp","M1400puDown"}, name)) rangeHi = 1900;
+    if (FindInVector({"M1400puUp"}, name)) rangeHi = 2000;
+    if (FindInVector({"M1600JERUp","M1600NNPDFUp"}, name)) rangeLo = 1000;
+    if (FindInVector({"M1600btagUp","M1600JECUp","M1600puDown"}, name)) rangeLo = 1100;
+    if (FindInVector({"M1600JERUp"}, name)) rangeHi = 1800;
+    if (FindInVector({"M1600JECDown","M1600JECUp"}, name)) rangeHi = 1900;
+    if (FindInVector({"M1600JECDown","M1600NNPDFDown"}, name)) rangeHi = 2100;
+    if (FindInVector({"M1600btagUp","M1600taggerSFUp"}, name)) rangeHi = 2200;
+
+    if (FindInVector({"M1800JECUp","M1800NNPDFUp","M1800taggerSFUp"}, name)) rangeLo = 1000;
+    if (FindInVector({"M1800btagDown","M1800btagUp","M1800JERDown","M1800JERUp","M1800murmufUp","M1800puDown","M1800puUp","M1800taggerSFDown"}, name)) rangeLo = 1100;
+    if (FindInVector({"M1800btagUp","M1800JECUp","M1800JERDown"}, name)) rangeHi = 2000;
+    if (FindInVector({"M1800prefiringDown","M1800puDown"}, name)) rangeHi = 2100;
+    if (FindInVector({"M1800btagDown"}, name)) rangeHi = 2200;
+    if (FindInVector({"M1800NNPDFUp","M1800taggerSFUp"}, name)) rangeHi = 2300;
+
+    if (FindInVector({"M2000btagDown","M2000JECUp","M2000JERDown","M2000murmufDown","M2000murmufUp","M2000prefiringDown","M2000taggerSFDown"}, name)) rangeLo = 1000;
+    if (FindInVector({"M2000JECDown"}, name)) rangeLo = 1200;
+    if (FindInVector({"M2000prefiringUp"}, name)) rangeLo = 1300;
+    if (FindInVector({"M2000prefiringDown"}, name)) rangeHi = 2200;
+    if (FindInVector({"M2000JECUp","M2000puUp"}, name)) rangeHi = 2300;
+    if (FindInVector({"M2000NNPDFUp"}, name)) rangeHi = 2400;
+    if (FindInVector({"M2000btagDown","M2000btagUp"}, name)) rangeHi = 2600;
+    if (FindInVector({"M2000JECDown","M2000JERUp","M2000NNPDFDown","M2000prefiringUp","M2000taggerSFDown"}, name)) rangeHi = 2700;
+
+    if (FindInVector({"M2500taggerSFDown","M2500btagDown","M2500JECUp"}, name)) rangeLo = 1100;
+    if (FindInVector({"M3000taggerSFUp","M3000JERUp","M3000taggerSFDown","M3000JECUp"}, name)) rangeHi = 3500;
+    if (FindInVector({"M3500btagUp"}, name)) rangeHi = 4100;
+    if (FindInVector({"M4000puDown","M4000taggerSFUp","M4000JECUp"}, name)) rangeLo = 1900;
+    if (FindInVector({"M4000taggerSFUp"}, name)) rangeHi = 4700;
+    if (FindInVector({"M4000JECUp"}, name)) rangeHi = 4500;
+    if (FindInVector({"M4000NNPDFUp"}, name)) rangeHi = 4800;
+    if (FindInVector({"M4000puDown"}, name)) rangeHi = 4900;
+    if (FindInVector({"M4000JERDown"}, name)) rangeHi = 5000;
+
+    if (FindInVector({"M4500btagDown","M4500JERDown"}, name)) rangeLo = 1700;
+    if (FindInVector({"M4500btagUp", "M4500JERDown"}, name)) rangeHi = 6000;
+    if (FindInVector({"M4500taggerSFDown","M4500NNPDFUp","M4500JECUp"}, name)) rangeHi = 6300;
+
+    if (FindInVector({"M5000NNPDFUp","M5000puDown","M5000NNPDFUp","M5000JECUp","M5000murmufUp"}, name)) rangeLo = 1900;
+    if (FindInVector({"M5000btagUp"}, name)) rangeHi = 5900;
+    if (FindInVector({"M5000NNPDFUp","M5000puDown","M5000NNPDFUp","M5000JECUp"}, name)) rangeHi = 6000;
+    if (FindInVector({"M5000murmufUp"}, name)) rangeHi = 6100;
 
     plotLo = mass*(1-10./28.);
     plotHi = mass*(1+10./28.);
@@ -84,12 +127,12 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
     if (mass==1600) { rangeLo = 1000; rangeHi = 1900;}//OK-ish TODO
     if (mass==1800) { rangeLo = 1100; rangeHi = 2000;}
     if (mass==2000) { rangeLo = 1200; rangeHi = 2200;}//OK //14-15-16 2200
-    // if (mass==2000) { rangeLo = myMin; rangeHi = myMax;}
     if (mass==2500) { rangeLo = 1800; rangeHi = 2700;}//OK
-    if (mass==3000) { rangeLo = 2100; rangeHi = 3300;}//OK-ish
+    if (mass==3000) { rangeLo = 1700; rangeHi = 3300;}
     if (mass==3500) { rangeLo = 2400; rangeHi = 3900;}
     // if (mass==4000) { rangeLo = isEle? 2900: 2800; rangeHi = isEle? 4400: 4400;}//2900-4400
     if (mass==4000) { rangeLo = 3000; rangeHi = isEle?4400:4500;}//36-45 31-43 ele 30-42 38-43
+    // if (mass==4000) { rangeLo = myMin; rangeHi = myMax;}
     if (mass==4500) { rangeLo = 3400; rangeHi = 4900;}//OK
     if (mass==5000) { rangeLo = isEle? 4300: 3300; rangeHi = isEle? 5300: 5400;}//OK
     // if (mass==4000) { rangeLo = myMin; rangeHi = myMax;}
@@ -97,6 +140,13 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
     if (mass==6000) { rangeLo = 4600; rangeHi = 6600;}
     if (mass==7000) { rangeLo = 5700; rangeHi = 7600;}
     if (mass==8000) { rangeLo = 6800; rangeHi = 8800;}
+
+    if (isEle) {
+
+    } else {
+      if (FindInVector({"M3000JECDown","M3000MuonScaleUp"}, name)) rangeLo = 1500;
+
+    }
 
     plotLo = mass*(1-10./28.);
     plotHi = mass*(1+10./28.);
@@ -152,6 +202,7 @@ CreateRooWorkspace::CreateRooWorkspace(std::string year_, std::string collection
 
   myMin = (min_=="")? 0 : stoi(min_);
   myMax = (max_=="")? 0 : stoi(max_);
+  // debug = true;
   SetEnv();
 
 };
@@ -332,6 +383,17 @@ void CreateRooWorkspace::LoadFiles() {
 
       f_map[hmname].reset(new TFile(fname.c_str()));
       histo_map[hmname].reset((TH1F*)((TH1F*)f_map[hmname]->Get((hname).c_str()))->Clone((hmname+" SR").c_str()));
+
+      if (mass==5000 && channel=="invisiblechannel") {
+        for (int bin = 0; bin < histo_map[hmname]->GetNbinsX()+1; bin++) {
+          int bin_center = histo_map[hmname]->GetBinCenter(bin);
+          // std::cout << hmname << " " << bin_center << " " << histo_map[hmname]->GetBinContent(bin) << " " << histo_map[hmname]->GetBinError(bin)<< std::endl;
+          if (bin_center==2950 || bin_center==3050 || bin_center==4250 || bin_center==4350 || bin_center==4450) {
+            histo_map[hmname]->SetBinContent(bin, (histo_map[hmname]->GetBinContent(bin-3)+histo_map[hmname]->GetBinContent(bin+3))/2);
+            histo_map[hmname]->SetBinError(bin, (histo_map[hmname]->GetBinError(bin-3)+histo_map[hmname]->GetBinError(bin+3))/2);
+          }
+        }
+      }
     }
   }
 
@@ -362,6 +424,19 @@ void CreateRooWorkspace::LoadFiles() {
         for (const auto& x : histos_temp) y_vals.push_back(x.second->GetBinContent(bin));
         histo_map[hmname_Up]->SetBinContent(bin, *max_element(y_vals.begin(), y_vals.end()));
         histo_map[hmname_Down]->SetBinContent(bin, *min_element(y_vals.begin(), y_vals.end()));
+      }
+      if (mass==5000 && channel=="invisiblechannel") {
+        for (int bin = 0; bin < histo_map[hmname_Up]->GetNbinsX()+1; bin++) {
+          for (const auto& n_ : {hmname_Up,hmname_Down}) {
+            int bin_center = histo_map[n_]->GetBinCenter(bin);
+            if (bin_center==2950 || bin_center==3050 || bin_center==4350 || (bin_center==4950 && n_==hmname_Up) || (bin_center==5050 && n_==hmname_Down)) {
+              // Bins with large weights!
+              int bin_ = (bin_center>4000)?bin-1:bin-3;
+              histo_map[n_]->SetBinContent(bin, (histo_map[n_]->GetBinContent(bin_)+histo_map[n_]->GetBinContent(bin_))/2);
+              histo_map[n_]->SetBinError(bin, (histo_map[n_]->GetBinError(bin_)+histo_map[n_]->GetBinError(bin_))/2);
+            }
+          }
+        }
       }
     }
   }
@@ -399,6 +474,17 @@ void CreateRooWorkspace::LoadFiles() {
         stdev = TMath::Sqrt(stdev/PDF_variations);
         histo_map[hmname_Up]->SetBinContent(bin,   histo_map[hmname_Up]->GetBinContent(bin) + stdev );
         histo_map[hmname_Down]->SetBinContent(bin, histo_map[hmname_Down]->GetBinContent(bin) - stdev );
+      }
+      if (mass==5000 && channel=="invisiblechannel") {
+        for (int bin = 0; bin < histo_map[hmname_Up]->GetNbinsX()+1; bin++) {
+          for (const auto& n_ : {hmname_Up,hmname_Down}) {
+            int bin_center = histo_map[n_]->GetBinCenter(bin);
+            if (bin_center==2950 || bin_center==3050 || bin_center==3150 || bin_center==4350 || bin_center==4550 ) {
+              histo_map[n_]->SetBinContent(bin, (histo_map[n_]->GetBinContent(bin-3)+histo_map[n_]->GetBinContent(bin+3))/2);
+              histo_map[n_]->SetBinError(bin, (histo_map[n_]->GetBinError(bin-3)+histo_map[n_]->GetBinError(bin+3))/2);
+            }
+          }
+        }
       }
     }
   }
@@ -619,12 +705,13 @@ void CreateRooWorkspace::InitializePDFs() {
     for (const int & mass : MyMassPoints) {
       FitName = GetSgName(mass,syst);
       std::string ParName = "_"+FitName+unique_name;
+      // std::cout << "find " << FitName << std::endl;
 
       if (channel=="invisiblechannel"){
         fitPars[FitName].emplace_back(new RooRealVar(("sg_p0"+ParName).c_str(), ("sg_p0_"+ParName).c_str(), mass, mass*0.7, mass*1.05)); // mu
-        fitPars[FitName].emplace_back(new RooRealVar(("sg_p1"+ParName).c_str(), ("sg_p1_"+ParName).c_str(), 80,10,600));                 // sigma - width
-        fitPars[FitName].emplace_back(new RooRealVar(("sg_p2"+ParName).c_str(), ("sg_p2_"+ParName).c_str(), 0.3, -2, 10));
-        fitPars[FitName].emplace_back(new RooRealVar(("sg_p3"+ParName).c_str(), ("sg_p3_"+ParName).c_str(), 40, -50, 150));
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p1"+ParName).c_str(), ("sg_p1_"+ParName).c_str(), (FitName=="M1600puDown"|| FitName=="M1800taggerSFUp") ? mass*0.046+70. : 100., 100., 500.)); // sigma - width
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p2"+ParName).c_str(), ("sg_p2_"+ParName).c_str(), 0.7, 0., 10));
+        fitPars[FitName].emplace_back(new RooRealVar(("sg_p3"+ParName).c_str(), ("sg_p3_"+ParName).c_str(), 0.1, 0., 10));
       } else {
         fitPars[FitName].emplace_back(new RooRealVar(("sg_p0"+ParName).c_str(), ("sg_p0_"+ParName).c_str(), mass, mass*0.7, mass*1.3));
         fitPars[FitName].emplace_back(new RooRealVar(("sg_p1"+ParName).c_str(), ("sg_p1_"+ParName).c_str(), mass*0.02+20., 10., 500));
@@ -633,7 +720,11 @@ void CreateRooWorkspace::InitializePDFs() {
       }
 
       Fits_map[FitName]["Gauss"].reset(new RooGaussian(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1]));
-      Fits_map[FitName]["CB"].reset(new RooCBShape(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+      if (channel=="invisiblechannel"){
+        Fits_map[FitName]["CB"].reset(new ExpGaussExp(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+      } else {
+        Fits_map[FitName]["CB"].reset(new RooCBShape(FitName.c_str(), "Signal Prediction", *x_var, *fitPars[FitName][0], *fitPars[FitName][1], *fitPars[FitName][2], *fitPars[FitName][3]));
+      }
       // Fits_map[FitName]["CB_fit"].reset(new RooCBShape(FitName.c_str(), "Signal Prediction", *x_var_sig, *fitPars[(FitName"_fit").c_str()][0], *fitPars[(FitName"_fit").c_str()][1], *fitPars[(FitName"_fit").c_str()][2], *fitPars[(FitName"_fit").c_str()][3]));
     }
   }
@@ -794,7 +885,7 @@ void CreateRooWorkspace::DoFits() {
 
     std::string mass = x.first;
     if (mass.compare(0,1,"M")==0 && mass.compare(0,2,"MC")!=0) {
-      CalculateSignalFittingRange(std::stoi(mass.substr(1, mass.find("_")-1)), fit_min[x.first], fit_max[x.first], plot_min[x.first], plot_max[x.first], y_max[x.first]); // TODO
+      CalculateSignalFittingRange(std::stoi(mass.substr(1, mass.find("_")-1)), fit_min[x.first], fit_max[x.first], plot_min[x.first], plot_max[x.first], y_max[x.first], mass);
       // Normalization into the fitting range. Need to be corrected for the effected area of the PDF later.
       nEventsSignal[x.first] = CalculateIntegral(histo_map[x.first].get(),fit_min[x.first],fit_max[x.first],doBinWidth);//TODO
     }
@@ -836,7 +927,7 @@ void CreateRooWorkspace::DoFits() {
     for (const int & mass : MyMassPoints) {
       std::string hname = GetSgName(mass,syst);
       if (debug) std::cout << "fit mass:" << syst << "\t" << mass << "\t" << fit_min[hname] << " -- " << fit_max[hname] << '\n';
-      FitRes_map[hname][FitSignal].reset(Fits_map[hname][FitSignal]->fitTo(*rooHist_map[hname], RooFit::Range(fit_min[hname], fit_max[hname]), RooFit::SumW2Error(kTRUE), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
+      FitRes_map[hname][FitSignal].reset(Fits_map[hname][FitSignal]->fitTo(*rooHist_map[hname], RooFit::Range(fit_min[hname], fit_max[hname]), RooFit::SumW2Error(kTRUE), RooFit::Minimizer("Minuit2"), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
     }
   }
 
@@ -911,7 +1002,11 @@ void CreateRooWorkspace::PlotBkgFit() {
     std::unordered_map<std::string, RooHist*> hratio;
     std::unordered_map<std::string, double> chi2_map;
 
-    TCanvas* c_bg = tdrDiCanvas(("Events"+mode).c_str(), plot_lo, plot_hi, plot_ylo, plot_yhi, doPlotRatio?0.8:-6, doPlotRatio?1.2:6, nameXaxis, nameYaxis, nameRatioaxis);
+    std::string isCR = FindInString("CR", mode) ? "CR" : "SR";
+    double show_lo = ranges.at(isCR).at(channel).at("show_lo");
+    double show_hi = ranges.at(isCR).at(channel).at("show_hi");
+    
+    TCanvas* c_bg = tdrDiCanvas(("Events"+mode).c_str(), show_lo, show_hi, plot_ylo, plot_yhi, doPlotRatio?0.8:-6, doPlotRatio?1.2:6, nameXaxis, nameYaxis, nameRatioaxis);
     c_bg->cd(1)->SetLogy(1);
     // plotter = x_var->frame(plot_lo,plot_hi);
     plotter.reset(x_var->frame(plot_lo,plot_hi));
@@ -1108,13 +1203,13 @@ void CreateRooWorkspace::PlotSignals(std::string syst) {
     pave->SetBorderSize(0); pave->SetTextSize(0.03); pave->SetLineColor(1); pave->SetLineStyle(1);
     pave->SetLineWidth(2); pave->SetFillColor(0); pave->SetFillStyle(0);
     pave->AddText(TString::Format("Fit range = [%.0f,%.0f]", fit_min[SgName],fit_max[SgName]));
-    pave->AddText(TString::Format("Integral%.1f", nEventsSignal[SgName]));
+    pave->AddText(TString::Format("Integral %.1f", nEventsSignal[SgName]));
     pave->AddText(TString::Format("#chi^{2}/n.d.f. = %.1f", chi2));
     pave->AddText(TString::Format("p-value = %.1f", pv));
     pave->AddText(TString::Format("#mu = %2.3f +- %2.3f", fitPars[SgName][0]->getVal(),fitPars[SgName][0]->getError()));
     pave->AddText(TString::Format("#sigma = %2.3f +- %2.3f", fitPars[SgName][1]->getVal(),fitPars[SgName][1]->getError()));
-    pave->AddText(TString::Format("#alpha = %2.3f +- %2.3f", fitPars[SgName][2]->getVal(),fitPars[SgName][2]->getError()));
-    pave->AddText(TString::Format("k = %2.3f +- %2.3f", fitPars[SgName][3]->getVal(),fitPars[SgName][3]->getError()));
+    pave->AddText(TString::Format("%s = %2.3f +- %2.3f", (channel=="invisible"? "k_{L}": "#alpha"), fitPars[SgName][2]->getVal(),fitPars[SgName][2]->getError()));
+    pave->AddText(TString::Format("%s = %2.3f +- %2.3f", (channel=="invisible"? "k_{H}": "n"), fitPars[SgName][3]->getVal(),fitPars[SgName][3]->getError()));
     SgPars["Masses"].at(i_mass)       = (double)mass;
     SgPars["nevents"].at(i_mass)      = nEventsSignal[SgName];
     SgPars["nevents_err"].at(i_mass)  = TMath::Sqrt(SgPars["nevents"].at(i_mass));
@@ -1399,7 +1494,6 @@ void CreateRooWorkspace::InputDatacards(){
       double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_min[mode], fit_max[mode]);
       if (debug) std::cout << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << " " << CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_min[mode], fit_max[mode]) << std::endl;
       DataCard  << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << std::endl;
-
 
       std::unique_ptr<RooArgSet> model_params(Fits_map[mode][model]->getParameters(*x_var));
       TString name; int from = 0;
