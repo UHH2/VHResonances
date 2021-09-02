@@ -21,7 +21,7 @@ class PlotTaggerShapes(VariablesBase):
         # self.Discriminators = ["H4qvsQCD","H4qvsQCD_MD","HccvsQCD","HccvsQCD_MD","ZHccvsQCD","ZHccvsQCD_MD"]
         self.Discriminators = ["H4qvsQCD","ZHccvsQCD_MD"]
 
-        self.color  = {"Background": ROOT.kOrange-2,
+        self.color  = {"Background": ROOT.kOrange+1,
                        "Signal":     ROOT.kAzure+2,
                        "DY":               ROOT.kOrange+1,
                        "WJets":            ROOT.kAzure+7,
@@ -48,7 +48,7 @@ class PlotTaggerShapes(VariablesBase):
 
     def LoadHistos(self):
         self.hists = {}
-        for sample in ["Background","Signal"]:
+        for sample in ["Signal","Background"]:
             for channel in self.Channels+["lepton"]:
                 for disc in self.Discriminators:
                     name_ = sample+channel+disc
@@ -82,16 +82,18 @@ class PlotTaggerShapes(VariablesBase):
         self.LoadHistos()
         for disc in self.Discriminators:
             for channel in self.Channels+["lepton"]:
-                TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
+                TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}" if TDR.extraText!="Simulation" else "MC RunII"
                 canv = tdrCanvas(disc+channel, -0.05, 1.05, 0.0001, 20, disc.replace("_MD",""),"A.U.")
                 canv.SetLogy(1)
                 leg = tdrLeg(0.70,0.70,0.89,0.89, 0.030, 42, ROOT.kBlack);
-                for sample in ["Background", "Signal"]:
+                for sample in ["Signal", "Background"]:
                     color = self.color[sample]
-                    self.hists[sample+channel+disc].Scale(1./self.hists[sample+channel+disc].Integral())
-                    tdrDraw(self.hists[sample+channel+disc], "hist", 0, color, 1, color, 1001, color)
-                    self.hists[sample+channel+disc].SetFillColorAlpha(color, 0.4)
-                    leg.AddEntry(self.hists[sample+channel+disc], sample, "f")
+                    h_ = self.hists[sample+channel+disc]
+                    h_.Scale(1./h_.Integral())
+                    h_.SetLineWidth(2)
+                    tdrDraw(h_, "hist", 0, color, 1, color, 1001, color)
+                    h_.SetFillColorAlpha(color, 0.6 if "Background" in sample else 0.45)
+                    leg.AddEntry(h_, sample, "f")
                 canv.SaveAs(self.outdir+"TaggerShape_"+disc+"_"+channel+".pdf")
 
 
@@ -99,15 +101,3 @@ class PlotTaggerShapes(VariablesBase):
 if __name__ == '__main__':
     PlotBkg = PlotTaggerShapes()
     PlotBkg.PlotHistos()
-    # args = parse_arguments()
-    # years       = args.years if len(args.years)!=0 else ["2016"]
-    # histFolders = args.histFolders if len(args.histFolders)!=0 else []
-    # Channels    = args.Channels if len(args.Channels)!=0 else ["muonchannel"]
-    # Collections = args.Collections if len(args.Collections)!=0 else ["Puppi"]
-
-    # for year in years:
-    #     for channel in Channels:
-    #         for collection in Collections:
-    #             if "inv" in channel: continue
-    #             PlotBkg = PlotTaggerShapes(year=year, channel=channel, collection=collection)
-    #             PlotBkg.PlotHistos()

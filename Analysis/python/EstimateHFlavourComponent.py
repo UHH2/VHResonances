@@ -38,7 +38,6 @@ class EstimateHFlavorComponent(VariablesBase):
                 if (abs(gp.pdgId()) == rt.g ): n_l+=1
         return (n_c,n_b,n_l)
 
-
     def GetJetFlavor2(self,event, jet, radius=0.8):
         list_ = []
         for gp in event.GenParticles:
@@ -51,7 +50,7 @@ class EstimateHFlavorComponent(VariablesBase):
         vars = {}
         sels = {}
         print "year\tchannel\tmass\t",
-        for decay in ["Hcc","Hbb","HWW","Hgg","Helse","nomatch"]:
+        for decay in ["Hcc","Hbb","HWW","Hgg","Htautau", "Helse","nomatch"]:
             for flav in ["", "_bb","_cc","_LL"]:
                 print decay+flav+"\t",
         print ""
@@ -62,6 +61,12 @@ class EstimateHFlavorComponent(VariablesBase):
             # print year,channel,sample
             vars.setdefault(year,{}).setdefault(channel,{}).setdefault(sample,[])
             sels.setdefault(year,{}).setdefault(channel,{}).setdefault(sample,[])
+            BR = {"tot":0, "WW4q":0, "ZZ4q":0, "WW":0, "ZZ":0, "ll":0, "tau":0, "light":0, "else":0}
+            BR2 = {}
+            for i in ["0","1","2","3","4"]:
+                for flav in ["", "_bb","_cc","_LL"]:
+                    BR2["Wc"+i+flav] = 0
+                    BR2["Zc"+i+flav] = 0
             for filename in glob.glob(self.Path_STORAGE+year+"/Selection/Puppi/"+channel+"channel/nominal/workdir_Selection_"+sample+"/*.root"):
                 f_ = ROOT.TFile(filename)
                 t_ = f_.Get("AnalysisTree")
@@ -74,7 +79,6 @@ class EstimateHFlavorComponent(VariablesBase):
                     for zp in ev.ZprimeCandidate:
                         jet = zp.H()
                         num = jet.btag_MassDecorrelatedDeepBoosted_probHcc()+jet.btag_MassDecorrelatedDeepBoosted_probZcc()
-                        # num = jet.btag_DeepBoosted_probHcc()
                         den = num+jet.btag_DeepBoosted_raw_score_qcd()
                         score = num/den if den!=0 else 0
                         decay = rt.ZprimeDecayToString(int(ev.HDecay))
@@ -88,12 +92,59 @@ class EstimateHFlavorComponent(VariablesBase):
                             store += "_cc"
                         if flavour==rt.light:
                             store += "_LL"
-                        if store=="Hgg_cc" or store=="Helse_cc":
-                            c_, b_, l_ = self.GetQuarkComponent(ev, jet)
-                            print c_, b_, l_
+                        if decay =="Helse":
+                            BR["tot"] += 1
+                            for gp in ev.GenParticles:
+                                if abs(gp.pdgId())!=25: continue
+                                d1 = gp.daughter(ev.GenParticles, 1)
+                                d2 = gp.daughter(ev.GenParticles, 2)
+                                dec = abs(d1.pdgId())
+                                if dec==24 or dec ==23:
+                                    d11 = abs(d1.daughter(ev.GenParticles, 1).pdgId())
+                                    d12 = abs(d1.daughter(ev.GenParticles, 2).pdgId())
+                                    d21 = abs(d2.daughter(ev.GenParticles, 1).pdgId())
+                                    d22 = abs(d2.daughter(ev.GenParticles, 2).pdgId())
+                                    nc = 0
+                                    nl = 0
+                                    for dd in [d11,d12,d21,d22]:
+                                        if dd ==4: nc+=1
+                                        if dd>=11 and dd<=15 ==4: nl+=1
+                                    if nl ==2 and dec==23:
+                                        isll = True
+                                    elif nl ==1 and dec==24:
+                                        isll = True
+                                    else:
+                                        isll = False
+                                if dec==24:
+                                    BR2["Wc"+str(nc)+store.replace(decay,"")] +=1
+                                    if isll:
+                                        BR["ll"] += 1
+                                    elif d11 <= 4 and d12 <= 4 and d21 <= 4 and d22 <= 4:
+                                        BR["WW4q"] += 1
+                                    else: BR["WW"] += 1
+                                elif dec==23:
+                                    BR2["Zc"+str(nc)+store.replace(decay,"")] +=1
+                                    if isll:
+                                        BR["ll"] += 1
+                                    elif d11 <= 4 and d12 <= 4 and d21 <= 4 and d22 <= 4:
+                                        BR["ZZ4q"] += 1
+                                    else:
+                                        BR["ZZ"] += 1
+                                elif dec==15:
+                                    BR["tau"] += 1
+                                elif dec<4 or dec==21:
+                                    BR["light"] += 1
+                                else:
+                                    BR["else"] += 1
                         vars[year][channel][sample].append(store)
                         if score<0.8: continue
                         sels[year][channel][sample].append(store)
+            print "TOT=", BR["tot"],
+            for x in BR:
+                print "match=",x, ":", round(BR[x]*100./BR["tot"],2),
+            for x in BR2:
+                print "match=",x, ":", round(BR2[x]*100./BR["tot"],2),
+            print ""
             # print mass, i, notmatched
             var = vars[year][channel][sample]
             vars["tot"].extend(var)
@@ -103,14 +154,17 @@ class EstimateHFlavorComponent(VariablesBase):
             if tot_var==0: continue
             if tot_sel==0: continue
             print year, "\t", channel, "\t", mass, "\t",
-            for decay in ["Hcc","Hbb","HWW","Hgg","Helse","nomatch"]:
+            for decay in ["Hcc","Hbb","HWW","Hgg","Htautau", "Helse","nomatch"]:
                 for flav in ["", "_bb","_cc","_LL"]:
                     skim_var = len(list(filter(lambda x: decay in x and flav in x , var)))
                     skim_sel = len(list(filter(lambda x: decay in x and flav in x , sel)))
                     print round(skim_var*100./tot_var,2), "\t", round(skim_sel*100./tot_sel,2), "\t", round(skim_sel*100./skim_var if skim_var!=0 else 0,2), " -- ",
             print ""
+        for x in BR:
+            print x, BR[x]*100/BR["tot"],
+        print ""
         tot = len( vars["tot"])
-        for decay in ["Hcc","Hbb","HWW","Hgg","Helse","nomatch"]:
+        for decay in ["Hcc","Hbb","HWW","Hgg","Htautau", "Helse","nomatch"]:
             for flav in ["", "_bb","_cc","_LL"]:
                 tot_df = len(list(filter(lambda x: decay in x and flav in x , vars["tot"])))
                 print round(tot_df*100./tot,2), "\t",

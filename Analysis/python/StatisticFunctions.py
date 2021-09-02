@@ -9,7 +9,8 @@ from array import array
 
 def lnN(nominal, variation):
     if variation==0: raise Exception("var==0")
-    return 1+abs(nominal-variation)/nominal
+    # return 1+abs(nominal-variation)/nominal
+    return 1+(nominal-variation)/nominal
 
 def CountBinsMinMax(hist, min, max):
     Nbins = 0

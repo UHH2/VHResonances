@@ -243,7 +243,7 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     changes.append(["<ConfigSGE", "Workdir", "workdir_"+outdir, "workdir_"+outdir+"_"+sample])
                     changes.append(["<ConfigParse", 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile,syst,channel)+'"'])
                     changes.append(["<!ENTITY", "OUTDIR", outdir , outdir+"/"+folders])
-                    if "Preselection" in ConfigFile or "PDFReweight" in ConfigFile or "HEMIssueStudy" in ConfigFile:
+                    if "Preselection" in ConfigFile or "PDFReweight" in ConfigFile or "HEMIssueStudy" in ConfigFile or "LeptonIDStudies" in ConfigFile:
                         if "invisible" in channel:
                             changes.append(["<!ENTITY", "original_pdfname", "defaultValue" , "NNPDF31_nnlo_as_0118_nf_4"])
                         else: changes.append(["<!ENTITY", "original_pdfname", "defaultValue" , "NNPDF31_lo_as_0130"])

@@ -1,6 +1,7 @@
 from Utils import *
 from parallelise import *
 
+nParallel     = 25
 nSpace_text   = 50
 nSpace_number = 25
 nSpace_small  = 10
@@ -13,16 +14,6 @@ def nSpace_Long(word=""):
 
 def MergeListString(myList):
     return " ".join([nSpace_Long(str(x)) if len(myList)>1 and "param" in str(myList[1]).lower() else nSpace(str(x)) for x in myList[:1]]+[nSpace(str(x)) for x in myList[1:]])
-
-# def lnN(nominal, varUp, varDown):
-#     if varUp==0: raise Exception("varUp==0")
-#     if varDown==0: raise Exception("varDown==0")
-#     return (1+abs(nominal-varUp)/nominal,1+abs(nominal-varDown)/nominal)
-
-def lnN(nominal, variation):
-    if variation==0: raise Exception("var==0")
-    return 1+abs(nominal-variation)/nominal
-
 
 def DataCardTemplate(path, filename, mode = "", signalName="MC_ZprimeToZH", ChannelNames=["ZprimeZH", "bbchannel"], bkgNames=["MC_DY", "MC_TTbar", "MC_Diboson"], Parameters=[], Observed=[-1,-1], Rates=[[0,0,0],[0,0,0]], lumi=(100,1)):
     nChannel = len(ChannelNames)
@@ -65,9 +56,36 @@ def DataCardTemplate(path, filename, mode = "", signalName="MC_ZprimeToZH", Chan
     # lines.append(nSpace(nSpace_short("sigma")+"lnN")+MergeListString((["1.150"]+["-"]*nBkg)*nChannel))
     # lines.append(nSpace(nSpace_short("sigma")+"lnN")+MergeListString((["1.0001"]+["-"]*nBkg)*nChannel))
     lines.append(separator)
+    groups = {}
+    groups["Theory"]      = ["NNPDF", "murmuf"]
+    groups["Detector"]    = ["lumi", "pu"]
+    groups["DeepAk8"]     = ["taggerSF"]
+    groups["Tagging"]     = ["btag"] + groups["DeepAk8"]
+    groups["Jets"]        = ["JEC", "JER"] + groups["Tagging"]
+    if not "inv" in ChannelNames[0]:
+        groups["Leptons"] = ["id", "prefiring","trigger"]
+    if "muon" in ChannelNames[0]:
+        groups["Muon"]    = ["MuonScale", "isolation", "reco", "tracking"]
+        groups["Leptons"]+= groups["Muon"]
+    groups["Systematics"] = list(set([el for sys in groups.keys() for el in groups[sys]]))
+    groups["Signal"]      = []
+    groups["Background"]  = []
     for param in Parameters:
         lines.append(param)
+        sys = param.split()[0]
+        if "sg_" in sys: groups["Signal"].append(sys)
+        if "data_" in sys: groups["Background"].append(sys)
     lines.append(separator)
+    lines.append(separator)
+    groups["Stastical"] = groups["Signal"] + groups["Background"]
+    groups["All"]       = groups["Systematics"] + groups["Stastical"]
+    for sys in groups.keys():
+        line = sys+" group ="
+        for el in groups[sys]:
+            line += " "+el
+        lines.append(line)
+    lines.append(separator)
+
     with open(path+filename, "w") as outputfile:
         for line in lines:
             outputfile.write(line+"\n")
@@ -92,12 +110,12 @@ class CreateDataCards(VariablesBase):
         if (self.isHbb): self.AnalysisDir += "/Hbb/"
 
         # self.fitFunction = "CB"
-        self.fitFunction = "Exp_3"
-        self.fitFunction = "NO"
+        # self.fitFunction = "Exp_3"
+        # self.fitFunction = "NO"
         # self.mode = "bkg_pred"
         self.fitFunction = "Exp_2"
         # self.mode = "DY_SR"
-        self.mode = "bkg_pred"
+        # self.mode = "bkg_pred"
         self.mode = "data"
         self.BRs= {"invisible": 0.2, "muon": 0.1, "electron": 0.1, "chargedlepton":0.1}
         self.ResetLists()
@@ -137,6 +155,7 @@ class CreateDataCards(VariablesBase):
                     self.RatesBkg[uniqueName].setdefault(ChannelName,[]).append(line.split()[-1] if "h_" in self.fitFunction else line.split()[-2]) #TODO fix for all cases. Before was -3
                 if "signal" in line:
                     BR = self.BRs["invisible"] if "invisible" in uniqueName else self.BRs["chargedlepton"]
+		    print BR
                     if not any(syst in line for syst in self.Systematics+self.Systematics_Scale):
                         self.RatesSignal[uniqueName][line.split()[0]] = str(float(line.split()[-1])*BR)
                     else:
@@ -196,6 +215,7 @@ class CreateDataCards(VariablesBase):
         if self.RunSystematics:
             for sys in self.Systematics + self.Systematics_Scale:
                 if sys=="nominal": continue
+                # if "NNPDF" in sys: continue
                 nominal = float(self.RatesSignal[uniqueName][signalName])
                 varUp = 0
                 varDown = 0
@@ -211,15 +231,7 @@ class CreateDataCards(VariablesBase):
                 #     else: #TODO Fix me
                 #         varUp = nominal
                 #         varDown = nominal
-                if not "muon"  in channel and "MuonScale" in sys: continue
-                if not "muon"  in channel and "isolation" in sys: continue
-                if not "muon"  in channel and "tracking"  in sys: continue
-                if not "muon"  in channel and "reco"      in sys: continue
-                if "invisible" in channel and "pu"        in sys: continue
-                if "invisible" in channel and "btag"      in sys: continue
-                if "invisible" in channel and "prefiring" in sys: continue
-                if "invisible" in channel and "id"        in sys: continue
-                if "invisible" in channel and "trigger"   in sys: continue
+                if DoControl([""], year+channel+sys, channel, signalName): continue
                 if nominal==0:#TODO Fix me
                     print channel, year,sys,signalName, nominal,varUp,varDown
                     continue
@@ -295,13 +307,9 @@ class CreateDataCards(VariablesBase):
         # self.list_processes = list(map(lambda x: self.list_processes[x] if (not "RunII" in self.list_processes[x][0] and not "full" in self.list_processes[x][0]) else "" , range(len(self.list_processes))))
         self.list_logfiles  = list(filter(lambda x: x!="", self.list_logfiles))
         self.list_processes = list(filter(lambda x: x!="", self.list_processes))
-        # for i in range(len(self.list_processes)):
-        #     print self.list_processes[i], self.list_logfiles[i]
-        print len(self.list_processes)
-        for x in self.list_processes: print x
-        # print " ".join(self.list_processes[0])
-        # print self.list_processes[0]
-        if self.RunCombine: parallelise(self.list_processes, 20, self.list_logfiles, cwd=True)
+        # print len(self.list_processes)
+        # for x in self.list_processes: print x
+        if self.RunCombine: parallelise(self.list_processes, nParallel, self.list_logfiles, cwd=True)
 
     @timeit
     def RunCommandsPerDataCard(self):
@@ -312,24 +320,85 @@ class CreateDataCards(VariablesBase):
             for collection in self.collections:
                 for year in self.years:
                     for channel in self.channels+["leptonchannel"]:
+                    # for channel in ["leptonchannel"]:
                         uniqueName = year+"/"+collection+"/"+channel+"/"+histFolder
                         uniqueName, workingDir = self.GetWorkdirName(uniqueName)
                         if not "lepton" in channel: self.ExtractParameters(uniqueName,workingDir,year,channel,histFolder)
                         for signalName in self.RatesSignal[uniqueName.replace("lepton","muon")]:
                             DCname = self.DataCardName(uniqueName,signalName).replace(".txt","")
                             mass = signalName.replace("M","")
-                            command = [workingDir]
-                            list_processes.setdefault("text2workspace", []).append([workingDir, "text2workspace.py", DCname+".txt", "-m", mass])
-                            list_processes.setdefault("combineTool_In", []).append([workingDir, "combineTool.py","-M","Impacts", "-d", DCname+".root", "-m", mass, "--doInitialFit", "--robustFit", "1"])
-                            list_processes.setdefault("combineTool_Do", []).append([workingDir, "combineTool.py","-M","Impacts", "-d", DCname+".root", "-m", mass, "--robustFit", "1", "--doFits"])
-                            list_processes.setdefault("combineTool_Im", []).append([workingDir, "combineTool.py","-M","Impacts", "-d", DCname+".root", "-m", mass, "-o", "impacts_"+mass+".json"])
-                            list_processes.setdefault("plotImpacts",    []).append([workingDir, "plotImpacts.py","-i","impacts_"+mass+".json","-o","impacts_"+mass])
-                            list_logfiles.append("log_"+str(index)+".txt")
-                            index += 1
-        for command in ["text2workspace","combineTool_In","combineTool_Do","combineTool_Im","plotImpacts"]:
+                            if mass == "1000": continue
+                            # if mass != "3000": continue
+                            # for tool,method,freeze in list(itertools.product(["Scan","Impacts","FitDiagnostics","GOF"],["_Asimov","_noAsimov"],["","_Freeze"])):
+                            for tool,method,freeze in list(itertools.product(["GOF"],["_Asimov","_noAsimov"],["","_Freeze"])):
+                                if "FitDiagnostics" in tool:
+                                    if "_Freeze" in freeze: continue
+                                if "GOF" in tool:
+                                    if "_Freeze" in freeze: continue
+                                    if "_Asimov" in method: continue
+                                folder = workingDir+tool+method+freeze+"/M"+mass
+                                os.system("mkdir -p "+folder)
+                                os.system("cp "+workingDir+DCname+".txt "+folder)
+                                if "muon" in channel or "ele" in channel or "inv" in channel:
+                                    os.system("cp "+workingDir+"ws_*.root "+folder)
+                                ExtraCommand  = ["--robustFit", "1"]
+                                if "_Asimov" in method:
+                                    ExtraCommand += ["-t", "-1"]
+                                if "_Freeze" in freeze:
+                                    if "Impacts" in tool:
+                                        ExtraCommand += ["--freezeNuisanceGroups", "Background"]
+                                    if "Scan" in tool:
+                                        ExtraCommand += ["--freezeNuisanceGroups", "Systematics"]
+
+                                if "FitDiagnostics" in tool:
+                                    command = [folder, "combine","-M","FitDiagnostics", "-d", DCname+".txt", "-m", mass, "-n", signalName+"_"+self.fitFunction, "--saveWorkspace", "--saveShapes", "--saveOverallShapes"]
+                                    list_processes.setdefault(tool, []).append(command)
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                elif "Impacts" in tool:
+                                    command = [folder, "combineTool.py","-M","Impacts", "-d", DCname+".root", "-m", mass]
+                                    list_processes.setdefault("text2workspace", []).append([folder, "text2workspace.py", DCname+".txt", "-m", mass])
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                    list_processes.setdefault(tool+"_In", []).append(command+ExtraCommand+["--doInitialFit"])
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                    list_processes.setdefault(tool+"_Do", []).append(command+ExtraCommand+["--doFits"])
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                    list_processes.setdefault(tool+"_Im", []).append(command+["-o", "Impacts_"+mass+".json"])
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                    list_processes.setdefault(tool+"_Plot", []).append([folder, "plotImpacts.py","-i","Impacts_"+mass+".json","-o","Impacts_"+mass])
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                elif "Scan" in tool:
+                                    command = [folder, "combine","-M","MultiDimFit", "-m", mass, "--rMin", "-0.5", "--rMax", "3",]
+                                    list_processes.setdefault(tool+"_snapshot", []).append(command+ExtraCommand+["-d", DCname+".txt","-n", method+"_"+tool+"_snapshot", "--saveWorkspace"])
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                    list_processes.setdefault(tool, []).append(command+ExtraCommand+["higgsCombine"+method+"_"+tool+"_snapshot.MultiDimFit.mH"+mass+".root", "-n", method+"_"+tool+freeze, "--snapshotName", "MultiDimFit", "--algo", "grid", "--points", "30"])
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                    pytool = self.Path_ANALYSIS+"../../CombineHarvester/CombineTools/scripts/plot1DScan.py"
+                                    command = [folder, pytool, "higgsCombine"+method+"_"+tool+freeze+".MultiDimFit.mH"+mass+".root", "-o","Scan"+method+tool+freeze]
+                                    list_processes.setdefault(tool+"_Plot", []).append(command)
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                    if "_Freeze" in freeze:
+                                        command = [folder, pytool, workingDir+tool+method+"/M"+mass+"/higgsCombine"+method+"_"+tool+".MultiDimFit.mH"+mass+".root", "-o","Scan_Combine"+method+tool+freeze]
+                                        list_processes.setdefault(tool+"_PlotCombined", []).append(command+["--others", "higgsCombine"+method+"_"+tool+freeze+".MultiDimFit.mH"+mass+".root:FreezeAll:632", "--breakdown", "Syst,Stat"])
+                                        list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                elif "GOF" in tool:
+                                    command = [folder, "combine","-M","GoodnessOfFit", "-d", DCname+".txt", "-m", mass, "-n", method+"_"+tool, "--algo", "saturated"]
+                                    list_processes.setdefault(tool, []).append(command+["-t", "100", "-s", "123456"])
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                    command = [folder, "combine","-M","GoodnessOfFit", "-d", DCname+".txt", "-m", mass, "-n", method+"_"+tool, "--algo", "saturated"]
+                                    list_processes.setdefault(tool, []).append(command)
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+                                    command = [folder, "combine","-M","GoodnessOfFit", "-d", DCname+".txt", "-m", mass, "-n", method+"_"+tool, "--algo", "saturated"]
+                                    list_processes.setdefault(tool+"_Plot", []).append(command+["higgsCombine_noAsimov_GOF.GoodnessOfFit.mH1400.123456.root"])
+                                    list_logfiles.append("log_"+str(index)+".txt"); index += 1
+
+        # for command in ["FitDiagnostics","text2workspace","Impacts_In","Impacts_Do","Impacts_Im","Impacts_Plot","Scan_snapshot", "Scan_snapshot", "Scan", "Scan_Plot", "Scan_PlotCombined"]:
+        # for command in ["Scan_snapshot", "Scan_snapshot", "Scan", "Scan_Plot", "Scan_PlotCombined"]:
+        for command in ["GOF", "GOF_Plot"]:
+            for x in list_processes[command]: print x
             print command, len(list_processes[command])
-            for x in list_processes[command]: print x[1:]
-            parallelise(list_processes[command], 20, list_logfiles, cwd=True)
+            if self.RunCombine:
+                print command
+                # parallelise(list_processes[command], nParallel, list_logfiles, cwd=True)
 
 
 if __name__ == '__main__':
@@ -356,17 +425,9 @@ if __name__ == '__main__':
     studies = "nominal"
     # studies = "noSignalFlatUncertainty"
 
-    # histFolders = ["DeepAk8_H4qvsQCD_massdep", "DeepAk8_ZHccvsQCD_MD", "DeepAk8_HccvsQCD_MD", "DeepAk8_H4qvsQCD_MD",
-    #                "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD", "DeepAk8_H4qvsQCD", "DeepAk8_HccvsQCD", "DeepAk8_ZHccvsQCD",
-    #                "DeepAk8_H4qvsQCD_massdep_HccvsQCD", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD"]
-
-    # histFolders = ["DeepAk8_HccvsQCD", "DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD", "DeepAk8_ZHccvsQCD_MD2"]
-    # histFolders = ["DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD2"]
-    # histFolders = ["DeepAk8_ZHccvsQCD_MD2"]
-    histFolders = ["DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD2"]
-    # histFolders = ["DeepAk8_HccvsQCD2"]
-
-    # histFolders = ["DeepAk8_ZHccvsQCD_MD"]
+    # histFolders = ["DeepAk8_ZHccvsQCD_MD", "DeepAk8_ZHccvsQCD_MD2", "DeepAk8_HccvsQCD", "DeepAk8_H4qvsQCD", "DeepAk8_H4qvsQCD_massdep", "DeepAk8_H4qvsQCD_massdep_HccvsQCD", "tau42"]
+    histFolders = ["DeepAk8_ZHccvsQCD_MD", "DeepAk8_H4qvsQCD", "DeepAk8_H4qvsQCD_massdep"]
+    histFolders = ["DeepAk8_ZHccvsQCD_MD"]
 
     # years = ["2016", "2017", "2018", "RunII"]
     channels = ["muonchannel", "electronchannel", "invisiblechannel"]
@@ -383,23 +444,3 @@ if __name__ == '__main__':
     # DataCards.CombineYear()
     DataCards.RunDataCards()
     # DataCards.RunCommandsPerDataCard()
-
-
-
-
-# name="DataCard_RunII_Puppi_muonchannel_btag_DeepBoosted_H4qvsQCDmassdep_x3_M1000_Exp_2_simple2"
-# mpoint="2000"
-# text2workspace.py ${name}.txt -m ${mpoint}
-# combineTool.py -M Impacts -d ${name}.root -m ${mpoint} --doInitialFit --robustFit 1
-# combineTool.py -M Impacts -d ${name}.root -m ${mpoint} --robustFit 1 --doFits
-# combineTool.py -M Impacts -d ${name}.root -m ${mpoint} -o impacts.json
-# plotImpacts.py -i impacts.json -o impacts_simple2
-
-#
-# mpoint="2000"
-# name="DataCard_RunII_Puppi_leptonchannel_btag_DeepBoosted_H4qvsQCD_cc_M${mpoint}_Exp_2_Expected"
-# text2workspace.py ${name}.txt -m ${mpoint}
-# combineTool.py -M Impacts -d ${name}.root -m ${mpoint} --doInitialFit --robustFit 1 --rMin 0 --rMax 10
-# combineTool.py -M Impacts -d ${name}.root -m ${mpoint} --robustFit 1 --doFits --rMin 0 --rMax 10
-# combineTool.py -M Impacts -d ${name}.root -m ${mpoint} -o impacts_${mpoint}.json
-# plotImpacts.py -i impacts_${mpoint}.json -o impacts_${mpoint}

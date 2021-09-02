@@ -5,7 +5,7 @@ TDR.writeExtraText = True
 TDR.extraText  = "Simulation"
 TDR.extraText2 = "Work in progress"
 
-ForThesis(TDR)
+# ForThesis(TDR)
 
 '''
 Module to plot LeptonID Efficiency
@@ -39,7 +39,7 @@ colors = {"ele_ID_kincut":                  (ROOT.kBlack,ROOT.kDot),
           "muon_ID_CutBasedIdMediumPrompt": (ROOT.kGray,ROOT.kDot),
           "muon_ID_CutBasedIdTight":        (ROOT.kOrange-2,ROOT.kDot),
           "muon_ID_CutBasedIdGlobalHighPt": (ROOT.kRed+1,ROOT.kOpenSquare),
-          "muon_ID_CutBasedIdTrkHighPt":    (ROOT.kOrange+1,ROOT.kFullTriangleUp),
+          "muon_ID_CutBasedIdTrkHighPt":    (ROOT.kGreen+2,ROOT.kFullCircle),
           "muon_ID_MvaLoose":               (ROOT.kBlue+1,ROOT.kFullTriangleDown),
           "muon_ID_MvaMedium":              (ROOT.kGreen,ROOT.kDot),
           "muon_ID_MvaTight":               (ROOT.kMagenta,ROOT.kDot),
@@ -52,7 +52,7 @@ class PlotLeptonIDEfficiency(VariablesBase):
     def __init__(self,year="2016", collection="Puppi", channel="muonchannel", isDR=True):
         VariablesBase.__init__(self)
         self.year       = year
-        TDR.lumi_13TeV  = str(round(float(self.lumi_map[self.year]["lumi_fb"]),1))+" fb^{-1}"
+        TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}" if TDR.extraText!="Simulation" else "MC "+year
         self.outdir     = self.Path_ANALYSIS+"Analysis/OtherPlots/LeptonID/"
         self.RefID      = "ID_kincut"
         self.HistType   = "LeptonID"
@@ -76,7 +76,7 @@ class PlotLeptonIDEfficiency(VariablesBase):
         self.Xaxis_min  = 0 if self.isDR else 0
         self.Xaxis_max  = 1 if self.isDR else 5000
         self.Yaxis_min  = 0.
-        self.Yaxis_max  = 1.2
+        self.Yaxis_max  = 1.4
         self.histos     = {}
 
         self.SignalSamples.append(self.MainBkg)
@@ -122,7 +122,7 @@ class PlotLeptonIDEfficiency(VariablesBase):
 
     def ResetCanvas(self, name):
         self.canv = tdrCanvas(name, self.Xaxis_min, self.Xaxis_max, self.Yaxis_min, self.Yaxis_max, self.nameXaxis,self.nameYaxis)
-        self.leg = tdrLeg(0.35,0.30,0.95,0.6, 0.035, 42, ROOT.kBlack)
+        self.leg = tdrLeg(0.23,0.20,0.95,0.5, 0.045, 42, ROOT.kBlack)
         self.leg.SetNColumns(2 if "simple" in name else 3)
 
     def PlotHistos(self):
@@ -130,11 +130,12 @@ class PlotLeptonIDEfficiency(VariablesBase):
         self.ResetCanvas("canv_"+self.year+self.channel+self.HistName)
         for [ID,hist] in self.histos.items():
             if self.Signal in ID or self.MainBkg in ID: continue
-            hist.SetMarkerSize(1.2)
+            hist.SetMarkerSize(1.5)
             color = colors[ID.replace(self.doubleID,"")][0]
             marker = colors[ID.replace(self.doubleID,"")][1]
-            if "Loose_2IDs" in ID: marker = ROOT.kFullCircle
+            if "Loose_2IDs" in ID: color,marker = (ROOT.kOrange+1,ROOT.kFullTriangleUp)
             if "GlobalHighPt_2IDs" in ID: marker = ROOT.kFullSquare
+            if "GlobalHighPt_2IDs" in ID: hist.SetMarkerSize(2)
             tdrDraw(hist, "hist", marker, color, 2 if self.doubleID in ID else 1, color, 0, color)
             self.leg.AddEntry(hist, ID.replace("ID_","").replace("muon_","").replace("ele_","").replace("CutBasedId",""), "l")
         self.canv.SaveAs(self.outdir+self.year+"_"+self.channel+self.HistName+".pdf")
@@ -148,13 +149,20 @@ class PlotLeptonIDEfficiency(VariablesBase):
             if "TrkHighPt" in ID and self.doubleID in ID : continue
             if "Tk" in ID and self.doubleID in ID : continue
             if "Mva" in ID and self.doubleID in ID : continue
-            hist.SetMarkerSize(1.2)
+            hist.SetMarkerSize(1.5)
             color = colors[ID.replace(self.doubleID,"")][0]
             marker = colors[ID.replace(self.doubleID,"")][1]
-            if "Loose_2IDs" in ID: marker = ROOT.kFullCircle
+            if "Loose_2IDs" in ID: color,marker = (ROOT.kOrange+1,ROOT.kFullTriangleUp)
             if "GlobalHighPt_2IDs" in ID: marker = ROOT.kFullSquare
+            if "GlobalHighPt_2IDs" in ID: hist.SetMarkerSize(2)
             tdrDraw(hist, "P", marker, color, 2 if self.doubleID in ID else 1, color, 0, color)
-            self.leg.AddEntry(hist, ID.replace("ID_","").replace("muon_","").replace("ele_","").replace("CutBasedId","").replace(self.doubleID,"+TrkHighPt"), "lp")
+            LegName = ID.replace("ID_","").replace("muon_","").replace("ele_","").replace("CutBasedId","").replace(self.doubleID,"+TrkHighPt")
+            if LegName == "loose":
+                LegName += "+iso"
+            LegName = LegName.replace("Mva","MVA ").replace("TrkH", "tracker h").replace("Loose","loose")
+            LegName = LegName.replace("GlobalH","h").replace("_", " ").replace("noIso","").replace("Pt","-p_{T}")
+            LegName = LegName.replace(" iso"," +iso").replace("+", " + ")
+            self.leg.AddEntry(hist, LegName, "lp")
         self.canv.SaveAs(self.outdir+self.year+"_"+self.channel+self.HistName+"_simple.pdf")
 
         if True: # Used only as a cross-check for each sample
@@ -164,12 +172,13 @@ class PlotLeptonIDEfficiency(VariablesBase):
                     if self.isMuon and not "muon" in ID: continue
                     if self.isEle and not "ele" in ID: continue
                     hist = self.histos[sample+ID]
-                    hist.SetMarkerSize(1.2)
+                    hist.SetMarkerSize(1.5)
                     if all(not x in ID for x in self.MinSetIDs): continue
                     color = colors[ID.replace(self.doubleID,"")][0]
                     marker = colors[ID.replace(self.doubleID,"")][1]
-                    if "Loose_2IDs" in ID: marker = ROOT.kFullCircle
+                    if "Loose_2IDs" in ID: color,marker = (ROOT.kOrange+1,ROOT.kFullTriangleUp)
                     if "GlobalHighPt_2IDs" in ID: marker = ROOT.kFullSquare
+                    if "GlobalHighPt_2IDs" in ID: hist.SetMarkerSize(2)
                     tdrDraw(hist, "P", marker, color, 2 if self.doubleID in ID else 1, color, 0, color)
                     self.leg.AddEntry(hist, ID.replace("ID_","").replace("muon_","").replace("ele_","").replace("CutBasedId",""), "lp")
                 self.canv.SaveAs(self.outdir+self.year+"_"+self.channel+"_"+sample+self.HistName+"_simple.pdf")
@@ -183,8 +192,8 @@ def main():
     Channels = args.Channels
 
     # years = ["2016","2017","2018", "RunII"]
-    # Channels = ["muonchannel", "electronchannel"]
-    # years = ["2016"]
+    Channels = ["muonchannel", "electronchannel"]
+    years = ["RunII"]
     # Channels = ["muonchannel"]
 
     for year,channel,isDR in list(itertools.product(years, Channels, [True,False])):

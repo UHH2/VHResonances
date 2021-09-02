@@ -88,7 +88,7 @@ Module to plot Tagger shapes
 class PlotSignalShapes(VariablesBase):
     def __init__(self):
         VariablesBase.__init__(self)
-        self.Samples = ["M"+str(m) for m in self.MassPointsReduced]
+        self.Samples = ["M"+str(m) for m in self.MassPointsReduced if m!=1000 and m!=1200]
         self.Samples_reduced = ["M1600", "M2000", "M2500", "M3000", "M3500", "M4000", "M4500", "M5000"]
         self.Syst_list = self.Systematics[1:]+self.Systematics_Scale
         # self.Syst_list = list(filter(lambda x: not "PDF" in x and not "murmuf" in x ,self.Syst_list))
@@ -172,7 +172,7 @@ class PlotSignalShapes(VariablesBase):
 
     def PlotFuncions(self):
         for channel in self.Channels:
-            TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
+            TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}" if TDR.extraText!="Simulation" else "MC RunII"
             isInv = "inv" in channel
             canv = tdrCanvas(channel, f_xmin, f_xmax, 0.0001, 0.036 if not isInv else 0.066, "M(Z') [GeV]" if not isInv else "M_{T}(Z') [GeV]" ,"A.U.", isExtraSpace=True)
             hframe = ROOT.gROOT.FindObject("hframe")
@@ -180,10 +180,12 @@ class PlotSignalShapes(VariablesBase):
             leg2 = tdrLeg(0.42,0.66,0.65,0.89, 0.035, 42, ROOT.kBlack)
             leg = tdrLeg(0.60,0.60,0.92,0.89, 0.035, 42, ROOT.kBlack)
             leg.SetNColumns(2)
+            fs = []
             for sys in ["Nominal","Syst. up", "Syst. down"]:
                 f_ = ROOT.TF1()
                 f_.SetLineColor(ROOT.kBlack)
-                # f_.SetLineStyle(self.style[sys])
+                f_.SetLineStyle(self.style[sys])
+                fs.append(f_)
                 leg2.AddEntry(f_, sys,"l")
             for year in ["RunII"]:
                 for collection in self.Collections:
@@ -208,7 +210,7 @@ class PlotSignalShapes(VariablesBase):
             if par == 3: ymin, ymax, ParName, funcName = (0,8,    "n",            "pol2")
             if par == 4: ymin, ymax, ParName, funcName = (0,25,   "Norm",         "pol2")
             if par == 5: ymin, ymax, ParName, funcName = (0,2,    "lnN",          "pol0")
-            TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
+            TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}" if TDR.extraText!="Simulation" else "MC RunII"
             yName = "parameter "+str(par+1)
             if par == 4: yName = "Normalisation"
             if par == 5: yName = "lnN"
@@ -222,9 +224,9 @@ class PlotSignalShapes(VariablesBase):
                 color = ROOT.kAzure+2 if isInv else (ROOT.kRed+1 if isMuo else ROOT.kGreen+2)
                 markerStyle = ROOT.kFullCircle if isInv else (ROOT.kFullTriangleUp if isMuo else ROOT.kFullTriangleDown)
                 if par==2:
-                    ParName = "k_L" if isInv else "#alpha"
+                    ParName = "k_{L}" if isInv else "#alpha"
                 if par==3:
-                    ParName = "k_H" if isInv else "n"
+                    ParName = "k_{H}" if isInv else "n"
                 for year in ["RunII"]:
                     for collection in self.Collections:
                         x_bins = []
@@ -286,11 +288,11 @@ class PlotSignalShapes(VariablesBase):
                         func_stat.SetLineStyle(style_stat)
                         func_syst.SetLineStyle(style_syst)
                         rt.gStyle.SetOptFit(0)
-                        fitRes_stat = graph_stat.Fit(func_stat,"RMQS0")
+                        fitRes_stat = graph_stat.Fit(func_stat,"RMQS")
                         fitRes_syst = graph_syst.Fit(func_syst,"RMQS0")
                         band_stat, _, _ = ComputeHistWithCL("par"+str(par)+year+channel+collection+sample+"_stat", func_stat, fitRes_stat, graph_stat.GetHistogram(), cl=0.95)
                         band_syst, _, _ = ComputeHistWithCL("par"+str(par)+year+channel+collection+sample+"_syst", func_syst, fitRes_syst, graph_syst.GetHistogram(), cl=0.95)
-                        # tdrDraw(band_stat, "e4", 9, ROOT.kWhite, 1, color+1, 1001, color+1)
+                        tdrDraw(band_stat, "e4", 9, ROOT.kWhite, 1, color+1, 1001, color+1)
                         # tdrDraw(band_syst, "e4", 9, ROOT.kWhite, 1, color, 1001, color)
                         band_stat.SetMarkerSize(0)
                         band_syst.SetMarkerSize(0)
@@ -307,12 +309,12 @@ class PlotSignalShapes(VariablesBase):
                         # for func in [func_stat,func_syst]:
                         #     for n in range(func.GetNpar()):
                         #         print par, channel, n, func.GetParameter(n), func.GetParError(n)
-            canv.SaveAs(self.outdir+"SignalParameter_"+str(par)+".pdf")
+            canv.SaveAs(self.outdir+"SignalParameter_"+str(par)+"_withFit.pdf")
             # self.funcs[year+channel+collection+sample+sys]
 
 
 
 if __name__ == '__main__':
     PlotBkg = PlotSignalShapes()
-    PlotBkg.PlotFuncions()
+    # PlotBkg.PlotFuncions()
     PlotBkg.PlotParameters()

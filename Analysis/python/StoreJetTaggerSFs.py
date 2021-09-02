@@ -4,10 +4,9 @@ from array import array
 
 import tdrstyle_all as TDR
 TDR.writeExtraText = True
-TDR.extraText  = "Simulation"
-TDR.extraText2 = "Work in progress"
+TDR.extraText = "Work in progress"
 
-ForThesis(TDR)
+# ForThesis(TDR)
 
 '''
 Module to plot and store Hcc SFs
@@ -96,9 +95,9 @@ def StoreJetTaggerSF():
     legs = {}
     for flavor in ["FlavC", "FlavB", "FlavL"]:
         canvs[flavor] = tdrCanvas("JetTaggerSF"+flavor, 180, 620, 0.6, 2.6, "p_{T} [GeV]", "Scale Factor")
-        legs[flavor] = tdrLeg(0.25,0.75,0.85,0.85, 0.045, 42, ROOT.kBlack)
-        legs[flavor].SetNColumns(3)
-        tdrHeader(legs[flavor], flavor, textAlign = 22)
+        legs[flavor] = tdrLeg(0.70,0.60,0.85,0.85, 0.045, 42, ROOT.kBlack)
+        #legs[flavor].SetNColumns(3)
+        tdrHeader(legs[flavor], "Cat. flavour-"+flavor.replace("Flav","").lower().replace("l","light"), textAlign = 22)
 
 
     for year in ["2016", "2017", "2018"]:

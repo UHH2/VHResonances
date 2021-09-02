@@ -28,7 +28,6 @@ void CalculateChiSquare(double& chi2, int& nbins, RooHist* hpull, double xmin, d
 
 void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeLo, double& rangeHi, double& plotLo, double& plotHi, double& ymax, std::string& name) {
 
-
   // rangeLo = mass*(1-5./28.);
   // rangeHi = mass*(1+3.5/28.);
   // rangeLo = 0.776*mass-56;
@@ -41,8 +40,8 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
     rangeLo = 0.7742*mass-113;
     rangeHi = 1.0857*mass+46;
 
-    if (mass==1000) { rangeLo = 1000; rangeHi = 1300;}
-    if (mass==1200) { rangeLo = 1000; rangeHi = 1700;}
+    if (mass==1000) { rangeLo = 800; rangeHi = 1100;}
+    if (mass==1200) { rangeLo = 900; rangeHi = 1600;}
     if (mass==1400) { rangeLo = 1000; rangeHi = 1800;}
     if (mass==1600) { rangeLo = 1200; rangeHi = 2000;}
     if (mass==1800) { rangeLo = 1200; rangeHi = 2600;}
@@ -51,14 +50,16 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
     if (mass==3000) { rangeLo = 1000; rangeHi = 3600;}
     if (mass==3500) { rangeLo = 1400; rangeHi = 4200;}
     if (mass==4000) { rangeLo = 1700; rangeHi = 4900;}
-    // if (mass==4000) { rangeLo = myMin; rangeHi = myMax;}
     if (mass==4500) { rangeLo = 2000; rangeHi = 5900;}
-    // if (mass==4500) { rangeLo = myMin; rangeHi = myMax;}
     if (mass==5000) { rangeLo = 1600; rangeHi = 6000;}
     if (mass==5500) { rangeLo = 2500; rangeHi = 6000;}
     if (mass==6000) { rangeLo = 2800; rangeHi = 7000;}
     if (mass==7000) { rangeLo = 3000; rangeHi = 7600;}
     if (mass==8000) { rangeLo = 4000; rangeHi = 8800;}
+
+    if (FindInVector({"M1200JERDown"}, name)) rangeHi = 1400;
+    if (FindInVector({"M1200JECDown","M1200prefiringDown","M1200prefiringUp"}, name)) rangeHi = 1500;
+    if (FindInVector({"M1200btagDown","M1200JECUp","M1200JERUp","M1200murmufUp","M1200NNPDFDown","M1200puDown","M1200taggerSFDown","M1200taggerSFUp"}, name)) rangeHi = 1700;
 
     if (FindInVector({"M1400taggerSFUp"}, name)) rangeHi = 1700;
     if (FindInVector({"M1400JECDown","M1400JERUp","M1400NNPDFUp","M1400prefiringUp","M1400puDown"}, name)) rangeHi = 1900;
@@ -97,7 +98,7 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
     if (FindInVector({"M4000JERDown"}, name)) rangeHi = 5000;
 
     if (FindInVector({"M4500btagDown","M4500JERDown"}, name)) rangeLo = 1700;
-    if (FindInVector({"M4500btagUp", "M4500JERDown"}, name)) rangeHi = 6000;
+    if (FindInVector({"M4500btagUp","M4500JERDown"}, name)) rangeHi = 6000;
     if (FindInVector({"M4500taggerSFDown","M4500NNPDFUp","M4500JECUp"}, name)) rangeHi = 6300;
 
     if (FindInVector({"M5000NNPDFUp","M5000puDown","M5000NNPDFUp","M5000JECUp","M5000murmufUp"}, name)) rangeLo = 1900;
@@ -113,39 +114,39 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
     plotHi = mass*(1+20./28.);
 
     if (FindInString("ZH",histFolder)) ymax = 5;
-    else ymax = 8;
+    else if (FindInString("massdep",histFolder)) ymax = 15;
+    else {
+      ymax = 5;
+      if (mass==1400) rangeLo = 1100;
+    }
 
   } else {
     bool isEle = FindInString("ele",channel);
     rangeLo = 0.7742*mass-113;
     rangeHi = 1.0857*mass+46;
 
-    if (mass==1000) { rangeLo = 700;  rangeHi = 1400;}
-    if (mass==1200) { rangeLo = 700;  rangeHi = 1600;}
-
-    if (mass==1400) { rangeLo = 1000; rangeHi = isEle? 1600: 1800;} //OK-ish
-    if (mass==1600) { rangeLo = 1000; rangeHi = 1900;}//OK-ish TODO
+    if (mass==1000) { rangeLo = 800;  rangeHi = isEle? 1600:1400;}
+    if (mass==1200) { rangeLo = 800;  rangeHi = isEle? 1600:1500;}
+    if (mass==1400) { rangeLo = 1000; rangeHi = isEle? 1600: 1800;}
+    if (mass==1600) { rangeLo = 1000; rangeHi = 1900;}
     if (mass==1800) { rangeLo = 1100; rangeHi = 2000;}
-    if (mass==2000) { rangeLo = 1200; rangeHi = 2200;}//OK //14-15-16 2200
-    if (mass==2500) { rangeLo = 1800; rangeHi = 2700;}//OK
+    if (mass==2000) { rangeLo = 1200; rangeHi = 2200;}
+    if (mass==2500) { rangeLo = 1800; rangeHi = 2700;}
     if (mass==3000) { rangeLo = 1700; rangeHi = 3300;}
     if (mass==3500) { rangeLo = 2400; rangeHi = 3900;}
-    // if (mass==4000) { rangeLo = isEle? 2900: 2800; rangeHi = isEle? 4400: 4400;}//2900-4400
-    if (mass==4000) { rangeLo = 3000; rangeHi = isEle?4400:4500;}//36-45 31-43 ele 30-42 38-43
-    // if (mass==4000) { rangeLo = myMin; rangeHi = myMax;}
-    if (mass==4500) { rangeLo = 3400; rangeHi = 4900;}//OK
-    if (mass==5000) { rangeLo = isEle? 4300: 3300; rangeHi = isEle? 5300: 5400;}//OK
-    // if (mass==4000) { rangeLo = myMin; rangeHi = myMax;}
+    if (mass==4000) { rangeLo = 3000; rangeHi = isEle?4400:4500;}
+    if (mass==4500) { rangeLo = 3400; rangeHi = 4900;}
+    if (mass==5000) { rangeLo = isEle? 4300: 3300; rangeHi = isEle? 5300: 5400;}
     if (mass==5500) { rangeLo = 4400; rangeHi = 6000;}
     if (mass==6000) { rangeLo = 4600; rangeHi = 6600;}
     if (mass==7000) { rangeLo = 5700; rangeHi = 7600;}
     if (mass==8000) { rangeLo = 6800; rangeHi = 8800;}
+    // if (mass==4000) { rangeLo = myMin; rangeHi = myMax;}
 
     if (isEle) {
-
+      if (FindInVector({"M1200JECUp","M1200JERUp"}, name)) rangeHi = 1700;
     } else {
       if (FindInVector({"M3000JECDown","M3000MuonScaleUp"}, name)) rangeLo = 1500;
-
     }
 
     plotLo = mass*(1-10./28.);
@@ -1005,7 +1006,7 @@ void CreateRooWorkspace::PlotBkgFit() {
     std::string isCR = FindInString("CR", mode) ? "CR" : "SR";
     double show_lo = ranges.at(isCR).at(channel).at("show_lo");
     double show_hi = ranges.at(isCR).at(channel).at("show_hi");
-    
+
     TCanvas* c_bg = tdrDiCanvas(("Events"+mode).c_str(), show_lo, show_hi, plot_ylo, plot_yhi, doPlotRatio?0.8:-6, doPlotRatio?1.2:6, nameXaxis, nameYaxis, nameRatioaxis);
     c_bg->cd(1)->SetLogy(1);
     // plotter = x_var->frame(plot_lo,plot_hi);
@@ -1574,9 +1575,7 @@ int main(int argc, char** argv){
   std::vector<std::string> channels = {"muonchannel", "electronchannel", "invisiblechannel"};
   std::vector<std::string> years = {"2016", "2017", "2018", "RunII"};
 
-
   std::unique_ptr<CreateRooWorkspace> roo;
-
 
   if (argc>1) {
     std::string histFolder, channel, collection, year, min="", max="";

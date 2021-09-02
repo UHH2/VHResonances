@@ -160,8 +160,9 @@ private:
 
   std::vector<std::string> systematics = {"lumi", "JEC", "JER","MuonScale"};
   // std::vector<std::string> systematics = {"lumi"};
-  std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
-  // std::vector<std::string> SystematicsScale = {};
+  //Not implemented for bkg yet
+  // std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
+  std::vector<std::string> SystematicsScale = {};
   std::vector<std::string> Var_murmuf = {"upup", "upnone", "noneup", "nonedown", "downnone", "downdown"};
   const int PDF_variations = 100;
   bool xmin_set = false;

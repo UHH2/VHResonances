@@ -55,7 +55,9 @@ class PlotBTagEfficiencies(VariablesBase):
         for year in self.years:
             # Load MC_DY histos
             for channel in self.Channels:
-                filename = self.Path_STORAGE+year+"/Preselection/Puppi/"+channel+"channel/nominal/uhh2.AnalysisModuleRunner.MC.MC_DY_"+year+"_noTree_merge.root"
+                if "invisible" in channel: continue
+                # filename = self.Path_STORAGE+year+"/Preselection/Puppi/"+channel+"channel/nominal/uhh2.AnalysisModuleRunner.MC.MC_DY_"+year+"_noTree_merge.root"
+                filename = self.Path_STORAGE+year+"/Preselection/Puppi/"+channel+"channel/nominal/uhh2.AnalysisModuleRunner.MC.MC_ZprimeToZH_"+year+"_noTree.root"
                 file_ = ROOT.TFile(filename)
                 for cut,flavor,mode in list(itertools.product(self.Cuts, self.Flavours, self.Modes)):
                     hname = year+channel+cut+flavor+mode
@@ -71,6 +73,7 @@ class PlotBTagEfficiencies(VariablesBase):
                 file_.Close()
             # Calculate MC_DY efficiencies
             for channel in self.Channels + [self.lepton]:
+                if "invisible" in channel: continue
                 for cut,flavor in list(itertools.product(self.Cuts, self.Flavours)):
                         hname = year+channel+cut+flavor
                         self.histos[hname] = self.histos[hname+"Passing"].Clone(hname)
@@ -96,6 +99,7 @@ class PlotBTagEfficiencies(VariablesBase):
             self.ResetCanvas(flavor)
             for year in self.years:
                 for channel in self.Channels + [self.lepton]:
+                    if "invisible" in channel: continue
                     hname = year+channel+self.defaultCut+flavor
                     self.histos[hname+"pt"] = ROOT.TH1D(hname+"pt",hname+"pt", ROOT.BTagMCEffBinsPt.size()-1,array('d',list(ROOT.BTagMCEffBinsPt)))
                     for x in range(1,self.histos[hname+"pt"].GetNbinsX()+1):
@@ -107,7 +111,7 @@ class PlotBTagEfficiencies(VariablesBase):
                             else : point = colors[col]
                     tdrDraw(self.histos[hname+"pt"], "P", point, color, 1, color, 0, color)
                     self.leg.AddEntry(self.histos[hname+"pt"], hname.replace(self.defaultCut,"").replace("FlavUDSG","_light"), "lp")
-            self.canv.SaveAs(self.outdir+"Years_lepton_"+flavor+".pdf")
+            self.canv.SaveAs(self.outdir+"Years_lepton_"+flavor+"_Signal.pdf")
 
     def SaveRootFiles(self):
         for year in self.years:
@@ -121,7 +125,7 @@ def main():
     PlotSyst = PlotBTagEfficiencies()
     PlotSyst.LoadHistos()
     PlotSyst.PlotHistos()
-    PlotSyst.SaveRootFiles()
+    # PlotSyst.SaveRootFiles()
 
 
 if __name__ == '__main__':

@@ -3,10 +3,9 @@ from array import array
 
 import tdrstyle_all as TDR
 TDR.writeExtraText = True
-TDR.extraText  = "Simulation"
-TDR.extraText2 = "Work in progress"
+TDR.extraText = "Work in progress"
 
-ForThesis(TDR)
+# ForThesis(TDR)
 
 class HEMIssueImpact(VariablesBase):
     def __init__(self):
@@ -14,52 +13,38 @@ class HEMIssueImpact(VariablesBase):
         TDR.lumi_13TeV  = str("2018 RunCD")
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/HEMIssueImpact/"
         os.system("mkdir -p "+self.outdir)
-        self.histfolder = "nTopJet_DeepAk8_ZHccvsQCD_MD_SR"
+        # self.histfolders = ["nocuts", "weights", "HEM", "cleaned", "JetDiLeptonPhiAngular", "QCDRejection", "ScaleFactors", "ExtraCleaning", "DeepAk8_ZHccvsQCD_MD_SR"]
+        self.histfolders = ["cleaned", "ScaleFactors", "ExtraCleaning"]
         self.hname = "etaphi_1"
         self.defaultYear = "2018"
 
-
-    def CalculateImpact(self):
-        for ch in self.Channels:
-            for mass in self.MassPointsReduced:
-                fname = self.Path_STORAGE+self.defaultYear+"/SignalRegion/Puppi/"+ch+"channel/nominal/"+self.PrefixrootFile+"MC."+self.Signal+("_inv" if "inv" in ch else "")+"_M"+str(mass)+"_"+self.defaultYear+"_"+"noTree.root"
-                if not os.path.isfile(fname):
-                    print "NOT FOUND,", fname
-                    continue
-                f_ = rt.TFile(fname)
-
-                h2D = f_.Get(self.histfolder+"/"+self.hname)
-                print ch, mass, round(100.*h2D.Integral(h2D.GetXaxis().FindBin(-3.2),h2D.GetXaxis().FindBin(-1.3),h2D.GetYaxis().FindBin(-1.57),h2D.GetYaxis().FindBin(-0.87))/h2D.Integral(),2), "%"
-
     def Plot2D(self):
-        for ch in self.Channels:
-            sampleList = list(filter(lambda x: "DATA" in x, self.SubSamples_Year_Dict[self.defaultYear]))
-            sampleList = list(filter(lambda x: "RunC" in x or "RunD" in x, sampleList))
-            if "muo" in ch: sampleList = list(filter(lambda x: "Muon" in x, sampleList))
-            if "inv" in ch: sampleList = list(filter(lambda x: "MET" in x, sampleList))
-            if "ele" in ch: sampleList = list(filter(lambda x: "Ele" in x or "Pho" in x, sampleList))
-            h2D_sum = 0
-            for sample in sampleList:
-                fname = self.Path_STORAGE+self.defaultYear+"/Preselection/Puppi/"+ch+"channel/nominal/"+self.PrefixrootFile+"DATA."+sample+"_noTree.root"
+        for mode in ["HEM","noHEM"]:
+            for ch in self.Channels:
+                sampleList = list(filter(lambda x: "DATA" in x, self.Processes_Year_Dict[self.defaultYear]))
+                if "muo" in ch: sampleList = list(filter(lambda x: "Muon" in x, sampleList))
+                if "inv" in ch: sampleList = list(filter(lambda x: "MET" in x, sampleList))
+                if "ele" in ch: sampleList = list(filter(lambda x: "Ele" in x, sampleList))
+                if len(sampleList)>1: raise "ERROR"
+                fname = self.Path_STORAGE+self.defaultYear+"/HEMIssueStudy_"+mode+"/Puppi/"+ch+"channel/nominal/"+self.PrefixrootFile+"DATA."+sampleList[0]+"_noTree_merge.root"
                 f_ = rt.TFile(fname)
-                h2D = f_.Get("nTopJet_JetDiLeptonPhiAngular/"+self.hname)
-                if h2D_sum==0:
-                    h2D_sum = h2D.Clone(ch)
-                    h2D_sum.SetDirectory(0)
-                else:
-                    h2D_sum.Add(h2D)
+                for hfolder in self.histfolders:
+                    h2D = f_.Get("nTopJet_"+hfolder+"/"+self.hname)
+                    print mode, ch, hfolder, round(100.*h2D.Integral(h2D.GetXaxis().FindBin(-3.2),h2D.GetXaxis().FindBin(-1.3),h2D.GetYaxis().FindBin(-1.57),h2D.GetYaxis().FindBin(-0.87))/h2D.Integral(),2), "%"
+                    canv = tdrCanvas(mode+ch+hfolder, -2.6, 2.6, -3.3, 3.3, "#eta^{jet}","#phi^{jet}", square=kSquare, is2D=True, iPos=0)
+                    #canv.SetLogz(1)
+                    SetAlternative2DColor(h2D)
+                    h2D.GetZaxis().SetTitle("Number of jets")
+                    h2D.GetZaxis().SetTitleOffset(1.35)
+                    h2D.RebinX(10)
+                    h2D.RebinY(15)
+                    tdrDraw(h2D, "colz")
+                    canv.Update()
+                    canv.SaveAs(self.outdir+ch+"_RunCD_"+self.defaultYear+"_"+hfolder+"_"+mode+".pdf")
                 f_.Close()
-            canv = tdrCanvas(ch, -2.6, 2.6, -3.3, 3.3, "#eta^{jet}","#phi^{jet}", square=kSquare, is2D=True)
-            SetAlternative2DColor(h2D_sum)
-            tdrDraw(h2D_sum, "colz")
-            canv.Update()
-
-            canv.SaveAs(self.outdir+ch+"_RunCD_"+self.defaultYear+".pdf")
-
 
 def main():
     HEM = HEMIssueImpact()
-    HEM.CalculateImpact()
     HEM.Plot2D()
 
 if __name__ == '__main__':

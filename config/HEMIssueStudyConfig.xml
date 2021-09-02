@@ -38,7 +38,7 @@
 <!ENTITY jetid                      "true">  <!--true/false -->
 <!ENTITY topjetid                   "true">  <!--true/false -->
 <!ENTITY do_metcorrection           "true">  <!--true/false -->
-<!ENTITY doHEM                      "false"> <!--true/false -->
+<!ENTITY doHEM                      "true"> <!--true/false -->
 
 <!-- Systematic uncertainties -->
 <!ENTITY JEC_Version                "defaultValue">

@@ -13,6 +13,7 @@ class PlotLimits(VariablesBase):
         VariablesBase.__init__(self)
         self.isObs = isObs
         self.MassPoints = array('d',[float(x) for x in self.MassPointsReduced])
+        self.MassPoints = array('d',[float(x) for x in [1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000]])
         self.nPoints = len(self.MassPoints)
         self.outdir = self.Path_ANALYSIS+"Analysis/Limits/"
         os.system("mkdir -p "+self.outdir)
@@ -21,10 +22,10 @@ class PlotLimits(VariablesBase):
 
         self.colors = { "muon":            ROOT.kOrange+1,
                         "electron":        ROOT.kAzure+1,
-                        "charged leptons": ROOT.kGreen+2,
+                        "charged lepton":  ROOT.kGreen+2,
                         "invisible":       ROOT.kViolet-3,
                         "neutrino":        ROOT.kViolet-3,
-                        "leptons":         ROOT.kRed+1,
+                        "lepton":          ROOT.kRed+1,
         }
 
     def CreateDefaultGraphs(self):
@@ -32,6 +33,30 @@ class PlotLimits(VariablesBase):
         yval = {}
         self.graphs = {}
         self.PlotDetails = {}
+
+        self.graphs["Default_obs"] = ROOT.TGraphErrors()
+        self.graphs["Default_obs"].SetLineColor(ROOT.kBlack)
+        self.graphs["Default_obs"].SetLineStyle(ROOT.kSolid)
+        self.graphs["Default_obs"].SetFillStyle(0)
+        self.graphs["Default_obs"].SetFillColor(ROOT.kBlack)
+
+        self.graphs["Default_exp"] = ROOT.TGraphErrors()
+        self.graphs["Default_exp"].SetLineColor(ROOT.kBlack)
+        self.graphs["Default_exp"].SetLineStyle(ROOT.kDashed)
+        self.graphs["Default_exp"].SetFillStyle(0)
+        self.graphs["Default_exp"].SetFillColor(ROOT.kBlack)
+
+        self.graphs["Default_band1"] = ROOT.TGraphErrors()
+        self.graphs["Default_band1"].SetLineColor(ROOT.kGreen+2)
+        self.graphs["Default_band1"].SetLineStyle(ROOT.kSolid)
+        self.graphs["Default_band1"].SetFillStyle(1000)
+        self.graphs["Default_band1"].SetFillColor(ROOT.kGreen+2)
+
+        self.graphs["Default_band2"] = ROOT.TGraphErrors()
+        self.graphs["Default_band2"].SetLineColor(ROOT.kOrange)
+        self.graphs["Default_band2"].SetLineStyle(ROOT.kSolid)
+        self.graphs["Default_band2"].SetFillStyle(1000)
+        self.graphs["Default_band2"].SetFillColor(ROOT.kOrange)
 
         xval["theo"] = [800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600, 3700, 3800, 3900, 4000, 4100, 4200, 4300, 4400, 4500, 4600, 4700, 4800, 4900, 5000]
         yval["HVT_A"] = [578.0999, 358.3873, 231.6927, 154.8033, 106.2204, 74.50991, 53.23298, 38.62051, 28.39542, 21.11701, 15.85439, 12.00795, 9.163542, 7.039392, 5.439621, 4.225485, 3.297668, 2.584068, 2.032477, 1.604015, 1.269687, 1.009061, 0.8013809, 0.6388036, 0.5101927, 0.4081523, 0.3269965, 0.2623107, 0.2106453, 0.1693069, 0.1361855, 0.109623, 0.08828075, 0.07113544, 0.05733185, 0.04620448, 0.03724663, 0.03002855, 0.02420639, 0.01950782, 0.01571446, 0.01265338, 0.01018433]
@@ -54,13 +79,14 @@ class PlotLimits(VariablesBase):
 
         # self.PlotDetails["HVT_A"]  = {"color": ROOT.kViolet-9, "lstyle": ROOT.kSolid, "LegName": "HVT model A"}
         # self.PlotDetails["HVT_B"]  = {"color": ROOT.kViolet-1, "lstyle": ROOT.kSolid, "LegName": "HVT model B"}
-        self.PlotDetails["HVT_A"]  = {"color": ROOT.kRed+2,    "lstyle": ROOT.kSolid, "LegName": "HVT model A"}
-        self.PlotDetails["HVT_B"]  = {"color": ROOT.kAzure+10, "lstyle": ROOT.kSolid, "LegName": "HVT model B"}
-        self.PlotDetails["Hbb"]    = {"color": ROOT.kAzure,    "lstyle": ROOT.kDashed, "LegName": "B2G-19-006 Hbb"}
-        self.PlotDetails["Hbb0b"]  = {"color": ROOT.kAzure,    "lstyle": ROOT.kDashed, "LegName": "B2G-19-006 H0b"}
-        self.PlotDetails["ZeeH0b"] = {"color": ROOT.kAzure,    "lstyle": ROOT.kDashed, "LegName": "B2G-19-006 ZeeH0b"}
+        self.PlotDetails["HVT_A"]  = {"color": ROOT.kRed+2,    "lstyle": ROOT.kSolid,  "LegName": "HVT model A"}
+        self.PlotDetails["HVT_B"]  = {"color": ROOT.kAzure+10, "lstyle": ROOT.kSolid,  "LegName": "HVT model B"}
+        self.PlotDetails["Hbb"]    = {"color": ROOT.kAzure,    "lstyle": ROOT.kDotted, "LegName": "B2G-19-006 2b cat."}
+        self.PlotDetails["Hbb0b"]  = {"color": ROOT.kAzure,    "lstyle": ROOT.kDashed, "LegName": "B2G-19-006 0b cat."}
+        self.PlotDetails["ZeeH0b"] = {"color": ROOT.kAzure,    "lstyle": ROOT.kDashed, "LegName": "#splitline{B2G-19-006}{0b cat. (Z#rightarrow ee)}"}
+# arXiv:2102.08198, CMS-B2G-19-006, CERN-EP-2021-009
 
-    def CreateGraphDefault(self, GraphName = "chargedLeptons", FileName = "Limits_ZHcc_MD"):
+    def CreateGraphDefault(self, GraphName = "chargedlepton", FileName = "Limits_ZHcc_MD"):
         vals = {}
         for line in open(self.outdir+FileName+"_"+GraphName+".txt").readlines():
             name = line.split()[0]
@@ -85,19 +111,26 @@ class PlotLimits(VariablesBase):
                 if "Expected 84.0%:" in line: name = "exp_1sigmaPos"
                 if "Expected 97.5%:" in line: name = "exp_2sigmaPos"
                 vals[name][index] = line.split()[4]
+        # print channel, FileName
         for x in vals:
             if "sigmaNeg" in x: vals[x] = vals["exp"] - vals[x]
             if "sigmaPos" in x: vals[x] = vals[x] - vals["exp"]
             vals[x] = array('d',vals[x])
+            # print x, "=", [round(el,3) for el in vals[x]]
         self.CreateGraph(vals, channel, extraName)
 
     def CreateGraph(self, vals, GraphName, extraName=""):
-        dummy = array('d',np.array([0]*self.nPoints))
-        self.graphs[extraName+GraphName+"band1"] = ROOT.TGraphAsymmErrors(self.nPoints, self.MassPoints, vals["exp"], dummy, dummy, vals["exp_1sigmaNeg"], vals["exp_1sigmaPos"])
-        self.graphs[extraName+GraphName+"band2"] = ROOT.TGraphAsymmErrors(self.nPoints, self.MassPoints, vals["exp"], dummy, dummy, vals["exp_2sigmaNeg"], vals["exp_2sigmaPos"])
-        self.graphs[extraName+GraphName+"exp"]   = ROOT.TGraphErrors(self.nPoints, self.MassPoints, vals["exp"])
+        nPoints = self.nPoints
+        xval = self.MassPoints
+        # if nPoints != len(vals["exp"]):
+        #     nPoints = len(vals["exp"])
+        #     xval = array('d',[float(x) for x in self.MassPointsReduced])
+        dummy = array('d',np.array([0]*nPoints))
+        self.graphs[extraName+GraphName+"band1"] = ROOT.TGraphAsymmErrors(nPoints, xval, vals["exp"], dummy, dummy, vals["exp_1sigmaNeg"], vals["exp_1sigmaPos"])
+        self.graphs[extraName+GraphName+"band2"] = ROOT.TGraphAsymmErrors(nPoints, xval, vals["exp"], dummy, dummy, vals["exp_2sigmaNeg"], vals["exp_2sigmaPos"])
+        self.graphs[extraName+GraphName+"exp"]   = ROOT.TGraphErrors(nPoints, xval, vals["exp"])
         if self.isObs:
-            self.graphs[extraName+GraphName+"obs"]   = ROOT.TGraphErrors(self.nPoints, self.MassPoints, vals["obs"])
+            self.graphs[extraName+GraphName+"obs"]   = ROOT.TGraphErrors(nPoints, xval, vals["obs"])
 
         self.PlotDetails[extraName+GraphName+"band1"] = {"color": ROOT.kGreen+2, "lstyle": ROOT.kSolid, "LegName": "68% Expected"}
         self.PlotDetails[extraName+GraphName+"band2"] = {"color": ROOT.kOrange,  "lstyle": ROOT.kSolid, "LegName": "95% Expected"}
@@ -105,19 +138,32 @@ class PlotLimits(VariablesBase):
         if self.isObs:
             self.PlotDetails[extraName+GraphName+"obs"]   = {"color": ROOT.kBlack,   "lstyle": ROOT.kSolid, "LegName": "Observed"}
 
-    def CreateCanvas(self, PlotName, headerName = ""):
-        self.canv = tdrCanvas(PlotName, 1200, 5200, 1e-01, 700, "M(Z') [GeV]", "#sigma#left(pp#rightarrowZ'#right) #times Br#left(Z'#rightarrow ZH #right)#left(fb#right)")
+    def SaveCanvas(self, FileName, isStored):
+        self.canv.Update()
+        self.canv.RedrawAxis()
+        self.canv.SaveAs(self.outdir+"Limits_"+FileName+("_Final" if isStored else "")+("_obs" if self.isObs else "")+".pdf")
+
+    def CreateCanvas(self, PlotName, headerName = "", isStored=False):
+        self.canv = tdrCanvas(PlotName+("_Final" if isStored else ""), 1200, 5200, 0.5e-01, 400, "M(Z') [GeV]", "#sigma#left(pp#rightarrowZ'#right) #times Br#left(Z'#rightarrow ZH #right)#left[fb#right]")
         self.canv.SetLogy(1)
-        if headerName!="":
-            self.leg = tdrLeg(0.70, 0.6, 0.9, 0.85, 0.035, 42, ROOT.kBlack);
+        isDeepAk8 = "DeepAk8" in headerName
+        nElementsLegend = 0.07*3 if isDeepAk8 else 0.075*3 if "Expected" in headerName else 0.1*3
+        nElementsTheory = 0.08*2 if isDeepAk8 else (0.05*4 if "muon" in PlotName or "ele" in PlotName else 0.047*4)
+        if headerName!="" and isDeepAk8:
+            self.leg  = tdrLeg(0.63, 0.85-nElementsLegend, 0.89, 0.85, 0.04, 42, ROOT.kBlack)
         else:
-            self.leg  = tdrLeg(0.70, 0.7, 0.90, 0.85, 0.035, 42, ROOT.kBlack)
-        self.leg_theo = tdrLeg(0.40, 0.7, 0.60, 0.85, 0.035, 42, ROOT.kBlack)
-        self.leg.SetHeader("95% Upper Limit" if headerName=="" else headerName, "L")
-        if (self.isObs): self.leg.AddEntry(ROOT.TObject(), "Observed", "L")
+            self.leg  = tdrLeg(0.68 if not "Expected" in headerName else 0.70, 0.85-nElementsLegend, 0.89, 0.85, 0.04, 42, ROOT.kBlack)
+        self.leg.SetHeader("95% CL upper limit" if headerName=="" else headerName, "L")
+        # if not "Expected" in headerName or "Channels" o:
+        self.leg_theo = tdrLeg(0.40, 0.85-nElementsTheory, 0.60, 0.85, 0.04, 42, ROOT.kBlack)
+        self.leg_theo.SetHeader("Theory prediction", "L")
+        if not "Expected" in headerName:
+            if (self.isObs): self.leg.AddEntry(self.graphs["Default_obs"], "Observed", "L")
+            self.leg.AddEntry(self.graphs["Default_exp"], "Expected", "L")
+            self.leg.AddEntry(self.graphs["Default_band1"], "68% Expected", "CF")
+            self.leg.AddEntry(self.graphs["Default_band2"], "95% Expected", "CF")
 
-
-    def PlotLines(self, GraphName, isBand = False, LegName="", Color=None):
+    def PlotLines(self, GraphName, isBand = False, LegName="", Color=None, isObs=False, LStyle=None):
         if not GraphName in self.graphs:
             print "ERROR: "+GraphName+" not found"
         else:
@@ -128,11 +174,12 @@ class PlotLimits(VariablesBase):
             if LegName=="":
                 LegName = self.PlotDetails[GraphName]["LegName"]
             else:
-                lstyle = ROOT.kSolid
+                lstyle = LStyle if LStyle else ROOT.kSolid
                 color = Color if Color else self.colors[LegName]
-            tdrDraw(self.graphs[GraphName], "e3" if isBand else "C", ROOT.kFullCircle, color, lstyle, color, 1000 if isBand else 0, color)
+            tdrDraw(self.graphs[GraphName], "e3" if isBand else ("" if isObs else "C"), ROOT.kFullCircle, color, lstyle, color, 1000 if isBand else 0, color)
             if "Expected" in self.PlotDetails[GraphName]["LegName"]:
-                self.leg.AddEntry(self.graphs[GraphName], LegName, "CF" if isBand else "L")
+                if not isBand and LegName !="Expected":
+                    self.leg.AddEntry(self.graphs[GraphName], LegName, "CF" if isBand else "L")
             elif not "Observed" in LegName:
                 self.leg_theo.AddEntry(self.graphs[GraphName], LegName, "l")
 
@@ -141,7 +188,7 @@ class PlotLimits(VariablesBase):
             self.PlotLines(GraphName+"band1", isBand=True)
             self.PlotLines(GraphName+"exp")
             if self.isObs:
-                self.PlotLines(GraphName+"obs")
+                self.PlotLines(GraphName+"obs",isObs=True)
 
     def PlotTheoryLines(self):
         self.PlotLines("HVT_A")
@@ -155,50 +202,54 @@ class PlotLimits(VariablesBase):
             self.PlotLines("ZeeH0b")
 
     def PlotLimitsStandard(self, PlotName, isStored =True):
-        self.CreateCanvas(PlotName)
+        self.CreateCanvas(PlotName, isStored=isStored)
         if isStored:
             self.CreateGraphDefault(PlotName)
         else:
             self.CreateGraphIterative(PlotName)
         self.PlotBand(PlotName)
         self.PlotTheoryLines()
+        if "chargedlepton" in PlotName:
+            self.PlotLines("muon"+"exp",   LegName= "Expected Z#rightarrow #mu#mu", Color = ROOT.kAzure, LStyle=9)
+            self.PlotLines("electron"+"exp",   LegName= "Expected Z#rightarrow ee", Color = ROOT.kRed+1, LStyle=9)
+        self.SaveCanvas(PlotName+"_NoRef", isStored)
         self.PlotReferenceLines(("muon"in PlotName or "ele" in PlotName))
-        self.canv.Update()
-        self.canv.RedrawAxis()
-        self.canv.SaveAs(self.outdir+"Limits_"+PlotName+".pdf")
+        self.SaveCanvas(PlotName, isStored)
 
-    def PlotLimitsCompare(self, PlotName, isStored =True):
-        self.CreateCanvas(PlotName)
-        self.CreateGraphIterative("lepton", FileName = "DeepAk8_H4qvsQCD", extraName="H4q")
-        self.PlotLines("lepton"+"exp", LegName= "ZHccvsQCD", Color=ROOT.kGreen+2)
-        self.PlotLines("H4q"+"lepton"+"exp", LegName= "H4qvsQCD", Color=ROOT.kRed+1)
+    def PlotLimitsCompare(self, PlotName, isStored = False):
+        self.CreateCanvas(PlotName, headerName="DeepAk8 score")
+        # histFolders = ["DeepAk8_H4qvsQCD", "DeepAk8_H4qvsQCD_massdep", "DeepAk8_H4qvsQCD_massdep_HccvsQCD", "DeepAk8_HccvsQCD", "DeepAk8_ZHccvsQCD_MD2", "tau42"]
+        histFolders = ["DeepAk8_H4qvsQCD", "DeepAk8_H4qvsQCD_massdep"]
+        infos = {"DeepAk8_H4qvsQCD":         {"LegName":  "H4qvsQCD   1-dim.",    "Color": ROOT.kOrange+1},
+                 "DeepAk8_H4qvsQCD_massdep": {"LegName":  "H4qvsQCD   p_{T}-dep.", "Color": ROOT.kAzure+2},
+                  }
+        for fname in histFolders:
+            LegName = infos[fname]["LegName"]
+            if isStored:
+                self.CreateGraphDefault(PlotName)
+            else:
+                self.CreateGraphIterative("lepton", FileName = fname, extraName = LegName)
+            self.PlotLines(LegName+"lepton"+"exp", LegName = LegName, Color = infos[fname]["Color"])
+        self.PlotLines("lepton"+"exp", LegName= "ZHccvsQCD 1-dim.", Color=ROOT.kGreen+2)
         self.PlotTheoryLines()
-        self.canv.Update()
-        self.canv.RedrawAxis()
-        self.canv.SaveAs(self.outdir+"Limits_"+PlotName+".pdf")
+        self.SaveCanvas(PlotName, isStored)
 
-    def CompareChannels(self):
-        self.CreateCanvas("Channels", "Channels")
+    def CompareChannels(self, extraText=""):
+        self.CreateCanvas("Channels"+extraText, "Expected")
         self.PlotLines("muon"+"exp",   LegName= "muon")
         self.PlotLines("electron"+"exp",   LegName= "electron")
-        self.PlotLines("chargedlepton"+"exp",   LegName= "charged leptons")
-        self.PlotLines("neutrino"+"exp",   LegName= "neutrino")
-        self.PlotLines("Leptons"+"exp",   LegName= "leptons")
-        self.PlotTheoryLines()
+        self.PlotLines("chargedlepton"+"exp",   LegName= "charged lepton")
+        self.PlotLines("invisible"+"exp",   LegName= "neutrino")
+        self.PlotLines("lepton"+"exp",   LegName= "lepton")
+        # self.PlotTheoryLines()
         self.PlotReferenceLines()
-        self.canv.Update()
-        self.canv.RedrawAxis()
-        self.canv.SaveAs(self.outdir+"Limits_Channels.pdf")
+        self.SaveCanvas("Channels"+extraText,False)
 
 
 if __name__ == '__main__':
-    PlotBkg = PlotLimits(isObs = False)
-    PlotBkg.PlotLimitsStandard("Leptons")
-    PlotBkg.PlotLimitsStandard("neutrino")
-    PlotBkg.PlotLimitsStandard("muon", isStored=False)
-    PlotBkg.PlotLimitsStandard("electron", isStored=False)
-    PlotBkg.PlotLimitsStandard("chargedlepton", isStored=False)
-    PlotBkg.PlotLimitsStandard("invisible", isStored=False)
-    PlotBkg.PlotLimitsStandard("lepton", isStored=False)
-    PlotBkg.PlotLimitsCompare("H4qvsZH", isStored=False)
+    PlotBkg = PlotLimits(isObs = True)
+    for channel in ["muon", "electron", "chargedlepton", "invisible", "lepton"]:
+        PlotBkg.PlotLimitsStandard(channel, isStored=True)
+        # PlotBkg.PlotLimitsStandard(channel, isStored=False)
+    PlotBkg.PlotLimitsCompare("DeepAk8scores", isStored=False)
     PlotBkg.CompareChannels()

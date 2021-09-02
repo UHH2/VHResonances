@@ -4,7 +4,7 @@ import tdrstyle_all as TDR
 import datetime
 TDR.writeExtraText = True
 TDR.extraText  = "Simulation"
-TDR.extraText2 = "Private work"
+TDR.extraText2 = "Work in progress"
 
 #ForThesis(TDR)
 
@@ -80,7 +80,7 @@ class PlotHistograms(VariablesBase):
         else: MassPoints = self.MassPoints
         for year in years:
             for var in self.Variables:
-                TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}"
+                TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}" if TDR.extraText!="Simulation" else "MC "+year
                 self.CreateCanvas(year+var)
                 for mode in self.Modes:
                     for mass in MassPoints:

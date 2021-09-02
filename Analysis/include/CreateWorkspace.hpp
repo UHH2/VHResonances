@@ -89,8 +89,8 @@
 
 
 // const std::vector<double> MyMassPoints = {1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000};
-
 const std::vector<double> MyMassPoints = {1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000};
+// const std::vector<double> MyMassPoints = {1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000};
 
 double GetRange(TH1F* h, double x);
 
@@ -252,6 +252,7 @@ private:
 
   TString extra_text = doFtest? "_Ftest_": "";
 
+  // double x_lo     = 800;
   double x_lo     = 1000;
   double x_hi     = 6000;
   double x_lo_short = 1000;
@@ -286,14 +287,14 @@ private:
   const std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, double>>> ranges = {
     { "SR", {
       { "muonchannel", {
-        { "fit_lo",  1200},
-        { "fit_hi",  4400},
+        { "fit_lo",  1000},
+        { "fit_hi",  3000},
         { "show_lo", 1000},
         { "show_hi", 4500},
       }},
       { "electronchannel", {
-        { "fit_lo",  1200},
-        { "fit_hi",  4200},
+        { "fit_lo",  900},
+        { "fit_hi",  2800},
         { "show_lo", 1000},
         { "show_hi", 4500},
       }},

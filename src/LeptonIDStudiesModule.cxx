@@ -77,17 +77,20 @@ protected:
 
   Event::Handle<std::vector<Jet> > h_jets;
   Event::Handle<std::vector<TopJet> > h_topjets;
-
   // Define common modules
   std::unique_ptr<uhh2::Selection> lumi_selection;
   std::vector<std::unique_ptr<AnalysisModule>> weightsmodules, modules;
   std::unique_ptr<uhh2::AndSelection> metfilters_selection;
   std::unique_ptr<GenericJetCleaner> GJC, GTJC;
+  std::unique_ptr<AnalysisModule> PDFReweight_module;
 
   // Define selections
+  std::unordered_map<std::string, std::unique_ptr<Selection>> Trigger_selection;
   std::shared_ptr<Selection> NBoostedJetSel;
   std::shared_ptr<VetoSelection> VetoLeptonSel;
   std::shared_ptr<Selection> NoLeptonSel, NLeptonSel, DeltaRDiLepton_selection, JetDiLeptonPhiAngularSel;
+  std::unique_ptr<Selection> HEMEventCleaner_Selection;
+
 
 };
 
@@ -136,6 +139,9 @@ LeptonIDStudiesModule::LeptonIDStudiesModule(uhh2::Context& ctx){
 
   // Set up variables
   MS["year"]              = ctx.get("year");
+  MS["dataset_version"]   = ctx.get("dataset_version");
+  MB["is_SingleElectron"] = FindInString("SingleElectron", MS["dataset_version"]);
+  MB["is_SinglePhoton"]   = FindInString("SinglePhoton",   MS["dataset_version"]);
   MB["is_mc"]             = ctx.get("dataset_type") == "MC";
   MB["isPuppi"]           = string2bool(ctx.get("isPuppi"));
   MB["isCHS"]             = string2bool(ctx.get("isCHS"));
@@ -193,6 +199,7 @@ LeptonIDStudiesModule::LeptonIDStudiesModule(uhh2::Context& ctx){
 
   weightsmodules.emplace_back(new GenLevelJetMatch(ctx,MS["topjetLabel"]));
   weightsmodules.emplace_back(new FinalStateMatching(ctx));
+  weightsmodules.emplace_back(new NLOCorrections(ctx));
 
   // https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2
   metfilters_selection.reset(new AndSelection(ctx, "metfilters"));
@@ -207,9 +214,13 @@ LeptonIDStudiesModule::LeptonIDStudiesModule(uhh2::Context& ctx){
   if (!MB["is_mc"]) metfilters_selection->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter"); /* TODO Not recommended for MC, but do check */
   /* metfilters_selection->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter"); TODO Not recommended, under review.*/
 
+  //Quick fix for Detector issues
+  HEMEventCleaner_Selection.reset(new HEMCleanerSelection(ctx, MS["jetLabel"], MS["topjetLabel"], true, false));
+
   GJC.reset( new GenericJetCleaner(ctx, MS["jetLabel"],    false, jetId, topjetId, muoId, eleId));
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
 
+  PDFReweight_module.reset(new PDFReweight(ctx));
   NBoostedJetSel.reset(new NTopJetSelection(1,-1,topjetId,h_topjets));
 
   if (MB["muonchannel"]) {

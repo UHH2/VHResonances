@@ -28,26 +28,45 @@ class PlotNLOCorrections(VariablesBase):
         self.histos = {}
         self.histFolder = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/Theory/"
         self.nameXaxis = "p_{T}^{V} (GeV)"
-        self.nameYaxis = "Theory Corrections"
+        self.nameYaxis = "Theory correction factor"
         self.Xaxis_min = {"all": 30.0,   "qcd_nnlo": 30.0,   "qcd": 50.0,   "ewk": 50.0,   "nlo_simple": 100.0,  "nlo_pdfwgt": 50.0,   "qcd_ewk": 100.0}
         self.Xaxis_max = {"all": 2100.0, "qcd_nnlo": 6000.0, "qcd": 2100.0, "ewk": 1300.0, "nlo_simple": 1260.0, "nlo_pdfwgt": 2100.0, "qcd_ewk": 1300.0}
         self.Yaxis_min = {"all": 0.2,    "qcd_nnlo": 1.02,   "qcd": 0.2,    "ewk": 0.65,   "nlo_simple": 0.60,   "nlo_pdfwgt": 0.2,    "qcd_ewk": 0.2}
         self.Yaxis_max = {"all": 1.65,   "qcd_nnlo": 1.20,   "qcd": 1.65,   "ewk": 1.15,   "nlo_simple": 1.60,   "nlo_pdfwgt": 1.65,   "qcd_ewk": 1.65}
-        self.color = {"z_qcd_ewk":    (ROOT.kMagenta+1,   ROOT.kFullTriangleUp),
-                      "w_qcd_ewk":    (ROOT.kPink+1,      ROOT.kFullTriangleUp),
-                      "z_ewk":        (ROOT.kRed+2,       ROOT.kFullSquare),
-                      "w_ewk":        (ROOT.kOrange+1,    ROOT.kFullSquare),
-                      "g_ewk":        (ROOT.kOrange+2,    ROOT.kFullSquare),
-                      "z_qcd":        (ROOT.kAzure+1,     ROOT.kFullCircle),
-                      "w_qcd":        (ROOT.kAzure-7,     ROOT.kFullCircle),
-                      "g_qcd":        (ROOT.kViolet+1,    ROOT.kFullCircle),
-                      "dy_qcd_2017":  (ROOT.kAzure-2,     ROOT.kFullCircle),
-                      "w_qcd_2017":   (ROOT.kAzure+9,     ROOT.kFullCircle),
-                      "znn_qcd_2017": (ROOT.kBlue-9,    ROOT.kFullCircle),
-                      "eej_qcd_nnlo": (ROOT.kGreen+1,     ROOT.kFullTriangleDown),
-                      "evj_qcd_nnlo": (ROOT.kGreen+2,     ROOT.kFullTriangleDown),
-                      "vvj_qcd_nnlo": (ROOT.kSpring-8,    ROOT.kFullTriangleDown),
-                      "aj_qcd_nnlo":  (ROOT.kGreen+3,     ROOT.kFullTriangleDown),
+        # self.color = {"z_qcd_ewk":    (ROOT.kMagenta+1,   ROOT.kFullTriangleUp),
+        #               "w_qcd_ewk":    (ROOT.kPink+1,      ROOT.kFullTriangleUp),
+        #               "z_ewk":        (ROOT.kRed+2,       ROOT.kFullSquare),
+        #               "w_ewk":        (ROOT.kOrange+1,    ROOT.kFullSquare),
+        #               "g_ewk":        (ROOT.kOrange+2,    ROOT.kFullSquare),
+        #               "z_qcd":        (ROOT.kAzure+1,     ROOT.kFullCircle),
+        #               "w_qcd":        (ROOT.kAzure-7,     ROOT.kFullCircle),
+        #               "g_qcd":        (ROOT.kViolet+1,    ROOT.kFullCircle),
+        #               "dy_qcd_2017":  (ROOT.kAzure-2,     ROOT.kFullCircle),
+        #               "w_qcd_2017":   (ROOT.kAzure+9,     ROOT.kFullCircle),
+        #               "znn_qcd_2017": (ROOT.kBlue-9,      ROOT.kFullCircle),
+        #               "eej_qcd_nnlo": (ROOT.kGreen+1,     ROOT.kFullTriangleDown),
+        #               "evj_qcd_nnlo": (ROOT.kGreen+2,     ROOT.kFullTriangleDown),
+        #               "vvj_qcd_nnlo": (ROOT.kSpring-8,    ROOT.kFullTriangleDown),
+        #               "aj_qcd_nnlo":  (ROOT.kGreen+3,     ROOT.kFullTriangleDown),
+        #               }
+        # ["dy_qcd_2017","znn_qcd_2017","w_qcd_2017"] ["z_qcd","z_ewk","w_qcd", "w_ewk"]
+        self.color = {"w_qcd":        (ROOT.kGreen+2,     ROOT.kFullSquare),
+                      "z_qcd":        (ROOT.kAzure+2,     ROOT.kFullCircle),
+                      "w_ewk":        (ROOT.kRed+1,       ROOT.kFullSquare),
+                      "z_ewk":        (ROOT.kOrange+1,    ROOT.kFullCircle),
+                      "w_qcd_2017":   (ROOT.kGreen+3,     ROOT.kFullSquare),
+                      "dy_qcd_2017":  (ROOT.kAzure-3,     ROOT.kFullTriangleUp),
+                      "znn_qcd_2017": (ROOT.kAzure+3,     ROOT.kFullTriangleDown),
+
+                      "g_qcd":        (ROOT.kViolet+1,    ROOT.kFullCross),
+                      "g_ewk":        (ROOT.kOrange+2,    ROOT.kFullCross),
+                      "w_qcd_ewk":    (ROOT.kAzure+2,     ROOT.kFullSquare),
+                      "z_qcd_ewk":    (ROOT.kMagenta+1,   ROOT.kFullCircle),
+                      "w_qcd_ewk":    (ROOT.kAzure+2,     ROOT.kFullSquare),
+                      "eej_qcd_nnlo": (ROOT.kGreen+1,     ROOT.kFullCross),
+                      "evj_qcd_nnlo": (ROOT.kGreen+2,     ROOT.kFullCross),
+                      "vvj_qcd_nnlo": (ROOT.kSpring-8,    ROOT.kFullCross),
+                      "aj_qcd_nnlo":  (ROOT.kGreen+3,     ROOT.kFullCross),
                       }
 
     def LoadHistos(self):
@@ -115,7 +134,7 @@ class PlotNLOCorrections(VariablesBase):
         tdrHeader(self.leg, "QCD",  textSize = 0.05)
         tdrHeader(self.leg2, "EWK", textSize = 0.05)
 
-        for hname in ["z_qcd","z_ewk","w_qcd", "w_ewk"]:
+        for hname in ["w_qcd", "w_ewk", "z_qcd","z_ewk"]:
             hist = self.histos[hname]
             graph = ROOT.TGraph(hist)
             graphs.append(graph)
@@ -136,17 +155,17 @@ class PlotNLOCorrections(VariablesBase):
         self.ResetCanvas(corr)
         self.leg = tdrLeg(0.65, 0.65, 0.95, 0.89, 0.05)
         tdrHeader(self.leg, "QCD",  textSize = 0.05)
-        for hname in ["dy_qcd_2017","znn_qcd_2017","w_qcd_2017"]:
+        for hname in ["w_qcd_2017","dy_qcd_2017","znn_qcd_2017"]:
             hist = self.histos[hname]
             graph = ROOT.TGraph(hist)
             graphs.append(graph)
             graph.SetLineWidth(5)
             graph.SetMarkerSize(1.7)
-            color = ROOT.kGreen+3 if "w_" in hname else (ROOT.kBlue-3 if "dy_" in hname else ROOT.kOrange+2)
+            color = self.color[hname][0]
             linestyle = ROOT.kDashed if "w_" in hname else ROOT.kSolid
             markerstyle = ROOT.kFullSquare if "w_" in hname else (ROOT.kFullTriangleUp if "dy_" in hname else ROOT.kFullTriangleDown)
             tdrDraw(graph, "CP", markerstyle, color, linestyle, color)
-            nleg = hname.replace("_", " ").replace("dy", "z").upper().replace("ZNN", "Z(#nu#nu)").split()[0]+"+jets"
+            nleg = hname.replace("_", " ").replace("dy", "Z(ll)").replace("w","W").replace("znn", "Z(#nu#nu)").split()[0]+"+jets"
             self.leg.AddEntry(graph, nleg, "lp")
 
         self.canv.SaveAs(self.histFolder+corr+".pdf")

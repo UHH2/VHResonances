@@ -44,18 +44,19 @@ class TaggerCutStudy(VariablesBase):
     def __init__(self):
         VariablesBase.__init__(self)
         TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
+        self.Channels = ['muon', 'electron']
+        print self.Channels
         self.hfName = "Histos"
         self.isFast = True
         self.isFast = False
         self.fName = "TaggerVariables"
         if not self.isFast: self.hfName += "_all"
         self.Samples = filter(lambda x: self.MainBkg in x or self.Signal in x, self.Processes_Year_Dict["2016"])
-        self.Ybins = sorted([x for x in np.arange(0.2,1,0.001)])
+        self.Ybins = sorted([x for x in np.arange(0,1,0.001)])
         self.Xbins = sorted([self.MassPoints[i] - (self.MassPoints[i]-self.MassPoints[i-1])/2 for i in range(1,len(self.MassPoints))]+[500,8500])
         print self.Xbins
         self.Xvars = ["Mass"]
-        # self.Yvars = ["H4q", "Hcc", "WH", "H4q_SR", "Hcc_SR", "WH_SR", "DeltaRll", "DeltaRll_SR"]
-        self.Yvars = [ "ZHcc", "ZHcc_MD", "DeltaRll", "DeltaRll_SR"]
+        self.Yvars = ["H4q","ZHcc_MD", "DeltaRll"]
 
         self.indir  = self.Path_ANALYSIS+"Analysis/OtherPlots/TaggerInfo/"
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/TaggerCutStudy/"
@@ -66,9 +67,6 @@ class TaggerCutStudy(VariablesBase):
         for sample in [self.Signal, self.MainBkg, "MC_TTbar"]:
             self.df.append(joblib.load(self.indir+self.fName+"_"+sample+("_all" if not self.isFast else "")+".pkl"))
         self.df = pd.concat(self.df)
-        self.df["jet_HccvsQCD"] = self.df["jet_Hcc"]/(self.df["jet_Hcc"]+self.df["jet_QCD"])
-        self.df["jet_W"] = self.df.loc[:,["jet_Wqq","jet_Wcq"]].sum(axis=1)
-        self.df["jet_WH"] = (self.df["jet_W"]+self.df["jet_Hqqqq"])/(self.df["jet_W"]+self.df["jet_Hqqqq"]+self.df["jet_QCD"])
 
     @timeit
     def CreateHistos(self):
@@ -80,7 +78,7 @@ class TaggerCutStudy(VariablesBase):
             if DoControl([""], year+channel+sample, channel, sample): continue
             name = Xvar+Yvar+year+channel+sample
             histos[name] = rt.TH2D(name,name,len(self.Xbins)-1,array('d',self.Xbins), len(self.Ybins)-1, array('d',self.Ybins))
-            histos[name+"bins"] = rt.TH2D(name+"bins", name+"bins", 1000, 0, 10000, 2000, 0.2, 1)
+            histos[name+"bins"] = rt.TH2D(name+"bins", name+"bins", 1000, 0, 10000, 2000, 0, 1)
             histos[name].SetDirectory(0)
             histos[name+"bins"].SetDirectory(0)
 
@@ -91,14 +89,12 @@ class TaggerCutStudy(VariablesBase):
 
             for ind, entry in self.df[(self.df["year"]==year) & (self.df["channel"]==channel) & (self.df["sample"]==sample)].iterrows():
                 sample, pt, mass, w = (entry["sample"], entry["jet_pt"],entry["Zprime_mass"], entry["weight_GLP"])
-                DB_H4q, DB_Hcc, DB_WH, DeltaRll, DB_ZHcc, DB_ZHcc_MD = (entry["jet_H4qvsQCD"],entry["jet_HccvsQCD"],entry["jet_WH"], entry["Z_DeltaR_ll"], entry["jet_ZHccvsQCD"], entry["jet_ZHccvsQCD_MD"])
+                DB_H4q, DB_Hcc, DB_ZHcc_MD, DeltaRll = (entry["jet_H4qvsQCD"],entry["jet_HccvsQCD"], entry["jet_ZHccvsQCD_MD"], entry["Z_DeltaR_ll"])
                 for Xvar in self.Xvars:
                     x_val = mass
                     for Yvar in self.Yvars:
-                        y_val = DB_H4q if "H4q" in Yvar else (DB_Hcc if "Hcc" in Yvar else (DeltaRll if "DeltaR" in Yvar else DB_WH))
-                        if "ZHcc" in Yvar:
-                            y_val = DB_ZHcc_MD if "MD" in Yvar else DB_ZHcc
-                        if "SR" in Yvar and DB_H4q<PtDependentCut(pt): continue
+                        y_val = DB_H4q if "H4q" in Yvar else (DB_Hcc if "Hcc" in Yvar else (DeltaRll if "DeltaR" in Yvar else DB_ZHcc_MD))
+                        # if "SR" in Yvar and DB_H4q<PtDependentCut(pt): continue
                         for y_ in [year, "RunII"]:
                             for c_ in [channel, "lepton"]:
                                 signal = self.Signal
@@ -132,7 +128,7 @@ class TaggerCutStudy(VariablesBase):
             # self.histos[name] = file_.Get(name+"bins")
             self.histos[name].SetDirectory(0)
             # self.histos[name].RebinX(100)
-            if self.Signal in sample: self.histos[name].Scale(0.1) #TODO
+            # if self.Signal in sample: self.histos[name].Scale(0.5) #TODO
         file_.Close()
 
     @timeit
@@ -146,7 +142,7 @@ class TaggerCutStudy(VariablesBase):
         histo = rt.TH2D("SensitivityScan","SensitivityScan",len(self.Xbins)-1,array('d',self.Xbins), len(self.Ybins)-1, array('d',self.Ybins))
         x_min = 0
         x_max = 5300
-        canv = tdrCanvas("canv", x_min, x_max, 0.0001, 10, Xvar, DB+"vsQCD")
+        canv = tdrCanvas("canv", x_min, x_max, 0.0001, 10, "M(Z') [GeV]", DB+"vsQCD")
         canv.SetLogy()
         leg = tdrLeg(0.40,0.70,0.95,0.89, 0.025, 42, rt.kBlack)
         # leg.SetNColumns(3)
@@ -196,6 +192,14 @@ class TaggerCutStudy(VariablesBase):
                 if year!="RunII" and channel!="lepton":
                     err2[name].append(DB_cut[name])
 
+            if year=="RunII" and channel=="lepton":
+                print year, channel
+                print "DB"
+                prettydic(DB_cut)
+                print "err"
+                prettydic(err)
+                print "err2"
+                prettydic(err2)
             filtered_pt_max = []
             filtered_DB_cut = []
             filtered_err = []
@@ -303,11 +307,10 @@ class TaggerCutStudy(VariablesBase):
 
 def main():
     TCS = TaggerCutStudy()
-    TCS.CreateHistos()
-    # TCS.SensitivityScan()
-    TCS.SensitivityScan(DB="DeltaRll")
-    # TCS.SensitivityScan(DB="Hcc")
-    # TCS.SensitivityScan(DB="WH")
+    # TCS.CreateHistos()
+    TCS.SensitivityScan(DB="H4q")
+    # TCS.SensitivityScan(DB="DeltaRll")
+    # TCS.SensitivityScan(DB="ZHcc_MD")
 
 if __name__ == '__main__':
     main()

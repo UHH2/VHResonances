@@ -519,7 +519,7 @@ TCanvas* tdrDiCanvas(const char* canvName, double x_min, double x_max, double y_
   // Scale text sizes and margins to match normal size
   hdw->GetYaxis()->SetTitleOffset((square?0.9:1.1) * Hdw / H_ref);
   hdw->GetXaxis()->SetTitleOffset(0.9);
-  hdw->SetTitleSize(hdw->GetTitleSize("Y") * H_ref / Hdw, "Y");
+  hdw->SetTitleSize(((unsigned)strlen(nameYaxis2)<=10)? (hdw->GetTitleSize("Y") * H_ref / Hdw) : (hdw->GetTitleSize("Y") * H_ref / Hdw)*(10./(unsigned)strlen(nameYaxis2)), "Y");
   hdw->SetLabelSize(hdw->GetLabelSize("Y") * H_ref / Hdw, "Y");
   hdw->SetTitleSize(hdw->GetTitleSize("X") * H_ref / Hdw, "X");
   hdw->SetLabelSize(hdw->GetLabelSize("X") * H_ref / Hdw, "X");

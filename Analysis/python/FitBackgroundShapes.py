@@ -41,13 +41,6 @@ def FTest(chi2_1, chi2_2, npar_1, npar_2, n_):
     return 1. - ROOT.TMath.FDistI(((chi2_1-chi2_2)/(npar_2-npar_1))/(chi2_2/(n_-npar_2-1)), npar_2-npar_1, n_-npar_2)
 
 
-# dijetfunction_altp3  f = "[3]*( ROOT.TMath.Power(5.-xp + [2]*x*x/1e6,[0])/(ROOT.TMath.Power(xp,[1]) ))", f_xmin, f_xmax);
-# dijetfunction_p4     f = "[4]*( ROOT.TMath.Power(5.-xp,[0])/(ROOT.TMath.Power(xp,[1] + [2]*ROOT.TMath.Log(xp) + [3]*ROOT.TMath.Log(xp)*ROOT.TMath.Log(xp) ) ) )", f_xmin, f_xmax);
-# dijetfunction_altp4  f = "[4]*( ROOT.TMath.Power(5.-xp + [2]*x*x/1e6,[0])/(ROOT.TMath.Power(xp,[1]+[3]*ROOT.TMath.Log(xp)) ))", f_xmin, f_xmax);
-# dijetfunction_p5     f = "[5]*( ROOT.TMath.Power(5.-xp,[0])) / (ROOT.TMath.Power(xp,[1] + [2]*ROOT.TMath.Log(xp) + [3]*ROOT.TMath.Log(xp)*ROOT.TMath.Log(xp) + [4]*ROOT.TMath.Power(ROOT.TMath.Log(xp),3) ) )", f_xmin, f_xmax);
-
-
-
 class FitBackgroundShapes(VariablesBase):
     def __init__(self, xmin=-1, xmax=-1):
         VariablesBase.__init__(self)
@@ -80,7 +73,7 @@ class FitBackgroundShapes(VariablesBase):
             "electron": {
                 "MC_SR":   (1000, 3000),
                 "MC_CR":   (1100, 3600),
-                "DATA_SR": (900, 1800),
+                "DATA_SR": (900, 3000),
                 "DATA_CR": (1000, 3300),
                 },
             "invisible": {
@@ -155,10 +148,11 @@ class FitBackgroundShapes(VariablesBase):
                         for func_name in self.degrees:
                             self.funcs[func_name] = ROOT.TF1(unique_name+func_name, PolinomialExponent, f_xmin, f_xmax, int(func_name)+1)
                         self.errors = {}
-                        for func_name in self.degrees:
+                        for func_name in self.degrees if not "DATA_SR" in hname else reversed(self.degrees) if "ele" in channel else ["3","1","2"]:
                             func = self.funcs[func_name]
                             func.SetLineColor(self.color[func_name])
-                            fitRes = hist.Fit(unique_name+func_name, "RMQS+")
+                            if "DATA_SR" in hname and "ele" in channel: func.SetLineColor(self.color["2"])
+                            fitRes = hist.Fit(unique_name+func_name, "RMQS" if hname == "DATA_SR" else "RMQS+")
                             self.errors["band"+func_name], self.errors["band_pull"+func_name], self.errors["pull"+func_name] = ComputeHistWithCL(unique_name+func_name, func, fitRes, hist, cl=0.68)
                             self.errors["band2"+func_name], self.errors["band_pull2"+func_name], self.errors["pull2"+func_name] = ComputeHistWithCL(unique_name+func_name, func, fitRes, hist, cl=0.95)
                             self.chi2[func_name] = (func.GetChisquare(), func.GetNDF(), func.GetProb())
@@ -167,47 +161,68 @@ class FitBackgroundShapes(VariablesBase):
                         ymax = 5*1e02
                         ymin = 0.00101
                         if "CR" in hname:
+                            ymin = 0.101
                             ymax = 1e05
                         if "DATA" in hname:
                             ymin = 1
                             ymax = 1e04
                         if "DATA_SR" in hname:
                             ymin = 0.101
+                            ymax = 1e03
                         if "MC_SR" in hname:
                             ymin = 0.0501
                         if isInv:
+                            ymin = 0.101
                             ymax = 1e07
+                            if "DATA_SR" in hname:
+                                ymax = 1e05
                         # if not isInv and "SR" in hname: ymax = 1e02
-                        canv = tdrDiCanvas(unique_name, p_xmin, f_xmax+150, ymin, ymax, -1, 3, "M(Z') [GeV]" if not isInv else "M_{T}(Z') [GeV]" ,"Events", "Hist/Fit")
+                        canv = tdrDiCanvas(unique_name, p_xmin, f_xmax+150, ymin, ymax, -1, 3, "M(Z') [GeV]" if not isInv else "M_{T}(Z') [GeV]" ,"Events", "Data / Fit" if "DATA" in hname else "Sim. / Fit")
                         canv.cd(1).SetLogy(1)
-                        leg = tdrLeg(0.40,0.60,0.92,0.89, 0.040, 42, ROOT.kBlack)
+                        leg = tdrLeg(0.43,0.89-0.08*(2 if "DATA_SR" in unique_name else 4),0.83,0.89, 0.040, 42, ROOT.kBlack)
+			leg.AddEntry(hist, "Data" if "DATA" in unique_name else "Simulation" ,"lp")
                         for func_name in self.degrees:
+                            if func_name!="2" and "DATA_SR" in unique_name: continue
                             canv.cd(1)
                             color = self.color[func_name]
                             func = self.funcs[func_name]
-                            func.Draw("same")
                             band = self.errors["band"+func_name]
                             band2 = self.errors["band2"+func_name]
                             pull = self.errors["pull"+func_name]
                             band_pull = self.errors["band_pull"+func_name]
                             band_pull2 = self.errors["band_pull2"+func_name]
+                            if "DATA_SR" in unique_name and "ele" in unique_name:
+                                func = self.funcs["1"]
+                                band = self.errors["band"+"1"]
+                                band2 = self.errors["band2"+"1"]
+                                pull = self.errors["pull"+"1"]
+                                band_pull = self.errors["band_pull"+"1"]
+                                band_pull2 = self.errors["band_pull2"+"1"]
                             chi2_red = self.chi2[func_name][0]/self.chi2[func_name][1]
                             prob_new = self.chi2[func_name][2]
                             ftest  = FTest(self.chi2[str(int(func_name)-1)][0], self.chi2[func_name][0], int(func_name), int(func_name)+1, band.GetNbinsX()) if func_name!="1" else 0
                             ftest_store[unique_name+func_name+"vs"+str(int(func_name)-1)] = round(ftest*100,2)
+                            func.Draw("same")
                             if func_name != "1" and hname!="DATA_SR":
                                 d_ = int(func_name)
                                 if ftest>0.05:
                                     ftest_tot[str(d_-1)] +=1
+                                    print unique_name+func_name+"vs"+str(int(func_name)-1), ftest, str(d_-1)
                                 else:
                                     prob_new = self.chi2[func_name][2]
                                     chi2_old = self.chi2[str(d_-1)][0]/self.chi2[str(d_-1)][1]
                                     if d_==3 and (prob_new>0.95 or prob_new<0.05 or (chi2_old>0.9 and chi2_old<1.1) ):
                                         ftest_tot[str(d_-1)] +=1
+                                        print unique_name+func_name+"vs"+str(int(func_name)-1), ftest, str(d_-1)
                                     else:
                                         ftest_tot[str(d_)] +=1
+                                        print unique_name+func_name+"vs"+str(int(func_name)-1), ftest, str(d_)
                             # leg.AddEntry(func, "N = "+func_name+" F-test = "+str(round(ftest,2))+" #chi^{2}"+"/n.d.f = "+str(round(chi2_red,2))+" p-value = "+str(round(self.chi2[func_name][2],2)), "l")
-                            leg.AddEntry(func, "N = "+func_name+"  #chi^{2}"+"/n.d.f = "+str(int(chi2_red*100)/100.)+" p-value = "+str(int(prob_new*100))+" %", "l")
+                            #if hname == "DATA_SR" and func_name=="1" and "ele" in channel:
+                            #    leg.AddEntry(func, "N = 2,  #chi^{2}"+"/n.d.f = "+str(int(chi2_red*100)/100.)+", p-value = "+str(int(prob_new*100))+" %", "l")
+                            #else:
+                            #    leg.AddEntry(func, "N = "+func_name+",  #chi^{2}"+"/n.d.f = "+str(int(chi2_red*100)/100.)+", p-value = "+str(int(prob_new*100))+" %", "l")
+                            leg.AddEntry(func, "f_{"+func_name+"} : #chi^{2}/n.d.f. = "+str(int(chi2_red*100)/100.)+", p-value = "+str(int(prob_new*100))+" %", "l")
                             # tdrDraw(band2, "e3", 9, ROOT.kWhite, 1, color, 1001, color)
                             band2.SetMarkerSize(0)
                             tdrDraw(band, "e3", 9, ROOT.kWhite, 1, color+1, 1001, color+1)
@@ -215,7 +230,12 @@ class FitBackgroundShapes(VariablesBase):
                             band.SetFillColorAlpha(color+1,0.35)
                             band2.SetFillColorAlpha(color,0.35)
                             canv.cd(2)
-                            tdrDraw(pull, "", ROOT.kFullCircle, color, 1, color, 0, color)
+                            for n in range(0,pull.GetNbinsX()+1):
+                                if pull.GetBinContent(n)==0 : pull.SetBinContent(n, -10)
+                            if "DATA_SR" in unique_name:
+                                tdrDraw(pull, "e0", ROOT.kFullCircle, ROOT.kBlack, 1, ROOT.kBlack, 0, ROOT.kBlack)
+                            else:
+                                tdrDraw(pull, "e0", ROOT.kFullCircle, color, 1, color, 0, color)
                             # tdrDraw(band_pull2, "e3", 9, ROOT.kWhite, 1, color, 1001, color)
                             band_pull2.SetMarkerSize(0)
                             tdrDraw(band_pull, "e3", 9, ROOT.kWhite, 1, color+1, 1001, color+1)

@@ -24,15 +24,10 @@ class FitSignalShapes(VariablesBase):
         self.Syst_list = self.Systematics[1:]+self.Systematics_Scale
         self.Syst = [self.Systematics[0]]+[x+v for x in self.Syst_list for v in ["Up", "Down"] if (not "murmuf" in x and not "PDF" in x)]
         # self.SignalSamples = [self.Signal+mode+"_M"+str(mass) for mass in [1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000] for mode in ["","_inv"]]
-        self.SignalSamples = [self.Signal+mode+"_M"+str(mass) for mass in [2000] for mode in ["","_inv"]]
+        self.SignalSamples = [self.Signal+mode+"_M"+str(mass) for mass in [3000] for mode in ["","_inv"]]
 
-        self.color  = {"CB":  ROOT.kOrange+1,
-                       "EGE": ROOT.kGreen+2,
-                       # "1": ROOT.kAzure+2,
-                       # "2": ROOT.kGreen+2,
-                       # "3": ROOT.kRed+1,
-                       # "4": ROOT.kOrange+1,
-                       # "5": ROOT.kOrange-2,
+        self.color  = {"EGE": ROOT.kAzure+2,
+                       "CB": ROOT.kOrange+1,
                        }
 
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/SignalShapes/"
@@ -142,7 +137,7 @@ class FitSignalShapes(VariablesBase):
                                 fitRes = hist.Fit(fname, "RQMS")
                                 self.errors["band"+fname], self.errors["band_pull"+fname], self.errors["pull"+fname] = ComputeHistWithCL(unique_name+func_name, func, fitRes, hist, cl=0.95)
                                 self.chi2[fname] = (func.GetChisquare(), func.GetNDF(), func.GetProb())
-                        TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}"
+                        TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}" if TDR.extraText!="Simulation" else "MC "+year
                         ymax = 0.3 if not isInv else 1
                         # ymax = 10 if not isInv else 50
                         canv = tdrDiCanvas(year+"_"+channel+"_"+collection+"_"+sample, p_xmin, p_xmax, 0.001, ymax, 0.5, 1.5, "M(Z') [GeV]" if not isInv else "M_{T}(Z') [GeV]", "Events", "Hist/Fit")

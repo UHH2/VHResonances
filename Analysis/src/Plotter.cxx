@@ -36,7 +36,13 @@ SampleInfo::SampleInfo(std::string uniqueName, std::string fileName, double weig
 }
 
 void Plotter::AddSample(std::string uniqueName, std::string fileName, double weight, Type type, std::string legName, int color, int linestyle) {
-  Samples[uniqueName].reset(new SampleInfo(uniqueName, fileName+"_"+year+"_noTree.root", weight, type, legName, color, linestyle));
+  std::string extraName = "";
+  if (GetModule()=="Preselection") {
+    if (FindInString("DATA",fileName) || FindInString("DY",fileName) || FindInString("WJets",fileName) || (FindInString("TTbar",fileName) && "2016"!=GetYear())){
+      extraName = "_merge";
+    }
+  }
+  Samples[uniqueName].reset(new SampleInfo(uniqueName, fileName+"_"+year+"_noTree"+extraName+".root", weight, type, legName, color, linestyle));
   histnames.push_back(uniqueName);
   if (Samples[uniqueName]->GetIsToStack()) histstacknames.push_back(uniqueName);
 }
@@ -63,7 +69,7 @@ void Plotter::SetEnv() {
   }
 
   if(GetChannel()!="muonchannel" && FindInVector(systematics,"MuonScale")) systematics.erase(systematics.begin()+distance(systematics.begin(), std::find(systematics.begin(), systematics.end(), "MuonScale")));
-  if (module=="SignalRegion") {
+  if (module=="SignalRegion"|| module=="Selection") {
     for (const auto& syst: SystematicsScale) {
       if (!FindInString("muon",GetChannel()) && FindInString("tracking",syst)) continue;
       if (!FindInString("muon",GetChannel()) && FindInString("isolation",syst)) continue;
@@ -279,8 +285,9 @@ void Plotter::MakeStackHist(){
 void Plotter::MakePlot(){
   if (debug) PrintGreen("--> MakePlot");
 
-  TCanvas* canvas = tdrDiCanvas(("stack"+relPath+hname).c_str(), xmin, xmax, ymin, ymax, 0.3, 1.7, xTitle, "Events", "Data/Pred.", false);
+  TCanvas* canvas = tdrDiCanvas(("stack"+relPath+hname).c_str(), xmin, xmax, ymin, ymax, 0.3, 1.7, xTitle, "Events", "Data / Pred.", false);
   TLegend* leg = tdrLeg(0.6, 0.9 - 0.035*histnames.size(), 0.9, 0.9, 0.035, 42);
+  if (isToSwapLegend()) leg = tdrLeg(0.2, 0.83 - 0.035*histnames.size(), 0.5, 0.83, 0.035, 42);
 
   canvas->cd(1)->SetLogy(1);
   stack->Draw("hist same");
@@ -297,7 +304,7 @@ void Plotter::MakePlot(){
     }
     if (Samples[sample]->GetIsData()) name_hist_ratio = sample;
     std::string opt = Samples[sample]->GetIsData()? "P E": "hist";
-    histos[sample]->SetLineWidth(3);
+    histos[sample]->SetLineWidth(2);
     // histos[sample]->SetMarkerSize(1.15);
     tdrDraw(histos[sample].get(), opt, kFullDotLarge,  Samples[sample]->GetColor(), Samples[sample]->GetLinestyle(), Samples[sample]->GetColor(), 0, Samples[sample]->GetColor());
     opt = Samples[sample]->GetIsData()? "lp": "l";
@@ -307,8 +314,9 @@ void Plotter::MakePlot(){
   fixOverlay();
   canvas->cd(2);
 
-  TLegend* leg_ratio = tdrLeg(0.17, 0.75, 0.49, 0.89, 0.08);
-  leg_ratio->SetNColumns(2);
+  TLegend* leg_ratio = tdrLeg(0.17, 0.75, plotSyst?0.54: 0.34, 0.89, 0.08);
+  if (isToSwapLegend()) leg_ratio = tdrLeg(plotSyst?0.53: 0.78, 0.75, plotSyst?0.89: 0.94, 0.89, 0.08);
+  if (plotSyst) leg_ratio->SetNColumns(2);
 
   TH1F* h_ratio  = (TH1F*)(histos[name_hist_ratio]->Clone("ratio"));
   TH1F* h_ratiostat = (TH1F*)(stack->GetStack()->Last()->Clone("ratiostat"));
@@ -363,8 +371,8 @@ void Plotter::MakePlot(){
   if (plotSyst) tdrDraw(h_ratiotot, "E2", 0, kGray+2, 0, kGray+2, 1000, kGray+2);
   tdrDraw(h_ratiostat, "E2", 0, kGray+1, 0, kGray+1, 1000, kGray+1);
   tdrDraw(h_ratio, "E", 20, kBlack, 0, kBlack, 1000, kBlack);
-  leg_ratio->AddEntry(h_ratiostat,"Stat.","f");
-  if (plotSyst) leg_ratio->AddEntry(h_ratiotot,"Stat. #oplus Syst.","f");
+  leg_ratio->AddEntry(h_ratiostat,"Stat. unc.","f");
+  if (plotSyst) leg_ratio->AddEntry(h_ratiotot,"Stat. #oplus Syst. unc.","f");
   fixOverlay();
 
   canvas->SaveAs((outputdir+year+"_"+module+"_"+collections+"_"+channel+"_nominal_"+Split(hname,0)+"_"+Split(hname,1)+(plotSyst?"_syst":"")+".pdf").c_str());
@@ -418,16 +426,17 @@ void SetData(Plotter* plotter){
   if (ch=="muonchannel") name = "SingleMuon";
   if (ch=="electronchannel") name = "SingleElectron";
   if (ch=="invisiblechannel") name = "MET";
-  plotter->AddSample("Data",        "DATA.DATA_"+name,   1.0,   typeData,   "Data",     kBlack,    kSolid);
+  if (ch=="chargedleptonchannel") name = "SingleLepton";
+  plotter->AddSample("Data",        "DATA.DATA_"+name,      1.0,   typeData,   "Data",     kBlack,    kSolid);
 }
 
 void SetMC(Plotter* plotter){
-  plotter->AddSample("DY",          "MC.MC_DY",               1.0,   typeMC,     "DY",       kOrange-2, kSolid);
+  plotter->AddSample("DY",          "MC.MC_DY",             1.0,   typeMC,     "Z+jet",    kOrange-2, kSolid);
   if (plotter->GetChannel()=="invisiblechannel") {
-    plotter->AddSample("WJets",     "MC.MC_WJets",            1.0,   typeMC,     "WJets",    kAzure+7,  kSolid);
+    plotter->AddSample("WJets",     "MC.MC_WJets",          1.0,   typeMC,     "W+jet",    kAzure+7,  kSolid);
   }
-  plotter->AddSample("VV",          "MC.MC_VV",               1.0,   typeMC,     "VV",       kGreen+2,  kSolid);
-  plotter->AddSample("TTbar",       "MC.MC_TTbar",            1.0,   typeMC,     "TTbar",    kRed+1,    kSolid);
+  plotter->AddSample("VV",          "MC.MC_VV",             1.0,   typeMC,     "VV",       kGreen+2,  kSolid);
+  plotter->AddSample("TTbar",       "MC.MC_TTbar",          1.0,   typeMC,     "t#bar{t}", kRed+1,    kSolid);
 }
 
 void SetSignal(Plotter* plotter){
@@ -449,6 +458,7 @@ void PlotDistribution(std::string ch, std::string year, std::string module, std:
   plotter->SetXRange(xmin,xmax);
   plotter->SetYRange(ymin, ymax);
   plotter->SetXTitle(xtitle);
+  if(FindInString("DR12", hname)) plotter->swapLegend(true);
   if(FindInString("_pt", hname)) plotter->SetRebin(5);
   plotter->Process();
 }
@@ -484,8 +494,9 @@ void PlotTagger(std::string ch="muonchannel", std::string year="RunII", std::str
 
 
 void PlotPt(std::string ch="muonchannel", std::string year="RunII", std::string module="Selection", std::string hname_="Z_pt", std::string xname="p_{T} [GeV]") {
-  std::string hname="ZprimeCandidate_ScaleFactors/"+hname_;
+  std::string hname= (hname_=="pt")? "ele_ScaleFactors/"+hname_ : "ZprimeCandidate_ScaleFactors/"+hname_;
   if (module=="SignalRegion") hname = TString(hname).ReplaceAll("ScaleFactors","Selection").Data();
+  if (ch=="muonchannel") hname = TString(hname).ReplaceAll("ele_","muon_").Data();
   bool isInv = ch=="invisiblechannel";
   double ymax = isInv? 4.01e7 :8.01e5;
   PlotDistribution(ch, year, module, hname, 200, 2500, 1.5e-02, ymax, xname);
@@ -499,11 +510,32 @@ void PlotEtaPhi(std::string ch="muonchannel", std::string year="RunII", std::str
   PlotDistribution(ch, year, module, hname, -3, 3, 1.5e-02, ymax, xname);
 }
 
+void PlotDeltaR(std::string ch="muonchannel", std::string year="RunII", std::string module="Selection", std::string hname_="delta_R", std::string xname="#Delta R") {
+  std::string hname= (hname_=="delta_R_subjets")? "ZprimeCandidate_ZprimeReco/"+hname_: (FindInString("delta_", hname_)? "ZprimeCandidate_ZprimeReco/"+hname_: "diLepton_Preselection/"+hname_);
+  if (module=="SignalRegion") hname = TString(hname).ReplaceAll("ScaleFactors","Selection").ReplaceAll("ZprimeReco","Selection").ReplaceAll("Preselection","Selection").Data();
+  bool isInv = ch=="invisiblechannel";
+  bool isLarge = hname_=="delta_R_H_Z" || FindInString("jet_DR", hname_);
+  double ymax = isInv? 7.01e8 :2.01e8;
+  double xmin = isLarge? 0.: 0.05;
+  double xmax = isLarge? 6.: 0.78;
+  PlotDistribution(ch, year, module, hname, xmin, xmax, 1.5e-02, ymax, xname);
+}
+
+void PlotMass(std::string ch="muonchannel", std::string year="RunII", std::string module="Selection", std::string hname_="mass", std::string xname="m") {
+  std::string hname="ZprimeCandidate_ScaleFactors/"+hname_;
+  if (module=="SignalRegion") hname = TString(hname).ReplaceAll("ScaleFactors","Selection").Data();
+  bool isInv = ch=="invisiblechannel";
+  double ymax = isInv? 4.01e7 :8.01e5;
+  PlotDistribution(ch, year, module, hname, 80, 102, 1.5e-02, ymax, xname);
+}
+
 void PlotHDistributions(std::string  ch="muonchannel", std::string year="RunII", std::string module="Selection") {
   std::string extra = "jet";
   PlotPt(ch,  year, module, "H_pt",  "p_{T}^{"+extra+"} [GeV]");
   PlotEtaPhi(ch, year, module, "H_phi", "#phi^{"+extra+"}" );
   PlotEtaPhi(ch, year, module, "H_eta", "#eta^{"+extra+"}" );
+  PlotDeltaR(ch, year, module, "delta_R_subjets", "#Delta R^{sj_1,sj_2}");
+  PlotMass(ch,   year, module, "H_mass", "m("+extra+") [GeV]");
 
   if (module=="Selection") PlotTagger(ch, year, module, "ZHccvsQCD", true);
   PlotTagger(ch, year, module, "H4qvsQCD", false);
@@ -513,24 +545,41 @@ void PlotZDistributions(std::string  ch="muonchannel", std::string year="RunII",
   bool isInv = ch=="invisiblechannel";
   bool isEle = ch=="electronchannel";
   std::string extra = isInv? "miss": (isEle? "ee": "#mu#mu");
-  PlotPt(ch,     year, module, "Z_pt" , "p_{T}^{"+extra+"} [GeV]");
-  PlotEtaPhi(ch, year, module, "Z_phi", "#phi^{"+extra+"}" );
-  PlotEtaPhi(ch, year, module, "Z_eta", "#eta^{"+extra+"}" );
+  PlotPt(ch,     year, module, "Z_pt" ,  "p_{T}^{"+extra+"} [GeV]");
+  PlotEtaPhi(ch, year, module, "Z_phi",  "#phi^{"+extra+"}" );
+  PlotEtaPhi(ch, year, module, "Z_eta",  "#eta^{"+extra+"}" );
+  PlotMass(ch,   year, module, "Z_mass", "m("+extra+") [GeV]");
+  if (module=="SignalRegion") {
+    PlotPt(ch,  year, module, "l1_pt",  "p_{T}^{l1} [GeV]");
+    PlotPt(ch,  year, module, "l2_pt",  "p_{T}^{l2} [GeV]");
+  }
 }
 
-
-
+void PlotKinVariables(std::string  ch="muonchannel", std::string year="RunII", std::string module="Selection") {
+  bool isInv = ch=="invisiblechannel";
+  bool isEle = ch=="electronchannel";
+  std::string extra = isInv? "miss" : (isEle? "e": "#mu");
+  std::string hname = isInv? "" : (isEle? "diElectron": "diMuon");
+  if (isInv){
+    PlotDeltaR(ch, year, module, "delta_phi_H_Z", "#Delta#phi(jet,p_{T}^{"+extra+"})");
+  } else {
+    PlotDeltaR(ch, year, module, hname+"_DR12", "#Delta R("+extra+extra+")");
+    PlotDeltaR(ch, year, module, hname+"_jet_DR", "#Delta R(jet,"+extra+extra+")");
+    if (module=="SignalRegion") return;
+    PlotPt(ch,     year, module, "pt" ,  "p_{T}^{"+extra+"} [GeV]");
+  }
+}
 
 
 int main(){
   gErrorIgnoreLevel = kError;
   for (const auto& ch: {"muonchannel","electronchannel","invisiblechannel"}) {
-    for (const auto& year: {"2016","2017","2018","RunII"}) {
-      for (const auto& module: {"Selection"}) {
-      //for (const auto& module: {"Selection","SignalRegion"}) {
+    for (const auto& year: {"RunII"}) {
+      for (const auto& module: {"Selection","SignalRegion"}) {
         PrintGreen<std::string>({ch,year,module});
         PlotZprimeMass(ch,year,module);
         PlotCount(ch,year,module);
+        PlotKinVariables(ch,year,module);
         PlotHDistributions(ch,year,module);
         PlotZDistributions(ch,year,module);
       }

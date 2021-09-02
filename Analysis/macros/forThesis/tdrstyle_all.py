@@ -1,5 +1,4 @@
 import ROOT as rt
-from array import array
 
 #######################################
 # New CMS Style from 2014             #
@@ -17,15 +16,6 @@ def ExtraTextOff(TDR):
 def ForThesis(TDR):
     CMSOff(TDR)
     ExtraTextOff(TDR)
-
-def SetAlternative2DColor(h=None):
-    Red    = [ 0.00, 0.00, 1.00, 0.70]
-    Green  = [ 0.30, 0.50, 0.70, 0.00]
-    Blue   = [ 0.50, 0.40, 0.20, 0.15]
-    Length = [ 0.00, 0.15, 0.70, 1.00]
-    nb = 200
-    rt.TColor.CreateGradientColorTable(len(Length),array('d',Length),array('d',Red),array('d',Green),array('d',Blue),nb)
-    if h is not None: h.SetContour(nb)
 
 #############
 # tdrstyle  #
@@ -227,7 +217,6 @@ def CMS_lumi(pad, iPeriod=4, iPosX=11):
   e = 0.025
   pad.cd()
   lumiText = ""
-  if( outOfFrame ):lumiText += "#scale[0.88]{"
   if( iPeriod==1 ):
     lumiText += lumi_7TeV
     lumiText += " (7 TeV)"
@@ -244,6 +233,7 @@ def CMS_lumi(pad, iPeriod=4, iPosX=11):
     lumiText += lumi_13TeV
     lumiText += " (13 TeV)"
   elif ( iPeriod==7 ):
+    if( outOfFrame ):lumiText += "#scale[0.85]{"
     lumiText += lumi_13TeV
     lumiText += " (13 TeV)"
     lumiText += " + "
@@ -252,12 +242,11 @@ def CMS_lumi(pad, iPeriod=4, iPosX=11):
     lumiText += " + "
     lumiText += lumi_7TeV
     lumiText += " (7 TeV)"
+    if( outOfFrame): lumiText += "}"
   elif ( iPeriod==12 ):
     lumiText += "8 TeV"
   elif ( iPeriod==0 ):
     lumiText += lumi_sqrtS
-
-  if( outOfFrame): lumiText += "}"
 
   latex = rt.TLatex()
   latex.SetNDC()
@@ -308,7 +297,7 @@ def CMS_lumi(pad, iPeriod=4, iPosX=11):
             if (extraText2!=""): latex.DrawLatex(posX_, posY_-relExtraDY*cmsTextSize*t - relExtraDY*extraTextSize*t, extraText2)
   elif( writeExtraText ):
     if( iPosX==0):
-      posX_ =   l + 3.3*relPosX*(1-l-r)
+      posX_ =   l +  relPosX*(1-l-r)
       posY_ =   1-t+lumiTextOffset*t
     latex.SetTextFont(extraTextFont)
     latex.SetTextSize(extraTextSize*t)
@@ -330,7 +319,7 @@ kRectangular = False
 
 # Give the macro an empty histogram for h.Draw("AXIS")
 # Create h after calling setTDRStyle to get all the settings right
-def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square=kRectangular, iPeriod=4, iPos=11, is2D=False, isExtraSpace=False):
+def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square=kRectangular, iPeriod=4, iPos=11):
   setTDRStyle()
   # writeExtraText = true       # if extra text
   # extraText  = extraText_  # default extra text is "Preliminary"
@@ -369,18 +358,18 @@ def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square
   canv.SetBorderMode(0)
   canv.SetFrameFillStyle(0)
   canv.SetFrameBorderMode(0)
-  canv.SetLeftMargin( B/W if is2D else (L/W+0.03 if isExtraSpace else L/W) )
-  canv.SetRightMargin( B/W+0.01 if is2D else (R/W+0.01 if isExtraSpace else R/W) )
+  canv.SetLeftMargin( L/W )
+  canv.SetRightMargin( R/W )
   canv.SetTopMargin( T/H )
-  canv.SetBottomMargin(B/H+0.03 if isExtraSpace else B/H )
+  canv.SetBottomMargin( B/H )
   # FOR JEC plots, prefer to keep ticks on both sides
   #canv.SetTickx(0)
   #canv.SetTicky(0)
   #
   # assert(h)
   h = canv.DrawFrame(x_min,y_min,x_max,y_max)
-  h.GetYaxis().SetTitleOffset((0.8 if is2D else 1.25) if square else (1.3 if isExtraSpace else 1.0))
-  h.GetXaxis().SetTitleOffset((0.9 if is2D else 1.0)  if square else (1.0 if isExtraSpace else 0.9))
+  h.GetYaxis().SetTitleOffset(1.20 if square else 1.0)
+  h.GetXaxis().SetTitleOffset(1.0  if square else 0.9)
   h.GetXaxis().SetTitle(nameXaxis)
   h.GetYaxis().SetTitle(nameYaxis)
   h.Draw("AXIS")
@@ -401,116 +390,17 @@ def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square
 
 
 
-def tdrDiCanvas(canvName, x_min, x_max, y_min, y_max, y_min2, y_max2, nameXaxis, nameYaxis, nameYaxis2, square=kRectangular, iPeriod=4, iPos=11):
-  setTDRStyle()
-
-  W_ref = 600 if square else 800
-  H_ref = 350 if square else 600
-
-  # Set bottom pad relative height and relative margin
-  F_ref = 1./3.
-  M_ref = 0.03
-
-  # Set reference margins
-  T_ref = 0.07
-  B_ref = 0.13
-  L = 0.12 if square else 0.15
-  R = 0.05
-
-  # Calculate total canvas size and pad heights
-  W = W_ref
-  H = int(H_ref * (1 + (1-T_ref-B_ref)*F_ref+M_ref))
-  Hup = H_ref * (1-B_ref)
-  Hdw = H - Hup
-
-  # references for T, B, L, R
-  Tup = T_ref * H_ref / Hup
-  Tdw = M_ref * H_ref / Hdw
-  Bup = 0.01
-  Bdw = B_ref * H_ref / Hdw
-
-  canv = rt.TCanvas(canvName,canvName,50,50,W,H)
-  canv.SetFillColor(0)
-  canv.SetBorderMode(0)
-  canv.SetFrameFillStyle(0)
-  canv.SetFrameBorderMode(0)
-  canv.SetFrameLineColor(0)
-  canv.SetFrameLineWidth(0)
-  # FOR JEC plots, prefer to keep ticks on both sides
-  #canv.SetTickx(0)
-  #canv.SetTicky(0)
-  canv.Divide(1,2)
-
-  canv.cd(1)
-  rt.gPad.SetPad(0, Hdw / H, 1, 1)
-  rt.gPad.SetLeftMargin( L )
-  rt.gPad.SetRightMargin( R )
-  rt.gPad.SetTopMargin( Tup )
-  rt.gPad.SetBottomMargin( Bup )
-
-  # assert(h)
-  hup = canv.cd(1).DrawFrame(x_min,y_min,x_max,y_max)
-  hup.GetYaxis().SetTitleOffset((0.9 if square else 1.1) * Hup / H_ref)
-  hup.GetXaxis().SetTitleOffset(0.9)
-  hup.SetTitleSize(hup.GetTitleSize("Y") * H_ref / Hup, "Y")
-  hup.SetLabelSize(hup.GetLabelSize("Y") * H_ref / Hup, "Y")
-  hup.GetYaxis().SetTitle(nameYaxis)
-  #
-  # writing the lumi information and the CMS "logo"
-  if iPeriod>0: CMS_lumi( rt.gPad, iPeriod, iPos )
-
-  canv.cd(2)
-  rt.gPad.SetPad(0, 0, 1, Hdw / H)
-  rt.gPad.SetLeftMargin( L )
-  rt.gPad.SetRightMargin( R )
-  rt.gPad.SetTopMargin( Tdw )
-  rt.gPad.SetBottomMargin( Bdw )
-
-  hdw = canv.cd(2).DrawFrame(x_min,y_min2,x_max,y_max2)
-  # Scale text sizes and margins to match normal size
-  hdw.GetYaxis().SetTitleOffset((0.9 if square else 1.1) * Hdw / H_ref)
-  hdw.GetXaxis().SetTitleOffset(0.9)
-  hdw.SetTitleSize(hdw.GetTitleSize("Y") * H_ref / Hdw, "Y")
-  hdw.SetLabelSize(hdw.GetLabelSize("Y") * H_ref / Hdw, "Y")
-  hdw.SetTitleSize(hdw.GetTitleSize("X") * H_ref / Hdw, "X")
-  hdw.SetLabelSize(hdw.GetLabelSize("X") * H_ref / Hdw, "X")
-  hdw.GetXaxis().SetTitle(nameXaxis)
-  hdw.GetYaxis().SetTitle(nameYaxis2)
-
-  # Set tick lengths to match original (these are fractions of axis length)
-  hdw.SetTickLength(hdw.GetTickLength("Y") * H_ref / Hup, "Y") #?? ok if 1/3
-  hdw.SetTickLength(hdw.GetTickLength("X") * H_ref / Hdw, "X")
-
-  # Reduce divisions to match smaller height (default n=510, optim=kTRUE)
-  hdw.GetYaxis().SetNdivisions(505)
-  hdw.Draw("AXIS")
-  canv.cd(0)
-
-  canv.Update()
-  canv.RedrawAxis()
-  canv.GetFrame().Draw()
-  #
-  return canv
-
-###################
-# end tdrDiCanvas #
-###################
-
-
-
-
 def setNewTitle(name = "new title"):
   gStyle.SetOptTitle(0)
   title = rt.TPaveLabel(.11,.95,.35,.99,name,"brNDC")
   title.Draw()
 
-def tdrDraw(h, opt, marker=rt.kFullCircle, mcolor=rt.kBlack, lstyle=rt.kSolid, lcolor=-1, fstyle=1001, fcolor=rt.kYellow+1, alpha=-1):
+def tdrDraw(h, opt, marker=rt.kFullCircle, mcolor=rt.kBlack, lstyle=rt.kSolid, lcolor=-1, fstyle=1001, fcolor=rt.kYellow+1):
   h.SetMarkerStyle(marker)
   h.SetMarkerColor(mcolor)
   h.SetLineStyle(lstyle)
   h.SetLineColor(mcolor if lcolor==-1 else lcolor)
   h.SetFillStyle(fstyle)
-  if alpha>0: h.SetFillColorAlpha(fcolor, alpha)
   h.SetFillColor(fcolor)
   h.Draw(opt+"SAME")
 
