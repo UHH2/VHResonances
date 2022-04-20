@@ -56,7 +56,7 @@ const bool do_QCD_NNLO = false;
 
 const std::unordered_map<std::string, std::map<std::string, std::pair<int, int>>>
 Trigger_run_validity = {
-  { "2016", {
+  { "UL16", {
     { "HLT_Mu50_v*",                              std::pair(272760, 284044) }, // 272007
     { "HLT_TkMu50_v*",                            std::pair(274954, 284044) },
     { "HLT_Ele27_WPTight_Gsf_v*",                 std::pair(272760, 284044) }, // 273158
@@ -80,7 +80,7 @@ Trigger_run_validity = {
     { "HLT_AK8PFJet450_v*",                       std::pair(272760, 284044) },
     { "HLT_AK8PFJet500_v*",                       std::pair(272760, 284044) },
   }},
-  { "2017", {
+  { "UL17", {
     { "HLT_Mu50_v*",                              std::pair(296070, 306460) }, // 297020, 306462
     { "HLT_OldMu100_v*",                          std::pair(299368, 306460) }, //306462 // 299370
     { "HLT_TkMu100_v*",                           std::pair(299368, 306460) }, // 306462
@@ -115,7 +115,7 @@ Trigger_run_validity = {
     { "HLT_AK8PFJet450_v*",                       std::pair(296070, 306460) },
     { "HLT_AK8PFJet500_v*",                       std::pair(296070, 306460) },
   }},
-  { "2018", {
+  { "UL18", {
     { "HLT_Mu50_v*",                              std::pair(315252, 325175) }, // 315252, 325273
     { "HLT_OldMu100_v*",                          std::pair(315252, 325175) }, // 315252, 325273
     { "HLT_TkMu100_v*",                           std::pair(315252, 325175) }, // 315252, 325273
@@ -165,29 +165,41 @@ Trigger_run_validity = {
 
 const std::unordered_map<std::string, std::map<std::string, float>>
 lumi_map = {
-  { "2016", {
-    { "lumiPlot",     36},
-    { "lumi_fb",      35.9},
-    { "lumi_pb",      35920},
-    { "uncertainty",  2.5},
+  { "UL16preVFP", {
+    { "lumiPlot",     20},
+    { "lumi_fb",      19.53},
+    { "lumi_pb",      19530},
+    { "uncertainty",  1.2},
   }},
-  { "2017", {
+  { "UL16postVFP", {
+    { "lumiPlot",     17},
+    { "lumi_fb",      16.80},
+    { "lumi_pb",      16800},
+    { "uncertainty",  1.2},
+  }},
+  { "UL16", {
+    { "lumiPlot",     36},
+    { "lumi_fb",      36.33},
+    { "lumi_pb",      36330},
+    { "uncertainty",  1.2},
+  }},
+  { "UL17", {
     { "lumiPlot",     41},
-    { "lumi_fb",      41.5},
-    { "lumi_pb",      41530},
+    { "lumi_fb",      41.48},
+    { "lumi_pb",      41480},
     { "uncertainty",  2.3},
   }},
-  { "2018", {
-    { "lumiPlot",     59},
-    { "lumi_fb",      59.7},
-    { "lumi_pb",      59740},
+  { "UL18", {
+    { "lumiPlot",     60},
+    { "lumi_fb",      59.83},
+    { "lumi_pb",      59830},
     { "uncertainty",  2.5},
   }},
   { "RunII", {
-    { "lumiPlot",     137},
-    { "lumi_fb",      137.19},
-    { "lumi_pb",      137190},
-    { "uncertainty",  1.8},
+    { "lumiPlot",     140},
+    { "lumi_fb",      139.92},
+    { "lumi_pb",      139920},
+    { "uncertainty",  1.6},
   }},
 };
 
