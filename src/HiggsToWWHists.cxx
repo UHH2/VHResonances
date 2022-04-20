@@ -382,8 +382,6 @@ void HiggsToWWHists::fill(const Event & event){
       if (nsubjet>0) subjet1 = cand.H().subjets().at(0);
       if (nsubjet>1) subjet2 = cand.H().subjets().at(1);
       double sub1=9999, sub2=0;
-      if (disc=="btag_combinedSecondaryVertex") {    sub1 = nsubjet>0 ? subjet1.btag_combinedSecondaryVertex() :     9999; sub2 = nsubjet>1 ? subjet2.btag_combinedSecondaryVertex() : 0;}
-      if (disc=="btag_combinedSecondaryVertexMVA") { sub1 = nsubjet>0 ? subjet1.btag_combinedSecondaryVertexMVA() :  9999; sub2 = nsubjet>1 ? subjet2.btag_combinedSecondaryVertexMVA() : 0; }
       if (disc=="btag_DeepJet") {                    sub1 = nsubjet>0 ? subjet1.btag_DeepJet() :                     9999; sub2 = nsubjet>1 ? subjet2.btag_DeepJet() : 0; }
       if (disc=="btag_DeepCSV") {                    sub1 = nsubjet>0 ? subjet1.btag_DeepCSV() :                     9999; sub2 = nsubjet>1 ? subjet2.btag_DeepCSV() : 0; }
       if (disc=="btag_DeepFlavour_bb") {             sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_bb() :              9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_bb() : 0; }

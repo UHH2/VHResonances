@@ -51,8 +51,8 @@ protected:
   std::vector<std::string> discriminators = {"btag_MassDecorrelatedDeepBoosted_HccvsQCD", "btag_DeepBoosted_HccvsQCD",
   "btag_MassDecorrelatedDeepBoosted_ZHccvsQCD", "btag_DeepBoosted_ZHccvsQCD", "btag_MassDecorrelatedDeepBoosted_H4qvsQCD", "btag_DeepBoosted_H4qvsQCD"};
 
-  std::vector<std::string> discriminators_subjets =  {"btag_combinedSecondaryVertex", "btag_combinedSecondaryVertexMVA", "btag_DeepJet",
-  "btag_DeepCSV", "btag_DeepFlavour_bb", "btag_DeepFlavour_b", "btag_DeepFlavour_lepb", "btag_DeepFlavour_uds", "btag_DeepFlavour_g", "btag_DeepFlavour_c"};
+  std::vector<std::string> discriminators_subjets =  {"btag_DeepJet", "btag_DeepCSV",
+  "btag_DeepFlavour_bb", "btag_DeepFlavour_b", "btag_DeepFlavour_lepb", "btag_DeepFlavour_uds", "btag_DeepFlavour_g", "btag_DeepFlavour_c"};
 
   std::vector<std::string> discriminators_Extra = {"btag_DeepBoosted_WvsQCD", "btag_DeepBoosted_ZvsQCD", "btag_DeepBoosted_HvsQCD",
   "btag_MassDecorrelatedDeepBoosted_WvsQCD", "btag_MassDecorrelatedDeepBoosted_ZvsQCD", "btag_MassDecorrelatedDeepBoosted_ZHbbvsQCD",

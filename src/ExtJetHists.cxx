@@ -103,7 +103,6 @@ void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuf
   book_TH1F("eta"+histSuffix,"#eta^{"+axisSuffix+"}",100,-5,5);
   book_TH1F("phi"+histSuffix,"#phi^{"+axisSuffix+"}",50,-M_PI,M_PI);
   book_TH2F("etaphi"+histSuffix,";#eta^"+axisSuffix+";#phi^"+axisSuffix, 500, -5, 5, 500,-3, 3);
-  book_TH1F("csv"+histSuffix,"csv-disriminator "+axisSuffix,50,0,1);
   book_TH1F("DeepCSV"+histSuffix,"DeepCSV-disriminator "+axisSuffix,50,0,1);
   book_TH1F("flavor"+histSuffix,"flavor "+axisSuffix,200,-100,100);
   book_TH1F("deltaR_lepton"+histSuffix,"#Delta R(lepton,"+axisSuffix+")",40, 0, 8.0);
@@ -216,7 +215,6 @@ void ExtJetHists::fill_jetHist<Jet>(const Event & event, const string& histSuffi
   fill_H1("eta"+histSuffix, jet.eta(), weight);
   fill_H1("phi"+histSuffix, jet.phi(), weight);
   fill_H2("etaphi"+histSuffix, jet.eta(), jet.phi(), weight);
-  fill_H1("csv"+histSuffix, jet.btag_combinedSecondaryVertex(), weight);
   fill_H1("DeepCSV"+histSuffix, jet.btag_DeepCSV(), weight);
   fill_H1("flavor"+histSuffix, jet.pdgId(), weight);
   for (const auto & muon : *event.muons ) {
@@ -347,8 +345,6 @@ void ExtJetHists::fill_jetHist<TopJet>(const Event & event, const string& histSu
     if (nsubjet>0) subjet1 = jet.subjets().at(0);
     if (nsubjet>1) subjet2 = jet.subjets().at(1);
     double sub1=9999, sub2=0;
-    if (disc=="btag_combinedSecondaryVertex") {    sub1 = nsubjet>0 ? subjet1.btag_combinedSecondaryVertex() :     9999; sub2 = nsubjet>1 ? subjet2.btag_combinedSecondaryVertex() : 0;}
-    if (disc=="btag_combinedSecondaryVertexMVA") { sub1 = nsubjet>0 ? subjet1.btag_combinedSecondaryVertexMVA() :  9999; sub2 = nsubjet>1 ? subjet2.btag_combinedSecondaryVertexMVA() : 0; }
     if (disc=="btag_DeepJet") {                    sub1 = nsubjet>0 ? subjet1.btag_DeepJet() :                     9999; sub2 = nsubjet>1 ? subjet2.btag_DeepJet() : 0; }
     if (disc=="btag_DeepCSV") {                    sub1 = nsubjet>0 ? subjet1.btag_DeepCSV() :                     9999; sub2 = nsubjet>1 ? subjet2.btag_DeepCSV() : 0; }
     if (disc=="btag_DeepFlavour_bb") {             sub1 = nsubjet>0 ? subjet1.btag_DeepFlavour_bb() :              9999; sub2 = nsubjet>1 ? subjet2.btag_DeepFlavour_bb() : 0; }
