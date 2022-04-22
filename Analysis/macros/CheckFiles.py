@@ -42,8 +42,8 @@ class CheckFileNumbers(ModuleRunner):
 
 if __name__ == '__main__':
 
-    Years       = ["2016", "2017","2018"]
-    Years       = ["2018"]
+    Years       = ["UL16preVFP", "UL16postVFP", "UL17","UL18"]
+    Years       = ["UL18"]
     Collections = ["Puppi"]
     Channels    = ["muon", "electron", "invisible"]
     # Channels    = ["invisible"]

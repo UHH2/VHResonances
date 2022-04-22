@@ -161,7 +161,7 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
   }
 
   ymax *= lumi_map.at(year).at("lumi_fb")/lumi_map.at("RunII").at("lumi_fb");
-  if (year=="2017") ymax *= 1.1;
+  if (year=="UL17") ymax *= 1.1;
 
   std::string hname = GetSgName(mass);
   rangeLo = GetRange(histo_map[hname].get(), rangeLo);
@@ -1573,7 +1573,7 @@ int main(int argc, char** argv){
   if (isHbb) histFolders = {"tau21" };
   std::vector<std::string> collections = {"Puppi"};
   std::vector<std::string> channels = {"muonchannel", "electronchannel", "invisiblechannel"};
-  std::vector<std::string> years = {"2016", "2017", "2018", "RunII"};
+  std::vector<std::string> years = {"UL16", "UL17", "UL18", "RunII"};
 
   std::unique_ptr<CreateRooWorkspace> roo;
 

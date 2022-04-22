@@ -49,7 +49,7 @@ void CalculateSignalEfficiencies(std::string histFolder) {
   std::string prefix = "uhh2.AnalysisModuleRunner.MC.";
   std::string syst = "nominal";
 
-  std::vector<std::string> years =  {"2016", "2017", "2018", "RunII"};
+  std::vector<std::string> years =  {"UL16", "UL17", "UL18", "RunII"};
   // std::vector<std::string> years =  {"RunII"};
   // std::vector<std::string> collections =  {"Puppi", "CHS", "HOTVR"};
   std::vector<std::string> collections =  {"Puppi"};
@@ -364,9 +364,9 @@ void CalculateSignalEfficiencies(std::string histFolder) {
 
   for (std::string year: years) {
 
-    if (year=="2016")  {color = kGreen+2;  markerSyle=kFullTriangleDown;}
-    if (year=="2017")  {color = kAzure+1;  markerSyle=kFullTriangleUp;}
-    if (year=="2018")  {color = kRed+1;    markerSyle=kFullSquare;}
+    if (year=="UL16")  {color = kGreen+2;  markerSyle=kFullTriangleDown;}
+    if (year=="UL17")  {color = kAzure+1;  markerSyle=kFullTriangleUp;}
+    if (year=="UL18")  {color = kRed+1;    markerSyle=kFullSquare;}
     if (year=="RunII") {color = kOrange+1; markerSyle=kFullDotLarge;}
     for (std::string channel: channels) {
       namePlot = "Inc_Puppi_"+channel+"_"+year+"_"+histFolder;

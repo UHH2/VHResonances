@@ -38,7 +38,7 @@ SampleInfo::SampleInfo(std::string uniqueName, std::string fileName, double weig
 void Plotter::AddSample(std::string uniqueName, std::string fileName, double weight, Type type, std::string legName, int color, int linestyle) {
   std::string extraName = "";
   if (GetModule()=="Preselection") {
-    if (FindInString("DATA",fileName) || FindInString("DY",fileName) || FindInString("WJets",fileName) || (FindInString("TTbar",fileName) && "2016"!=GetYear())){
+    if (FindInString("DATA",fileName) || FindInString("DY",fileName) || FindInString("WJets",fileName) || (FindInString("TTbar",fileName) && "UL16"!=GetYear())){
       extraName = "_merge";
     }
   }

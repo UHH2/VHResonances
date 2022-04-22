@@ -12,7 +12,7 @@ Modify these items, everything else will work. The files given here must already
 Collections = ["Puppi"]
 Channels = ["muon", "electron", "invisible"]
 # Channels = ["muon", "invisible"]
-Channels = ["muon", "electron"]
+# Channels = ["muon", "electron"]
 # Channels = ["muon"]
 # Channels = ["electron"]
 # Channels = ["invisible"]
@@ -30,7 +30,7 @@ Systematics = ["nominal"]
 # Systematics = ["JEC_down"]
 
 controls = [""] # default
-# controls = ["2018"]
+# controls = ["UL18"]
 # controls = ["DATA"]
 # controls = ["RunD"]
 # controls = ["MC"]
@@ -51,18 +51,18 @@ controls = [""] # default
 #                  Selections                   #
 #                                               #
 #################################################
-for year in ["2016","2017","2018"]:
-# for year in ["2016","2017"]:
-# for year in ["2018"]:
+# for year in ["UL16preVFP", "UL16postVFP", "UL17","UL18"]:
+# for year in ["UL16postVFP", "UL17","UL18"]:
+for year in ["UL18"]:
 
     isNice=True
     # isNice=False
     nProcess=20
-    # Modules = ModuleRunner(year,controls)
+    Modules = ModuleRunner(year,controls)
     # Modules = ModuleRunner(year,controls, isAnalysis=False)
 
     # Modules.SetModule("GenericCleaning", Collections, Channels, Systematics)
-    # Modules.SetModule("HEMIssueStudy", Collections, Channels, Systematics)
+    Modules.SetModule("HEMIssueStudy", Collections, Channels, Systematics)
     # Modules.SetModule("PDFReweight", Collections, Channels, Systematics)
     # Modules.SetModule("Preselection", Collections, Channels, Systematics)
     # Modules.SetModule("Selection", Collections, Channels, Systematics)
@@ -74,10 +74,10 @@ for year in ["2016","2017","2018"]:
 
     # Modules.SetModule("HccSFSelection", Collections, Channels, Systematics)
 
-    # Modules.DeleteWorkdirs()
-    # Modules.CreateConfigFiles()
-    # Modules.CondorControl("")
-    # Modules.RunLocal("Check")
+    Modules.DeleteWorkdirs()
+    Modules.CreateConfigFiles()
+    Modules.CondorControl("")
+    Modules.RunLocal("Check")
     # time.sleep(6*60*60)
     # Modules.CondorControl("Submit")
     # Modules.CondorControl("")
@@ -107,7 +107,7 @@ for year in ["2016","2017","2018"]:
 #                                               #
 #################################################
 
-years = ["2016","2017","2018", "RunII"]
+years = ["UL16","UL17","UL18", "RunII"]
 controls = [""]
 # controls = ["Preselection", "Selection"]
 # controls = ["Preselection"]

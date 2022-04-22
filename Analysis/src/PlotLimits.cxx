@@ -10,7 +10,7 @@ void PlotLimits(bool doObs, bool isHbb) {
   const double yaxis_hi = 5e03;
 
   std::map<std::string, int> colors = {
-    {"2016",kViolet-9+1}, {"2017",kOrange+1}, {"2018",kCyan+1}, {"RunII",kGreen+2}, {"fullRunII", kGreen+2},
+    {"UL16",kViolet-9+1}, {"UL17",kOrange+1}, {"UL18",kCyan+1}, {"RunII",kGreen+2}, {"fullRunII", kGreen+2},
     {"NN",kOrange+1}, {"NN_1",kViolet-9+1}, {"NN_2",kCyan+1}, {"CNN",kBlue+1}, {"tau42",kBlack},
     {"btag_DeepBoosted_probHbb",kViolet-9+1}, {"tau32",kBlue+1}, {"tau21",kOrange+1},
     {"btag_DeepBoosted_H4qvsQCDp2", kOrange+1}, {"btag_DeepBoosted_H4qvsQCDp02", kYellow+1}, {"btag_DeepBoosted_H4qvsQCDpt1000", kCyan+1},
@@ -84,9 +84,9 @@ void PlotLimits(bool doObs, bool isHbb) {
   // std::vector<std::string> channels = {"muonchannel", "electronchannel"};
   std::vector<std::string> channels = {"muonchannel", "electronchannel", "chargedleptonchannel", "invisiblechannel", "leptonchannel"};
   // std::vector<std::string> channels = {"leptonchannel"};
-  // std::vector<std::string> years = {"2016", "2017", "2018", "RunII", "fullRunII"};
+  // std::vector<std::string> years = {"UL16", "UL17", "UL18", "RunII", "fullRunII"};
   std::vector<std::string> years = {"RunII"};
-  // std::vector<std::string> years = {"2016"};
+  // std::vector<std::string> years = {"UL16"};
   // std::vector<std::string> channels = {"muonchannel"};
 
 

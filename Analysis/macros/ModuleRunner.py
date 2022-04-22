@@ -9,7 +9,7 @@ from functions import *
 
 
 class ModuleRunner(ModuleRunnerBase):
-    def __init__(self,year="2017",controls=[""], isAnalysis=True):
+    def __init__(self,year="UL17",controls=[""], isAnalysis=True):
         ModuleRunnerBase.__init__(self,year,isAnalysis=isAnalysis)
         self.Module = ""
         self.ConfigFile = ""
@@ -251,13 +251,13 @@ class ModuleRunner(ModuleRunnerBase):
                     mode = "MC" if "MC" in sample else "DATA"
                     filespath = path_RunII+self.PrefixrootFile+mode+"."+sample+"_noTree.root"
                     command = ["hadd", "-f", "-T", filespath.replace(self.year,year)]
-                    for histo in glob.glob(filespath.replace("RunII","201*").replace(self.year,"201*").replace("_noTree","*")):
+                    for histo in glob.glob(filespath.replace("RunII","UL1*").replace(self.year,"UL1*").replace("_noTree","*")):
                         command.append(histo)
                     list_processes.append(command)
                 for mode in ["", "incl_"]:
                     fname = path_RunII+self.PrefixrootFile+"MC.MC_VV_"+mode+year+"_noTree.root"
                     command = ["hadd", "-f", "-T", fname]
-                    for file_ in glob.glob(fname.replace("RunII","201*")):
+                    for file_ in glob.glob(fname.replace("RunII","UL1*")):
                         command.append(file_)
                     if len(command)>4: list_processes_merge.append(command)
         if doPlots:
