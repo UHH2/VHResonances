@@ -69,7 +69,7 @@ protected:
 
   // Define variables
   std::string NameModule = "PreselectionModule";
-  std::vector<std::string> histogram_tags = { "nocuts", "PDFReweight", "weights", "Trigger", "HEM", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
+  std::vector<std::string> histogram_tags = { "nocuts", "weights", "Trigger", "HEM", "cleaned", "Veto", "NLeptonSel", "NBoostedJet", "METCut", "DeltaRDiLepton", "JetDiLeptonPhiAngular"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
@@ -81,7 +81,7 @@ protected:
   std::vector<std::unique_ptr<AnalysisModule>> weightsmodules, modules;
   std::unique_ptr<uhh2::AndSelection> metfilters_selection;
   std::unique_ptr<GenericJetCleaner> GJC, GTJC;
-  std::unique_ptr<AnalysisModule> PDFReweight_module;
+  // std::unique_ptr<AnalysisModule> PDFReweight_module;
 
   // Define selections
   std::unordered_map<std::string, std::unique_ptr<Selection>> Trigger_selection;
@@ -223,9 +223,9 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   GJC.reset( new GenericJetCleaner(ctx, MS["jetLabel"],    false, jetId, topjetId, muoId, eleId));
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
 
-  PDFReweight_module.reset(new PDFReweight(ctx));
-
-  for (auto& t : Trigger_run_validity.at(MS["year"])) {
+  // PDFReweight_module.reset(new PDFReweight(ctx));
+  MS["year_simple"] = FindInString("UL16", MS["year"])? "UL16": MS["year"];
+  for (auto& t : Trigger_run_validity.at(MS["year_simple"])) {
     if (MB["muonchannel"] && !FindInString("Mu", t.first) ) continue;
     if (MB["muonchannel"] && FindInString("NoMu", t.first) ) continue;
     if (MB["electronchannel"] && !FindInString("Ele", t.first) && !FindInString("Pho", t.first) ) continue;
@@ -274,8 +274,8 @@ bool PreselectionModule::process(uhh2::Event& event) {
   auto weight_gen = event.weight;
   fill_histograms(event, "nocuts");
 
-  if (FindInString("MC_ZprimeToZH", MS["dataset_version"])) PDFReweight_module->process(event);
-  fill_histograms(event, "PDFReweight");
+  // if (FindInString("MC_ZprimeToZH", MS["dataset_version"])) PDFReweight_module->process(event);
+  // fill_histograms(event, "PDFReweight");
 
   if(event.isRealData && MB["lumisel"]) if(!lumi_selection->passes(event)) return false;
 
@@ -294,7 +294,7 @@ bool PreselectionModule::process(uhh2::Event& event) {
   bool pass_Ele_triggers_Photon_Dataset = false;
 
   for (auto& el : Trigger_selection) {
-    if (event.isRealData && (event.run < Trigger_run_validity.at(MS["year"]).at(el.first).first || event.run > Trigger_run_validity.at(MS["year"]).at(el.first).second) ) continue;
+    if (event.isRealData && (event.run < Trigger_run_validity.at(MS["year_simple"]).at(el.first).first || event.run > Trigger_run_validity.at(MS["year_simple"]).at(el.first).second) ) continue;
     bool pass = el.second->passes(event);
     // For 2016 and 2017 the SinglePhoton and SingleElectron datasets are separete.
     // To avoid double counting, we consider eleTriggers in the SingleElectron
@@ -310,7 +310,6 @@ bool PreselectionModule::process(uhh2::Event& event) {
   if (!pass_triggers_OR || pass_Ele_triggers_Photon_Dataset) return false;
 
   fill_histograms(event, "Trigger");
-
   //Effective in 2018 only.
   // Here the assumption is that it should check for cleaned jets to avoid overlap with leptons (Tight WP recommanded).
   if(!HEMEventCleaner_Selection->passes(event)) return false;

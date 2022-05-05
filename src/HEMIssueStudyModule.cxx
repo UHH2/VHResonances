@@ -233,7 +233,8 @@ HEMIssueStudyModule::HEMIssueStudyModule(uhh2::Context& ctx){
   GJC.reset( new GenericJetCleaner(ctx, MS["jetLabel"],    false, jetId, topjetId, muoId, eleId));
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
 
-  for (auto& t : Trigger_run_validity.at(MS["year"])) {
+  MS["year_simple"] = FindInString("UL16", MS["year"])? "UL16": MS["year"];
+  for (auto& t : Trigger_run_validity.at(MS["year_simple"])) {
     if (MB["muonchannel"] && !FindInString("Mu", t.first) ) continue;
     if (MB["muonchannel"] && FindInString("NoMu", t.first) ) continue;
     if (MB["electronchannel"] && !FindInString("Ele", t.first) && !FindInString("Pho", t.first) ) continue;
@@ -321,7 +322,7 @@ bool HEMIssueStudyModule::process(uhh2::Event& event) {
   bool pass_Ele_triggers_Photon_Dataset = false;
 
   for (auto& el : Trigger_selection) {
-    if (event.isRealData && (event.run < Trigger_run_validity.at(MS["year"]).at(el.first).first || event.run > Trigger_run_validity.at(MS["year"]).at(el.first).second) ) continue;
+    if (event.isRealData && (event.run < Trigger_run_validity.at(MS["year_simple"]).at(el.first).first || event.run > Trigger_run_validity.at(MS["year_simple"]).at(el.first).second) ) continue;
     bool pass = el.second->passes(event);
     // For 2016 and 2017 the SinglePhoton and SingleElectron datasets are separete.
     // To avoid double counting, we consider eleTriggers in the SingleElectron

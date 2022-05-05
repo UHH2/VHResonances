@@ -92,6 +92,7 @@ class ModuleRunner(ModuleRunnerBase):
         if "HEMIssueStudy" in self.Module:
             self.Systematics = ["nominal"]
             self.Samples     = list(filter(lambda x: "RunC" in x or "RunD" in x, self.Samples))
+            self.Samples     = list(filter(lambda x: 'UL18' in x, self.Samples))
         if "LeptonIDStudies" in self.Module:
             self.Systematics = ["nominal"]
             self.Samples     = list(filter(lambda x: "Zprime" in x or "DY" in x, self.Samples))

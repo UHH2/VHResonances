@@ -46,6 +46,6 @@ protected:
   MuonId muoIDcleaning;
   ElectronId eleIDcleaning;
 
-  std::unordered_map<std::string, std::vector<std::string>> runs = { {"2016", runPeriods2016}, {"2017", runPeriods2017}, {"2018", runPeriods2018}};
+  std::unordered_map<std::string, std::vector<std::string>> runs = { {"UL16preVFP", runPeriodsUL16preVFP}, {"UL16postVFP", runPeriodsUL16postVFP}, {"UL17", runPeriods2017}, {"UL18", runPeriods2018}};
 
 };
