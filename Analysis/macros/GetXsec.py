@@ -29,6 +29,7 @@ class GetXsec(VariablesBase):
 
         for year in self.years:
             for sample in samples:
+                kFactor = True if  any(x == sample.lstrip('MC_') for x in ['ZZ','WZ', 'WW']) else False
                 sample_ = sample
                 sample_ = sample_.replace('MC_','')
                 sample_ = sample_.replace('ZprimeToZH_M', 'ZprimeToZHToZlepHinc-')
@@ -39,7 +40,7 @@ class GetXsec(VariablesBase):
                 sample += '_'+year
                 spaces = ' '*(40-len(sample))
                 if info_ =='lumi':
-                    lumi = str(self.helper.get_lumi(sample_,'13TeV',year))
+                    lumi = str(self.helper.get_lumi(sample_,'13TeV',year, kFactor=kFactor))
                     spaces_lumi = ' '*(15-len(lumi))
                     print('<InputData Type="MC"    Version="'+sample+'"'+spaces+'Lumi="'+lumi+'"'+spaces_lumi+'NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &'+sample+';'+spaces+'<InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>')
                 if info_ =='xml':

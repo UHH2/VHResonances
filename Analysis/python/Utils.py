@@ -52,7 +52,7 @@ def DoControl(controls, control_, channel, sample):
     if all(not control in control_ for control in controls):
         check = True
     if "invisible" in channel and "MC_DY" in sample and not "MC_DY_inv" in sample:
-        check = not ("MC_DY_201" in sample or "MC_DY_RunII" in sample)
+        check = not ("MC_DY_UL" in sample or "MC_DY_RunII" in sample)
     if "invisible" in channel and "MC_ZprimeToZH" in sample and not "_inv" in sample:
         check = True
     if not "invisible" in channel and "_inv" in sample:

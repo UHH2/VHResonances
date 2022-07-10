@@ -275,12 +275,12 @@ void ExtJetHists::fill_jetHist<Jet>(const Event & event, const string& histSuffi
   }
   if (event.electrons) {
     if (event.electrons->size() > 0) {
-      fill_H1("deltaR_muon1"+histSuffix, deltaR(jet, (*event.electrons)[0]), weight);
-      fill_H1("deltaphi_muon1"+histSuffix, deltaPhi(jet, (*event.electrons)[0]), weight);
+      fill_H1("deltaR_ele1"+histSuffix, deltaR(jet, (*event.electrons)[0]), weight);
+      fill_H1("deltaphi_ele1"+histSuffix, deltaPhi(jet, (*event.electrons)[0]), weight);
     }
     if (event.electrons->size() > 1) {
-      fill_H1("deltaR_muon2"+histSuffix, deltaR(jet, (*event.electrons)[1]), weight);
-      fill_H1("deltaphi_muon2"+histSuffix, deltaPhi(jet, (*event.electrons)[1]), weight);
+      fill_H1("deltaR_ele2"+histSuffix, deltaR(jet, (*event.electrons)[1]), weight);
+      fill_H1("deltaphi_ele2"+histSuffix, deltaPhi(jet, (*event.electrons)[1]), weight);
     }
   }
   return;

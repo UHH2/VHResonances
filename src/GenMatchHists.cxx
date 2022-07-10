@@ -108,16 +108,16 @@ void GenMatchHists::book_ParticleHist(const string & histSuffix, const string & 
   book_TH1F("mass_"   +histSuffix, "M "         +axisSuffix, (histSuffix=="ZPrime")? 1000 : 100, 0, (histSuffix=="ZPrime")? 10000 : 200);
   // book_TH1F("mass_"   +histSuffix, "M "         +axisSuffix, 100, 0, 200);
   book_TH1F("flavor_" +histSuffix, "flavor "    +axisSuffix, 101, -50.5, 50.5);
-  book_TH2F("DeltaRmaxvspt_"+histSuffix, 1000, 0, 1000, 100, 0., 2.);
-  book_TH2F("DeltaR1vspt_"  +histSuffix, 1000, 0, 1000, 100, 0., 2.);
-  book_TH2F("DeltaR2vspt_"  +histSuffix, 1000, 0, 1000, 100, 0., 2.);
-  book_TH2F("DeltaR3vspt_"  +histSuffix, 1000, 0, 1000, 100, 0., 2.);
-  book_TH2F("DeltaR4vspt_"  +histSuffix, 1000, 0, 1000, 100, 0., 2.);
-  book_TH2F("DeltaRmaxvspt_"+histSuffix+"_OS", 1000, 0, 1000, 100, 0., 2.);
-  book_TH2F("DeltaR1vspt_"  +histSuffix+"_OS", 1000, 0, 1000, 100, 0., 2.);
-  book_TH2F("DeltaR2vspt_"  +histSuffix+"_OS", 1000, 0, 1000, 100, 0., 2.);
-  book_TH2F("DeltaR3vspt_"  +histSuffix+"_OS", 1000, 0, 1000, 100, 0., 2.);
-  book_TH2F("DeltaR4vspt_"  +histSuffix+"_OS", 1000, 0, 1000, 100, 0., 2.);
+  book_TH2F("DeltaRmaxvspt_"+histSuffix, 100, 0, 1000, 50, 0., 2.);
+  book_TH2F("DeltaR1vspt_"  +histSuffix, 100, 0, 1000, 50, 0., 2.);
+  book_TH2F("DeltaR2vspt_"  +histSuffix, 100, 0, 1000, 50, 0., 2.);
+  book_TH2F("DeltaR3vspt_"  +histSuffix, 100, 0, 1000, 50, 0., 2.);
+  book_TH2F("DeltaR4vspt_"  +histSuffix, 100, 0, 1000, 50, 0., 2.);
+  book_TH2F("DeltaRmaxvspt_"+histSuffix+"_OS", 100, 0, 1000, 50, 0., 2.);
+  book_TH2F("DeltaR1vspt_"  +histSuffix+"_OS", 100, 0, 1000, 50, 0., 2.);
+  book_TH2F("DeltaR2vspt_"  +histSuffix+"_OS", 100, 0, 1000, 50, 0., 2.);
+  book_TH2F("DeltaR3vspt_"  +histSuffix+"_OS", 100, 0, 1000, 50, 0., 2.);
+  book_TH2F("DeltaR4vspt_"  +histSuffix+"_OS", 100, 0, 1000, 50, 0., 2.);
   return;
 }
 

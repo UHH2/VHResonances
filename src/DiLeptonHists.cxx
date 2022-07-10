@@ -18,8 +18,8 @@ DiLeptonHists::DiLeptonHists(Context & ctx, const string & dname, const string &
     string dilepton = (lepton=="Electron") ? "ee" : "#mu#mu";
     book_TH1F("di"+lepton+"_number",  "number of "+dilepton,                11, -.5, 10.5);
     book_TH1F("di"+lepton+"_charge",  "charge of "+dilepton,                5,-2.5,2.5);
-    book_TH1F("di"+lepton+"_mass",    "m^"        +dilepton+" [GeV/c^{2}]", 40,70,110);
-    book_TH1F("di"+lepton+"_pt",      "p_{T}^"    +dilepton+" [GeV]",       30,0,1500);
+    book_TH1F("di"+lepton+"_mass",    "m^{"       +dilepton+"} [GeV/c^{2}]",40,70,110);
+    book_TH1F("di"+lepton+"_pt",      "p_{T}^{"   +dilepton+"} [GeV]",      30,0,1500);
     book_TH1F("di"+lepton+"_eta",     "#eta "     +dilepton,                100,-5,5);
     book_TH1F("di"+lepton+"_phi",     "#phi "     +dilepton,                50,-M_PI,M_PI);
     book_TH1F("di"+lepton+"_DR12",    "#Delta R(" +dilepton+")",            100, 0, M_PI);
