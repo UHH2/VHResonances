@@ -1,0 +1,3 @@
+[submodule "Analysis/ScaleFactors/Muons/MuonReferenceEfficiencies"]
+	path = Analysis/ScaleFactors/Muons/MuonReferenceEfficiencies
+	url = ssh://git@gitlab.cern.ch:7999/cms-muonPOG/MuonReferenceEfficiencies.git
