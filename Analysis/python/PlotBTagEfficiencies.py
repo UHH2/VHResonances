@@ -19,19 +19,21 @@ Module to study BTag Efficiencies
 - Default collection is Puppi.
 '''
 
-colors = {"2016":       ROOT.kGreen+2,
-          "2017":       ROOT.kRed+1,
-          "2018":       ROOT.kOrange+1,
-          "lepton":     ROOT.kFullCircle,
-          "muon":       ROOT.kFullTriangleDown,
-          "electron":   ROOT.kFullTriangleUp,
-          "invisible":  ROOT.kFullSquare,
+colors = {"UL16preVFP":  ROOT.kAzure-2,
+          "UL16postVFP": ROOT.kGreen+2,
+          "UL17":        ROOT.kRed+1,
+          "UL18":        ROOT.kOrange+1,
+          "lepton":      ROOT.kFullCircle,
+          "muon":        ROOT.kFullTriangleDown,
+          "electron":    ROOT.kFullTriangleUp,
+          "invisible":   ROOT.kFullSquare,
 
 }
 
 class PlotBTagEfficiencies(VariablesBase):
     def __init__(self):
         VariablesBase.__init__(self)
+        self.years = ['UL16postVFP','UL17','UL18']
         TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
         self.outdir     = self.Path_ANALYSIS+"Analysis/OtherPlots/BTag/"
         self.nameXaxis  = "p_{T} [GeV]"
@@ -101,13 +103,13 @@ class PlotBTagEfficiencies(VariablesBase):
                 for channel in self.Channels + [self.lepton]:
                     if "invisible" in channel: continue
                     hname = year+channel+self.defaultCut+flavor
-                    self.histos[hname+"pt"] = ROOT.TH1D(hname+"pt",hname+"pt", ROOT.BTagMCEffBinsPt.size()-1,array('d',list(ROOT.BTagMCEffBinsPt)))
+                    self.histos[hname+"pt"] = ROOT.TH1D(hname+"pt",hname+"pt", ROOT.kBTagMCEffBinsPt.size()-1,array('d',list(ROOT.kBTagMCEffBinsPt)))
                     for x in range(1,self.histos[hname+"pt"].GetNbinsX()+1):
                         self.histos[hname+"pt"].SetBinContent(x,self.histos[hname].GetBinContent(x,1))
                         self.histos[hname+"pt"].SetBinError(x,self.histos[hname].GetBinError(x,1))
                     for col in colors:
                         if col in hname:
-                            if col.isdigit(): color = colors[col]
+                            if 'UL' in col: color = colors[col]
                             else : point = colors[col]
                     tdrDraw(self.histos[hname+"pt"], "P", point, color, 1, color, 0, color)
                     self.leg.AddEntry(self.histos[hname+"pt"], hname.replace(self.defaultCut,"").replace("FlavUDSG","_light"), "lp")
@@ -125,7 +127,7 @@ def main():
     PlotSyst = PlotBTagEfficiencies()
     PlotSyst.LoadHistos()
     PlotSyst.PlotHistos()
-    # PlotSyst.SaveRootFiles()
+    PlotSyst.SaveRootFiles()
 
 
 if __name__ == '__main__':

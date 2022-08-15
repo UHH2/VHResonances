@@ -24,156 +24,156 @@
 <!ENTITY ScaleVariationMuF          "none">
 
 
-<!-- MC Samples 2016 -->
-<!ENTITY MC_ZprimeToZH_M600_2016        SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2016.xml">
-<!ENTITY MC_ZprimeToZH_M800_2016        SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2016.xml">
-<!ENTITY MC_ZprimeToZH_M1000_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M1200_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_2016.xml">
-<!ENTITY MC_ZprimeToZH_M1400_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_2016.xml">
-<!ENTITY MC_ZprimeToZH_M1600_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_2016.xml">
-<!ENTITY MC_ZprimeToZH_M1800_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_2016.xml">
-<!ENTITY MC_ZprimeToZH_M2000_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M2500_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_2016.xml">
-<!ENTITY MC_ZprimeToZH_M3000_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M3500_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_2016.xml">
-<!ENTITY MC_ZprimeToZH_M4000_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M4500_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_2016.xml">
-<!ENTITY MC_ZprimeToZH_M5000_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M5500_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_2016.xml">
-<!ENTITY MC_ZprimeToZH_M6000_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M7000_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_2016.xml">
-<!ENTITY MC_ZprimeToZH_M8000_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_2016.xml">
+<!-- MC Samples UL16postVFP -->
+<!ENTITY MC_ZprimeToZH_M600_UL16postVFP          SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M800_UL16postVFP          SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M1000_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M1200_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M1400_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M1600_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M1800_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M2000_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M2500_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M3000_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M3500_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M4000_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M4500_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M5000_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M5500_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M6000_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M7000_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_M8000_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_UL16postVFP.xml">
 
-<!ENTITY MC_ZprimeToZH_inv_M600_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M600_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M800_2016    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M800_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1000_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1200_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1200_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1400_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1400_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1600_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1600_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1800_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1800_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M2000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2000_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M2500_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2500_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M3000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3000_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M3500_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3500_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M4000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4000_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M4500_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4500_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M5000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5000_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M5500_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5500_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M6000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M6000_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M7000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M7000_2016.xml">
-<!ENTITY MC_ZprimeToZH_inv_M8000_2016   SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M8000_2016.xml">
+<!ENTITY MC_ZprimeToZH_inv_M600_UL16postVFP      SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M600_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M800_UL16postVFP      SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M800_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1000_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1200_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1200_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1400_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1400_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1600_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1600_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1800_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1800_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M2000_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M2500_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2500_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M3000_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M3500_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3500_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M4000_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M4500_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4500_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M5000_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M5500_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5500_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M6000_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M6000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M7000_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M7000_UL16postVFP.xml">
+<!ENTITY MC_ZprimeToZH_inv_M8000_UL16postVFP     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M8000_UL16postVFP.xml">
 
-<!ENTITY MC_DY_2016                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_DY_2016.xml">
-<!ENTITY MC_TTbar_2016                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_TTbar_2016.xml">
-<!ENTITY MC_WW_2016                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_WW_2016.xml">
-<!ENTITY MC_WZ_2016                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_WZ_2016.xml">
-<!ENTITY MC_ZZ_2016                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/MC_ZZ_2016.xml">
-<!ENTITY MC_WJets_2016                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/MC_WJets_2016.xml">
+<!ENTITY MC_DY_UL16postVFP                       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_DY_UL16postVFP.xml">
+<!ENTITY MC_TTbar_UL16postVFP                    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_TTbar_UL16postVFP.xml">
+<!ENTITY MC_WW_UL16postVFP                       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_WW_UL16postVFP.xml">
+<!ENTITY MC_WZ_UL16postVFP                       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_WZ_UL16postVFP.xml">
+<!ENTITY MC_ZZ_UL16postVFP                       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/MC_ZZ_UL16postVFP.xml">
+<!ENTITY MC_WJets_UL16postVFP                    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/MC_WJets_UL16postVFP.xml">
 
-<!-- MC Samples 2017 -->
-<!ENTITY MC_ZprimeToZH_M600_2017        SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2017.xml">
-<!ENTITY MC_ZprimeToZH_M800_2017        SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2017.xml">
-<!ENTITY MC_ZprimeToZH_M1000_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M1200_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_2017.xml">
-<!ENTITY MC_ZprimeToZH_M1400_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_2017.xml">
-<!ENTITY MC_ZprimeToZH_M1600_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_2017.xml">
-<!ENTITY MC_ZprimeToZH_M1800_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_2017.xml">
-<!ENTITY MC_ZprimeToZH_M2000_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M2500_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_2017.xml">
-<!ENTITY MC_ZprimeToZH_M3000_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M3500_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_2017.xml">
-<!ENTITY MC_ZprimeToZH_M4000_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M4500_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_2017.xml">
-<!ENTITY MC_ZprimeToZH_M5000_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M5500_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_2017.xml">
-<!ENTITY MC_ZprimeToZH_M6000_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M7000_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_2017.xml">
-<!ENTITY MC_ZprimeToZH_M8000_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_2017.xml">
+<!-- MC Samples UL17 -->
+<!ENTITY MC_ZprimeToZH_M600_UL17                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M800_UL17                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M1000_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M1200_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M1400_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M1600_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M1800_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M2000_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M2500_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M3000_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M3500_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M4000_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M4500_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M5000_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M5500_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M6000_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M7000_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_M8000_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_UL17.xml">
 
-<!ENTITY MC_ZprimeToZH_inv_M600_2017    SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M600_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M800_2017    SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M800_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1000_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1000_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1200_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1200_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1400_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1400_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1600_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1600_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1800_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1800_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M2000_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2000_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M2500_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2500_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M3000_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3000_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M3500_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3500_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M4000_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4000_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M4500_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4500_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M5000_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5000_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M5500_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5500_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M6000_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M6000_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M7000_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M7000_2017.xml">
-<!ENTITY MC_ZprimeToZH_inv_M8000_2017   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M8000_2017.xml">
+<!ENTITY MC_ZprimeToZH_inv_M600_UL17             SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M600_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M800_UL17             SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M800_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1000_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1200_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1200_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1400_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1400_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1600_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1600_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1800_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1800_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M2000_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M2500_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2500_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M3000_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M3500_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3500_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M4000_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M4500_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4500_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M5000_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M5500_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5500_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M6000_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M6000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M7000_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M7000_UL17.xml">
+<!ENTITY MC_ZprimeToZH_inv_M8000_UL17            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M8000_UL17.xml">
 
-<!ENTITY MC_DY_2017                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_DY_2017.xml">
-<!ENTITY MC_TTbar_2017                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_TTbar_2017.xml">
-<!ENTITY MC_WW_2017                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_WW_2017.xml">
-<!ENTITY MC_WZ_2017                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_WZ_2017.xml">
-<!ENTITY MC_ZZ_2017                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/MC_ZZ_2017.xml">
-<!ENTITY MC_WJets_2017                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/MC_WJets_2017.xml">
+<!ENTITY MC_DY_UL17                              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_DY_UL17.xml">
+<!ENTITY MC_TTbar_UL17                           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_TTbar_UL17.xml">
+<!ENTITY MC_WW_UL17                              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_WW_UL17.xml">
+<!ENTITY MC_WZ_UL17                              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_WZ_UL17.xml">
+<!ENTITY MC_ZZ_UL17                              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/MC_ZZ_UL17.xml">
+<!ENTITY MC_WJets_UL17                           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/MC_WJets_UL17.xml">
 
-<!-- MC Samples 2018 -->
-<!ENTITY MC_ZprimeToZH_M600_2018        SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_2018.xml">
-<!ENTITY MC_ZprimeToZH_M800_2018        SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_2018.xml">
-<!ENTITY MC_ZprimeToZH_M1000_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M1200_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_2018.xml">
-<!ENTITY MC_ZprimeToZH_M1400_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_2018.xml">
-<!ENTITY MC_ZprimeToZH_M1600_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_2018.xml">
-<!ENTITY MC_ZprimeToZH_M1800_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_2018.xml">
-<!ENTITY MC_ZprimeToZH_M2000_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M2500_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_2018.xml">
-<!ENTITY MC_ZprimeToZH_M3000_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M3500_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_2018.xml">
-<!ENTITY MC_ZprimeToZH_M4000_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M4500_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_2018.xml">
-<!ENTITY MC_ZprimeToZH_M5000_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M5500_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_2018.xml">
-<!ENTITY MC_ZprimeToZH_M6000_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M7000_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_2018.xml">
-<!ENTITY MC_ZprimeToZH_M8000_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_2018.xml">
+<!-- MC Samples UL18 -->
+<!ENTITY MC_ZprimeToZH_M600_UL18                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M600_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M800_UL18                 SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M800_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M1000_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M1200_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1200_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M1400_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1400_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M1600_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1600_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M1800_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M1800_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M2000_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M2500_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M2500_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M3000_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M3500_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M3500_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M4000_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M4500_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M4500_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M5000_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M5500_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M5500_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M6000_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M6000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M7000_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M7000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_M8000_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZprimeToZH_M8000_UL18.xml">
 
-<!ENTITY MC_ZprimeToZH_inv_M600_2018    SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M600_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M800_2018    SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M800_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1000_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1000_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1200_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1200_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1400_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1400_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1600_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1600_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M1800_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1800_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M2000_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2000_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M2500_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2500_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M3000_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3000_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M3500_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3500_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M4000_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4000_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M4500_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4500_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M5000_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5000_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M5500_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5500_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M6000_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M6000_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M7000_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M7000_2018.xml">
-<!ENTITY MC_ZprimeToZH_inv_M8000_2018   SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M8000_2018.xml">
+<!ENTITY MC_ZprimeToZH_inv_M600_UL18             SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M600_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M800_UL18             SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M800_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1000_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1200_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1200_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1400_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1400_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1600_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1600_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M1800_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M1800_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M2000_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M2500_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M2500_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M3000_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M3500_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M3500_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M4000_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M4500_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M4500_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M5000_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M5500_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M5500_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M6000_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M6000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M7000_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M7000_UL18.xml">
+<!ENTITY MC_ZprimeToZH_inv_M8000_UL18            SYSTEM "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_ZprimeToZH_inv_M8000_UL18.xml">
 
-<!ENTITY MC_DY_2018                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_DY_2018.xml">
-<!ENTITY MC_TTbar_2018                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_TTbar_2018.xml">
-<!ENTITY MC_WW_2018                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_WW_2018.xml">
-<!ENTITY MC_WZ_2018                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_WZ_2018.xml">
-<!ENTITY MC_ZZ_2018                     SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/MC_ZZ_2018.xml">
-<!ENTITY MC_WJets_2018                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/MC_WJets_2018.xml">
+<!ENTITY MC_DY_UL18                              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_DY_UL18.xml">
+<!ENTITY MC_TTbar_UL18                           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_TTbar_UL18.xml">
+<!ENTITY MC_WW_UL18                              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_WW_UL18.xml">
+<!ENTITY MC_WZ_UL18                              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_WZ_UL18.xml">
+<!ENTITY MC_ZZ_UL18                              SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/MC_ZZ_UL18.xml">
+<!ENTITY MC_WJets_UL18                           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/MC_WJets_UL18.xml">
 
 <!-- Data Samples -->
-<!ENTITY DATA_SingleMuon_2016           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_2016.xml">
-<!ENTITY DATA_SingleElectron_2016       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/leptonchannel/nominal/DATA_SingleElectron_2016.xml">
-<!ENTITY DATA_MET_2016                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2016/Preselection/All/invisiblechannel/nominal/DATA_MET_2016.xml">
+<!ENTITY DATA_SingleMuon_UL16postVFP             SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_UL16postVFP.xml">
+<!ENTITY DATA_SingleElectron_UL16postVFP         SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/leptonchannel/nominal/DATA_SingleElectron_UL16postVFP.xml">
+<!ENTITY DATA_MET_UL16postVFP                    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL16postVFP/Preselection/All/invisiblechannel/nominal/DATA_MET_UL16postVFP.xml">
 
-<!ENTITY DATA_SingleMuon_2017           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_2017.xml">
-<!ENTITY DATA_SingleElectron_2017       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/leptonchannel/nominal/DATA_SingleElectron_2017.xml">
-<!ENTITY DATA_MET_2017                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2017/Preselection/All/invisiblechannel/nominal/DATA_MET_2017.xml">
+<!ENTITY DATA_SingleMuon_UL17                    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_UL17.xml">
+<!ENTITY DATA_SingleElectron_UL17                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/leptonchannel/nominal/DATA_SingleElectron_UL17.xml">
+<!ENTITY DATA_MET_UL17                           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL17/Preselection/All/invisiblechannel/nominal/DATA_MET_UL17.xml">
 
-<!ENTITY DATA_SingleMuon_2018           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_2018.xml">
-<!ENTITY DATA_SingleElectron_2018       SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/leptonchannel/nominal/DATA_SingleElectron_2018.xml">
-<!ENTITY DATA_MET_2018                  SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/2018/Preselection/All/invisiblechannel/nominal/DATA_MET_2018.xml">
+<!ENTITY DATA_SingleMuon_UL18                    SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/DATA_SingleMuon_UL18.xml">
+<!ENTITY DATA_SingleElectron_UL18                SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/leptonchannel/nominal/DATA_SingleElectron_UL18.xml">
+<!ENTITY DATA_MET_UL18                           SYSTEM  "/nfs/dust/cms/user/USER/WorkingArea/File/Analysis/UL18/Preselection/All/invisiblechannel/nominal/DATA_MET_UL18.xml">
 
 ]>
 
@@ -189,157 +189,157 @@
 
   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTDIR;/" PostFix="" TargetLumi="1" >
 
-    <!-- MC 2016 -->
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2016"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2016;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_2016"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_2016;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <!-- MC UL16postVFP -->
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_UL16postVFP"          Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_UL16postVFP;          <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_UL16postVFP"          Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_UL16postVFP;          <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M600_2016"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M600_2016;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M800_2016"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M800_2016;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1200_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1200_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1400_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1400_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1600_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1600_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1800_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1800_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2500_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2500_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3500_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3500_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4500_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4500_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5500_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5500_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M6000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M6000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M7000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M7000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M8000_2016"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M8000_2016;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M600_UL16postVFP"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M600_UL16postVFP;      <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M800_UL16postVFP"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M800_UL16postVFP;      <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1000_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1000_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1200_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1200_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1400_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1400_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1600_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1600_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1800_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1800_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2000_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2000_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2500_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2500_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3000_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3000_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3500_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3500_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4000_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4000_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4500_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4500_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5000_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5000_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5500_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5500_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M6000_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M6000_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M7000_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M7000_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M8000_UL16postVFP"     Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M8000_UL16postVFP;     <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_DY_2016"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2016;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_TTbar_2016"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2016;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WW_2016"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2016;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WZ_2016"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2016;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_2016"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2016;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WJets_2016"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2016;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_UL16postVFP"                       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_UL16postVFP;                       <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_TTbar_UL16postVFP"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_UL16postVFP;                    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW_UL16postVFP"                       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_UL16postVFP;                       <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_UL16postVFP"                       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_UL16postVFP;                       <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ_UL16postVFP"                       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_UL16postVFP;                       <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WJets_UL16postVFP"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_UL16postVFP;                    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <!-- MC 2017 -->
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2017"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2017;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_2017"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_2017;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <!-- MC UL17 -->
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_UL17"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_UL17;                 <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_UL17"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_UL17;                 <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M600_2017"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M600_2017;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M800_2017"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M800_2017;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1200_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1200_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1400_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1400_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1600_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1600_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1800_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1800_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2500_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2500_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3500_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3500_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4500_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4500_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5500_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5500_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M6000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M6000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M7000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M7000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M8000_2017"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M8000_2017;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M600_UL17"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M600_UL17;             <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M800_UL17"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M800_UL17;             <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1000_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1000_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1200_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1200_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1400_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1400_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1600_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1600_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1800_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1800_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2000_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2000_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2500_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2500_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3000_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3000_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3500_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3500_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4000_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4000_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4500_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4500_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5000_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5000_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5500_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5500_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M6000_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M6000_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M7000_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M7000_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M8000_UL17"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M8000_UL17;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_DY_2017"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2017;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_TTbar_2017"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2017;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WW_2017"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2017;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WZ_2017"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2017;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_2017"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2017;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WJets_2017"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2017;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_UL17"                              Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_UL17;                              <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_TTbar_UL17"                           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_UL17;                           <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW_UL17"                              Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_UL17;                              <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_UL17"                              Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_UL17;                              <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ_UL17"                              Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_UL17;                              <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WJets_UL17"                           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_UL17;                           <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <!-- MC 2018 -->
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_2018"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_2018;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_2018"       Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_2018;       <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <!-- MC UL18 -->
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M600_UL18"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M600_UL18;                 <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M800_UL18"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M800_UL18;                 <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1000_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1000_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1200_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1200_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1400_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1400_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1600_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1600_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M1800_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M1800_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2000_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2000_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M2500_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M2500_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3000_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3000_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M3500_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M3500_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4000_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4000_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M4500_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M4500_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5000_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5000_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M5500_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M5500_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M6000_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M6000_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M7000_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M7000_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_M8000_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_M8000_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M600_2018"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M600_2018;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M800_2018"   Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M800_2018;   <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1200_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1200_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1400_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1400_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1600_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1600_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1800_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1800_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2500_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2500_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3500_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3500_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4500_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4500_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5500_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5500_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M6000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M6000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M7000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M7000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M8000_2018"  Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M8000_2018;  <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M600_UL18"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M600_UL18;             <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M800_UL18"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M800_UL18;             <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1000_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1000_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1200_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1200_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1400_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1400_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1600_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1600_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M1800_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M1800_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2000_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2000_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M2500_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M2500_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3000_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3000_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M3500_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M3500_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4000_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4000_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M4500_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M4500_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5000_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5000_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M5500_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M5500_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M6000_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M6000_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M7000_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M7000_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZprimeToZH_inv_M8000_UL18"            Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZprimeToZH_inv_M8000_UL18;            <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="MC"    Version="MC_DY_2018"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_2018;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_TTbar_2018"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_2018;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WW_2018"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_2018;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WZ_2018"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_2018;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_ZZ_2018"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_2018;                    <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="MC"    Version="MC_WJets_2018"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_2018;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_DY_UL18"                              Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_DY_UL18;                              <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_TTbar_UL18"                           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_TTbar_UL18;                           <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WW_UL18"                              Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WW_UL18;                              <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WZ_UL18"                              Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WZ_UL18;                              <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_ZZ_UL18"                              Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_ZZ_UL18;                              <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="MC"    Version="MC_WJets_UL18"                           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &MC_WJets_UL18;                           <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
     <!-- Data -->
 
-    <InputData Type="DATA"  Version="DATA_SingleMuon_2016"          Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2016;          <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_SingleElectron_2016"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2016;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_MET_2016"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2016;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_UL16postVFP"             Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_UL16postVFP;             <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_UL16postVFP"         Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_UL16postVFP;         <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_UL16postVFP"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_UL16postVFP;                    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="DATA"  Version="DATA_SingleMuon_2017"          Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2017;          <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_SingleElectron_2017"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2017;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_MET_2017"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2017;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_UL17"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_UL17;                    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_UL17"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_UL17;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_UL17"                           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_UL17;                           <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
-    <InputData Type="DATA"  Version="DATA_SingleMuon_2018"          Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_2018;          <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_SingleElectron_2018"      Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_2018;      <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
-    <InputData Type="DATA"  Version="DATA_MET_2018"                 Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_2018;                 <InputTree Name="AnalysisTree"/>  <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleMuon_UL18"                    Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleMuon_UL18;                    <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_SingleElectron_UL18"                Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_SingleElectron_UL18;                <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
+    <InputData Type="DATA"  Version="DATA_MET_UL18"                           Lumi="1"  NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &DATA_MET_UL18;                           <InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>
 
     <UserConfig>
       <!-- define which collections to read from the input. Only specify what you need to save I/O time -->

@@ -69,7 +69,8 @@ protected:
   // Define variables
   std::string NameModule = "SelectionModule";
   std::vector<std::string> histogram_tags = {"Preselection", "QCDRejection", "MuonScale", "ZprimeReco", "ZprimeSelection", "PTMassCut", "ScaleFactors"};
-  std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "weight_pu", "weight_pu_up", "weight_pu_down", "HDecay", "ZDecay", "ZprimeDecay", "weight_btag","weight_btag_up", "weight_btag_down"};
+  // std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "weight_pu", "weight_pu_up", "weight_pu_down", "HDecay", "ZDecay", "ZprimeDecay", "weight_btag","weight_btag_up", "weight_btag_down"};
+  std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "weight_pu", "weight_pu_up", "weight_pu_down", "HDecay", "ZDecay", "ZprimeDecay"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
@@ -78,7 +79,7 @@ protected:
   Event::Handle<std::vector<TopJet> > h_topjets;
   Event::Handle<std::vector<ZprimeCandidate> > h_ZprimeCandidates;
 
-  Event::Handle<std::vector<tensorflow::Tensor> > h_image;
+  // Event::Handle<std::vector<tensorflow::Tensor> > h_image;
 
   // Define selections
 
@@ -172,7 +173,7 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
   h_jets = ctx.get_handle<std::vector<Jet>>(MS["jetLabel"]);
   h_topjets = ctx.get_handle<std::vector<TopJet>>(MS["topjetLabel"]);
   h_ZprimeCandidates = ctx.get_handle<std::vector<ZprimeCandidate>>("ZprimeCandidate");
-  h_image = ctx.get_handle<std::vector<tensorflow::Tensor>>("Images");
+  // h_image = ctx.get_handle<std::vector<tensorflow::Tensor>>("Images");
 
   // Set up histograms:
 
@@ -189,7 +190,7 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
 
   MCScaleVariation_module.reset(new MCScaleVariation(ctx));
 
-  ScaleFactors_module["BTag"].reset(new MCBTagScaleFactor(ctx, BTag_algo, BTag_wp, MS["topjetLabel"], "nominal", "lt"));
+  ScaleFactors_module["BTag"].reset(new MCBTagScaleFactor(ctx, BTag_algo, BTag_wp, MS["topjetLabel"], "mujets", "incl"));
   ScaleFactors_module["SFs"].reset(new ScaleFactorsManager(ctx, h_ZprimeCandidates));
 
   ZprimeCandidateReconstruction_module.reset(new ZprimeCandidateReconstruction(ctx, min_dilep_pt, min_DR_dilep, max_DR_dilep, min_jet_dilep_delta_phi, max_jet_dilep_delta_phi, MS["leptons"], MS["topjetLabel"]));
@@ -232,8 +233,8 @@ bool SelectionModule::process(uhh2::Event& event) {
   }
   fill_histograms(event, "QCDRejection");
 
-  MuonScaleVariations_module->process(event);
-  fill_histograms(event, "MuonScale");
+  // MuonScaleVariations_module->process(event);
+  // fill_histograms(event, "MuonScale");
 
   ZprimeCandidateReconstruction_module->process(event);
   fill_histograms(event, "ZprimeReco");

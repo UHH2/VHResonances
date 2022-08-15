@@ -364,12 +364,6 @@ void HiggsToWWHists::fill(const Event & event){
 
     for (std::string & disc : discriminators) {
       double val = 9999;
-      if (disc=="btag_MassDecorrelatedDeepBoosted_HccvsQCD") val = GetHccvsQCD(cand.H(), true);
-      if (disc=="btag_DeepBoosted_HccvsQCD") val = GetHccvsQCD(cand.H(), false);
-      if (disc=="btag_MassDecorrelatedDeepBoosted_ZHccvsQCD") val = GetZHccvsQCD(cand.H(), true);
-      if (disc=="btag_DeepBoosted_ZHccvsQCD") val = GetZHccvsQCD(cand.H(), false);
-      if (disc=="btag_MassDecorrelatedDeepBoosted_H4qvsQCD") val = cand.H().btag_MassDecorrelatedDeepBoosted_H4qvsQCD();
-      if (disc=="btag_DeepBoosted_H4qvsQCD") val = cand.H().btag_DeepBoosted_H4qvsQCD();
       if (cand.has_discriminator(disc)) val = cand.discriminator(disc);
       fill_H1("H_"+disc, val, weight);
       if (FindInString("chi2", disc) || FindInString("SDmass", disc)) continue;
@@ -468,8 +462,13 @@ void HiggsToWWHists::fill(const Event & event){
       if (disc=="btag_MassDecorrelatedDeepBoosted_probHqqqq")     val = cand.H().btag_MassDecorrelatedDeepBoosted_probHqqqq();
       if (disc=="btag_MassDecorrelatedDeepBoosted_probZbb")       val = cand.H().btag_MassDecorrelatedDeepBoosted_probZbb();
 
-      fill_H1("H_"+disc, val, weight);
-      H2("Zprime"+massPlotName+"vs"+disc)->Fill(cand.Zprime_mass(), val, weight);
+      if (disc=="btag_ParticleNet_mass") {
+        val = cand.discriminator(disc);
+        fill_H1("H_"+disc, val, weight);
+      } else {
+        fill_H1("H_"+disc, val, weight);
+        H2("Zprime"+massPlotName+"vs"+disc)->Fill(cand.Zprime_mass(), val, weight);
+      }
     }
     H2("H_btag_DeepBoosted_HbbvsHcc_2D")->Fill(cand.H().btag_DeepBoosted_probHbb(), cand.H().btag_DeepBoosted_probHcc(), weight);
 

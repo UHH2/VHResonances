@@ -52,25 +52,33 @@ int FindInVector(const std::vector<std::string>& vec, const std::string& el) {
 const std::string MyString(const std::string & tag) {return tag;};// Needed just to deal with preprocessing macros
 
 
-double GetQCD(const TopJet& j, bool isMD) {
+double GetQCD(const TopJet& j, bool isPN, bool isMD) {
   if (isMD) {
-    return (j.btag_MassDecorrelatedDeepBoosted_probQCDb()+j.btag_MassDecorrelatedDeepBoosted_probQCDbb()+j.btag_MassDecorrelatedDeepBoosted_probQCDc()+j.btag_MassDecorrelatedDeepBoosted_probQCDcc()+j.btag_MassDecorrelatedDeepBoosted_probQCDothers());
+    if (isPN) {
+      return (j.btag_MassDecorrelatedParticleNetJetTags_probQCDbb()+j.btag_MassDecorrelatedParticleNetJetTags_probQCDcc()+j.btag_MassDecorrelatedParticleNetJetTags_probQCDb()+j.btag_MassDecorrelatedParticleNetJetTags_probQCDc()+j.btag_MassDecorrelatedParticleNetJetTags_probQCDothers());
+    } else {
+      return (j.btag_MassDecorrelatedDeepBoosted_probQCDb()+j.btag_MassDecorrelatedDeepBoosted_probQCDbb()+j.btag_MassDecorrelatedDeepBoosted_probQCDc()+j.btag_MassDecorrelatedDeepBoosted_probQCDcc()+j.btag_MassDecorrelatedDeepBoosted_probQCDothers());
+    }
   }
   else {
-    return (j.btag_DeepBoosted_probQCDb()+j.btag_DeepBoosted_probQCDbb()+j.btag_DeepBoosted_probQCDc()+j.btag_DeepBoosted_probQCDcc()+j.btag_DeepBoosted_probQCDothers());
+    if (isPN) {
+      return (j.btag_ParticleNetJetTags_probQCDbb()+j.btag_ParticleNetJetTags_probQCDcc()+j.btag_ParticleNetJetTags_probQCDb()+j.btag_ParticleNetJetTags_probQCDc()+j.btag_ParticleNetJetTags_probQCDothers());
+    } else {
+      return (j.btag_DeepBoosted_probQCDb()+j.btag_DeepBoosted_probQCDbb()+j.btag_DeepBoosted_probQCDc()+j.btag_DeepBoosted_probQCDcc()+j.btag_DeepBoosted_probQCDothers());
+    }
   }
 }
 
-double GetHccvsQCD(const TopJet& j, bool isMD) {
+double GetHccvsQCD(const TopJet& j, bool isPN, bool isMD) {
   double Hcc = 0;
-  if (isMD) Hcc = j.btag_MassDecorrelatedDeepBoosted_probHcc();
-  else Hcc = j.btag_DeepBoosted_probHcc();
-  return Hcc/(Hcc+GetQCD(j,isMD));
+  if (isMD) Hcc = isPN? j.btag_MassDecorrelatedParticleNetJetTags_probXcc(): j.btag_MassDecorrelatedDeepBoosted_probHcc();
+  else Hcc = isPN? j.btag_ParticleNetJetTags_probHcc() : j.btag_DeepBoosted_probHcc();
+  return Hcc/(Hcc+GetQCD(j,isPN,isMD));
 }
 
-double GetZHccvsQCD(const TopJet& j, bool isMD) {
+double GetZHccvsQCD(const TopJet& j, bool isPN, bool isMD) {
   double ZHcc = 0;
-  if (isMD) ZHcc = j.btag_MassDecorrelatedDeepBoosted_probZcc()+j.btag_MassDecorrelatedDeepBoosted_probHcc();
-  else ZHcc = j.btag_DeepBoosted_probZcc()+j.btag_DeepBoosted_probHcc();
-  return ZHcc/(ZHcc+GetQCD(j,isMD));
+  if (isMD) ZHcc = isPN? j.btag_MassDecorrelatedParticleNetJetTags_probXcc() : j.btag_MassDecorrelatedDeepBoosted_probZcc()+j.btag_MassDecorrelatedDeepBoosted_probHcc();
+  else ZHcc = isPN? (j.btag_MassDecorrelatedParticleNetJetTags_probXcc()+j.btag_ParticleNetJetTags_probZcc()) : (j.btag_DeepBoosted_probZcc()+j.btag_DeepBoosted_probHcc());
+  return ZHcc/(ZHcc+GetQCD(j,isPN,isMD));
 }

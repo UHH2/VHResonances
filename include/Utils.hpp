@@ -18,6 +18,6 @@ int FindInVector(const std::vector<std::string>& vec, const std::string& el);
 
 const std::string MyString(const std::string & tag);// Needed just to deal with preprocessing macros
 
-double GetQCD(const TopJet& j, bool isMD=false);
-double GetHccvsQCD(const TopJet& j, bool isMD=false);
-double GetZHccvsQCD(const TopJet& j, bool isMD=false);
+double GetQCD(const TopJet& j, bool isPN=false, bool isMD=false);
+double GetHccvsQCD(const TopJet& j, bool isPN=false, bool isMD=false);
+double GetZHccvsQCD(const TopJet& j, bool isPN=false, bool isMD=false);

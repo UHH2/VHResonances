@@ -19,7 +19,8 @@ class PlotHistograms(VariablesBase):
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/PDFScaleVariations/"
         os.system("mkdir -p "+self.outdir)
         self.years = years
-        self.module = "PDFReweight"
+        # self.module = "PDFReweight"
+        self.module = "Preselection"
         self.Modes = ["nocuts", "weights"]
         self.Norm = True
         self.Variables = ["pt_jet","eta_jet"]
@@ -105,7 +106,7 @@ class PlotHistograms(VariablesBase):
 
 if __name__ == '__main__':
     args = parse_arguments()
-    years       = args.years if len(args.years)!=0 else ["2016","2017","2018"]
+    years       = args.years if len(args.years)!=0 else ["UL16postVFP","UL17","UL18"]
 
     PDF = PlotHistograms(years=years)
     PDF.LoadHistos()

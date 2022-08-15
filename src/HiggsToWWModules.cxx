@@ -186,11 +186,24 @@ void ZprimeCandidateReconstruction::setDiscriminators(Event& event, ZprimeCandid
 
   candidate.set_discriminators("btag_DeepBoosted_H4qvsQCD", jet.btag_DeepBoosted_H4qvsQCD());
   candidate.set_discriminators("btag_DeepBoosted_H4qvsQCD_MD", jet.btag_MassDecorrelatedDeepBoosted_H4qvsQCD());
-  candidate.set_discriminators("btag_DeepBoosted_HccvsQCD", GetHccvsQCD(jet,false));
-  candidate.set_discriminators("btag_DeepBoosted_HccvsQCD_MD", GetHccvsQCD(jet,true));
-  candidate.set_discriminators("btag_DeepBoosted_ZHccvsQCD", GetZHccvsQCD(jet,false));
-  candidate.set_discriminators("btag_DeepBoosted_ZHccvsQCD_MD", GetZHccvsQCD(jet,true));
+  candidate.set_discriminators("btag_DeepBoosted_HccvsQCD", GetHccvsQCD(jet,false,false));
+  candidate.set_discriminators("btag_DeepBoosted_HccvsQCD_MD", GetHccvsQCD(jet,false,true));
+  candidate.set_discriminators("btag_DeepBoosted_ZHccvsQCD", GetZHccvsQCD(jet,false,false));
+  candidate.set_discriminators("btag_DeepBoosted_ZHccvsQCD_MD", GetZHccvsQCD(jet,false,true));
 
+  candidate.set_discriminators("btag_ParticleNet_HccvsQCD", GetHccvsQCD(jet,true,false));
+  candidate.set_discriminators("btag_ParticleNet_HccvsQCD_MD", GetHccvsQCD(jet,true,true));
+  candidate.set_discriminators("btag_ParticleNet_ZHccvsQCD", GetZHccvsQCD(jet,true,false));
+  candidate.set_discriminators("btag_ParticleNet_ZHccvsQCD_MD", GetZHccvsQCD(jet,true,true));
+
+
+  candidate.set_discriminators("btag_ParticleNet_H4qvsQCD", jet.btag_ParticleNetDiscriminatorsJetTags_H4qvsQCD());
+
+  candidate.set_discriminators("btag_ParticleNet_HbbvsQCD", jet.btag_ParticleNetDiscriminatorsJetTags_HbbvsQCD());
+  candidate.set_discriminators("btag_ParticleNet_HccvsQCD_2", jet.btag_ParticleNetDiscriminatorsJetTags_HccvsQCD());
+  candidate.set_discriminators("btag_ParticleNet_XbbvsQCD_MD", jet.btag_MassDecorrelatedParticleNetDiscriminatorsJetTags_XbbvsQCD());
+  candidate.set_discriminators("btag_ParticleNet_XccvsQCD_MD", jet.btag_MassDecorrelatedParticleNetDiscriminatorsJetTags_XccvsQCD());
+  candidate.set_discriminators("btag_ParticleNet_mass", jet.ParticleNetMassRegressionJetTags_mass());
 }
 
 
@@ -556,11 +569,11 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
     if (muonchannel && FindInString("Muon", sf.first) ) {
       std::string fname = "VHResonances/Analysis/ScaleFactors/Muons/"+sf.second.first+".root";
       if (FindInString("ID", sf.first)){
-        weight_postfix = "id";        sys = 0.; etaYaxis = true;
+        weight_postfix = "id";        sys = 0.; etaYaxis = false;
       } else if (FindInString("Trigger", sf.first)) {
-        weight_postfix = "trigger";   sys = 2.; etaYaxis = false;
+        weight_postfix = "trigger";   sys = 0.; etaYaxis = false;
       } else if (FindInString("Isolation", sf.first)) {
-        weight_postfix = "isolation"; sys = 0.; etaYaxis = FindInString("2016", year) ? false : true;
+        weight_postfix = "isolation"; sys = 0.; etaYaxis = false;
       } else if (FindInString("Tracking", sf.first)){
         weight_postfix = "tracking";  sys = 0.; etaYaxis = false;
       } else if (FindInString("Reconstruction", sf.first)) {
@@ -577,7 +590,7 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
       } else if (FindInString("Reconstruction", sf.first)) {
         weight_postfix = "reco";      sys = 0.;  etaYaxis = false;
       } else throw invalid_argument("In ScaleFactorsManager.cxx: No implementation for "+sf.first);
-      if (FindInString("2017",year)) sys += 1.0;
+      // if (FindInString("2017",year)) sys += 1.0;
       SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys, weight_postfix, "nominal", "electrons", sf.second.second));
     }
     if (FindInString("Jet_Tagger", sf.first) ) {
@@ -600,7 +613,7 @@ bool ScaleFactorsManager::process(uhh2::Event& event){
       if (cand.discriminator("MuonID"+std::to_string(muid+1))>=0) SFs_muo["Muon_HighPtID"]->process_onemuon(event,muid);
       else SFs_muo["Muon_TrkHighPtID"]->process_onemuon(event,muid);
       SFs_muo["Muon_Isolation"]->process_onemuon(event,muid);
-      SFs_muo["Muon_Tracking"]->process_onemuon(event,muid);
+      // SFs_muo["Muon_Tracking"]->process_onemuon(event,muid);
       SFs_muo["Muon_Reconstruction"]->process_onemuon(event,muid);
     }
   }

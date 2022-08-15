@@ -160,7 +160,7 @@ def newNumber(year,sample,ConfigFile,syst,channel):
     if 'MC_ZprimeToZH' in sample:
         newNumber = 100
     if not 'Preselection' in ConfigFile and not 'SF' in ConfigFile and not 'LeptonIDStudies' in ConfigFile:
-        newNumber = 1 if 'MC_DY' in sample else 1000
+        newNumber = 1 if 'MC_DY' in sample else (10 if 'MC_TT' in sample or 'DATA' in sample else 1000)
         if 'MC_WJets' in sample: newNumber = 10
     if syst!='nominal':
         newNumber = int(0.9*newNumber)
