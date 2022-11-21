@@ -20,17 +20,17 @@ LeptonIDHists::LeptonIDHists(Context & ctx, const string & dname): HistsBase(ctx
 
   if (electronchannel) {
     eleIds["ele_ID_kincut"]                   = PtEtaSCCut(min_lepton_pt, min_lepton_eta);
-    eleIds["ele_ID_MVA_loose_iso"]            = AndId<Electron>(ElectronID_MVA_Fall17_loose_iso,    PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-    eleIds["ele_ID_MVA_loose_noIso"]          = AndId<Electron>(ElectronID_MVA_Fall17_loose_noIso,  PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-    eleIds["ele_ID_HEEP"]                     = AndId<Electron>(ElectronID_HEEP_RunII_25ns,         PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-    eleIds["ele_ID_veto"]                     = AndId<Electron>(ElectronID_Fall17_veto,             PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-    eleIds["ele_ID_veto_noIso"]               = AndId<Electron>(ElectronID_Fall17_veto_noIso,       PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-    eleIds["ele_ID_loose"]                    = AndId<Electron>(ElectronID_Fall17_loose,            PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-    eleIds["ele_ID_loose_noIso"]              = AndId<Electron>(ElectronID_Fall17_loose_noIso,      PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-    eleIds["ele_ID_medium"]                   = AndId<Electron>(ElectronID_Fall17_medium,           PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-    eleIds["ele_ID_medium_noIso"]             = AndId<Electron>(ElectronID_Fall17_medium_noIso,     PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-    eleIds["ele_ID_tight"]                    = AndId<Electron>(ElectronID_Fall17_tight,            PtEtaSCCut(min_lepton_pt, min_lepton_eta));
-    eleIds["ele_ID_tight_noIso"]              = AndId<Electron>(ElectronID_Fall17_tight_noIso,      PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_MVA_loose_iso"]            = AndId<Electron>(ElectronTagID(Electron::mvaEleID_Fall17_iso_V2_wpLoose),          PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_MVA_wp90_iso"]             = AndId<Electron>(ElectronTagID(Electron::mvaEleID_Fall17_iso_V2_wp90),             PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_MVA_wp80_iso"]             = AndId<Electron>(ElectronTagID(Electron::mvaEleID_Fall17_iso_V2_wp80),             PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_MVA_loose_noIso"]          = AndId<Electron>(ElectronTagID(Electron::mvaEleID_Fall17_noIso_V2_wpLoose),        PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_MVA_wp90_noIso"]           = AndId<Electron>(ElectronTagID(Electron::mvaEleID_Fall17_noIso_V2_wp90),           PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_MVA_wp80_noIso"]           = AndId<Electron>(ElectronTagID(Electron::mvaEleID_Fall17_noIso_V2_wp80),           PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_HEEP"]                     = AndId<Electron>(ElectronTagID(Electron::heepElectronID_HEEPV70),                  PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_veto"]                     = AndId<Electron>(ElectronTagID(Electron::cutBasedElectronID_Fall17_94X_V2_veto),   PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_loose"]                    = AndId<Electron>(ElectronTagID(Electron::cutBasedElectronID_Fall17_94X_V2_loose),  PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_medium"]                   = AndId<Electron>(ElectronTagID(Electron::cutBasedElectronID_Fall17_94X_V2_medium), PtEtaSCCut(min_lepton_pt, min_lepton_eta));
+    eleIds["ele_ID_tight"]                    = AndId<Electron>(ElectronTagID(Electron::cutBasedElectronID_Fall17_94X_V2_tight),  PtEtaSCCut(min_lepton_pt, min_lepton_eta));
     for (const auto& id :eleIds) leptoncollections.push_back(id.first);
   }
 

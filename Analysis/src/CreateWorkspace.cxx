@@ -1568,7 +1568,8 @@ int main(int argc, char** argv){
   "DeepAk8_HccvsQCD_MD", "DeepAk8_H4qvsQCD_MD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD_MD",
   "DeepAk8_H4qvsQCD", "DeepAk8_HccvsQCD", "DeepAk8_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_HccvsQCD",
   "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD", "DeepAk8_H4qvsQCD_massdep_ZHccvsQCD_MD", "tau42",
-  "DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD2"};
+  "DeepAk8_HccvsQCD2", "DeepAk8_ZHccvsQCD_MD2",
+  "PN_ZHccvsQCD_MD", "PN_ZHccvsQCD_MD2", "PN_HccvsQCD", "PN_H4qvsQCD"};
 
   if (isHbb) histFolders = {"tau21" };
   std::vector<std::string> collections = {"Puppi"};

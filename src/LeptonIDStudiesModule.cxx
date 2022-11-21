@@ -82,7 +82,7 @@ protected:
   std::vector<std::unique_ptr<AnalysisModule>> weightsmodules, modules;
   std::unique_ptr<uhh2::AndSelection> metfilters_selection;
   std::unique_ptr<GenericJetCleaner> GJC, GTJC;
-  std::unique_ptr<AnalysisModule> PDFReweight_module;
+  // std::unique_ptr<AnalysisModule> PDFReweight_module;
 
   // Define selections
   std::unordered_map<std::string, std::unique_ptr<Selection>> Trigger_selection;
@@ -220,7 +220,7 @@ LeptonIDStudiesModule::LeptonIDStudiesModule(uhh2::Context& ctx){
   GJC.reset( new GenericJetCleaner(ctx, MS["jetLabel"],    false, jetId, topjetId, muoId, eleId));
   GTJC.reset(new GenericJetCleaner(ctx, MS["topjetLabel"], true,  jetId, topjetId, muoId, eleId));
 
-  PDFReweight_module.reset(new PDFReweight(ctx));
+  // PDFReweight_module.reset(new PDFReweight(ctx));
   NBoostedJetSel.reset(new NTopJetSelection(1,-1,topjetId,h_topjets));
 
   if (MB["muonchannel"]) {
@@ -288,7 +288,7 @@ bool LeptonIDStudiesModule::process(uhh2::Event& event) {
   if(!NLeptonSel->passes(event)) return false;
   fill_histograms(event, "NLeptonSel");
 
-  return true;
+  return false;
 }
 
 // as we want to run the ExampleCycleNew directly with AnalysisModuleRunner,

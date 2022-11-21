@@ -8,7 +8,3 @@
 <use name="tensorflow"/>
 <use name="protobuf"/>
 <use name="Eigen"/>
-<use name="FWCore/Framework" />
-<use name="FWCore/Utilities" />
-<use name="FWCore/Concurrency" />
-<use name="RecoBTag/TensorFlow"/>

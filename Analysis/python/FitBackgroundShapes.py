@@ -47,6 +47,7 @@ class FitBackgroundShapes(VariablesBase):
         self.xmin = xmin
         self.xmax = xmax
         self.Folder = "DeepAk8_ZHccvsQCD_MD"
+        self.Folder = "PN_ZHccvsQCD_MD"
         self.degrees = ["1","2","3"]
 
         self.color  = {"1": ROOT.kAzure+2,
@@ -253,9 +254,9 @@ class FitBackgroundShapes(VariablesBase):
                                 hist.SetBinError(i,0)
                         tdrDraw(hist, "", ROOT.kFullCircle, ROOT.kBlack, 1, ROOT.kBlack, 0, ROOT.kBlack)
                         if self.xmin!=-1 or self.xmax!=-1:
-                            canv.SaveAs(self.outdir+"BackgroundShape_"+unique_name+"_"+str(self.xmin)+"_"+str(self.xmax)+".pdf")
+                            canv.SaveAs(self.outdir+"BackgroundShape_"+unique_name+"_"+str(self.xmin)+"_"+str(self.xmax)+"_"+self.Folder+".pdf")
                         else:
-                            canv.SaveAs(self.outdir+"BackgroundShape_"+unique_name+".pdf")
+                            canv.SaveAs(self.outdir+"BackgroundShape_"+unique_name+"_"+self.Folder+".pdf")
         print ftest_tot
         print ftest_store
 
