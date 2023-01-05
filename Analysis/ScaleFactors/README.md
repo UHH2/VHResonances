@@ -2,9 +2,10 @@
 
 **BTag SFs**:
 - BTag ScaleFactors added from:
-  - 2016: https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation2016Legacy subjet_DeepCSV_2016LegacySF_V1.csv
-  - 2017: https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation94X subjet_DeepCSV_94XSF_V4_B_F_v2.csv
-  - 2018: https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation102X subjet_DeepCSV_102XSF_V1.csv
+  - 2016: https://twiki.cern.ch/twiki/bin/view/CMS/BtagRecommendation106XUL16preVFP
+  - 2016: https://twiki.cern.ch/twiki/bin/view/CMS/BtagRecommendation106XUL16postVFP
+  - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/BtagRecommendation106XUL17
+  - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/BtagRecommendation106XUL18
 
 - BTag Efficiencies calculated within the framework.
 

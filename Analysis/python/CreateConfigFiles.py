@@ -21,23 +21,17 @@ YearVars['lumi_file']           = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/
                                    'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/common/UHH2-data/UL18/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON_normtag.root',
                                    }
 
-YearVars['MCBtagEfficiencies']  = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL16postVFP.root',
+YearVars['MCBtagEfficiencies']  = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL16preVFP.root',
                                    'UL16postVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL16postVFP.root',
                                    'UL17': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL17.root',
                                    'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL18.root',
                                    }
 
-YearVars['BTagCalibration']     = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_UL16postVFPLegacySF_V1.csv',
-                                   'UL16postVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_UL16postVFPLegacySF_V1.csv',
-                                   'UL17': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_94XSF_V4_B_F_v2.csv',
-                                   'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_102XSF_V1.csv',
+YearVars['BTagCalibration']     = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_deepCSV_106XUL16preVFP_v1.csv',
+                                   'UL16postVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_deepCSV_106XUL16postVFP_v1.csv',
+                                   'UL17': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_106X_UL17_SF.csv',
+                                   'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_deepCSV_106XUL18_v1.csv',
                                    }
-
-# YearVars['BTagCalibration']     = {'UL16': os.environ['CMSSW_BASE']+'/src/UHH2/common/data/2016/DeepCSV_UL16postVFPLegacySF_WP_V1.csv',
-#                                    'UL17': os.environ['CMSSW_BASE']+'/src/UHH2/common/data/2017/DeepCSV_94XSF_WP_V4_B_F.csv',
-#                                    'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/common/data/2018/DeepCSV_102XSF_WP_V1.csv',
-#                                    }
-
 
 
 def newNumber(year,sample,ConfigFile,syst,channel):
