@@ -166,39 +166,39 @@ Trigger_run_validity = {
 const std::unordered_map<std::string, std::map<std::string, float>>
 lumi_map = {
   { "UL16preVFP", {
-    { "lumiPlot",     20},
+    { "lumiPlot",     19.5},
     { "lumi_fb",      19.53},
     { "lumi_pb",      19530},
     { "uncertainty",  1.2},
   }},
   { "UL16postVFP", {
-    { "lumiPlot",     17},
+    { "lumiPlot",     16.8},
     { "lumi_fb",      16.80},
     { "lumi_pb",      16800},
     { "uncertainty",  1.2},
   }},
   { "UL16", {
-    { "lumiPlot",     36},
-    { "lumi_fb",      36.33},
-    { "lumi_pb",      36330},
+    { "lumiPlot",     36.3},
+    { "lumi_fb",      36.31},
+    { "lumi_pb",      36310},
     { "uncertainty",  1.2},
   }},
   { "UL17", {
-    { "lumiPlot",     41},
+    { "lumiPlot",     41.5},
     { "lumi_fb",      41.48},
     { "lumi_pb",      41480},
     { "uncertainty",  2.3},
   }},
   { "UL18", {
-    { "lumiPlot",     60},
+    { "lumiPlot",     59.8},
     { "lumi_fb",      59.83},
     { "lumi_pb",      59830},
     { "uncertainty",  2.5},
   }},
   { "RunII", {
-    { "lumiPlot",     140},
-    { "lumi_fb",      139.92},
-    { "lumi_pb",      139920},
+    { "lumiPlot",     138},
+    { "lumi_fb",      137.62},
+    { "lumi_pb",      137620},
     { "uncertainty",  1.6},
   }},
 };

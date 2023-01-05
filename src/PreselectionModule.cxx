@@ -213,9 +213,12 @@ PreselectionModule::PreselectionModule(uhh2::Context& ctx){
   metfilters_selection->add<TriggerSelection>("HBHENoiseIsoFilter", "Flag_HBHENoiseIsoFilter");
   metfilters_selection->add<TriggerSelection>("EcalDeadCellTriggerPrimitiveFilter", "Flag_EcalDeadCellTriggerPrimitiveFilter");
   metfilters_selection->add<TriggerSelection>("BadPFMuonFilter", "Flag_BadPFMuonFilter");
-  if (MS["year"] != "2016") metfilters_selection->add<EcalBadCalibSelection>("EcalBadCalibSelection"); /*TODO check 2016*/ // Use this instead of Flag_ecalBadCalibFilter, uses ecalBadCalibReducedMINIAODFilter in ntuple_generator
-  if (!MB["is_mc"]) metfilters_selection->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter"); /* TODO Not recommended for MC, but do check */
-  /* metfilters_selection->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter"); TODO Not recommended, under review.*/
+  metfilters_selection->add<TriggerSelection>("BadPFMuonDzFilter", "Flag_BadPFMuonDzFilter");
+  metfilters_selection->add<TriggerSelection>("ecalBadCalibFilter", "Flag_ecalBadCalibFilter");
+  metfilters_selection->add<EcalBadCalibSelection>("EcalBadCalibSelection");
+  metfilters_selection->add<TriggerSelection>("eeBadScFilter", "Flag_eeBadScFilter");
+  metfilters_selection->add<TriggerSelection>("hfNoisyHitsFilter", "Flag_hfNoisyHitsFilter");
+  metfilters_selection->add<TriggerSelection>("BadChargedCandidateFilter", "Flag_BadChargedCandidateFilter");
 
   //Quick fix for Detector issues
   HEMEventCleaner_Selection.reset(new HEMCleanerSelection(ctx, MS["jetLabel"], MS["topjetLabel"], true, false));

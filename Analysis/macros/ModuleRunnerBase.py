@@ -128,7 +128,7 @@ class VariablesBase(GenericPath):
 
 class ModuleRunnerBase(VariablesBase):
     ''' Class container for list of objects for particular year '''
-    def __init__(self,year='UL16', isAnalysis=True):
+    def __init__(self,year='UL17', isAnalysis=True):
         VariablesBase.__init__(self, isAnalysis=isAnalysis)
         self.year = year
         self.defineDirectories()
