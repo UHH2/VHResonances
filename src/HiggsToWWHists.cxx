@@ -96,6 +96,10 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
       book_TH1F("H_"+disc,"#"+disc+"^{H}",30, -0.01, 1.01);
       book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );
     }
+    else if (FindInString("ParticleNet_mass", disc)) {
+      book_TH1F("H_"+disc, disc+"^{H}",40,  0.,  200.);
+      book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 40,  0.,  200.);
+    }
     else if (FindInString("btag", disc)) {
       book_TH1F("H_"+disc, disc+"^{H}",30, -0.01, 1.01);
       book_TH2F("Zprime"+massPlotName+"vs"+disc, ";"+massType+"^{Zprime} [GeV/c^{2}];"+disc, 330, 0, 9900, 30, -0.01, 1.01 );

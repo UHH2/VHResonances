@@ -46,7 +46,7 @@ const double TaggerThr = 0.8;
 // Theory Corrections
 const bool do_EWK = true;
 const bool do_QCD_EWK = false;
-const bool do_QCD_NLO  = true;
+const bool do_QCD_NLO  = false;
 const bool do_QCD_NNLO = false;
 
 // Taken from :

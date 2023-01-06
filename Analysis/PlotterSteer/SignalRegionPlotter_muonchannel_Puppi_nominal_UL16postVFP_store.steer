@@ -1,0 +1,40 @@
+SteerPlotter(){
+
+  // steering for the plotter
+  fCycleName      = "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/UL16postVFP/SignalRegion/Puppi/muonchannel/nominal/uhh2.AnalysisModuleRunner"; // name of the cycle (first part of the name of the root files)
+  fInputFiles     = "DATA.DATA_SingleMuon_UL16postVFP_noTree.root, MC.MC_DY_UL16postVFP_noTree.root, MC.MC_VV_UL16postVFP_noTree.root, MC.MC_TTbar_UL16postVFP_noTree.root, MC.MC_ZprimeToZH_M2000_UL16postVFP_noTree.root,   MC.MC_ZprimeToZH_M3000_UL16postVFP_noTree.root,     MC.MC_ZprimeToZH_M5000_UL16postVFP_noTree.root "; // name of the input files (second part)
+  fSampleNames    = " Data,  DY,   VV,   TTbar,  Z'SPACE2SPACETeV,  Z'SPACE3SPACETeV,  Z'SPACE5SPACETeV";  // name of chains to be plotted
+  fSamplesWeight  = " 1.0,   1.0,  1.0,  1.0,    0.001,             0.001,             0.001";             // weights applied to the samples (same order as in fInputFiles)
+  fSamplesUnc     = " 0.0,   0.0,  0.0,  0.0,    0.0,               0.0,               0.0";               // normalisation uncertainty of individual samples
+  fHistColors     = " 1,     798,  418,  633,    1,                 1,                 1";                 // the colors of the histograms, negative numbers mean no filling
+  fHistMarkers    = " 20,    0,    0,    0,      0,                 -1,                -2";                // histogram markers (0=solid line, -1=dashed line, 24=open circle...)
+
+  fSamplesToStack = "TTbar, VV, DY";                                                        // the names of chains which you would like to stack (same as in input filenames)
+
+  fOutputPsFile = "/nfs/dust/cms/user/amalara/WorkingArea/File/Analysis/UL16postVFP/SignalRegion/Puppi/muonchannel/nominal/Plots/SignalRegion_muonchannel_Puppi.ps";
+
+  bRatioPlot      = true;   // plot ratio histograms?
+  bZScoreInRatio  = false;  // plot z-score instead of usual ratio
+  bDrawLegend     = true;   // draw a legend on each histogram? (otherwise only on the first one in each ps file)
+  bShapeNorm      = false;  // shape normalization?
+  bPortrait       = true;   // portrait or landscape?
+  bDrawEntries    = false;  // draw the histogram entries?
+  fLumi           = 35.9;   // luminosity of sample
+  fSysError       = 0.025;  // luminosity uncertainty
+  bDrawLumi       = true;   // plot ratio histograms?
+  bForPrelim      = true;   // draw text saying "CMS Preliminary" -> only works if bDrawLumi is on
+  bForPublication = false;  // draw text saying "CMS" -> only works if bDrawLumi is on
+  bSingleEPS 	    = false;  // True for single plots
+  bLogy           = true;
+  bScaleToWidth   = false;
+
+}
+
+
+// Colors from ROOT:
+// num EColor { kWhite =0,   kBlack =1,   kGray=920
+//             ,kRed   =632, kGreen =416, kBlue=600, kYellow=400, kMagenta=616, kCyan=432
+//             ,kOrange=800, kSpring=820, kTeal=840, kAzure =860, kViolet =880, kPink=900};
+//
+// default QCD   = 867 -> lighter version of Azure
+// default ttbar = 810 -> dark version of Orange (rather red)
