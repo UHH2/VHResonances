@@ -34,40 +34,43 @@ class PlotBTagEfficiencies(VariablesBase):
     def __init__(self):
         VariablesBase.__init__(self)
         self.years = ['UL16preVFP', 'UL16postVFP','UL17','UL18']
-        TDR.lumi_13TeV  = str(round(float(self.lumi_map['RunII']['lumiPlot']),1))+' fb^{-1}'
-        self.outdir     = self.Path_ANALYSIS+'Analysis/OtherPlots/BTag/'
-        self.nameXaxis  = 'p_{T} [GeV]'
-        self.nameYaxis  = 'Efficiency'
-        self.Xaxis_min  = 0
-        self.Xaxis_max  = 1000-1
-        self.Yaxis_min  = 0.001
-        self.Yaxis_max  = 1.2
-        self.lepton     = 'lepton'
-        self.histoname  = 'BTagMCEff'
-        self.defaultFlav= 'FlavB'
-        self.defaultCut = 'JetDiLeptonPhiAngular'
-        self.Cuts       = ['NLeptonSel', 'NBoostedJet','JetDiLeptonPhiAngular']
-        self.Flavours   = ['FlavB', 'FlavC', 'FlavUDSG']
-        self.Modes      = ['Passing', 'Total']
-        self.histos     = {}
+        TDR.cms_lumi     = self.lumi_map['RunII']['lumiPlot']+' fb^{-1}'
+        self.outdir      = self.Path_ANALYSIS+'Analysis/OtherPlots/BTag/'
+        self.nameXaxis   = 'p_{T} [GeV]'
+        self.nameYaxis   = 'Efficiency'
+        self.Xaxis_min   = 0
+        self.Xaxis_max   = 1000-1
+        self.Yaxis_min   = 0.001
+        self.Yaxis_max   = 1.2
+        self.lepton      = 'lepton'
+        self.histoname   = 'BTagMCEff'
+        self.defaultFlav = 'FlavB'
+        self.defaultCut  = 'JetDiLeptonPhiAngular'
+        self.Cuts        = ['NLeptonSel', 'NBoostedJet','JetDiLeptonPhiAngular']
+        self.Flavours    = ['FlavB', 'FlavC', 'FlavUDSG']
+        self.Modes       = ['Passing', 'Total']
+        self.histos      = {}
+        self.recreate    = False
+        # self.recreate    = True
 
         os.system('mkdir -p '+self.outdir)
+        os.system('mkdir -p '+self.outdir.replace('OtherPlots','ScaleFactors'))
         self.MergeSignalSamples()
 
     def MergeSignalSamples(self):
         for year in self.years:
             for channel in self.Channels:
-                filename = self.Path_STORAGE+year+'/Preselection/Puppi/'+channel+'channel/nominal/uhh2.AnalysisModuleRunner.MC.MC_ZprimeToZH_'+year+'_noTree.root'
-                if 'invisible' in channel: filename = filename.replace('ZprimeToZH_','ZprimeToZH_inv_')
+                filename = self.Path_STORAGE+year+'/Preselection/Puppi/'+channel+'channel/nominal/'+self.PrefixrootFile+'MC.'+self.Signal+'_'+year+'_noTree.root'
+                if 'invisible' in channel: filename = filename.replace(self.Signal+'_',self.Signal+'_inv_')
+                if self.recreate: os.system('rm '+filename)
                 if (not os.path.exists(filename)): os.system('hadd -f '+filename+' '+filename.replace(year+'_noTree.root','M*'+year+'_noTree.root'))
 
     def LoadHistos(self):
         for year in self.years:
             # Load MC_DY histos
             for channel in self.Channels:
-                # filename = self.Path_STORAGE+year+'/Preselection/Puppi/'+channel+'channel/nominal/uhh2.AnalysisModuleRunner.MC.MC_DY_'+year+'_noTree_merge.root'
-                filename = self.Path_STORAGE+year+'/Preselection/Puppi/'+channel+'channel/nominal/uhh2.AnalysisModuleRunner.MC.MC_ZprimeToZH_'+year+'_noTree.root'
-                if 'invisible' in channel: filename = filename.replace('ZprimeToZH_','ZprimeToZH_inv_')
+                filename = self.Path_STORAGE+year+'/Preselection/Puppi/'+channel+'channel/nominal/'+self.PrefixrootFile+'MC.'+self.Signal+'_'+year+'_noTree.root'
+                if 'invisible' in channel: filename = filename.replace(self.Signal+'_',self.Signal+'_inv_')
                 file_ = ROOT.TFile(filename)
                 for cut,flavor,mode in list(itertools.product(self.Cuts, self.Flavours, self.Modes)):
                     hname = year+channel+cut+flavor+mode

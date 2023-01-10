@@ -16,7 +16,7 @@ class PlotDataPerRun(VariablesBase):
         self.year = year
         self.steps = steps
         self.variables = variables
-        TDR.lumi_13TeV  = str(round(float(self.lumi_map[self.year]["lumi_fb"]),1))+" fb^{-1}"
+        TDR.cms_lumi = self.lumi_map[self.year]['lumiPlot']+' fb^{-1}'
         self.module = module
         self.histFolders = histFolders
         if Channels!="": self.Channels = Channels

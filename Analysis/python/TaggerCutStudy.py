@@ -43,7 +43,7 @@ colors = {"2016":       rt.kGreen+1,
 class TaggerCutStudy(VariablesBase):
     def __init__(self):
         VariablesBase.__init__(self)
-        TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
+        TDR.cms_lumi = self.lumi_map['RunII']['lumiPlot']+' fb^{-1}'
         self.Channels = ['muon', 'electron']
         print self.Channels
         self.hfName = "Histos"

@@ -81,7 +81,7 @@ class PlotHistograms(VariablesBase):
         else: MassPoints = self.MassPoints
         for year in years:
             for var in self.Variables:
-                TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}" if TDR.extraText!="Simulation" else "MC "+year
+                TDR.cms_lumi = self.lumi_map[year]['lumiPlot']+' fb^{-1}' if TDR.extraText!="Simulation" else "MC "+year
                 self.CreateCanvas(year+var)
                 for mode in self.Modes:
                     for mass in MassPoints:

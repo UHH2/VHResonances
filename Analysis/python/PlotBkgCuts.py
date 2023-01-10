@@ -65,7 +65,7 @@ class PlotBkgCuts(VariablesBase):
 
     def PlotHistos(self):
         self.LoadHistos()
-        TDR.lumi_13TeV  = str(round(float(self.lumi_map[self.year]["lumi_fb"]),1))+" fb^{-1}"
+        TDR.cms_lumi = self.lumi_map[self.year]['lumiPlot']+' fb^{-1}'
         canv = tdrCanvas("canv", 300, 4000, 1e-03, 6*1e4, "M_{Z'} (GeV)","Events")
         leg = tdrLeg(0.50,0.60,0.89,0.89, 0.030, 42, ROOT.kBlack);
         leg.SetNColumns(2)

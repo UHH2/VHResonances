@@ -163,7 +163,7 @@ class PlotSignalEfficiencies(VariablesBase):
         for year in self.years:
             for collection in self.Collections:
                 for channel in self.Channels+["chargedlepton"]:
-                    TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}" if TDR.extraText!="Simulation" else "MC "+year
+                    TDR.cms_lumi = self.lumi_map[year]['lumiPlot']+' fb^{-1}' if TDR.extraText!="Simulation" else "MC "+year
                     self.CreateCanvas(year+collection+channel+"Cuts")
                     grs = []
                     for cut in self.CutsList:

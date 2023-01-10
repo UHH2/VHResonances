@@ -32,7 +32,7 @@ colors = {"HbbMatchall":       (rt.kOrange+1, rt.kFullTriangleUp,   "Hbb"),
 class PrintEventNumber(VariablesBase):
     def __init__(self, years=[], Channels=[], Collections=["Puppi"], histFolders=[]):
         VariablesBase.__init__(self)
-        TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
+        TDR.cms_lumi = self.lumi_map['RunII']['lumiPlot']+' fb^{-1}'
         self.years = years
         self.Channels = Channels
         self.Collections = Collections

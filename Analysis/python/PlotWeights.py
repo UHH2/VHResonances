@@ -20,7 +20,7 @@ class PlotWeights(VariablesBase):
         self.variables = variables
         self.samples = samples
         self.module = module
-        TDR.lumi_13TeV  = str(round(float(self.lumi_map[self.year]["lumi_fb"]),1))+" fb^{-1}"
+        TDR.cms_lumi = self.lumi_map[self.year]['lumiPlot']+' fb^{-1}'
         self.module = module
         self.histFolders = histFolders
         if Channels!="": self.Channels = Channels

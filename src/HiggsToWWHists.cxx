@@ -147,7 +147,7 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
     book_TH1F("Zprime_ptinv"+massPlotName, "E_{T}^{miss}/"+massType+"(Z')", 10, 0, 1);
   }
 
-  for (const std::string & disc : {"Hcc", "HccMD"}) {
+  for (const std::string & disc : {"Hcc", "HccMD", "PN_MD"}) {
     for (const std::string & sel : {"tot", "Twp", "Mwp", "Lwp"}) {
       auto name = disc+"_ptvsmatch_"+sel;
       book_TH2F(name,";p_{T}^{H} [GeV];MatchingStatus^{H}", 7, 0, 7, 19, 0, 19);
@@ -337,6 +337,8 @@ void HiggsToWWHists::fill(const Event & event){
 
     double HccvsQCD    = cand.discriminator("btag_DeepBoosted_HccvsQCD");
     double HccvsQCD_MD = cand.discriminator("btag_DeepBoosted_HccvsQCD_MD");
+    double PN_ZHccvsQCD_MD = cand.discriminator("btag_ParticleNet_ZHccvsQCD");
+
     double H_pt = cand.H().pt();
 
     std::string H_pt_str = "";
@@ -351,6 +353,8 @@ void HiggsToWWHists::fill(const Event & event){
     // Values hard-coded taken from Loukas
     H2("Hcc_ptvsmatch_tot")->Fill(H_pt_str.c_str(), match.c_str(), weight);
     H2("HccMD_ptvsmatch_tot")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+    H2("PN_MD_ptvsmatch_tot")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+
     if (HccvsQCD>0.90)      H2("Hcc_ptvsmatch_Twp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
     else if (HccvsQCD>0.80) H2("Hcc_ptvsmatch_Mwp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
     else if (HccvsQCD>0.70) H2("Hcc_ptvsmatch_Lwp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
@@ -358,6 +362,10 @@ void HiggsToWWHists::fill(const Event & event){
     if (HccvsQCD_MD>0.90)      H2("HccMD_ptvsmatch_Twp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
     else if (HccvsQCD_MD>0.80) H2("HccMD_ptvsmatch_Mwp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
     else if (HccvsQCD_MD>0.70) H2("HccMD_ptvsmatch_Lwp")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+
+    if (PN_ZHccvsQCD_MD>0.90)      H2("PN_MD_ptvsmatch_tot")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+    else if (PN_ZHccvsQCD_MD>0.80) H2("PN_MD_ptvsmatch_tot")->Fill(H_pt_str.c_str(), match.c_str(), weight);
+    else if (PN_ZHccvsQCD_MD>0.70) H2("PN_MD_ptvsmatch_tot")->Fill(H_pt_str.c_str(), match.c_str(), weight);
 
     double HT = cand.H().pt();
     double ST = cand.H().pt()+cand.Z().pt();

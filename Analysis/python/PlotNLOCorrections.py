@@ -94,7 +94,7 @@ class PlotNLOCorrections(VariablesBase):
         file_.Close()
 
     def ResetCanvas(self, name="all"):
-        self.canv = tdrCanvas(name, self.Xaxis_min[name], self.Xaxis_max[name], self.Yaxis_min[name], self.Yaxis_max[name], self.nameXaxis, self.nameYaxis, iPeriod=0)
+        self.canv = tdrCanvas(name, self.Xaxis_min[name], self.Xaxis_max[name], self.Yaxis_min[name], self.Yaxis_max[name], self.nameXaxis, self.nameYaxis, iPos=0)
         self.leg = tdrLeg(0.40, 0.70, 0.95, 0.89)
         if "all" == name:
             self.leg.SetNColumns(2)

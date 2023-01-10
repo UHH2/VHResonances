@@ -112,7 +112,7 @@ class CompareBTagVariables(ModuleRunnerBase):
         for year, sample in list(itertools.product(self.years, self.samples)):
             if "inv" in sample: continue
             for histFolder in self.histFolders:
-                TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}"
+                TDR.cms_lumi = self.lumi_map[year]['lumiPlot']+' fb^{-1}'
                 self.canv_ratio[sample+year+histFolder+self.match] = tdrCanvas("canvratio"+sample+year+histFolder+self.match, 0, 1, -1, 10, self.histoName, "ratio")
                 self.legend[sample+year+self.histoName+histFolder] = tdrLeg(0.30,0.80,0.89,0.89, 0.030, 42, ROOT.kBlack)
 
@@ -145,7 +145,7 @@ class CompareBTagVariables(ModuleRunnerBase):
 
         # Take 2017 of a channel as denominator and 2016 or 2018 as nominator of same channel.
         # histograms are normalised
-        TDR.lumi_13TeV  = ""
+        TDR.cms_lumi = ""
         for channel, sample, histFolder in list(itertools.product(["electron","muon", "invisible"], self.samples, self.histFolders)):
             if "inv" in sample: continue
             histo_den = self.histos[channel+sample+histFolder+"2017"+self.match]

@@ -20,7 +20,7 @@ Module to plot LeptonID Efficiency
 class CalculateSystematicEffects(VariablesBase):
     def __init__(self, year = "RunII", channel = "muonchannel", histFolder="btag_DeepBoosted_H4qvsQCD", studies = "nominal", collection="Puppi"):
         VariablesBase.__init__(self)
-        TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}"
+        TDR.cms_lumi = self.lumi_map[year]['lumiPlot']+' fb^{-1}'
         self.year = year
         self.channel = channel.replace("channel","")
         self.isInv   = "inv" in self.channel

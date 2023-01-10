@@ -37,7 +37,7 @@ class PlotTaggerPtDependence(VariablesBase):
         x_values = np.array([800,1000,1200,1400,1600,1800,2000,2500,3000,3500,4000,4500,5000])
         y_values = np.array([0.0360,0.0193,0.0113,0.0075,0.0055,0.0044,0.0034,0.0035,0.0024,0.0034,0.0025,0.0034,0.0044])
         y_errors = np.array([0.0546,0.0242,0.0139,0.0089,0.0064,0.0065,0.0044,0.0044,0.0029,0.0044,0.0029,0.0039,0.0071])
-        TDR.lumi_13TeV  = "MC RunII"
+        TDR.cms_lumi = "MC RunII"
         canv = tdrCanvas("PlotPt", 600, 5200, 1e-03, 2*1e-01, "M(Z')[GeV]","H4qvsQCD threshold")
         canv.SetLogy(1)
         leg = tdrLeg(0.60,0.60,0.89,0.89, 0.045, 42, ROOT.kBlack)

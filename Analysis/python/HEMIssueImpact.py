@@ -10,7 +10,7 @@ TDR.extraText = "Work in progress"
 class HEMIssueImpact(VariablesBase):
     def __init__(self):
         VariablesBase.__init__(self)
-        TDR.lumi_13TeV  = str("2018 RunCD")
+        TDR.cms_lumi = str("2018 RunCD")
         self.outdir = self.Path_ANALYSIS+"Analysis/OtherPlots/HEMIssueImpact/"
         os.system("mkdir -p "+self.outdir)
         # self.histfolders = ["nocuts", "weights", "HEM", "cleaned", "JetDiLeptonPhiAngular", "QCDRejection", "ScaleFactors", "ExtraCleaning", "DeepAk8_ZHccvsQCD_MD_SR"]

@@ -107,7 +107,7 @@ class PlotZprimeMassByFlavor(VariablesBase):
                             if DoControl([""], unique_name, channel, sample): continue
                             stack = ROOT.THStack(unique_name, "")
                             norm = self.hists[unique_name+"_Inclusive"].Integral()
-                            TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]["lumi_fb"]),1))+" fb^{-1}" if TDR.extraText!="Simulation" else "MC "+year
+                            TDR.cms_lumi = self.lumi_map[year]['lumiPlot']+' fb^{-1}' if TDR.extraText!="Simulation" else "MC "+year
                             mass = float(sample.replace(self.Signal+("_inv" if isInv else "")+"_M",""))
                             canv = tdrCanvas(unique_name, 0 if self.doHmass else int(mass/3.), 200 if self.doHmass else int(mass*1.5), 0.0001, 1 if not isInv else 1, Xaxis, "A.U.", isExtraSpace=True)
                             canv.SetLogy(1)

@@ -82,7 +82,7 @@ class PlotTaggerShapes(VariablesBase):
         self.LoadHistos()
         for disc in self.Discriminators:
             for channel in self.Channels+["lepton"]:
-                TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}" if TDR.extraText!="Simulation" else "MC RunII"
+                TDR.cms_lumi = self.lumi_map['RunII']['lumiPlot']+' fb^{-1}' if TDR.extraText!="Simulation" else "MC RunII"
                 canv = tdrCanvas(disc+channel, -0.05, 1.05, 0.0001, 20, disc.replace("_MD",""),"A.U.")
                 canv.SetLogy(1)
                 leg = tdrLeg(0.70,0.70,0.89,0.89, 0.030, 42, ROOT.kBlack);

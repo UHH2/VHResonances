@@ -45,7 +45,7 @@ void CreateRooWorkspace::CalculateSignalFittingRange(double mass, double& rangeL
     if (mass==1400) { rangeLo = 1000; rangeHi = 1800;}
     if (mass==1600) { rangeLo = 1200; rangeHi = 2000;}
     if (mass==1800) { rangeLo = 1200; rangeHi = 2600;}
-    if (mass==2000) { rangeLo = 1100; rangeHi = 2500;}
+    if (mass==2000) { rangeLo = 1200; rangeHi = 2500;}
     if (mass==2500) { rangeLo = 1300; rangeHi = 3200;}
     if (mass==3000) { rangeLo = 1000; rangeHi = 3600;}
     if (mass==3500) { rangeLo = 1400; rangeHi = 4200;}
@@ -221,7 +221,7 @@ void CreateRooWorkspace::SetEnv() {
 
   writeExtraText = true;       // if extra text
   extraText  = "Work in progress" ;//"Preliminary";
-  lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at(year).at("lumi_fb"));
+  lumi_13TeV  = TString::Format("%.1f fb^{-1}", lumi_map.at(year).at("lumiPlot"));
 
   user            = std::getenv("USER");
   Path_ANALYSIS   = std::getenv("CMSSW_BASE"); Path_ANALYSIS += "/src/UHH2/VHResonances/";
@@ -240,7 +240,6 @@ void CreateRooWorkspace::SetEnv() {
   if (FindInVector(SystNames, "all")) {
     SystNames.erase(SystNames.begin()+FindInVector(SystNames,"all"));
     for (std::string syst: SystematicsAll) {
-      if (!FindInString("muon",channel) && FindInString("tracking",syst)) continue;
       if (!FindInString("muon",channel) && FindInString("isolation",syst)) continue;
       if (!FindInString("muon",channel) && FindInString("MuonScale",syst)) continue;
       if (FindInString("invisible",channel) && FindInString("id",syst)) continue;
@@ -550,7 +549,7 @@ void CreateRooWorkspace::LoadFiles() {
 
 }
 
-void CreateRooWorkspace::PrepocessHistos() {
+void CreateRooWorkspace::PreprocessHistos() {
   /*
   & &&&&&&&&  &&&&&&&&  &&&&&&&& &&&&&&&&   &&&&&&&   &&&&&&  &&&&&&&&  &&&&&&   &&&&&&     &&     && &&&&  &&&&&&  &&&&&&&&  &&&&&&&   &&&&&&
   & &&     && &&     && &&       &&     && &&     && &&    && &&       &&    && &&    &&    &&     &&  &&  &&    &&    &&    &&     && &&    &&
@@ -576,6 +575,23 @@ void CreateRooWorkspace::PrepocessHistos() {
     if (mode=="DY_SR" || mode=="MC_SR" || (mode=="bkg_pred" && fitMC)) {//TODO Check for the invisiblechannel
       for (int i = 0; i < x.second->GetNbinsX()+1; i++) {
         if (x.second->GetBinContent(i)<2*1e-03) { histo_map[mode]->SetBinContent(i,0); histo_map[mode]->SetBinError(i,0); }
+      }
+    }
+
+    bool toSkip = FindInString("bkg_pred", mode) || FindInString("fake", mode) || FindInString("00", mode);
+    bool isData = FindInString("data", mode);
+    bool isCR = FindInString("CR", mode);
+    bool isInv = channel=="invisiblechannel";
+    int min_rel_err = 0;
+    if ( isData &&  isCR) min_rel_err = isInv? 10 : 2;
+    if (!isData && !isCR) min_rel_err = 15;
+    if (!isData &&  isCR) min_rel_err = isInv? 10 : 5;
+    if (!toSkip){
+      for (int i = 0; i < x.second->GetNbinsX()+1; i++) {
+        double bin_content = histo_map[mode]->GetBinContent(i);
+        double bin_error = histo_map[mode]->GetBinError(i);
+        double err_rel = bin_content!=0? 100.*bin_error/bin_content : 0;
+        if (err_rel>0 && err_rel<min_rel_err)histo_map[mode]->SetBinError(i,std::max(min_rel_err,(int)err_rel)*bin_content/100);
       }
     }
   }
@@ -631,11 +647,11 @@ void CreateRooWorkspace::NormaliseData() {
   for (int i = 0; i < histo_map["data_obs"]->GetNbinsX()+1; i++) {
     if (histo_map["data_obs"]->GetXaxis()->GetBinUpEdge(i)<fit_lo_SR || histo_map["data_obs"]->GetXaxis()->GetBinLowEdge(i)>fit_hi_SR){
       histo_map["data_obs"]->SetBinContent(i,0); histo_map["data_obs"]->SetBinError(i,0);
-
     }
   }
 
   data_obs.reset(new RooDataHist("data_obs", histo_map["data_obs"]->GetName(), RooArgList(*x_var), histo_map["data_obs"].get()));
+
   DataCard << " Background number of events = " << nEventsSR << " " << CalculateIntegral(histo_map["data"].get(),0,10000,doBinWidth) << std::endl;
 }
 
@@ -912,11 +928,7 @@ void CreateRooWorkspace::DoFits() {
   for (auto mode: Modes) {
     for (auto const& [model,dofit] : doFits_map[mode] ) {
       if (!dofit) continue;
-      if (mode=="data") {
-        FitRes_map[mode][model].reset(Fits_map[mode][model]->fitTo(*rooHist_map[mode], RooFit::Range(fit_min[mode], fit_max[mode]), RooFit::SumW2Error(kFALSE), RooFit::Minimizer("Minuit2"), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
-      } else {
-        FitRes_map[mode][model].reset(Fits_map[mode][model]->fitTo(*rooHist_map[mode], RooFit::Range(fit_min[mode], fit_max[mode]), RooFit::SumW2Error(kTRUE), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
-      }
+      FitRes_map[mode][model].reset(Fits_map[mode][model]->fitTo(*rooHist_map[mode], RooFit::Range(fit_min[mode], fit_max[mode]), RooFit::SumW2Error(kTRUE), RooFit::Minimizer("Minuit2"), RooFit::Save(), RooFit::Verbose(kFALSE), RooFit::PrintEvalErrors(-1)));
     }
   }
 
@@ -1003,18 +1015,24 @@ void CreateRooWorkspace::PlotBkgFit() {
     std::unordered_map<std::string, RooHist*> hratio;
     std::unordered_map<std::string, double> chi2_map;
 
-    std::string isCR = FindInString("CR", mode) ? "CR" : "SR";
-    double show_lo = ranges.at(isCR).at(channel).at("show_lo");
-    double show_hi = ranges.at(isCR).at(channel).at("show_hi");
+    bool isData = FindInString("data", mode);
+    bool isCR = FindInString("CR", mode);
+    std::string CR_string = isCR ? "CR" : "SR";
 
-    TCanvas* c_bg = tdrDiCanvas(("Events"+mode).c_str(), show_lo, show_hi, plot_ylo, plot_yhi, doPlotRatio?0.8:-6, doPlotRatio?1.2:6, nameXaxis, nameYaxis, nameRatioaxis);
+    double show_lo = ranges.at(CR_string).at(channel).at("show_lo");
+    double show_hi = ranges.at(CR_string).at(channel).at(isData? "fit_hi": "show_hi")+150;
+
+    double plot_ylo_ = isData? plot_ylo: plot_ylo/100;
+    double plot_yhi_ = isCR? plot_yhi/1e03: plot_yhi/1e04;
+    if (channel=="invisiblechannel") plot_yhi_ = isCR? plot_yhi/10: plot_yhi/1e02;
+
+    TCanvas* c_bg = tdrDiCanvas(("Events"+mode).c_str(), show_lo, show_hi, plot_ylo_, plot_yhi_, doPlotRatio?0.8:-6, doPlotRatio?1.2:6, nameXaxis, nameYaxis, nameRatioaxis);
     c_bg->cd(1)->SetLogy(1);
     // plotter = x_var->frame(plot_lo,plot_hi);
-    plotter.reset(x_var->frame(plot_lo,plot_hi));
+    plotter.reset(x_var->frame(show_lo,show_hi));
 
     // if (mode=="DY_SR") rooHist_map["data"]->plotOn(plotter.get(), RooFit::LineColor(kRed+1), RooFit::DataError(RooAbsData::Poisson));
-    if (mode=="data") rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::Poisson));
-    else rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2), RooFit::Name(mode.c_str()));
+    rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2), RooFit::Name(mode.c_str()));
     // rooHist_map[mode]->plotOn(plotter.get(),RooFit::DataError(RooAbsData::SumW2));
     // rooHist_map[mode]->plotOn(plotter.get());
 
@@ -1056,16 +1074,11 @@ void CreateRooWorkspace::PlotBkgFit() {
         double pv = TMath::Prob(chi2_map[model]*ndf, ndf)*100;
         TString name = model+std::string(7-model.size(), ' ' )+" #chi^{2}/n.d.f. = "+TString::Format("%.1f",chi2_map[model])+" p-value = "+TString::Format("%.2f",pv)+"\%";
 
-        std::string isCR = FindInString("CR", mode) ? "CR" : "SR";
+        std::string CR_string = FindInString("CR", mode) ? "CR" : "SR";
 
-        ranges.at("CR").at(channel).at("show_lo");
-        ranges.at("CR").at(channel).at("show_hi");
+        double show_lo = ranges.at(CR_string).at(channel).at("show_lo");
+        double show_hi = ranges.at(CR_string).at(channel).at("show_hi");
 
-        double show_lo = ranges.at(isCR).at(channel).at("show_lo");
-        double show_hi = ranges.at(isCR).at(channel).at("show_hi");
-        if (FindInString("data", mode) && FindInString("CR", mode)) {
-          show_hi = ranges.at("CR").at(channel).at("show_hi_data");
-        }
         Fits_map[mode][model]->plotOn(plotter.get(), RooFit::LineColor(color), RooFit::Range(show_lo, show_hi, kFALSE), RooFit::FillColor(color), RooFit::VisualizeError(*FitRes_map[mode][model], 0.7), RooFit::FillStyle(3001), RooFit::VLines());
         Fits_map[mode][model]->plotOn(plotter.get(), RooFit::LineColor(color), RooFit::Range(show_lo, show_hi, kFALSE));
         hpull[model] = plotter->pullHist();
@@ -1491,7 +1504,6 @@ void CreateRooWorkspace::InputDatacards(){
   for (auto mode: Modes) {
     for (auto const& [model,dofit] : doFits_map[mode] ) {
       if (!dofit || (model.find("Exp")!= std::string::npos && model!="Exp_2" && model!="Exp_3" && model!="Exp_4") ) continue;
-      // double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_lo_SR, fit_hi_SR);
       double frac = CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_min[mode], fit_max[mode]);
       if (debug) std::cout << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << " " << CalculateFractionAreaPDF(Fits_map[mode][model].get(), *x_var.get(), fit_min[mode], fit_max[mode]) << std::endl;
       DataCard  << mode+"_"+model+unique_name << " integral " << nEventsSR/frac  << " " << frac << std::endl;
@@ -1533,7 +1545,7 @@ void CreateRooWorkspace::Process() {
 
 
   LoadFiles();//OK
-  PrepocessHistos();//OK
+  PreprocessHistos();//OK
   NormaliseData(); //OK
   DoRebin(); //TODO put it in the correct place
   InitializePDFs(); //OK

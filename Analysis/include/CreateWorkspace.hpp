@@ -114,9 +114,9 @@ std::unordered_map<std::string, int> Colors = {
 
   { "NO",          kAzure+7},
   { "CB",          kOrange+1},
-  { "Exp_1",       kMagenta+1},
-  { "Exp_2",       kRed+1},
-  { "Exp_3",       kGreen+3},
+  { "Exp_1",       kRed+1},
+  { "Exp_2",       kGreen+2},
+  { "Exp_3",       kAzure+2},
   { "Exp_4",       kOrange+1},
   { "Exp_5",       kAzure+7},
   { "Exp_6",       kBlack},
@@ -158,7 +158,7 @@ public:
   void SetEnv();
   void LoadFiles();
   void LoadHistos();
-  void PrepocessHistos();
+  void PreprocessHistos();
   void NormaliseData();
   void DoRebin();
   void InitializePDFs();
@@ -189,8 +189,10 @@ private:
 
   std::vector<std::string> SystNames = {"nominal", "all"};
   // std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "mur", "muf", "murmuf" };
-  std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
-  std::vector<std::string> SystematicsShape = {"JEC", "JER", "MuonScale"};
+  // std::vector<std::string> SystematicsScale = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
+  // std::vector<std::string> SystematicsShape = {"JEC", "JER", "MuonScale"};
+  std::vector<std::string> SystematicsScale = {};
+  std::vector<std::string> SystematicsShape = {};
   std::vector<std::string> SystematicsAll;
   std::vector<std::string> Var_murmuf = {"upup", "upnone", "noneup", "nonedown", "downnone", "downdown"};
   const int PDF_variations = 100;
@@ -252,7 +254,6 @@ private:
 
   TString extra_text = doFtest? "_Ftest_": "";
 
-  // double x_lo     = 800;
   double x_lo     = 1000;
   double x_hi     = 6000;
   double x_lo_short = 1000;
@@ -261,84 +262,56 @@ private:
   double plot_hi  = 6000;
   double plot_ylo = 0.101;
   double plot_yhi = 1e07;
-  // double fit_lo   = 600;
-  // double fit_lo   = 1230;
-  // double fit_hi   = 3500;
-
-  // double fit_lo   = 1360; DY_CR bin30 ok also for DR_SR 30
-  // double fit_hi   = 5500; DY_CR bin30 ok also for DR_SR 30
-  // double fit_lo   = 1200; data_CR bin30
-  // double fit_hi   = 4000; data_CR bin30
-  // double fit_lo   = 1300; DR_SR bin30
-  // double fit_hi   = 4500; DR_SR bin30
-  // double fit_SR   = 810;
-  // double fit_min_CR = 1400;
-  // double fit_max_CR = 5000;
-
   double fit_lo_SR;
   double fit_lo_CR;
   double fit_hi_SR;
   double fit_hi_CR;
-  double show_lo_SR;
-  double show_hi_SR;
-  double show_lo_CR;
-  double show_hi_CR;
 
   const std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, double>>> ranges = {
     { "SR", {
       { "muonchannel", {
         { "fit_lo",  1000},
         { "fit_hi",  3000},
-        { "show_lo", 1000},
+        { "show_lo",  700},
         { "show_hi", 4500},
       }},
       { "electronchannel", {
-        { "fit_lo",  900},
-        { "fit_hi",  2800},
-        { "show_lo", 1000},
+        { "fit_lo",  1000},
+        { "fit_hi",  3000},
+        { "show_lo",  700},
         { "show_hi", 4500},
       }},
       { "invisiblechannel", {
-        { "fit_lo",  1000},
-        { "fit_hi",  3000},
-        { "show_lo", 700},
-        { "show_hi", 3150},
+        { "fit_lo",  1500},
+        { "fit_hi",  2500},
+        { "show_lo",  700},
+        { "show_hi", 3000},
       }},
     }},
     { "CR", {
       { "muonchannel", {
-        { "fit_lo",  1300},
-        { "fit_hi",  4200},
-        { "show_lo", 1200},
+        { "fit_lo",  1000},
+        { "fit_hi",  3900},
+        { "show_lo",  700},
         { "show_hi", 6000},
-        { "show_lo_data", 1200},
-        { "show_hi_data", 3500},
       }},
       { "electronchannel", {
-        { "fit_lo",  1300},
-        { "fit_hi",  3300},
-        { "show_lo", 1200},
+        { "fit_lo",  1000},
+        { "fit_hi",  3900},
+        { "show_lo",  700},
         { "show_hi", 6000},
-        { "show_lo_data", 1200},
-        { "show_hi_data", 4500},
       }},
       { "invisiblechannel", {
-        { "fit_lo",  1300},
-        { "fit_hi",  4200},
-        { "show_lo", 1200},
+        { "fit_lo",  1000},
+        { "fit_hi",  3900},
+        { "show_lo",  700},
         { "show_hi", 6000},
-        { "show_lo_data", 1200},
-        { "show_hi_data", 3500},
       }},
     }},
   };
 
-  // double fit_SR   = 1000;
-  double fit_min_CR = 1400;
-  double fit_max_CR = 6000;
-
   bool debug = false;
-  // bool debug = true;
+  //bool debug = true;
 
   int rebin;
   int bin;
@@ -346,6 +319,5 @@ private:
   std::vector<double> bins_Zprime_rebin;
 
   double nEventsSR, nEventsSR_fit, xsec_ref_;
-
 
 };

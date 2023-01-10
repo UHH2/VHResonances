@@ -90,7 +90,7 @@ def StoreJetTaggerSF():
     os.system("mkdir -p "+dir)
 
     graphs = []
-    TDR.lumi_13TeV = "137.2 fb^{-1}"
+    TDR.cms_lumi = self.lumi_map['RunII']['lumiPlot']+' fb^{-1}'
     canvs = {}
     legs = {}
     for flavor in ["FlavC", "FlavB", "FlavL"]:
