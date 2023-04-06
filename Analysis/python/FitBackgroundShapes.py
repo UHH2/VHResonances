@@ -47,7 +47,7 @@ class FitBackgroundShapes(VariablesBase):
         self.xmin = xmin
         self.xmax = xmax
         self.Folder = 'DeepAk8_ZHccvsQCD_MD'
-        self.Folder = 'PN_ZHccvsQCD_MD2'
+        self.Folder = 'PN_ZHccvsQCD_MD'
         self.degrees = ['1','2','3']
 
         self.color  = {'1': ROOT.kRed+1,
@@ -75,7 +75,7 @@ class FitBackgroundShapes(VariablesBase):
                 'MC_CR':   (1000, 5900),
                 'DATA_CR': (1000, 3900),
                 'MC_SR':   (1000, 4000),
-                'DATA_SR': (1000, 3000),
+                'DATA_SR': (900, 3000),
                 },
             'invisible': {
                 'MC_CR':   (1000, 6000),

@@ -10,14 +10,10 @@ f_xmax = 6000
 fNorms = {}
 
 def CrystalBall_Norm(x, par):
-    result = CrystalBall_Fit(x, par)/par[4]
-    norm = 1 if len(list(par))<=4 else par[4]
-    return norm*result*fNorms[str(par[0])+str(par[1])+str(par[2])+str(par[3])]
+    return CrystalBall_Fit(x, par)#*fNorms[str(par[0])+str(par[1])+str(par[2])+str(par[3])]
 
 def ExpGaussExp_Norm(x, par):
-    result = ExpGaussExp_Fit(x, par)/par[4]
-    norm = 1 if len(list(par))<=4 else par[4]
-    return norm*result*fNorms[str(par[0])+str(par[1])+str(par[2])+str(par[3])]
+    return ExpGaussExp_Fit(x, par)#*fNorms[str(par[0])+str(par[1])+str(par[2])+str(par[3])]
 
 
 '''
@@ -31,10 +27,8 @@ class PlotSignalShapes(VariablesBase):
         self.Samples = ['M'+str(m) for m in self.MassPointsReduced if m!=1000 and m!=1200]
         self.Samples_reduced = ['M1600', 'M2000', 'M2500', 'M3000', 'M3500', 'M4000', 'M4500', 'M5000']
         self.Syst_list = self.Systematics[1:]+self.Systematics_Scale
-        # self.Syst_list = list(filter(lambda x: not 'PDF' in x and not 'murmuf' in x ,self.Syst_list))
-        # self.Syst_list = ['trigger']
+        self.Syst_list = list(filter(lambda x: not 'PDF' in x and not 'murmuf' in x ,self.Syst_list))
         self.Syst = ['']+[x+v for x in self.Syst_list for v in ['Up', 'Down']]
-        self.Syst = ['']
         # self.Channels = ['muon', 'electron']
         self.Folder = 'PN_ZHccvsQCD_MD'
 
@@ -64,15 +58,14 @@ class PlotSignalShapes(VariablesBase):
         for year in ['RunII']:
             for channel in self.Channels:
                 for collection in self.Collections:
+                    for sample in self.Samples:
+                        for sys in self.Syst:
+                            if DoControl([''], year+channel+sys, channel, sample): continue
+                            name = year+channel+collection+sample+sys
+                            self.funcs[name] = ROOT.TF1(name, ExpGaussExp_Norm if 'inv' in channel else CrystalBall_Norm, f_xmin, f_xmax, 5)
                     fname = self.Path_ANALYSIS+'/Analysis/Limits/nominal/'+year+'/'+collection+'/'+channel+'channel/'+self.Folder+'/datacards/SignalProperties_'+year+'_'+self.Folder+'.txt'
                     with open(fname, 'r') as f_:
-                        lines = f_.readlines()
-                        for sample in self.Samples:
-                            for sys in self.Syst:
-                                if DoControl([''], year+channel+sys, channel, sample): continue
-                                name = year+channel+collection+sample+sys
-                                self.funcs[name] = ROOT.TF1(name, ExpGaussExp_Norm if 'inv' in channel else CrystalBall_Norm, f_xmin, f_xmax, 5)
-                        for line in lines:
+                        for line in f_.readlines():
                             # if not any(x in line for x in self.Syst_list): continue
                             if 'Up' in line and not any(x in line for x in self.Syst_list): continue
                             if 'Down' in line and not any(x in line for x in self.Syst_list): continue
@@ -100,17 +93,20 @@ class PlotSignalShapes(VariablesBase):
                         for sys in self.Syst:
                             if DoControl([''], year+channel+sys, channel, sample): continue
                             name = year+channel+collection+sample+sys
-                            func = self.funcs[name]
-                            fname = str(func.GetParameter(0))+str(func.GetParameter(1))+str(func.GetParameter(2))+str(func.GetParameter(3))
-                            f_ = ROOT.TF1('', ExpGaussExp_Fit if 'inv' in channel else CrystalBall_Fit, f_xmin,f_xmax, 5)
-                            f_.SetParameters(func.GetParameter(0),func.GetParameter(1),func.GetParameter(2),func.GetParameter(3), 1)
-                            fNorms[fname] = 1./f_.Integral(f_xmin,f_xmax)
+                            # norm = self.funcs[year+channel+collection+sample+sys].GetParameter(4)
+                            # self.funcs[year+channel+collection+sample+sys].SetParameter(4,1)
+                            # self.funcs[year+channel+collection+sample+sys].SetParameter(4,norm/1000)
+                            # func = self.funcs[name]
+                            # fname = str(func.GetParameter(0))+str(func.GetParameter(1))+str(func.GetParameter(2))+str(func.GetParameter(3))
+                            # f_ = ROOT.TF1('', ExpGaussExp_Fit if 'inv' in channel else CrystalBall_Fit, f_xmin,f_xmax, 5)
+                            # f_.SetParameters(func.GetParameter(0),func.GetParameter(1),func.GetParameter(2),func.GetParameter(3), 1)
+                            # fNorms[fname] = 1./f_.Integral(0,10000)
 
     def PlotFuncions(self):
         for channel in self.Channels:
             TDR.cms_lumi = self.lumi_map['RunII']['lumiPlot']+' fb^{-1}'
             isInv = 'inv' in channel
-            canv = tdrCanvas(channel, f_xmin, f_xmax, 0.0001, 0.036 if not isInv else 0.066, "M(Z') [GeV]" if not isInv else "M_{T}(Z') [GeV]" ,'A.U.', isExtraSpace=True)
+            canv = tdrCanvas(channel, f_xmin, f_xmax, 0.0001, 30 if not isInv else 100, "M(Z') [GeV]" if not isInv else "M_{T}(Z') [GeV]" ,'A.U.', isExtraSpace=True)
             hframe = ROOT.gROOT.FindObject('hframe')
             hframe.GetXaxis().SetNdivisions(5)
             leg2 = tdrLeg(0.42,0.66,0.65,0.89, 0.035, 42, ROOT.kBlack)
@@ -141,8 +137,8 @@ class PlotSignalShapes(VariablesBase):
             if par == 0: ymin, ymax, ParName, funcName = (0,6000, '#mu [GeV]',    'pol1')
             if par == 1: ymin, ymax, ParName, funcName = (0,350,  '#sigma [GeV]', 'pol2')
             if par == 2: ymin, ymax, ParName, funcName = (0,2,    '#alpha',       'pol2')
-            if par == 3: ymin, ymax, ParName, funcName = (0,8,    'n',            'pol2')
-            if par == 4: ymin, ymax, ParName, funcName = (0,25,   'Norm',         'pol2')
+            if par == 3: ymin, ymax, ParName, funcName = (0,3,    'n',            'pol2')
+            if par == 4: ymin, ymax, ParName, funcName = (0,30,   'Norm',         'pol2')
             if par == 5: ymin, ymax, ParName, funcName = (0,2,    'lnN',          'pol0')
             TDR.cms_lumi = self.lumi_map['RunII']['lumiPlot']+' fb^{-1}'
             yName = 'parameter '+str(par+1)
@@ -244,4 +240,4 @@ class PlotSignalShapes(VariablesBase):
 if __name__ == '__main__':
     Plotter = PlotSignalShapes()
     Plotter.PlotFuncions()
-    # Plotter.PlotParameters()
+    Plotter.PlotParameters()

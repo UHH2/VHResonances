@@ -40,7 +40,7 @@ class CreateMuonSFsHistograms():
         for year in ['UL16', 'UL17', 'UL18']:
             fname = self.fname.replace('mode',mode).replace('year',year)
             hname = self.hname.replace('mode',mode)
-            hist = ROOT.TH2D(hname,hname,3,0,2.4,69,50,3500) # arbitrary choice of pt bins of 5GeV
+            hist = ROOT.TH2D(hname,hname,3,0,2.4,69,50,3500) # arbitrary choice of pt bins of 50GeV to simplify loop
             for eta in range(1, hist.GetNbinsX()+1):
                 x  = hist.GetXaxis().GetBinCenter(eta)
                 dx = hist.GetXaxis().GetBinWidth(eta)/2
@@ -50,7 +50,7 @@ class CreateMuonSFsHistograms():
                         df = pts
                         ref_eta_bin = eta_bin
                         break
-                print x-dx, x+dx, ref_eta_bin
+                # print x-dx, x+dx, ref_eta_bin
                 for pt in range(1, hist.GetNbinsY()+1):
                     y  = hist.GetYaxis().GetBinCenter(pt)
                     dy = hist.GetYaxis().GetBinWidth(pt)/2
@@ -60,7 +60,7 @@ class CreateMuonSFsHistograms():
                             sf = sfs
                             ref_pt_bin = pt_bin
                             break
-                    print " ", y-dy, y+dy, ref_pt_bin, sf
+                    # print " ", y-dy, y+dy, ref_pt_bin, sf
                     hist.SetBinContent(eta,pt,sf[0])
                     hist.SetBinError(eta,pt,sf[1])
             file_ = ROOT.TFile(self.dir+fname, 'RECREATE')

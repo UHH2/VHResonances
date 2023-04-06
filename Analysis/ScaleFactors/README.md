@@ -12,48 +12,32 @@
 
 **Muon SFs**:
 - IDs:
-  - 2016: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2016LegacyRereco
-  - 2016: https://twiki.cern.ch/twiki/bin/viewauth/CMS/TWikiB2G-MUO for TkrHighPt
-  - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2017
-  - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2018
-
-- Trigger and Isolation:
-  - 2016: https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonWorkInProgressAndPagResults (IsoMu24_OR_IsoTkMu24, Mu50_OR_TkMu50, BtoF and G)
-  - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2017
-  - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceEffs2018
-
+  - Trigger and Isolation:
+  - Taken from https://gitlab.cern.ch/cms-muonPOG/muonefficiencies/-/tree/master/
 - Reco:
-  - A conservative systematic is set for PT > 300 GeV. It is recommended to add systematic uncertainties of 0.5% (PT < 300 GeV) or 1% (PT > 300 GeV).
-  - Same for 2016, 2017 and 2018
-  - More details here https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonReferenceSelectionAndCalibrationsRun2#Special_systematic_uncertainties
-
-- Tracking:
-  - An additional P-dependent systematic uncertainty to account for reconstruction with HighPt ID is used
-  - Same for 2016, 2017 and 2018
-  - More details here https://twiki.cern.ch/twiki/bin/viewauth/CMS/MuonReferenceSelectionAndCalibrationsRun2#Special_systematic_uncertainties
+  - 2016 https://twiki.cern.ch/twiki/bin/view/CMS/MuonUL2016
+  - 2017 https://twiki.cern.ch/twiki/bin/view/CMS/MuonUL2017
+  - 2018 https://twiki.cern.ch/twiki/bin/view/CMS/MuonUL2018
 
 **Electron SFs**:
 - IDs:
-  - 2016: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations (Fall17v2)
-  - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations (Fall17v2)
-  - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations (Fall17v2)
+ - 2016preVFP: /eos/cms/store/group/phys_egamma/UL_SF_EGammaFiles/UL16preVFP/Electrons/egammaEffi.txt_Ele_Loose_preVFP_EGM2D.root
+  - 2016postVFP: /eos/cms/store/group/phys_egamma/UL_SF_EGammaFiles/UL16postVFP/Electrons/egammaEffi.txt_Ele_Loose_postVFP_EGM2D.root
+  - 2017: /eos/cms/store/group/phys_egamma/UL_SF_EGammaFiles/UL17/Electrons/egammaEffi.txt_EGM2D_Loose_UL17.root
+  - 2018: /eos/cms/store/group/phys_egamma/UL_SF_EGammaFiles/UL18/Electrons/egammaEffi.txt_Ele_Loose_EGM2D.root
 
 - Trigger:
   - 2016: Relative to HLT_Ele27_WPTight_Gsf OR HLT_Photon175 OR HLT_Ele115_CaloIdVT_GsfTrkIdT
   - 2017: Relative to HLT_Ele35_WPTight_Gsf OR HLT_Photon200 OR HLT_Ele115_CaloIdVT_GsfTrkIdT
   - 2018: Relative to HLT_Ele32_WPTight_Gsf OR HLT_Photon200 OR HLT_Ele115_CaloIdVT_GsfTrkIdT
-  - Take from https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgHLTScaleFactorMeasurements via email. Merged 2 regions
-  - Relative to HEEPV70ID.
+  - Take from http://indico.cern.ch/event/1146225/contributions/4835158/attachments/2429997/4160813/HLTSFsWprime%20.pdf
+  - Relative to Loose ID
 
 - Reco:
-  - 2016: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations
-  - 2017: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations
-  - 2018: https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations
-
-- HLT:
-  - 1% unc applyed for 2017 as described in https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgammaRunIIRecommendations
-  - No effect on 2016 and 2018
-
+  - 2016preVFP: /eos/cms/store/group/phys_egamma/UL_SF_EGammaFiles/UL16preVFP/Electrons/RecoSFs/egammaEffi_ptAbove20.txt_EGM2D_UL2016preVFP.root
+  - 2016postVFP: /eos/cms/store/group/phys_egamma/UL_SF_EGammaFiles/UL16postVFP/Electrons/RecoSFs/egammaEffi_ptAbove20.txt_EGM2D_UL2016postVFP.root
+  - 2017: /eos/cms/store/group/phys_egamma/UL_SF_EGammaFiles/UL17/Electrons/RecoSFs/egammaEffi_ptAbove20.txt_EGM2D_UL2017.root
+  - 2018: /eos/cms/store/group/phys_egamma/UL_SF_EGammaFiles/UL18/Electrons/RecoSFs/egammaEffi_ptAbove20.txt_EGM2D_UL2018.root
 
 
 

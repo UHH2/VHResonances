@@ -28,6 +28,8 @@ class FitSignalShapes(VariablesBase):
         self.Syst = ['nominal']
         # self.SignalSamples = [self.Signal+mode+'_M'+str(mass) for mass in [1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000] for mode in ['','_inv']]
         self.SignalSamples = [self.Signal+mode+'_M'+str(mass) for mass in [3000] for mode in ['','_inv']]
+        # self.SignalSamples = [self.Signal+mode+'_M'+str(mass) for mass in [4000] for mode in ['_inv']]
+        # self.SignalSamples = [self.Signal+mode+'_M'+str(mass) for mass in [2000] for mode in ['_inv']]
 
         self.color  = {'EGE': ROOT.kAzure+2,
                        'CB': ROOT.kOrange+1,
@@ -51,10 +53,9 @@ class FitSignalShapes(VariablesBase):
                             f_ = ROOT.TFile(fname)
                             self.hists[unique_name] = f_.Get('ZprimeCandidate_'+self.Folder+'/Zprime_mass'+('' if not 'inv' in channel else '_transversal')+'_rebin100')
                             self.hists[unique_name].SetDirectory(0)
+                            for i in range(self.hists[unique_name].GetNbinsX()):
+                                self.hists[unique_name].SetBinError(i,self.hists[unique_name].GetBinError(i)*2)
                             self.hists[unique_name].Scale(self.BRs[channel]*round(ROOT.xsec_ref['default_value'],3))
-                            if 'inv' in channel:
-                                for i in range(self.hists[unique_name].GetNbinsX()):
-                                    self.hists[unique_name].SetBinError(i,self.hists[unique_name].GetBinError(i)*1.15)
                             f_.Close()
 
     def DoFits(self):
@@ -77,14 +78,14 @@ class FitSignalShapes(VariablesBase):
                             f_xmax = 1.0857*mass+46;
                             if (mass==1000): f_xmin, f_xmax = (1000., 1300.)
                             if (mass==1200): f_xmin, f_xmax = (1000., 1700.)
-                            if (mass==1400): f_xmin, f_xmax = (1000., 1900.)
+                            if (mass==1400): f_xmin, f_xmax = ( 800., 1700.)
                             if (mass==1600): f_xmin, f_xmax = (1000., 2100.)
                             if (mass==1800): f_xmin, f_xmax = (1000., 2500.)
                             if (mass==2000): f_xmin, f_xmax = (1200., 2600.)
                             if (mass==2500): f_xmin, f_xmax = (1000., 3400.)
                             if (mass==3000): f_xmin, f_xmax = (1500., 3500.) #OK
                             if (mass==3500): f_xmin, f_xmax = (1100., 3900.)
-                            if (mass==4000): f_xmin, f_xmax = (1800., 4800.)
+                            if (mass==4000): f_xmin, f_xmax = (2100., 4600.)
                             if (mass==4500): f_xmin, f_xmax = (1300., 4900.)
                             if (mass==5000): f_xmin, f_xmax = (1400., 5900.)
                             if (mass==5500): f_xmin, f_xmax = (2500., 6000.)
@@ -95,9 +96,9 @@ class FitSignalShapes(VariablesBase):
                             f_xmin = 0.7742*mass-113;
                             f_xmax = 1.0857*mass+46;
 
-                            if (mass==1000): f_xmin, f_xmax = (700, 1400)
-                            if (mass==1200): f_xmin, f_xmax = (700, 1600)
-                            if (mass==1400): f_xmin, f_xmax = (1000, 1600 if isEle else 1800)
+                            if (mass==1000): f_xmin, f_xmax = ( 700, 1400)
+                            if (mass==1200): f_xmin, f_xmax = ( 700, 1600)
+                            if (mass==1400): f_xmin, f_xmax = ( 900, 1600)
                             if (mass==1600): f_xmin, f_xmax = (1000, 1900)
                             if (mass==1800): f_xmin, f_xmax = (1100, 2000)
                             if (mass==2000): f_xmin, f_xmax = (1200, 2200)
@@ -140,8 +141,8 @@ class FitSignalShapes(VariablesBase):
                                 fitRes = hist.Fit(fname, 'RQMS')
                                 self.errors['band'+fname], self.errors['band_pull'+fname], self.errors['pull'+fname] = ComputeHistWithCL(unique_name+func_name, func, fitRes, hist, cl=0.95)
                                 self.chi2[fname] = (func.GetChisquare(), func.GetNDF(), func.GetProb())
-                        TDR.lumi_13TeV  = str(round(float(self.lumi_map[year]['lumi_fb']),1))+' fb^{-1}' if TDR.extraText!='Simulation' else 'MC '+year
-                        ymax = 0.3 if not isInv else 1
+                        TDR.cms_lumi = self.lumi_map['RunII']['lumiPlot']+' fb^{-1}' if TDR.extraText!='Simulation' else 'MC '+year
+                        ymax = 0.4 if not isInv else 1.2
                         # ymax = 10 if not isInv else 50
                         canv = tdrDiCanvas(year+'_'+channel+'_'+collection+'_'+sample, p_xmin, p_xmax, 0.001, ymax, 0.5, 1.5, "M(Z') [GeV]" if not isInv else "M_{T}(Z') [GeV]", 'Events', 'Hist/Fit')
                         rt.gStyle.SetOptFit(0)
@@ -155,6 +156,7 @@ class FitSignalShapes(VariablesBase):
                             unique_name = year+'_'+channel+'_'+collection+'_'+sample+'_'+sys
                             if DoControl([''], unique_name, channel, sample): continue
                             hist = self.hists[unique_name]
+                            skip = 10000
                             for func_name in ['CB','EGE']:
                                 isCB = 'CB' == func_name
                                 fname = unique_name+func_name
@@ -166,6 +168,8 @@ class FitSignalShapes(VariablesBase):
                                 band = self.errors['band'+fname]
                                 chi2_red = self.chi2[fname][0]/self.chi2[fname][1]
                                 prob_new = self.chi2[fname][2]
+                                if isCB and not isInv and prob_new>0.05 and prob_new<0.95: skip = min(chi2_red,skip)
+                                if not isCB and isInv and prob_new>0.05 and prob_new<0.95: skip = min(chi2_red,skip)
                                 legName = 'CrystalBall' if isCB else 'ExpGaussExp'
                                 leg[func_name].AddEntry(func, legName, 'l')
                                 leg[func_name].AddEntry(ROOT.TObject(), '#chi^{2}/n.d.f = '+str(int(chi2_red*100)/100.), '')
@@ -201,15 +205,20 @@ class FitSignalShapes(VariablesBase):
                             canv.cd(1)
                             tdrDraw(hist, '', ROOT.kFullCircle, ROOT.kBlack, 1, ROOT.kBlack, 0, ROOT.kBlack)
                         if self.xmin!=-1 or self.xmax!=-1:
+                            if skip>2:
+                                canv.Close()
+                                continue
                             canv.SaveAs(self.outdir+'SignalShape_'+year+'_'+channel+'_'+collection+'_'+sample+'_'+str(self.xmin)+'_'+str(self.xmax)+'_'+self.Folder+'.pdf')
                         else:
                             canv.SaveAs(self.outdir+'SignalShape_'+year+'_'+channel+'_'+collection+'_'+sample+'_'+self.Folder+'.pdf')
+                        canv.Close()
 
 if __name__ == '__main__':
     PlotBkg = FitSignalShapes()
     PlotBkg.DoFits()
-    # for xmin in range(1300,1700+1,100):
-    #     for xmax in range(3300,4000+1,100):
+    # for xmin in range(900,2500+1,100):
+    #     for xmax in range(4200,5000+1,100):
     #         if xmin >= xmax: continue
+    #         print "Running on", xmin,xmax
     #         PlotBkg = FitSignalShapes(xmin,xmax)
     #         PlotBkg.DoFits()

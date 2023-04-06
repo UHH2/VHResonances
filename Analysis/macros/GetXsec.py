@@ -29,7 +29,7 @@ class GetXsec(VariablesBase):
 
         for year in self.years:
             for sample in samples:
-                kFactor = True if  any(x == sample.lstrip('MC_') for x in ['ZZ','WZ', 'WW']) else False
+                kFactor = True
                 sample_ = sample
                 sample_ = sample_.replace('MC_','')
                 sample_ = sample_.replace('ZprimeToZH_M', 'ZprimeToZHToZlepHinc-')

@@ -17,7 +17,7 @@ class PlotLimits(VariablesBase):
         self.nPoints = len(self.MassPoints)
         self.outdir = self.Path_ANALYSIS+"Analysis/Limits/"
         os.system("mkdir -p "+self.outdir)
-        TDR.lumi_13TeV  = str(round(float(self.lumi_map["RunII"]["lumi_fb"]),1))+" fb^{-1}"
+        TDR.cms_lumi = self.lumi_map['RunII']['lumiPlot']+' fb^{-1}'
         self.CreateDefaultGraphs()
 
         self.colors = { "muon":            ROOT.kOrange+1,
@@ -96,7 +96,7 @@ class PlotLimits(VariablesBase):
         dummy = array('d',np.array([0]*len(vals["exp"])))
         self.CreateGraph(vals, GraphName)
 
-    def CreateGraphIterative(self, channel = "muon", FileName = "DeepAk8_ZHccvsQCD_MD", year ="RunII", mode = "Exp_2_Expected_AsymptoticLimits", extraName=""):
+    def CreateGraphIterative(self, channel = "muon", FileName = "PN_ZHccvsQCD_MD", year ="RunII", mode = "Exp_2_AsimovNoSys_AsymptoticLimits", extraName=""):
         vals = {}
         for x in ["obs", "exp", "exp_1sigmaNeg", "exp_2sigmaNeg", "exp_1sigmaPos", "exp_2sigmaPos"]:
             vals[x] = np.array([-1.]*self.nPoints)
@@ -146,7 +146,7 @@ class PlotLimits(VariablesBase):
     def CreateCanvas(self, PlotName, headerName = "", isStored=False):
         self.canv = tdrCanvas(PlotName+("_Final" if isStored else ""), 1200, 5200, 0.5e-01, 400, "M(Z') [GeV]", "#sigma#left(pp#rightarrowZ'#right) #times Br#left(Z'#rightarrow ZH #right)#left[fb#right]")
         self.canv.SetLogy(1)
-        isDeepAk8 = "DeepAk8" in headerName
+        isDeepAk8 = "PN" in headerName
         nElementsLegend = 0.07*3 if isDeepAk8 else 0.075*3 if "Expected" in headerName else 0.1*3
         nElementsTheory = 0.08*2 if isDeepAk8 else (0.05*4 if "muon" in PlotName or "ele" in PlotName else 0.047*4)
         if headerName!="" and isDeepAk8:
@@ -184,11 +184,11 @@ class PlotLimits(VariablesBase):
                 self.leg_theo.AddEntry(self.graphs[GraphName], LegName, "l")
 
     def PlotBand(self, GraphName):
-            self.PlotLines(GraphName+"band2", isBand=True)
-            self.PlotLines(GraphName+"band1", isBand=True)
-            self.PlotLines(GraphName+"exp")
-            if self.isObs:
-                self.PlotLines(GraphName+"obs",isObs=True)
+        self.PlotLines(GraphName+"band2", isBand=True)
+        self.PlotLines(GraphName+"band1", isBand=True)
+        self.PlotLines(GraphName+"exp")
+        if self.isObs:
+            self.PlotLines(GraphName+"obs",isObs=True)
 
     def PlotTheoryLines(self):
         self.PlotLines("HVT_A")
@@ -217,11 +217,13 @@ class PlotLimits(VariablesBase):
         self.SaveCanvas(PlotName, isStored)
 
     def PlotLimitsCompare(self, PlotName, isStored = False):
-        self.CreateCanvas(PlotName, headerName="DeepAk8 score")
+        self.CreateCanvas(PlotName, headerName="PN score")
         # histFolders = ["DeepAk8_H4qvsQCD", "DeepAk8_H4qvsQCD_massdep", "DeepAk8_H4qvsQCD_massdep_HccvsQCD", "DeepAk8_HccvsQCD", "DeepAk8_ZHccvsQCD_MD2", "tau42"]
-        histFolders = ["DeepAk8_H4qvsQCD", "DeepAk8_H4qvsQCD_massdep"]
+        # histFolders = ["DeepAk8_H4qvsQCD", "DeepAk8_H4qvsQCD_massdep", 'PN_ZHccvsQCD_MD']
+        histFolders = ['PN_ZHccvsQCD_MD']
         infos = {"DeepAk8_H4qvsQCD":         {"LegName":  "H4qvsQCD   1-dim.",    "Color": ROOT.kOrange+1},
                  "DeepAk8_H4qvsQCD_massdep": {"LegName":  "H4qvsQCD   p_{T}-dep.", "Color": ROOT.kAzure+2},
+                 "PN_ZHccvsQCD_MD": {"LegName":  "ZHccvsQCD PN", "Color": ROOT.kRed+1},
                   }
         for fname in histFolders:
             LegName = infos[fname]["LegName"]
@@ -249,7 +251,7 @@ class PlotLimits(VariablesBase):
 if __name__ == '__main__':
     PlotBkg = PlotLimits(isObs = True)
     for channel in ["muon", "electron", "chargedlepton", "invisible", "lepton"]:
-        PlotBkg.PlotLimitsStandard(channel, isStored=True)
-        # PlotBkg.PlotLimitsStandard(channel, isStored=False)
-    PlotBkg.PlotLimitsCompare("DeepAk8scores", isStored=False)
+        # PlotBkg.PlotLimitsStandard(channel, isStored=True)
+        PlotBkg.PlotLimitsStandard(channel, isStored=False)
+    # PlotBkg.PlotLimitsCompare("DeepAk8scores", isStored=False)
     PlotBkg.CompareChannels()

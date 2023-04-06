@@ -590,8 +590,7 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
       } else if (FindInString("Reconstruction", sf.first)) {
         weight_postfix = "reco";      sys = 0.;  etaYaxis = false;
       } else throw invalid_argument("In ScaleFactorsManager.cxx: No implementation for "+sf.first);
-      // if (FindInString("2017",year)) sys += 1.0;
-      SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys, weight_postfix, "nominal", "electrons", sf.second.second));
+      SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys, weight_postfix, "nominal", "electrons", sf.second.second, false));
     }
     if (FindInString("Jet_Tagger", sf.first) ) {
       std::string fname = "VHResonances/Analysis/ScaleFactors/Taggers/"+sf.second.first+".root";

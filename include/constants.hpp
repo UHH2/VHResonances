@@ -26,8 +26,8 @@ const float min_MET_pt = 250.0;
 
 const float min_dilep_pt = 200;
 const float min_DR_dilep = 0.0;
-// const float max_DR_dilep = 0.45;
 const float max_DR_dilep = 0.8;
+const float max_DR_dilep_tight = 0.45;
 const float min_jet_dilep_delta_phi = 2.0;
 const float max_jet_dilep_delta_phi = M_PI;
 const float min_Dphi_AK8jet_MET = 2.0;
@@ -248,9 +248,9 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Muon_TrkHighPtID",         std::pair("muonefficiencies/Run2/UL/2016_preVFP/2016_preVFP_Z/Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ID", "NUM_TrkHighPtID_DEN_TrackerMuons_abseta_pt")},
     { "Muon_Isolation",           std::pair("muonefficiencies/Run2/UL/2016_preVFP/2016_preVFP_Z/Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ISO", "NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt")},
     { "Muon_Trigger",             std::pair("muonefficiencies/Run2/UL/2016_preVFP/2016_preVFP_trigger/Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_SingleMuonTriggers", "NUM_Mu50_or_TkMu50_DEN_CutBasedIdGlobalHighPt_and_TkIsoLoose_eta_pt")},
-    { "Electron_LooseID",         std::pair("Electron_ID_SF_UL16preVFP_loose", "EGamma_SF2D")},
+    { "Electron_LooseID",         std::pair("Electron_ID_SF_UL16preVFP", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_UL16preVFP", "EGamma_SF2D")},
-    { "Electron_Trigger",         std::pair("Electron_Trigger_SF_2016", "SF_TH2F")},
+    { "Electron_Trigger",         std::pair("Electron_Trigger_SF_UL16preVFP", "EGamma_SF2D")},
     { "Jet_Tagger",               std::pair("Tagger_SF_2016", "SF_Var_FlavX_2016")},
   }},
   { "UL16postVFP", {
@@ -259,9 +259,9 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Muon_TrkHighPtID",         std::pair("muonefficiencies/Run2/UL/2016_postVFP/2016_postVFP_Z/Efficiencies_muon_generalTracks_Z_Run2016_UL_ID", "NUM_TrkHighPtID_DEN_TrackerMuons_abseta_pt")},
     { "Muon_Isolation",           std::pair("muonefficiencies/Run2/UL/2016_postVFP/2016_postVFP_Z/Efficiencies_muon_generalTracks_Z_Run2016_UL_ISO", "NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt")},
     { "Muon_Trigger",             std::pair("muonefficiencies/Run2/UL/2016_postVFP/2016_postVFP_trigger/Efficiencies_muon_generalTracks_Z_Run2016_UL_SingleMuonTriggers", "NUM_Mu50_or_TkMu50_DEN_CutBasedIdGlobalHighPt_and_TkIsoLoose_eta_pt")},
-    { "Electron_LooseID",         std::pair("Electron_ID_SF_UL16postVFP_loose", "EGamma_SF2D")},
+    { "Electron_LooseID",         std::pair("Electron_ID_SF_UL16postVFP", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_UL16postVFP", "EGamma_SF2D")},
-    { "Electron_Trigger",         std::pair("Electron_Trigger_SF_2016", "SF_TH2F")},
+    { "Electron_Trigger",         std::pair("Electron_Trigger_SF_UL16postVFP", "EGamma_SF2D")},
     { "Jet_Tagger",               std::pair("Tagger_SF_2016", "SF_Var_FlavX_2016")},
   }},
   { "UL17", {
@@ -270,9 +270,9 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Muon_TrkHighPtID",         std::pair("muonefficiencies/Run2/UL/2017/2017_Z/Efficiencies_muon_generalTracks_Z_Run2017_UL_ID", "NUM_TrkHighPtID_DEN_TrackerMuons_abseta_pt")},
     { "Muon_Isolation",           std::pair("muonefficiencies/Run2/UL/2017/2017_Z/Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO", "NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt")},
     { "Muon_Trigger",             std::pair("muonefficiencies/Run2/UL/2017/2017_trigger/Efficiencies_muon_generalTracks_Z_Run2017_UL_SingleMuonTriggers", "NUM_Mu50_or_OldMu100_or_TkMu100_DEN_CutBasedIdGlobalHighPt_and_TkIsoLoose_eta_pt")},
-    { "Electron_LooseID",         std::pair("Electron_ID_SF_UL17_loose", "EGamma_SF2D")},
+    { "Electron_LooseID",         std::pair("Electron_ID_SF_UL17", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_UL17", "EGamma_SF2D")},
-    { "Electron_Trigger",         std::pair("Electron_Trigger_SF_2017", "SF_TH2F")},
+    { "Electron_Trigger",         std::pair("Electron_Trigger_SF_UL17", "EGamma_SF2D")},
     { "Jet_Tagger",               std::pair("Tagger_SF_2017", "SF_Var_FlavX_2017")},
   }},
   { "UL18", {
@@ -281,9 +281,9 @@ ScaleFactors_map = {//std::pair(filename,histname)
     { "Muon_TrkHighPtID",         std::pair("muonefficiencies/Run2/UL/2018/2018_Z/Efficiencies_muon_generalTracks_Z_Run2018_UL_ID", "NUM_TrkHighPtID_DEN_TrackerMuons_abseta_pt")},
     { "Muon_Isolation",           std::pair("muonefficiencies/Run2/UL/2018/2018_Z/Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO", "NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt")},
     { "Muon_Trigger",             std::pair("muonefficiencies/Run2/UL/2018/2018_trigger/Efficiencies_muon_generalTracks_Z_Run2018_UL_SingleMuonTriggers", "NUM_Mu50_or_OldMu100_or_TkMu100_DEN_CutBasedIdGlobalHighPt_and_TkIsoLoose_eta_pt")},
-    { "Electron_LooseID",         std::pair("Electron_ID_SF_UL18_loose", "EGamma_SF2D")},
+    { "Electron_LooseID",         std::pair("Electron_ID_SF_UL18", "EGamma_SF2D")},
     { "Electron_Reconstruction",  std::pair("Electron_Reconstruction_SF_UL18", "EGamma_SF2D")},
-    { "Electron_Trigger",         std::pair("Electron_Trigger_SF_2018", "SF_TH2F")},
+    { "Electron_Trigger",         std::pair("Electron_Trigger_SF_UL18", "EGamma_SF2D")},
     { "Jet_Tagger",               std::pair("Tagger_SF_2017", "SF_Var_FlavX_2017")},
   }},
 };
