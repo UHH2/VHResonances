@@ -150,6 +150,7 @@ public:
 
 private:
   int mode;
+  bool isMuonChannel;
   std::unique_ptr<GeneralizedEndpoint> GE;
 
 };

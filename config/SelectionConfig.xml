@@ -18,7 +18,7 @@
 <!-- Systematics -->
 <!ENTITY lumi_file                  "defaultValue">
 <!ENTITY MCBtagEfficiencies         "defaultValue">
-<!ENTITY BTagCalibration            "defaultValue">
+<!ENTITY BTagCalibration_FixedWP    "defaultValue">
 <!ENTITY MuonScaleVariations        "nominal">
 <!ENTITY ScaleVariationMuR          "none">
 <!ENTITY ScaleVariationMuF          "none">
@@ -491,7 +491,7 @@
 
     <!-- Systematics -->
     <Item Name="MCBtagEfficiencies"         Value="&MCBtagEfficiencies;"/>
-    <Item Name="BTagCalibration"            Value="&BTagCalibration;"/>
+    <Item Name="BTagCalibration_FixedWP"    Value="&BTagCalibration_FixedWP;"/>
     <Item Name="MuonScaleVariations"        Value="&MuonScaleVariations;"/>
     <Item Name="ScaleVariationMuR"          Value="&ScaleVariationMuR;"/>
     <Item Name="ScaleVariationMuF"          Value="&ScaleVariationMuF;"/>

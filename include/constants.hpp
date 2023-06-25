@@ -41,11 +41,18 @@ const BTag::algo BTag_algo = BTag::DEEPCSV;
 const BTag::wp BTag_wp = BTag::WP_LOOSE;
 
 const double TaggerThr = 0.8;
+const std::unordered_map<std::string, double> TaggerThr_map ={
+  { "UL16preVFP", 0.9252},
+  { "UL16postVFP", 0.9252},
+  { "UL16", 0.9252},
+  { "UL17", 0.9347},
+  { "UL18", 0.9368},
+};
 
 
 // Theory Corrections
-const bool do_EWK = true;
-const bool do_QCD_EWK = false;
+const bool do_EWK = false;
+const bool do_QCD_EWK = true;
 const bool do_QCD_NLO  = false;
 const bool do_QCD_NNLO = false;
 

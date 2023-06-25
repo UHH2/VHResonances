@@ -192,7 +192,8 @@ HEMIssueStudyModule::HEMIssueStudyModule(uhh2::Context& ctx){
 
   // Set up selections
 
-  const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta), MuonID(Muon::TkIsoLoose));
+  const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta), MuonID(Muon::PFIsoTight));
+  // const MuonId muoId = AndId<Muon>(MuonID(Muon::CutBasedIdTrkHighPt), PtEtaCut(min_lepton_pt, min_lepton_eta), MuonID(Muon::TkIsoLoose));
   const ElectronId eleId = AndId<Electron>(ElectronTagID(Electron::cutBasedElectronID_Fall17_94X_V2_loose), PtEtaSCCut(min_lepton_pt, min_lepton_eta));
 
   const JetId jetId = AndId<Jet> (JetPFID(JETwp), PtEtaCut(min_jet_pt, min_lepton_eta));

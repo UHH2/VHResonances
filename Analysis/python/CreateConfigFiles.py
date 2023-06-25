@@ -5,136 +5,94 @@ from xml.dom.minidom import parseString
 
 
 YearVars = {}
-YearVars['JEC_Version']         = {'UL16preVFP': 'Summer19UL16APV_V7',
-                                   'UL16postVFP': 'Summer19UL16_V7',
-                                   'UL17': 'Summer19UL17_V5',
-                                   'UL18': 'Summer19UL18_V5',
-                                   }
-YearVars['JER_Version']         = {'UL16preVFP': 'Summer20UL16APV_JRV3',
-                                   'UL16postVFP': 'Summer20UL16_JRV3',
-                                   'UL17': 'Summer19UL17_JRV2',
-                                   'UL18': 'Summer19UL18_JRV2',
-                                   }
-YearVars['lumi_file']           = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/UHH2/common/UHH2-data/UL16preVFP/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON_UL16preVFP_normtag.root',
-                                   'UL16postVFP': os.environ['CMSSW_BASE']+'/src/UHH2/common/UHH2-data/UL16postVFP/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON_UL16postVFP_normtag.root',
-                                   'UL17': os.environ['CMSSW_BASE']+'/src/UHH2/common/UHH2-data/UL17/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON_normtag.root',
-                                   'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/common/UHH2-data/UL18/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON_normtag.root',
-                                   }
+YearVars['JEC_Version']             = {'UL16preVFP': 'Summer19UL16APV_V7',
+                                       'UL16postVFP': 'Summer19UL16_V7',
+                                       'UL17': 'Summer19UL17_V5',
+                                       'UL18': 'Summer19UL18_V5',
+                                       }
+YearVars['JER_Version']             = {'UL16preVFP': 'Summer20UL16APV_JRV3',
+                                       'UL16postVFP': 'Summer20UL16_JRV3',
+                                       'UL17': 'Summer19UL17_JRV2',
+                                       'UL18': 'Summer19UL18_JRV2',
+                                       }
+YearVars['lumi_file']               = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/UHH2/common/UHH2-data/UL16preVFP/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON_UL16preVFP_normtag.root',
+                                       'UL16postVFP': os.environ['CMSSW_BASE']+'/src/UHH2/common/UHH2-data/UL16postVFP/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON_UL16postVFP_normtag.root',
+                                       'UL17': os.environ['CMSSW_BASE']+'/src/UHH2/common/UHH2-data/UL17/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON_normtag.root',
+                                       'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/common/UHH2-data/UL18/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON_normtag.root',
+                                       }
 
-YearVars['MCBtagEfficiencies']  = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL16preVFP.root',
-                                   'UL16postVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL16postVFP.root',
-                                   'UL17': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL17.root',
-                                   'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL18.root',
-                                   }
+YearVars['MCBtagEfficiencies']      = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL16preVFP.root',
+                                       'UL16postVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL16postVFP.root',
+                                       'UL17': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL17.root',
+                                       'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/SF_UL18.root',
+                                       }
 
-YearVars['BTagCalibration']     = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_deepCSV_106XUL16preVFP_v1.csv',
-                                   'UL16postVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_deepCSV_106XUL16postVFP_v1.csv',
-                                   'UL17': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_106X_UL17_SF.csv',
-                                   'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_deepCSV_106XUL18_v1.csv',
-                                   }
+YearVars['BTagCalibration_FixedWP'] = {'UL16preVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_deepCSV_106XUL16preVFP_v1.csv',
+                                       'UL16postVFP': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_deepCSV_106XUL16postVFP_v1.csv',
+                                       'UL17': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_DeepCSV_106X_UL17_SF.csv',
+                                       'UL18': os.environ['CMSSW_BASE']+'/src/UHH2/VHResonances/Analysis/ScaleFactors/BTag/subjet_deepCSV_106XUL18_v1.csv',
+                                       }
 
 
 def newNumber(year,sample,ConfigFile,syst,channel):
     newNumber = 20
     if 'DATA' in sample:
         if 'UL16' in year:
-            newNumber = 350
-            if any(x in sample for x in ['DATA_SingleMuon_RunF', 'DATA_SingleElectron_RunC', 'DATA_SingleElectron_RunD', 'DATA_SingleElectron_RunF', 'DATA_MET_RunB', 'DATA_MET_RunC', 'DATA_MET_RunF']):
+            newNumber = 50
+            if any(x in sample for x in ['DATA_SingleMuon_RunF', 'DATA_SingleElectron_RunC', 'DATA_SingleElectron_RunD', 'DATA_MET_RunB', 'DATA_MET_RunC', 'DATA_MET_RunF']):
                 newNumber = 250
-            if any(x in sample for x in ['DATA_SingleElectron_RunE', 'DATA_SingleElectron_RunF']):
+            if any(x in sample for x in ['DATA_SingleElectron_RunE']):
                 newNumber = 200
             if any(x in sample for x in ['DATA_SingleElectron_RunB']):
                 newNumber = 180
-            if any(x in sample for x in ['DATA_SinglePhoton', 'DATA_SingleMuon_RunG', 'DATA_SingleMuon_RunH', 'DATA_SingleElectron_RunH']):
+            if any(x in sample for x in ['DATA_SinglePhoton_RunF']):
                 newNumber = 150
-            if any(x in sample for x in ['DATA_MET_RunD', 'DATA_MET_RunE', 'DATA_MET_RunG', 'DATA_MET_RunH']):
+            if any(x in sample for x in ['DATA_MET_RunD', 'DATA_MET_RunE', 'DATA_MET_RunG']):
                 newNumber = 170
-            if any(x in sample for x in ['DATA_SingleElectron_RunG']):
-               newNumber = 100
         if year=='UL17':
-            newNumber = 340
-            if any(x in sample for x in ['DATA_MET_RunF']):
-                newNumber = 120
-            if any(x in sample for x in ['DATA_SinglePhoton', 'DATA_SinglePhoton_RunF', 'DATA_MET_RunE']):
-                newNumber = 150
-            if any(x in sample for x in ['DATA_SingleMuon_RunF']):
-                newNumber = 280
-            if any(x in sample for x in ['DATA_SingleElectron_RunE', 'DATA_SingleMuon_RunF', 'DATA_SinglePhoton_RunB','DATA_SingleElectron_RunF']):
-                newNumber = 300
-            if any(x in sample for x in ['DATA_SingleElectron_RunC', 'DATA_SingleElectron_RunD']):
-                newNumber = 350
-            if any(x in sample for x in ['DATA_SingleMuon_RunE', 'DATA_SingleMuon_RunC', 'DATA_MET_RunC']):
-                newNumber = 390
-            if any(x in sample for x in ['DATA_SingleMuon_RunB', 'DATA_MET_RunB', 'DATA_SingleMuon_RunD']):
-                newNumber = 430
-            if any(x in sample for x in ['DATA_SingleElectron_RunB']):
-                newNumber = 620
-            if any(x in sample for x in ['DATA_MET_RunD', 'DATA_SinglePhoton_RunD', 'DATA_SinglePhoton_RunC']):
-               newNumber = 250
+            newNumber = 100
+            if any(x in sample for x in ['DATA_MET_RunD', 'DATA_SinglePhoton_RunE','DATA_SinglePhoton_RunF','DATA_MET_RunF','DATA_MET_RunE']):
+                newNumber = 50
+            if any(x in sample for x in ['DATA_MET_RunB', 'DATA_SinglePhoton_RunC','DATA_SingleElectron_RunB','DATA_SingleElectron_RunD']):
+               newNumber = 150
         if year=='UL18':
-            newNumber = 80
-            if any(x in sample for x in ['DATA_MET_RunB', 'DATA_MET_RunA', 'DATA_MET_RunC', 'DATA_SingleMuon_RunD', 'DATA_MET_RunD']):
-                newNumber = 150
-            if any(x in sample for x in ['DATA_SingleElectron_RunB', 'DATA_SingleElectron_RunC']):
-                newNumber = 200
-            if any(x in sample for x in ['DATA_SingleMuon_RunA']):
-                newNumber = 250
-            if any(x in sample for x in ['DATA_SingleMuon_RunB', 'DATA_SingleMuon_RunC']):
-                newNumber = 300
+            newNumber = 50
+            if any(x in sample for x in ['DATA_SingleMuon_RunC_UL18', 'DATA_SingleMuon_RunB_UL18', 'DATA_MET_RunB_UL18']):
+                newNumber = 100
+            if any(x in sample for x in ['DATA_SingleElectron_RunD_UL18','DATA_SingleElectron_RunA_UL18','DATA_MET_RunD_UL18']):
+                newNumber = 20
     if 'MC_DY' in sample:
-        newNumber = 60
-        if any(x in sample for x in ['MC_DY_inv_HT800to1200_UL18', 'MC_DY_inv_HT600to800_UL18']):
+        newNumber = 15 if 'UL18' in sample else 60
+        if any(x in sample for x in ['MC_DY_HT400to600_UL17', 'MC_DY_HT600to800_UL17', 'MC_DY_inv_HT2500toInf', 'MC_DY_HT2500toInf_UL16postVFP', 'MC_DY_HT1200to2500_UL16postVFP']):
             newNumber = 30
-        if any(x in sample for x in ['MC_DY_HT800to1200_UL17', 'MC_DY_HT1200to2500_UL17', 'MC_DY_HT2500toInf_UL18', 'MC_DY_inv_HT200to400_UL18']):
+        if any(x in sample for x in ['MC_DY_HT800to1200_UL17', 'MC_DY_HT1200to2500_UL17', 'MC_DY_HT2500toInf_UL17', 'MC_DY_inv_HT100to200_UL18']):
             newNumber = 70
-        if any(x in sample for x in ['MC_DY_HT600to800_UL17', 'MC_DY_HT400to600_UL17', 'MC_DY_HT2500toInf_UL17']):
-            newNumber = 80
-        if any(x in sample for x in ['MC_DY_HT800to1200_UL16postVFP', 'MC_DY_HT200to400_UL18']):
+        if any(x in sample for x in ['MC_DY_HT400to600_UL16postVFP', 'MC_DY_HT200to400_UL17', 'MC_DY_inv_HT600to800_UL17','MC_DY_inv_HT400to600_UL17', 'MC_DY_HT800to1200_UL16postVFP', 'MC_DY_HT100to200_UL16postVFP', 'MC_DY_HT100to200_UL18']):
             newNumber = 100
-        if any(x in sample for x in ['MC_DY_HT2500toInf_UL16postVFP', 'MC_DY_HT1200to2500_UL16postVFP']):
-            newNumber = 120
-        if any(x in sample for x in ['MC_DY_HT400to600_UL16postVFP', 'MC_DY_HT200to400_UL17']):
-            newNumber = 180
-        if any(x in sample for x in ['MC_DY_HT100to200_UL17', 'MC_DY_HT200to400_UL16postVFP', 'MC_DY_HT100to200_UL18']):
-            newNumber = 240
-        if any(x in sample for x in ['MC_DY_HT100to200_UL16postVFP']):
-            newNumber = 330
-        if any(x in sample for x in ['MC_DY_inv_HT600to800_UL17','MC_DY_inv_HT400to600_UL17']):
-            newNumber = 100
-        if any(x in sample for x in ['MC_DY_inv_HT200to400_UL17', 'MC_DY_inv_HT200to400_UL16postVFP']):
+        if any(x in sample for x in ['MC_DY_inv_HT200to400_UL17', 'MC_DY_inv_HT800to1200_UL16postVFP']):
             newNumber = 140
-        if any(x in sample for x in ['MC_DY_inv_HT800to1200_UL16postVFP', 'MC_DY_inv_HT100to200_UL17', 'MC_DY_inv_HT100to200_UL18', 'MC_DY_inv_HT100to200_UL16postVFP']):
-            newNumber = 250
-        if any(x in sample for x in ['MC_DY_inv_HT1200to2500_UL16postVFP']):
-            newNumber = 370
+        if any(x in sample for x in ['MC_DY_HT200to400_UL16postVFP', 'MC_DY_inv_HT1200to2500_UL16postVFP']):
+            newNumber = 180
+        if any(x in sample for x in ['MC_DY_HT100to200_UL17', 'MC_DY_inv_HT100to200_UL16postVFP']):
+            newNumber = 240
     if 'MC_TT' in sample:
-        newNumber = 40 if 'UL16' in year else 200 if year=='UL17' else 60
+        newNumber = 15 if 'UL16' in year else 60
     if 'MC_W' in sample:
         newNumber = 200
-        if any(x in sample for x in ['MC_WZ_UL17']):
-            newNumber = 500 if 'inv' in channel else 700
-        if any(x in sample for x in ['MC_WZ_UL18']):
-            newNumber = 200 if 'inv' in channel else 400
-        if any(x in sample for x in ['MC_WW_UL17']):
-            newNumber = 500 if 'inv' in channel else 200
-        if any(x in sample for x in ['MC_WZTo2L2Q_UL16postVFP', 'MC_WZ_UL16postVFP', 'MC_WW_UL16postVFP']):
+        if any(x in sample for x in ['MC_WZTo2L2Q_UL16postVFP', 'MC_WZ_UL16postVFP']):
             newNumber = 40
-        if any(x in sample for x in ['MC_WJets']):
+        if any(x in sample for x in ['MC_WJets', 'MC_WW_UL16postVFP', 'MC_WJetsToLNu_HT1200to2500', 'MC_WJetsToLNu_HT400to600']):
             newNumber = 13 if 'inv' in channel else 30
-        if any(x in sample for x in ['MC_WJetsToLNu_HT200to400_UL18', 'MC_WJetsToLNu_HT600to800_UL16postVFP', 'MC_WJetsToLNu_HT100to200_UL17', 'MC_WJetsToLNu_HT2500toInf_UL16postVFP', 'MC_WJetsToLNu_HT200to400_UL16postVFP', 'MC_WJetsToLNu_HT400to600_UL16postVFP', 'MC_WJetsToLNu_HT400to600_UL17']):
-            newNumber = 50
-        if any(x in sample for x in ['MC_WJetsToLNu_HT1200to2500_UL16postVFP', 'MC_WJetsToLNu_HT600to800_UL18', 'MC_WJetsToLNu_HT200to400_UL17', 'MC_WJetsToLNu_HT800to1200_UL18', 'MC_WJetsToLNu_HT800to1200_UL16postVFP', 'MC_WJetsToLNu_HT600to800_UL17', 'MC_WJetsToLNu_HT800to1200_UL17', 'MC_WJetsToLNu_HT100to200_UL18', 'MC_WJetsToLNu_HT400to600_UL18']):
+        if any(x in sample for x in ['MC_WJetsToLNu_HT200to400', 'MC_WJetsToLNu_HT600to800', 'MC_WJetsToLNu_HT100to200', 'MC_WJetsToLNu_HT2500toInf_UL16postVFP', 'MC_WJetsToLNu_HT800to1200']):
             newNumber = 20
         if any(x in sample for x in ['MC_WJetsToLNu_HT100to200_UL16postVFP']):
-            newNumber = 350
+            newNumber = 300
     if 'MC_ZZ' in sample:
         newNumber = 240
         if any(x in sample for x in ['MC_ZZTo4Q_UL16postVFP', 'MC_ZZ_UL16postVFP']):
             newNumber = 100 if 'inv' in channel else 150
         if any(x in sample for x in ['MC_ZZ_UL17']):
             newNumber = 500 if 'inv' in channel else 850
-        if any(x in sample for x in ['MC_ZZ_UL18']):
-            newNumber = 250 if 'inv' in channel else 500
         if any(x in sample for x in ['MC_ZZTo2L2Nu_UL16postVFP']):
             newNumber = 100 if 'inv' in channel else 250
     if 'MC_ZJets' in sample:
@@ -230,17 +188,17 @@ def CreateConfigFiles(year, samples, all_samples, collections, channels, systema
                     change_lines(path, filename, [el[0:2] for el in changes ], [el[2:3] for el in changes ], [el[3:4] for el in changes ])
                     changes.append(['<ConfigSGE', 'Workdir', 'workdir_'+outdir, 'workdir_'+outdir+'_'+sample])
                     changes.append(['<ConfigParse', 'FileSplit="20"', 'FileSplit="20"', 'FileSplit="'+newNumber(year,sample,ConfigFile,syst,channel)+'"'])
-                    changes.append(['<!ENTITY', 'OUTDIR', outdir , outdir+'/'+folders])
+                    changes.append(['<!ENTITY', 'OUTDIR', outdir, outdir+'/'+folders])
                     if 'Preselection' in ConfigFile or 'PDFReweight' in ConfigFile or 'HEMIssueStudy' in ConfigFile or 'LeptonIDStudies' in ConfigFile:
                         if 'invisible' in channel:
-                            changes.append(['<!ENTITY', 'original_pdfname', 'defaultValue' , 'NNPDF31_nnlo_as_0118_nf_4'])
-                        else: changes.append(['<!ENTITY', 'original_pdfname', 'defaultValue' , 'NNPDF31_lo_as_0130'])
+                            changes.append(['<!ENTITY', 'original_pdfname', 'defaultValue', 'NNPDF31_nnlo_as_0118_nf_4'])
+                        else: changes.append(['<!ENTITY', 'original_pdfname', 'defaultValue', 'NNPDF31_lo_as_0130'])
                     if 'Selection' in ConfigFile:
-                        changes.append(['<!ENTITY', 'SYSTEM', 'Preselection/All/leptonchannel/nominal/' , 'Preselection/'+folders.replace('MuonScale_up','nominal').replace('MuonScale_down','nominal')])
-                        changes.append(['<!ENTITY', 'SYSTEM', 'Preselection/All/invisiblechannel/nominal/' , 'Preselection/'+folders.replace('MuonScale_up','nominal').replace('MuonScale_down','nominal')])
+                        changes.append(['<!ENTITY', 'SYSTEM', 'Preselection/All/leptonchannel/nominal/', 'Preselection/'+folders.replace('MuonScale_up','nominal').replace('MuonScale_down','nominal')])
+                        changes.append(['<!ENTITY', 'SYSTEM', 'Preselection/All/invisiblechannel/nominal/', 'Preselection/'+folders.replace('MuonScale_up','nominal').replace('MuonScale_down','nominal')])
                     if 'SignalRegion' in ConfigFile:
-                        changes.append(['<!ENTITY', 'SYSTEM', 'Selection/All/leptonchannel/nominal/' , 'Selection/'+folders])
-                        changes.append(['<!ENTITY', 'SYSTEM', 'Selection/All/invisiblechannel/nominal/' , 'Selection/'+folders])
+                        changes.append(['<!ENTITY', 'SYSTEM', 'Selection/All/leptonchannel/nominal/', 'Selection/'+folders])
+                        changes.append(['<!ENTITY', 'SYSTEM', 'Selection/All/invisiblechannel/nominal/', 'Selection/'+folders])
                     if 'Puppi' in collection:
                         changes.append(['<!ENTITY', 'isCHS',    '"true"', '"false"'])
                         changes.append(['<!ENTITY', 'isHOTVR',  '"true"', '"false"'])

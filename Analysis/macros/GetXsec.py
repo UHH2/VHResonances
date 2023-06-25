@@ -29,7 +29,7 @@ class GetXsec(VariablesBase):
 
         for year in self.years:
             for sample in samples:
-                kFactor = True
+                kFactor = not ('DY' in sample or 'WJet' in sample or 'ZJet' in sample)
                 sample_ = sample
                 sample_ = sample_.replace('MC_','')
                 sample_ = sample_.replace('ZprimeToZH_M', 'ZprimeToZHToZlepHinc-')
@@ -45,7 +45,6 @@ class GetXsec(VariablesBase):
                     print('<InputData Type="MC"    Version="'+sample+'"'+spaces+'Lumi="'+lumi+'"'+spaces_lumi+'NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &'+sample+';'+spaces+'<InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>')
                 if info_ =='xml':
                     xml = str(self.helper.get_xml(sample_,'13TeV',year))
-                    spaces_xml = ' '*(40-len(xml))
                     print('<!ENTITY '+sample+spaces+'SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/'+xml+'">')
 
         for year in self.years:
@@ -65,7 +64,6 @@ class GetXsec(VariablesBase):
                         print('<InputData Type="DATA"  Version="'+sample+'"'+spaces+'Lumi="'+lumi+'"'+spaces_lumi+'NEventsMax="&NEVT;" Cacheable="&CACHEABLE;">  &'+sample+';'+spaces+'<InputTree Name="AnalysisTree"/> <OutputTree Name="AnalysisTree"/> </InputData>')
                     if info_ =='xml':
                         xml = str(self.helper.get_xml(sample_,'13TeV',year))
-                        spaces_xml = ' '*(40-len(xml))
                         print('<!ENTITY '+sample+spaces+'SYSTEM  "CMSSW_BASE/src/UHH2/common/UHH2-datasets/'+xml+'">')
 
 

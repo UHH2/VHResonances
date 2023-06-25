@@ -172,13 +172,17 @@ void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuf
     book_TH1F("Match"+histSuffix,"Match^{"+axisSuffix+"}",19, 0, 19);
     book_TH1F("MatchingStatus"+histSuffix,"MatchingStatus^{"+axisSuffix+"}",10, 0, 10);
     book_TH2F("MatchvsMatchingStatus"+histSuffix,";Match^{"+axisSuffix+"};MatchingStatus^{"+axisSuffix+"}",19, 0, 19, 10, 0, 10);
+    book_TH2F("MatchvshadronFlavour"+histSuffix,";Match^{"+axisSuffix+"};HadronFlavor^{"+axisSuffix+"}",19, 0, 19, 7, -1.5, 5.5);
+    book_TH2F("MatchingStatusvshadronFlavour"+histSuffix,";MatchingStatus^{"+axisSuffix+"};HadronFlavor^{"+axisSuffix+"}",10, 0, 10, 7, -1.5, 5.5);
     for (int i=1;i<20;i++) {
       H1("Match"+histSuffix)->GetXaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
       H2("MatchvsMatchingStatus"+histSuffix)->GetXaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
+      H2("MatchvshadronFlavour"+histSuffix)->GetXaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
     }
     for (int i=1;i<11;i++) {
       H1("MatchingStatus"+histSuffix)->GetXaxis()->SetBinLabel(i,MatchingStatusToString(i-1).c_str());
       H2("MatchvsMatchingStatus"+histSuffix)->GetYaxis()->SetBinLabel(i,MatchingStatusToString(i-1).c_str());
+      H2("MatchingStatusvshadronFlavour"+histSuffix)->GetXaxis()->SetBinLabel(i,MatchingStatusToString(i-1).c_str());
     }
 
     for (std::string & disc : discriminators) {
@@ -200,7 +204,7 @@ void ExtJetHists::book_jetHist(const string & histSuffix, const string & axisSuf
       bool isLong = FindInString("BoostedDoubleSecondary", disc);
       book_TH1F(disc+histSuffix, disc+"^{"+axisSuffix+"}", isLong? 60: 30, isLong? -1.01: -0.01, isLong? 1.01: 1.01);
     }
-
+    book_TH1F("hadronFlavour"+histSuffix, "hadronFlavour^{"+axisSuffix+"}", 7, -1.5, 5.5);
   }
   book_TH2F("jetptvsdeltaphi_dilep"+histSuffix,";#Delta#phi(lepton,"+axisSuffix+"; p_{T} "+axisSuffix+" [GeV]",50, 0, M_PI,50,minPt,maxPt);
   return;
@@ -308,6 +312,7 @@ void ExtJetHists::fill_jetHist<TopJet>(const Event & event, const string& histSu
   fill_H1("tau42"+histSuffix, (jet.tau2()!=0) ? (jet.tau4()/jet.tau2()) : -1, weight);
   fill_H1("tau43"+histSuffix, (jet.tau3()!=0) ? (jet.tau4()/jet.tau3()) : -1, weight);
   fill_H1("nsubjet"+histSuffix, jet.subjets().size(), weight);
+  fill_H1("hadronFlavour"+histSuffix, jet.hadronFlavour(), weight);
 
   std::vector<std::string> index_tag(2,"no b-tag"); int sj_ind = 0;
   for(auto subjet: jet.subjets()){
@@ -326,6 +331,9 @@ void ExtJetHists::fill_jetHist<TopJet>(const Event & event, const string& histSu
   H1("Match"+histSuffix)->Fill(match.c_str(), weight);
   H1("MatchingStatus"+histSuffix)->Fill(matchstatus.c_str(), weight);
   H2("MatchvsMatchingStatus"+histSuffix)->Fill(match.c_str(),matchstatus.c_str(), weight);
+
+  H2("MatchvshadronFlavour"+histSuffix)->Fill(match.c_str(),jet.hadronFlavour(), weight);
+  H2("MatchingStatusvshadronFlavour"+histSuffix)->Fill(matchstatus.c_str(),jet.hadronFlavour(), weight);
 
 
   for (std::string & disc : discriminators) {

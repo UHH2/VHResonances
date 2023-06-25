@@ -70,22 +70,15 @@ protected:
   // Define variables
 
   std::string NameModule = "SignalRegionModule";
-  std::vector<std::string> histogram_tags = {"Selection", "ExtraCleaning",
-  "DeepAk8_ZHccvsQCD_MD_SR",                  "DeepAk8_ZHccvsQCD_MD_CR",
-  "DeepAk8_ZHccvsQCD_MD2_SR",                 "DeepAk8_ZHccvsQCD_MD2_CR",
-  "DeepAk8_HccvsQCD_SR",                      "DeepAk8_HccvsQCD_CR",
-  "DeepAk8_H4qvsQCD_SR",                      "DeepAk8_H4qvsQCD_CR",
-  "DeepAk8_H4qvsQCD_massdep_SR",              "DeepAk8_H4qvsQCD_massdep_CR",
-  "DeepAk8_H4qvsQCD_massdep_HccvsQCD_SR",     "DeepAk8_H4qvsQCD_massdep_HccvsQCD_CR",
-  "PN_ZHccvsQCD_MD_SR",                       "PN_ZHccvsQCD_MD_CR",
-  "PN_ZHccvsQCD_MD2_SR",                      "PN_ZHccvsQCD_MD2_CR",
-  "PN_HccvsQCD_SR",                           "PN_HccvsQCD_CR",
-  "PN_H4qvsQCD_SR",                           "PN_H4qvsQCD_CR",
-  "tau42_SR", "tau42_CR","tau21_SR", "tau21_CR"};
+  std::vector<std::string> histogram_tags = {"Selection", "HEM", "SFs",
+  "PN_XccvsQCD_SR",       "PN_XccvsQCD_CR",
+  "PN_XccvsQCD_MD_SR",    "PN_XccvsQCD_MD_CR",
+  "PN_XvsQCD_MD_SR",      "PN_XvsQCD_MD_CR",
+  "PN_XbbccvsQCD_MD_SR",  "PN_XbbccvsQCD_MD_CR",
+  };
 
   std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "HDecay", "ZDecay", "ZprimeDecay"};
-  // std::vector<std::string> Systematics = {"pu", "btag", "prefiring", "id", "isolation", "tracking", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
-  std::vector<std::string> Systematics = {"pu", "prefiring", "id", "isolation", "trigger", "reco", "taggerSF", "murmuf", "NNPDF"};
+  std::vector<std::string> Systematics = {"pu", "btag", "prefiring", "id", "isolation", "trigger", "reco", "murmuf", "NNPDF"}; //taggerSF
 
   std::vector<std::string> Var_murmuf = {"upup", "upnone", "noneup", "nonedown", "downnone", "downdown"};
   std::vector<std::string> Variations = {"", "up", "down"};
@@ -113,10 +106,7 @@ protected:
   std::unordered_map<std::string, std::vector<double> > PDF_weights;
   std::unordered_map<std::string, std::unique_ptr<PDFWeights> > m_pdfweights;
 
-  // Define selections
-
-  std::unique_ptr<Selection> DeepAk8_H4qvsQCD_massdep_SR_selection;
-  std::unique_ptr<Selection> tau42_SR_selection, tau21_SR_selection;
+  std::unique_ptr<AnalysisModule> SF_module;
 
 };
 
@@ -154,6 +144,7 @@ void SignalRegionModule::book_handles(uhh2::Context& ctx) {
 
   for(const auto & syst : Systematics) {
     if (FindInString("PDF", syst)) continue;
+    if (FindInString("taggerSF", syst)) continue;
     for(const auto & var : FindInString("murmuf", syst) ? Var_murmuf: Variations) {
       string tag = GetSystName(syst, var);
       book_WFolder(tag+"_in",  new Event::Handle< float >, ctx.declare_event_input< float >(tag));
@@ -169,6 +160,7 @@ void SignalRegionModule::export_weights(uhh2::Event& event) {
 
   for(const auto & syst : Systematics) {
     if (FindInString("PDF", syst)) continue;
+    if (FindInString("taggerSF", syst)) continue;
     for(const auto & var : FindInString("murmuf", syst) ? Var_murmuf: Variations) {
       string tag = GetSystName(syst, var);
       event.set(WFolder(tag+"_out"), event.get(WFolder(tag+"_in")));
@@ -185,7 +177,7 @@ void SignalRegionModule::book_histograms(uhh2::Context& ctx){
     mytag = "ZprimeCandidate_"    + tag; book_HFolder(mytag, new HiggsToWWHists(ctx,mytag));
     mytag = "nTopJet_"            + tag; book_HFolder(mytag, new ExtJetHists(ctx,mytag, MS["topjetLabel"] ));
     if (FindInString("_CR", tag)) continue;
-    if (!FindInString("ZHccvsQCD", tag)) continue;
+    // if (!FindInString("ZHccvsQCD", tag)) continue;
     for (std::string& syst :  Systematics){
       if (FindInString("PDF", syst)) {
         for(int i=0; i<PDF_variations; i++){
@@ -208,7 +200,6 @@ void SignalRegionModule::fill_histograms(uhh2::Event& event, string tag) {
   string mytag;
   float save_weight = event.weight;
   if (FindInString("_CR", tag)) return;
-  if (!FindInString("ZHccvsQCD", tag)) return;
 
   if (MB["is_ZH"]) {for (std::pair<std::string, std::string> pdf : PFDs) PDF_weights[pdf.first] = m_pdfweights[pdf.first]->GetWeightList(event);}
 
@@ -227,6 +218,7 @@ void SignalRegionModule::fill_histograms(uhh2::Event& event, string tag) {
         if (var=="") continue;
         if (!event.isRealData) {
           if (FindInString("murmuf", syst)) event.weight = save_weight*event.get(WFolder(GetSystName(syst, var)+"_in"));
+          else if (FindInString("taggerSF", syst)) event.weight = save_weight*event.get(WFolder(GetSystName(syst, var)));
           else event.weight = save_weight*event.get(WFolder(GetSystName(syst, var)+"_in"))/event.get(WFolder(GetSystName(syst, "")+"_in"));
         }
         mytag = "ZprimeCandidate_"+syst+"_"+var+"_"+tag; HFolder(mytag)->fill(event);
@@ -283,15 +275,10 @@ SignalRegionModule::SignalRegionModule(uhh2::Context& ctx){
 
   // Set up selections
   for (std::pair<std::string, std::string> pdf : PFDs) m_pdfweights[pdf.first].reset(new PDFWeights(pdf.second));
-
-
-  // TODO
-  DeepAk8_H4qvsQCD_massdep_SR_selection.reset(new TaggerCut(0, 1,  MassDependentCut_value, "btag_DeepBoosted_H4qvsQCD", h_ZprimeCandidates));
-
-  std::string groom = MB["isHOTVR"]? "_groomed": "";
-  tau42_SR_selection.reset(new TaggerCut(0.0, 0.5, -1, "tau42"+groom, h_ZprimeCandidates));
-  tau21_SR_selection.reset(new TaggerCut(0.0, 0.4, -1, "tau21"+groom, h_ZprimeCandidates));
-
+  
+  auto sf = ScaleFactors_map.at(MS["year"]).at("Jet_Tagger");
+  // SF_module.reset( new JetTaggerSF(ctx, "VHResonances/Analysis/ScaleFactors/Taggers/"+sf.first+".root", sf.second, h_ZprimeCandidates));
+  
 }
 
 
@@ -308,60 +295,46 @@ bool SignalRegionModule::process(uhh2::Event& event) {
   event.weight = event.get(WFolder("weight_GLP_in"));
   fill_histograms(event, "Selection");
 
+  // LUMI temporary fix because lumi json was updated
+  if(event.run==315705 && event.luminosityBlock == 161) return false;
+  if(event.run==315705 && event.luminosityBlock == 163) return false;
+
   if (event.get(h_ZprimeCandidates).size()!=1) return false;
-  // if (event.get(h_ZprimeCandidates).size()!=1 && event.get(h_ZprimeCandidates)[0].discriminator("SDmass")<50) return false; // TODO!!!
-
-  ZprimeCandidate cand = event.get(h_ZprimeCandidates)[0];
-  if (cand.Zprime_mass()<800) return false;
-  if(!MB["invisiblechannel"]){ if(deltaR(cand.leptons()[0], cand.leptons()[1])>0.45) return false;}
-  fill_histograms(event, "ExtraCleaning");
-
-  bool ZHccvsQCD_MD_pass = cand.discriminator("btag_DeepBoosted_ZHccvsQCD_MD")>TaggerThr;
-  bool HccvsQCD_pass     = cand.discriminator("btag_DeepBoosted_HccvsQCD")>TaggerThr;
-  bool H4qvsQCD_pass     = cand.discriminator("btag_DeepBoosted_H4qvsQCD")>TaggerThr;
-
-  bool PN_ZHccvsQCD_MD_pass = cand.discriminator("btag_ParticleNet_ZHccvsQCD")>TaggerThr;
-  bool PN_HccvsQCD_pass     = cand.discriminator("btag_ParticleNet_HccvsQCD")>TaggerThr;
-  bool PN_H4qvsQCD_pass     = cand.discriminator("btag_ParticleNet_H4qvsQCD")>TaggerThr;
-
-  bool H4qvsQCD_massdep_pass  = DeepAk8_H4qvsQCD_massdep_SR_selection->passes(event);
-
-  if(ZHccvsQCD_MD_pass) fill_histograms(event, "DeepAk8_ZHccvsQCD_MD_SR");
-  else fill_histograms(event, "DeepAk8_ZHccvsQCD_MD_CR");
-
-  if(ZHccvsQCD_MD_pass && cand.H().softdropmass()>30) fill_histograms(event, "DeepAk8_ZHccvsQCD_MD2_SR");
-  else fill_histograms(event, "DeepAk8_ZHccvsQCD_MD2_CR");
-
-  if(PN_ZHccvsQCD_MD_pass) fill_histograms(event, "PN_ZHccvsQCD_MD_SR");
-  else fill_histograms(event, "PN_ZHccvsQCD_MD_CR");
-
-  if(PN_ZHccvsQCD_MD_pass && cand.H().softdropmass()>30) fill_histograms(event, "PN_ZHccvsQCD_MD2_SR");
-  else fill_histograms(event, "PN_ZHccvsQCD_MD2_CR");
-
-  if(HccvsQCD_pass) fill_histograms(event, "DeepAk8_HccvsQCD_SR");
-  else fill_histograms(event, "DeepAk8_HccvsQCD_CR");
-
-  if(PN_HccvsQCD_pass) fill_histograms(event, "PN_HccvsQCD_SR");
-  else fill_histograms(event, "PN_HccvsQCD_CR");
-
-  if(H4qvsQCD_pass) fill_histograms(event, "DeepAk8_H4qvsQCD_SR");
-  else fill_histograms(event, "DeepAk8_H4qvsQCD_CR");
-
-  if(PN_H4qvsQCD_pass) fill_histograms(event, "PN_H4qvsQCD_SR");
-  else fill_histograms(event, "PN_H4qvsQCD_CR");
-
-  if(H4qvsQCD_massdep_pass) {
-    fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_SR");
-    if (HccvsQCD_pass)     fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_HccvsQCD_SR");
-  } else {
-    fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_CR");
-    if (!HccvsQCD_pass)     fill_histograms(event, "DeepAk8_H4qvsQCD_massdep_HccvsQCD_CR");
+  
+  if (MB["invisiblechannel"]){
+    double met_phi = event.met->phi();
+    if((-1.8 < met_phi) && (met_phi< -0.6)) {
+      if (!MB["is_mc"] && (event.run > 319077)) return false;
+      if (MB["is_mc"]) event.weight *= (1. - 0.64844705699);
+    }
   }
 
-  if(tau42_SR_selection->passes(event)) fill_histograms(event, "tau42_SR");
-  else                                  fill_histograms(event, "tau42_CR");
-  if(tau21_SR_selection->passes(event)) fill_histograms(event, "tau21_SR");
-  else                                  fill_histograms(event, "tau21_CR");
+  fill_histograms(event, "HEM");
+  
+  // SF_module->process(event);
+  fill_histograms(event, "SFs");
+
+  ZprimeCandidate cand = event.get(h_ZprimeCandidates)[0];
+  // bool PN_XvsQCD_MD_pass = cand.discriminator("btag_ParticleNet_XvsQCD_MD")>TaggerThr;
+  // bool PN_XbbccvsQCD_MD_pass = cand.discriminator("btag_ParticleNet_XbbccvsQCD_MD")>TaggerThr;
+
+  bool PN_XvsQCD_MD_pass = GetXvsQCD(cand.H())>TaggerThr;
+  bool PN_XbbccvsQCD_MD_pass = GetXbbccvsQCD(cand.H())>TaggerThr;
+  bool PN_XccvsQCD_pass = cand.discriminator("btag_ParticleNet_ZHccvsQCD")>TaggerThr;
+  bool PN_XccvsQCD_MD_pass = cand.discriminator("btag_ParticleNet_ZHccvsQCD_MD")>TaggerThr;
+  
+
+  if(PN_XccvsQCD_pass) fill_histograms(event, "PN_XccvsQCD_SR");
+  else fill_histograms(event, "PN_XccvsQCD_CR");
+
+  if(PN_XccvsQCD_MD_pass) fill_histograms(event, "PN_XccvsQCD_MD_SR");
+  else fill_histograms(event, "PN_XccvsQCD_MD_CR");
+
+  if(PN_XbbccvsQCD_MD_pass) fill_histograms(event, "PN_XbbccvsQCD_MD_SR");
+  else fill_histograms(event, "PN_XbbccvsQCD_MD_CR");
+  
+  if(PN_XvsQCD_MD_pass) fill_histograms(event, "PN_XvsQCD_MD_SR");
+  else fill_histograms(event, "PN_XvsQCD_MD_CR");
 
   export_weights(event);
 

@@ -68,9 +68,9 @@ protected:
 
   // Define variables
   std::string NameModule = "SelectionModule";
-  std::vector<std::string> histogram_tags = {"Preselection", "QCDRejection", "MuonScale", "ZprimeReco", "ZprimeSelection", "PTMassCut", "ScaleFactors"};
-  // std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "weight_pu", "weight_pu_up", "weight_pu_down", "HDecay", "ZDecay", "ZprimeDecay", "weight_btag","weight_btag_up", "weight_btag_down"};
-  std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "weight_pu", "weight_pu_up", "weight_pu_down", "HDecay", "ZDecay", "ZprimeDecay"};
+  std::vector<std::string> histogram_tags = {"Preselection", "QCDRejection", "ZprimeReco", "ZprimeSelection", "PTMassCut", "ScaleFactors"}; //"MuonScale",
+  std::vector<std::string> weight_tags = {"weight_lumi", "weight_GLP", "weight_pu", "weight_pu_up", "weight_pu_down", "HDecay", "ZDecay", "ZprimeDecay", "weight_btag","weight_btag_up", "weight_btag_down"};
+  std::vector<std::string> weight_tags_btag = {"central", "bc_down", "bc_up", "light_down", "light_up"};
 
   std::unordered_map<std::string, std::string> MS;
   std::unordered_map<std::string, bool> MB;
@@ -88,8 +88,7 @@ protected:
   std::unique_ptr<AnalysisModule> CollectionProducer_module;
   std::unique_ptr<AnalysisModule> MCScaleVariation_module;
   std::unordered_map<std::string, std::unique_ptr<AnalysisModule>> ScaleFactors_module;
-  std::unique_ptr<AnalysisModule> MuonScaleVariations_module;
-
+  // std::unique_ptr<AnalysisModule> MuonScaleVariations_module;
 };
 
 
@@ -107,6 +106,10 @@ void SelectionModule::book_handles(uhh2::Context& ctx) {
     if (!MB["is_mc"] && tag.find("weight_pu")!=std::string::npos) continue;
     book_WFolder(tag+"_in",  new Event::Handle< float >, (tag.find("btag")!=std::string::npos)? ctx.get_handle< float >(tag) : ctx.declare_event_input< float >(tag));
     book_WFolder(tag+"_out", new Event::Handle< float >, ctx.declare_event_output< float >(tag));
+  }
+
+  for(const auto & tag : weight_tags_btag) {
+    book_WFolder("weight_btag_"+tag,  new Event::Handle< float >, ctx.get_handle< float >("weight_btag_"+tag));
   }
 }
 
@@ -186,7 +189,7 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
 
 
   //Scale factors
-  MuonScaleVariations_module.reset(new MuonScaleVariations(ctx));
+  // MuonScaleVariations_module.reset(new MuonScaleVariations(ctx));
 
   MCScaleVariation_module.reset(new MCScaleVariation(ctx));
 
@@ -219,7 +222,7 @@ SelectionModule::SelectionModule(uhh2::Context& ctx){
 
 bool SelectionModule::process(uhh2::Event& event) {
 
-  if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In "+NameModule+".cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
+  //if ((event.year).find(MS["year"])==std::string::npos) throw std::runtime_error("In "+NameModule+".cxx: You are running on "+event.year+" sample with a "+MS["year"]+" year config file. Fix this.");
 
   event.weight = event.get(WFolder("weight_GLP_in"));
 
@@ -249,12 +252,19 @@ bool SelectionModule::process(uhh2::Event& event) {
   }
   fill_histograms(event, "ZprimeSelection");
 
+  ZprimeCandidate cand = event.get(h_ZprimeCandidates)[0];
+  if(!MB["invisiblechannel"]){ if(deltaR(cand.leptons()[0], cand.leptons()[1])>max_DR_dilep_tight) return false;}
+  
   if(!PTMassCut_selection->passes(event)) return false;
   fill_histograms(event, "PTMassCut");
 
   MCScaleVariation_module->process(event);
   for (auto& el : ScaleFactors_module) el.second->process(event);
   fill_histograms(event, "ScaleFactors");
+
+  event.set(WFolder("weight_btag_out"), event.get(WFolder("weight_btag_central")));
+  event.set(WFolder("weight_btag_down_out"), event.get(WFolder("weight_btag_bc_down")));
+  event.set(WFolder("weight_btag_up_out"), event.get(WFolder("weight_btag_bc_up")));
 
   export_weights(event);
 

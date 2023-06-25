@@ -29,8 +29,8 @@ class VariablesBase(GenericPath):
         self.PrefixrootFile     = 'uhh2.AnalysisModuleRunner.'
         self.Collections        = ['Puppi']
         self.Channels           = ['muon', 'electron', 'invisible'] if self.isAnalysis else ['charm']
-        self.Systematics        = ['nominal', 'JER', 'JEC', 'MuonScale']
-        self.Systematics_Scale  = ['pu', 'btag', 'prefiring', 'id', 'isolation', 'tracking', 'trigger', 'reco', 'taggerSF', 'murmuf', 'NNPDF']
+        self.Systematics        = ['nominal', 'JER', 'JEC']
+        self.Systematics_Scale  = ['pu', 'btag', 'prefiring', 'id', 'isolation', 'trigger', 'reco', 'taggerSF', 'murmuf', 'NNPDF']
         self.Signal             = 'MC_ZprimeToZH'
         self.MainBkg            = 'MC_DY'
         self.MassPoints         = [600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000]

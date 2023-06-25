@@ -82,3 +82,14 @@ double GetZHccvsQCD(const TopJet& j, bool isPN, bool isMD) {
   else ZHcc = isPN? (j.btag_MassDecorrelatedParticleNetJetTags_probXcc()+j.btag_ParticleNetJetTags_probZcc()) : (j.btag_DeepBoosted_probZcc()+j.btag_DeepBoosted_probHcc());
   return ZHcc/(ZHcc+GetQCD(j,isPN,isMD));
 }
+
+
+double GetXbbccvsQCD(const TopJet& j) {
+  double X = j.btag_MassDecorrelatedParticleNetJetTags_probXcc() +j.btag_MassDecorrelatedParticleNetJetTags_probXbb();
+  return X/(X+GetQCD(j,true,true));
+}
+
+double GetXvsQCD(const TopJet& j) {
+  double X = j.btag_MassDecorrelatedParticleNetJetTags_probXcc() + j.btag_MassDecorrelatedParticleNetJetTags_probXbb() + j.btag_MassDecorrelatedParticleNetJetTags_probXqq();
+  return X/(X+GetQCD(j,true,true));
+}

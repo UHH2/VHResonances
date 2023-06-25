@@ -30,7 +30,8 @@ private:
   "btag_DeepBoosted_H4qvsQCD_MD", "btag_DeepBoosted_H4qvsQCD",
   "btag_ParticleNet_HccvsQCD","btag_ParticleNet_HccvsQCD_MD","btag_ParticleNet_ZHccvsQCD",
   "btag_ParticleNet_ZHccvsQCD_MD","btag_ParticleNet_H4qvsQCD","btag_ParticleNet_HbbvsQCD",
-  "btag_ParticleNet_HccvsQCD_2","btag_ParticleNet_XbbvsQCD_MD","btag_ParticleNet_XccvsQCD_MD"};
+  "btag_ParticleNet_HccvsQCD_2","btag_ParticleNet_XbbvsQCD_MD","btag_ParticleNet_XccvsQCD_MD",
+  "btag_ParticleNet_XbbccvsQCD_MD", "btag_ParticleNet_XvsQCD_MD"};
 
   std::vector<std::string> discriminators_subjets =  {"btag_DeepJet",
   "btag_DeepCSV", "btag_DeepFlavour_bb", "btag_DeepFlavour_b", "btag_DeepFlavour_lepb", "btag_DeepFlavour_uds", "btag_DeepFlavour_g", "btag_DeepFlavour_c"};

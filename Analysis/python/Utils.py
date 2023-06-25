@@ -19,6 +19,24 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.gStyle.SetOptStat(0)
 ROOT.gStyle.SetOptFit(0)
 
+class Quiet(object):
+    _instance = None  # Class variable to hold the singleton instance
+    def __new__(cls, level=ROOT.kInfo + 1):
+        if not cls._instance:
+            cls._instance = super(Quiet, cls).__new__(cls)
+        return cls._instance
+    def __init__(self, level=ROOT.kInfo + 1):
+        if not hasattr(self, 'initialized'):
+            self.initialized = True
+            self.set(level)
+    def set(self, level):
+        self.oldlevel = ROOT.gErrorIgnoreLevel
+        ROOT.gErrorIgnoreLevel = level
+    def reset(self):
+        ROOT.gErrorIgnoreLevel = self.oldlevel
+
+Quiet(ROOT.kError)
+
 def prettydic(d, indent=8):
     space = max([0]+[len(str(x)) for x in d])+2
     for key, value in d.items():

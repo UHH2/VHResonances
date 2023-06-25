@@ -14,9 +14,9 @@ class PlotSignalEfficiencies(VariablesBase):
     def __init__(self):
         VariablesBase.__init__(self)
         self.MassPoints = np.array(self.MassPoints)
-        self.Samples = ['M'+str(m) for m in self.MassPoints]
         self.SampleMask = (self.MassPoints>=1000)*(self.MassPoints<=6000)
         self.SamplesPlot = self.MassPoints[self.SampleMask]
+        self.Samples = ['M'+str(m) for m in self.SamplesPlot]
         self.years = self.years+['RunII']
         self.years = ['RunII']
         # self.Channels = ['invisible']
@@ -47,7 +47,7 @@ class PlotSignalEfficiencies(VariablesBase):
                 self.decays.append(('Z'+Z+'Hto'+H).replace('toelse', 'else'))
                 self.decays.append('Z'+Z)
 
-        self.CutsList = ['Triggers', 'Lepton selection', 'Angular cuts', 'b tag veto', 'ParticleNet', 'DeepAk8']
+        self.CutsList = ['Triggers', 'Lepton selection', 'Angular cuts', 'b tag veto', 'PN XvsQCD', 'PN XccvsQCD']
         self.Cuts = {
             'weights': {
                 'module'   : 'Preselection',
@@ -71,7 +71,7 @@ class PlotSignalEfficiencies(VariablesBase):
                 'module'   : 'Selection',
                 'color'    : ROOT.kOrange-2,
                 'style'    : ROOT.kSolid,
-                'folder'   : 'MuonScale',
+                'folder'   : 'ZprimeReco',
                 },
             'b tag veto': {
                 'module'   : 'Selection',
@@ -87,21 +87,33 @@ class PlotSignalEfficiencies(VariablesBase):
                 },
             'ScaleFactors': {
                 'module'   : 'Selection',
-                'color'    : ROOT.kBlack,
+                'color'    : ROOT.kGray+1,
                 'style'    : ROOT.kSolid,
                 'folder'   : 'ScaleFactors',
                 },
-            'ParticleNet': {
-                'module'   : 'SignalRegion',
-                'color'    : ROOT.kGreen+3,
-                'style'    : ROOT.kSolid,
-                'folder'   : 'PN_ZHccvsQCD_MD_SR',
-                },
-            'DeepAk8': {
+            'PN XvsQCD': {
                 'module'   : 'SignalRegion',
                 'color'    : ROOT.kGreen+2,
+                'style'    : ROOT.kSolid,
+                'folder'   : 'PN_XvsQCD_MD_SR',
+                },
+            'PN XbbccvsQC': {
+                'module'   : 'SignalRegion',
+                'color'    : ROOT.kGreen+3,
+                'style'    : ROOT.kDotted,
+                'folder'   : 'PN_XbbccvsQCD_MD_SR',
+                },
+            'PN XccvsQCD': {
+                'module'   : 'SignalRegion',
+                'color'    : ROOT.kGreen+3,
                 'style'    : ROOT.kDashed,
-                'folder'   : 'DeepAk8_ZHccvsQCD_MD_SR',
+                'folder'   : 'PN_XccvsQCD_MD_SR',
+                },
+            'PN XccvsQCD noMD': {
+                'module'   : 'SignalRegion',
+                'color'    : ROOT.kGray+1,
+                'style'    : ROOT.kDashed,
+                'folder'   : 'PN_XccvsQCD_SR',
                 },
         }
 
@@ -148,33 +160,30 @@ class PlotSignalEfficiencies(VariablesBase):
         self.leg = tdrLeg(0.40,0.65 if lowLeg else 0.70, 0.93 if lowLeg else 0.95,0.90, 0.040, 42, ROOT.kBlack)
         self.leg.SetNColumns(2)
 
-    def PlotEfficiencyCuts(self):
+    def PlotEfficiencyCuts(self, FS='HtoInc'):
         plotName = 'Cuts_'
         for year in self.years:
             for collection in self.Collections:
                 for channel in self.Channels+['chargedlepton']:
                     TDR.cms_lumi = self.lumi_map[year]['lumiPlot']+' fb^{-1}' if TDR.extraText!='Simulation' else 'MC '+year
-                    self.CreateCanvas(year+collection+channel+'Cuts')
+                    self.CreateCanvas(year+collection+channel+FS+'Cuts')
                     grs = []
                     for cut in self.CutsList:
                         folder  = self.Cuts[cut]['folder']
                         color   = self.Cuts[cut]['color']
                         style   = self.Cuts[cut]['style']
-                        eff = self.values[year+collection+channel+folder+'HtoInc'][self.SampleMask]
-                        eff /= self.values[year+collection+channel+'weights'+'HtoInc'][self.SampleMask]
-                        if 'SignalRegion' == self.Cuts[cut]['module']:
-                            eff *= self.values[year+collection+channel+'PTMassCut'+'HtoInc'][self.SampleMask]
-                            eff /= self.values[year+collection+channel+'ScaleFactors'+'HtoInc'][self.SampleMask]
+                        eff = self.values[year+collection+channel+folder+FS]
+                        eff /= self.values[year+collection+channel+'weights'+FS]
                         gr = ROOT.TGraphErrors(len(self.SamplesPlot), array('d',self.SamplesPlot), array('d',eff))
                         gr.SetLineWidth(2)
-                        tdrDraw(gr, 'lp', ROOT.kFullDotLarge, color, style, color, 0, color);
+                        tdrDraw(gr, 'lp', ROOT.kFullDotLarge, mcolor=color, lstyle= style, lcolor=color, fstyle=0, fcolor=color)
                         self.leg.AddEntry(gr, cut,'lp')
                         grs.append(gr)
-                    self.canv.SaveAs(self.outdir+'SignalEfficiencies_'+plotName+year+'_'+collection+'_'+channel+'.pdf')
+                    self.canv.SaveAs(self.outdir+'SignalEfficiencies_'+plotName+FS+'_'+year+'_'+collection+'_'+channel+'.pdf')
 
     def PlotEfficiencyHiggsDecays(self, isBR=False, isSR=False):
         plotName = 'HiggsDecays_'+('BR_' if isBR else '')+('SR_' if isSR else '')
-        cut  = 'PTMassCut' if not isSR else 'ParticleNet'
+        cut  = 'PTMassCut' if not isSR else 'PN'
         folder  = self.Cuts[cut]['folder']
         for year in self.years:
             for collection in self.Collections:
@@ -189,11 +198,11 @@ class PlotSignalEfficiencies(VariablesBase):
                         decaynorm = decay if isBR else 'HtoInc'
                         if isBR and not 'Inc' in decay:
                             decaynorm = ('Zee' if 'ele' in channel else ('Zmumu' if 'muon' in channel else '') ) +decaynorm
-                        eff = self.values[year+collection+channel+folder+decay][self.SampleMask]
-                        eff /= self.values[year+collection+channel+'weights'+decaynorm][self.SampleMask]
+                        eff = self.values[year+collection+channel+folder+decay]
+                        eff /= self.values[year+collection+channel+'weights'+decaynorm]
                         gr = ROOT.TGraphErrors(len(self.SamplesPlot), array('d',self.SamplesPlot), array('d',eff))
                         gr.SetLineWidth(2)
-                        tdrDraw(gr, 'lp', ROOT.kFullDotLarge, color, ROOT.kSolid, color, 0, color);
+                        tdrDraw(gr, 'lp', ROOT.kFullDotLarge, mcolor=color, mstyle=ROOT.kSolid, lcolor=color, fstyle=0, fcolor=color)
                         self.leg.AddEntry(gr, legName,'lp')
                         grs.append(gr)
                     self.canv.SaveAs(self.outdir+'SignalEfficiencies_'+plotName+year+'_'+collection+'_'+channel+'.pdf')
@@ -203,7 +212,12 @@ class PlotSignalEfficiencies(VariablesBase):
 if __name__ == '__main__':
     PlotBkg = PlotSignalEfficiencies()
     PlotBkg.PlotEfficiencyCuts()
-    PlotBkg.PlotEfficiencyHiggsDecays(isBR = False,isSR = False)
-    PlotBkg.PlotEfficiencyHiggsDecays(isBR = False,isSR = True)
-    PlotBkg.PlotEfficiencyHiggsDecays(isBR = True, isSR = False)
-    PlotBkg.PlotEfficiencyHiggsDecays(isBR = True, isSR = True)
+    PlotBkg.PlotEfficiencyCuts(FS='Htocc')
+    PlotBkg.PlotEfficiencyCuts(FS='Htobb')
+    PlotBkg.PlotEfficiencyCuts(FS='HtoWW')
+    PlotBkg.PlotEfficiencyCuts(FS='Htogg')
+    PlotBkg.PlotEfficiencyCuts(FS='Htotautau')
+    # PlotBkg.PlotEfficiencyHiggsDecays(isBR = False,isSR = False)
+    # PlotBkg.PlotEfficiencyHiggsDecays(isBR = False,isSR = True)
+    # PlotBkg.PlotEfficiencyHiggsDecays(isBR = True, isSR = False)
+    # PlotBkg.PlotEfficiencyHiggsDecays(isBR = True, isSR = True)

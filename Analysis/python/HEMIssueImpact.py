@@ -3,7 +3,7 @@ from array import array
 
 import tdrstyle_all as TDR
 TDR.writeExtraText = True
-TDR.extraText = "Work in progress"
+TDR.extraText = "   Work in progress"
 
 # ForThesis(TDR)
 
@@ -16,7 +16,7 @@ class HEMIssueImpact(VariablesBase):
         # self.histfolders = ["nocuts", "weights", "HEM", "cleaned", "JetDiLeptonPhiAngular", "QCDRejection", "ScaleFactors", "ExtraCleaning", "DeepAk8_ZHccvsQCD_MD_SR"]
         self.histfolders = ["cleaned", "ScaleFactors", "ExtraCleaning"]
         self.hname = "etaphi_1"
-        self.defaultYear = "2018"
+        self.defaultYear = "UL18"
 
     def Plot2D(self):
         for mode in ["HEM","noHEM"]:
@@ -31,7 +31,8 @@ class HEMIssueImpact(VariablesBase):
                 for hfolder in self.histfolders:
                     h2D = f_.Get("nTopJet_"+hfolder+"/"+self.hname)
                     print mode, ch, hfolder, round(100.*h2D.Integral(h2D.GetXaxis().FindBin(-3.2),h2D.GetXaxis().FindBin(-1.3),h2D.GetYaxis().FindBin(-1.57),h2D.GetYaxis().FindBin(-0.87))/h2D.Integral(),2), "%"
-                    canv = tdrCanvas(mode+ch+hfolder, -2.6, 2.6, -3.3, 3.3, "#eta^{jet}","#phi^{jet}", square=kSquare, is2D=True, iPos=0)
+                    canv = tdrCanvas(mode+ch+hfolder, -2.6, 2.6, -3.3, 3.3, "#eta^{jet}","#phi^{jet}", square=kSquare, isExtraSpace=True, is2D=True, iPos=0)
+                    GettdrCanvasHist(canv).GetYaxis().SetTitleOffset(0.7)
                     #canv.SetLogz(1)
                     SetAlternative2DColor(h2D)
                     h2D.GetZaxis().SetTitle("Number of jets")

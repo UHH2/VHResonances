@@ -53,22 +53,42 @@ def ForThesis(TDR):
     CMSOff(TDR)
     ExtraTextOff(TDR)
 
-#Alternative color pallette
-def SetAlternative2DColor(h=None):
-    Red    = [ 0.00, 0.00, 1.00, 0.70]
-    Green  = [ 0.30, 0.50, 0.70, 0.00]
-    Blue   = [ 0.50, 0.40, 0.20, 0.15]
-    Length = [ 0.00, 0.15, 0.70, 1.00]
-    nb = 200
-    rt.TColor.CreateGradientColorTable(len(Length), array('d',Length), array('d',Red), array('d',Green), array('d',Blue), nb)
-    if h is not None: h.SetContour(nb)
+MyPalette = None
 
-#############
-# tdrstyle  #
-#############
+def CreateAlternativePalette(alpha=1):
+    red_values    = array('d', [0.00, 0.00, 1.00, 0.70])
+    green_values  = array('d', [0.30, 0.50, 0.70, 0.00])
+    blue_values   = array('d', [0.50, 0.40, 0.20, 0.15])
+    length_values = array('d', [0.00, 0.15, 0.70, 1.00])
+    num_colors = 200
+    color_table = rt.TColor.CreateGradientColorTable(len(length_values), length_values, red_values, green_values, blue_values, num_colors,alpha)
+    global MyPalette
+    MyPalette = [color_table + i for i in range(num_colors)]
 
+def SetAlternative2DColor(hist=None, style=None, alpha=1):
+    global MyPalette
+    if MyPalette is None:
+        CreateAlternativePalette(alpha=alpha)
+    if style is None:
+        global tdrStyle
+        style = tdrStyle
+    style.SetPalette(len(MyPalette), array('i', MyPalette))
+    if hist is not None:
+      hist.SetContour(len(MyPalette))
+
+
+# ######## ########  ########        ######  ######## ##    ## ##       ########
+#    ##    ##     ## ##     ##      ##    ##    ##     ##  ##  ##       ##
+#    ##    ##     ## ##     ##      ##          ##      ####   ##       ##
+#    ##    ##     ## ########        ######     ##       ##    ##       ######
+#    ##    ##     ## ##   ##              ##    ##       ##    ##       ##
+#    ##    ##     ## ##    ##       ##    ##    ##       ##    ##       ##
+#    ##    ########  ##     ##       ######     ##       ##    ######## ########
+
+tdrStyle = None
+
+# Turns the grid lines on (true) or off (false)
 def tdrGrid( gridOn):
-  tdrStyle = gROOT.FindObject('tdrStyle')
   tdrStyle.SetPadGridX(gridOn)
   tdrStyle.SetPadGridY(gridOn)
 
@@ -77,7 +97,12 @@ def fixOverlay():
   rt.gPad.RedrawAxis()
 
 def setTDRStyle():
-  tdrStyle =  rt.TStyle('tdrStyle','Style for P-TDR')
+  global tdrStyle
+  if tdrStyle!=None:
+    del tdrStyle
+  tdrStyle = rt.TStyle('tdrStyle', 'Style for P-TDR')
+  rt.gROOT.SetStyle(tdrStyle.GetName())
+  rt.gROOT.ForceStyle()
   #for the canvas:
   tdrStyle.SetCanvasBorderMode(0)
   tdrStyle.SetCanvasColor(rt.kWhite)
@@ -107,14 +132,14 @@ def setTDRStyle():
   tdrStyle.SetEndErrorSize(2)
   tdrStyle.SetMarkerStyle(20)
   #For the fit/function:
-  tdrStyle.SetOptFit(1)
+  tdrStyle.SetOptFit(0)
   tdrStyle.SetFitFormat('5.4g')
   tdrStyle.SetFuncColor(2)
   tdrStyle.SetFuncStyle(1)
   tdrStyle.SetFuncWidth(1)
   #For the date:
   tdrStyle.SetOptDate(0)
-  # For the statistics box:
+  #For the statistics box:
   tdrStyle.SetOptFile(0)
   tdrStyle.SetOptStat(0) # To display the mean and RMS:   SetOptStat('mr')
   tdrStyle.SetStatColor(rt.kWhite)
@@ -164,19 +189,16 @@ def setTDRStyle():
   tdrStyle.SetHatchesLineWidth(5)
   tdrStyle.SetHatchesSpacing(0.05)
   tdrStyle.cd()
-  return tdrStyle
-
-###################
-# end setTDRStyle #
-###################
-#################
-# end tdrstyle  #
-#################
 
 
-#############
-# CMS_lumi  #
-#############
+#  ######  ##     ##  ######       ##       ##     ## ##     ## ####
+# ##    ## ###   ### ##    ##      ##       ##     ## ###   ###  ##
+# ##       #### #### ##            ##       ##     ## #### ####  ##
+# ##       ## ### ##  ######       ##       ##     ## ## ### ##  ##
+# ##       ##     ##       ##      ##       ##     ## ##     ##  ##
+# ##    ## ##     ## ##    ##      ##       ##     ## ##     ##  ##
+#  ######  ##     ##  ######       ########  #######  ##     ## ####
+
 
 def CMS_lumi(pad, iPosX=11):
   outOfFrame = False
@@ -268,28 +290,44 @@ def CMS_lumi(pad, iPosX=11):
     latex.DrawLatex(posX_, posY_, extraText)
   pad.Update()
 
-#################
-# end CMS_lumi  #
-#################
 
 
-#################
-# General Macro #
-#################
+# ########  ##        #######  ######## ######## #### ##    ##  ######         ##     ##    ###     ######  ########   #######   ######
+# ##     ## ##       ##     ##    ##       ##     ##  ###   ## ##    ##        ###   ###   ## ##   ##    ## ##     ## ##     ## ##    ##
+# ##     ## ##       ##     ##    ##       ##     ##  ####  ## ##              #### ####  ##   ##  ##       ##     ## ##     ## ##
+# ########  ##       ##     ##    ##       ##     ##  ## ## ## ##   ####       ## ### ## ##     ## ##       ########  ##     ##  ######
+# ##        ##       ##     ##    ##       ##     ##  ##  #### ##    ##        ##     ## ######### ##       ##   ##   ##     ##       ##
+# ##        ##       ##     ##    ##       ##     ##  ##   ### ##    ##        ##     ## ##     ## ##    ## ##    ##  ##     ## ##    ##
+# ##        ########  #######     ##       ##    #### ##    ##  ######         ##     ## ##     ##  ######  ##     ##  #######   ######
 
 
 # Create canvas with predefined axix and CMS logo
 def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square=kRectangular, iPos=11, is2D=False, isExtraSpace=False):
-  # iPos parameter defines the position of the CMS logo in the plot
-  # iPos=11 : top-left, left-aligned
-  # iPos=33 : top-right, right-aligned
-  # iPos=22 : center, centered
-  # iPos=0  : out of frame (in exceptional cases)
-  # mode generally : iPos = 10*(alignement 1/2/3) + position (1/2/3 = l/c/r)
+  """
+    Draw a canvas with TDR style.
 
-  # setTDRStyle to get all the settings right
-  tdrStyle = setTDRStyle()
+    canvName: Name of the canvas.
+    x_min: Minimum value of the x-axis.
+    x_max: Maximum value of the x-axis.
+    y_min: Minimum value of the y-axis.
+    y_max: Maximum value of the y-axis.
+    nameXaxis: Label for the x-axis.
+    nameYaxis: Label for the y-axis.
+    square: If True, canvas is square.
+    iPos: Position of the CMS logo in the plot.
+        iPos=11 : top-left, left-aligned
+        iPos=33 : top-right, right-aligned
+        iPos=22 : center, centered
+        iPos=0  : out of frame (in exceptional cases)
+        mode generally : iPos = 10*(alignement 1/2/3) + position (1/2/3 = l/c/r)
+    is2D: If True, canvas is 2D.
+    isExtraSpace: If True, add extra space to the margins.
+    """
 
+  # Set TDR style
+  setTDRStyle()
+
+  # Set canvas dimensions and margins
   W_ref = 600 if square else 800
   H_ref = 600 if square else 600
 
@@ -305,19 +343,21 @@ def tdrCanvas(canvName, x_min, x_max, y_min, y_max, nameXaxis, nameYaxis, square
   canv.SetBorderMode(0)
   canv.SetFrameFillStyle(0)
   canv.SetFrameBorderMode(0)
-  canv.SetLeftMargin( B/W if is2D else L/W+0.02)
-  canv.SetRightMargin( B/W+0.01 if is2D else R/W+0.01)
-  canv.SetTopMargin( T/H )
-  canv.SetBottomMargin(B/H+0.02)
+  canv.SetLeftMargin( (B/W if isExtraSpace else B/W) if is2D else L/W+0.02)
+  canv.SetRightMargin( (B/W+0.04 if isExtraSpace else B/W+0.01) if is2D else R/W+0.01)
+  canv.SetTopMargin(T/H)
+  canv.SetBottomMargin(B/H + 0.02)
 
-  h = canv.DrawFrame(x_min,y_min,x_max,y_max)
-  h.GetYaxis().SetTitleOffset((1.25 if isExtraSpace else 1.2) if square else (1.0 if isExtraSpace else 0.8))
+  # Draw frame and set axis labels
+  h = canv.DrawFrame(x_min, y_min, x_max, y_max)
+  y_offset = (1.25 if isExtraSpace else 1.2) if square else (1.0 if isExtraSpace else 0.8)
+  h.GetYaxis().SetTitleOffset(y_offset)
   h.GetXaxis().SetTitleOffset(0.9)
   h.GetXaxis().SetTitle(nameXaxis)
   h.GetYaxis().SetTitle(nameYaxis)
   h.Draw('AXIS')
 
-  # writing the lumi information and the CMS 'logo'
+  # Draw CMS logo and update canvas
   CMS_lumi(canv, iPos)
   canv.Update()
   canv.RedrawAxis()
@@ -331,38 +371,8 @@ def tdrCanvasResetAxes(canv, x_min, x_max, y_min, y_max):
   GettdrCanvasHist(canv).GetXaxis().SetRangeUser(x_min,x_max)
   GettdrCanvasHist(canv).GetYaxis().SetRangeUser(y_min,y_max)
 
-def tdrCanvas2d(canvName, square=True):
-  tdrStyle = setTDRStyle()
-
-  W = 600 if square else 700
-  H = 600
-
-
-
-  # references for T, B, L, R
-  T = 0.07*H
-  B = 0.13*H
-  L = 0.15*W
-  R = 0.24*W
-
-  canv = rt.TCanvas(canvName,canvName,50,50,W,H)
-  canv.SetFillColor(0)
-  canv.SetBorderMode(0)
-  canv.SetFrameFillStyle(0)
-  canv.SetFrameBorderMode(0)
-  canv.SetLeftMargin( 0.15 )
-  canv.SetRightMargin( 0.21 )
-  canv.SetTopMargin( 0.03 )
-  canv.SetBottomMargin( 0.13 )
-
-  return canv
-
-#################
-# end tdrCanvas #
-#################
-
 def tdrDiCanvas(canvName, x_min, x_max, y_min, y_max, y_min2, y_max2, nameXaxis, nameYaxis, nameYaxis2, square=kRectangular, iPos=11):
-  tdrStyle = setTDRStyle()
+  setTDRStyle()
 
   W_ref = 600 if square else 800
   H_ref = 350 if square else 600
@@ -443,16 +453,18 @@ def tdrDiCanvas(canvName, x_min, x_max, y_min, y_max, y_min2, y_max2, nameXaxis,
 
 def tdrLeg(x1, y1, x2, y2, textSize=0.04, textFont=42, textColor=rt.kBlack):
   leg = rt.TLegend(x1, y1, x2, y2, '', 'brNDC')
-  leg.SetFillStyle(rt.kNone)
-  leg.SetBorderSize(0)
   leg.SetTextSize(textSize)
   leg.SetTextFont(textFont)
   leg.SetTextColor(textColor)
+  leg.SetBorderSize(0)
+  leg.SetFillStyle(0)
+  leg.SetFillColor(0)
   leg.Draw()
   return leg
 
-def tdrHeader(leg, legTitle, textAlign=12, textSize=0.04, textFont=42, textColor=rt.kBlack, isToRemove = True):
-  header = rt.TLegendEntry( 0, legTitle, 'h' )
+#To be fixed as python deletes obj before time
+def tdrHeader(leg, legTitle, textAlign=12, textSize=0.04, textFont=42, textColor=rt.kBlack, isToRemove=True):
+  header = rt.TLegendEntry(0, legTitle, "h")
   header.SetTextFont(textFont)
   header.SetTextSize(textSize)
   header.SetTextAlign(textAlign)
@@ -465,8 +477,9 @@ def tdrHeader(leg, legTitle, textAlign=12, textSize=0.04, textFont=42, textColor
     leg.GetListOfPrimitives().AddLast(header)
 
 
-def tdrDraw(h, opt, marker=rt.kFullCircle, mcolor=rt.kBlack, lstyle=rt.kSolid, lcolor=-1, fstyle=1001, fcolor=rt.kYellow+1, alpha=-1):
+def tdrDraw(h, opt, marker=rt.kFullCircle, msize=1.0, mcolor=rt.kBlack, lstyle=rt.kSolid, lcolor=-1, fstyle=1001, fcolor=rt.kYellow+1, alpha=-1):
   h.SetMarkerStyle(marker)
+  h.SetMarkerSize(msize)
   h.SetMarkerColor(mcolor)
   h.SetLineStyle(lstyle)
   h.SetLineColor(mcolor if lcolor==-1 else lcolor)
@@ -475,71 +488,14 @@ def tdrDraw(h, opt, marker=rt.kFullCircle, mcolor=rt.kBlack, lstyle=rt.kSolid, l
   if alpha>0: h.SetFillColorAlpha(fcolor, alpha)
   h.Draw(opt+'SAME')
 
-def tdrDraw2d(h, opt, nbinsx, xmin, xmax, nbinsy, ymin, ymax, ncontour, zmin, zmax, axistitles):
-
-  h2 = rt.TH2D('h2', 'h2', nbinsx, xmin, xmax, nbinsy, ymin, ymax)
-  h2.GetXaxis().SetTitle(axistitles[0])
-  h2.GetYaxis().SetTitle(axistitles[1])
-  h2.GetZaxis().SetTitle(axistitles[2])
-  h2.GetYaxis().SetTitleOffset(1.15)
-  h2.GetZaxis().SetTitleOffset(1.3)
-  SetAlternative2DColor(h2)
-  h.SetHistogram(h2)
-
-  # HistCosmetics(h)
-  h.Draw('AXIS')
-  h.Draw(opt)
-  h.GetZaxis().SetRangeUser(zmin, zmax)
-  h2.SetContour(ncontour)
-  rt.gPad.RedrawAxis()
-
-def ScaleLeg(name, scale = 0.75):
-    return '#scale['+str(scale)+']{'+str(name)+'}'
-
-def HistCosmetics(hist, ratio=False):
-  hist.SetLineWidth(3)
-  #hist.SetMarkerStyle(8)
-  #hist.SetMarkerSize(0.4)
-  hist.SetTitle('')
-
-  # X label
-  # hist.GetXaxis().SetLabelFont(43)
-  # hist.GetXaxis().SetLabelSize(25)
-  # X title
-  # hist.GetXaxis().SetTitleFont(43)
-  # hist.GetXaxis().SetTitleSize(29)
-
-  # Y label
-  # hist.GetYaxis().SetLabelFont(43)
-  # hist.GetYaxis().SetLabelSize(25)
-  # hist.GetYaxis().SetNdivisions(510)
-  # Y title
-  # hist.GetYaxis().SetTitleFont(43)
-  # hist.GetYaxis().SetTitleSize(29)
-
-  hist.GetXaxis().SetNdivisions(505)
-  # hist.GetXaxis().SetTickSize(0.037)
-  # hist.SetMinimum(0)
-
-  if ratio:
-    hist.GetYaxis().SetTitleOffset(1.7)
-    hist.GetXaxis().SetTitleOffset(3)
-    hist.GetXaxis().SetTickSize(0.07)
-    hist.GetYaxis().SetTitleSize(15)
-    hist.GetYaxis().CenterTitle()
-    hist.GetYaxis().SetRangeUser(0.3, 1.7)
-    hist.GetYaxis().SetLabelSize(14)
-  # else:
-  #   hist.GetXaxis().SetTitleOffset(1.05)
-  #   hist.GetYaxis().SetTitleOffset(1.55)
-
-  def setNewTitle(name = 'new title'):
-    gStyle.SetOptTitle(0)
-    title = rt.TPaveLabel(.11,.95,.35,.99,name,'brNDC')
-    title.Draw()
-
 def tdrDrawLine(line, lcolor=rt.kRed, lstyle=rt.kSolid, lwidth=2):
    line.SetLineStyle(lstyle)
    line.SetLineColor(lcolor)
    line.SetLineWidth(lwidth)
    line.Draw('SAME')
+
+
+
+def ScaleText(name, scale = 0.75):
+    return '#scale['+str(scale)+']{'+str(name)+'}'
+

@@ -21,3 +21,5 @@ const std::string MyString(const std::string & tag);// Needed just to deal with 
 double GetQCD(const TopJet& j, bool isPN=false, bool isMD=false);
 double GetHccvsQCD(const TopJet& j, bool isPN=false, bool isMD=false);
 double GetZHccvsQCD(const TopJet& j, bool isPN=false, bool isMD=false);
+double GetXbbccvsQCD(const TopJet& j);
+double GetXvsQCD(const TopJet& j);

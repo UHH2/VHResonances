@@ -27,7 +27,7 @@ class ModuleRunner(ModuleRunnerBase):
         os.chdir(self.Path_ANALYSIS+"Analysis")
         list_processes = []
         list_logfiles = []
-        print "RunCommand:", command
+        # print "RunCommand:", command
         if len(kwargs)>0:
             i = 0
             for year in LoopOver("years", self.Samples_Year_Dict.keys()+["RunII"]):
@@ -38,9 +38,9 @@ class ModuleRunner(ModuleRunnerBase):
                             else: list_processes.append(["./"+command,histFolder,channel+"channel" if channel!="" else channel,collection,year])
                             list_logfiles.append("log_"+str(i)+".txt")
                             i +=1
-            for i in list_processes:
-                print i
             # print "Number of processes", len(list_processes)
+            for proc in list_processes:
+                print proc
             parallelise(list_processes, 20,list_logfiles)
             # parallelise(list_processes, 20)
         else:
@@ -159,10 +159,35 @@ class ModuleRunner(ModuleRunnerBase):
                 else:
                     # list_processes.append([self.Path_ANALYSIS+"Analysis/python/MergeLargeRootFiles.py", str(forPlotting), filespath, newFile])
                     list_processes.append(["hadd", "-f", "-T", newFile]+list_)
-        for i in list_processes:
-            print i[0:5], "+ others" if len(i)>5 else ""
+        # for i in list_processes:
+        #     print i[0:5], "+ others" if len(i)>5 else ""
         print "Number of processes", len(list_processes)
+        filtered = list(filter(lambda x: any('MC_DY' in y and 'inv' in y for y in x), list_processes))
+        list_processes = list(filter(lambda x: not any('MC_DY' in y and 'inv' in y for y in x), list_processes))
+        # print(len(filtered), filtered)
+        # print(len(list_processes), list_processes)
         parallelise(list_processes, 20)
+        if not mergeCategory:
+            parallelise(filtered, 20)
+            return
+        list_processes = []
+        list_processes_temp = []
+        list_processes_del = []
+        for orig in filtered:
+            final = orig[:4]
+            samples = orig[4:]
+            temps = []
+            step_ = 2
+            for i in range(0,len(samples),step_):
+                temp = final[-1].replace('.root', '_temp'+str(i)+'.root')
+                temps.append(temp)
+                list_processes_temp.append(final[:-1]+[temp]+samples[i:i+step_])
+            list_processes.append(final+temps)
+            list_processes_del.append(['rm']+temps)
+        parallelise(list_processes_temp, 20)
+        parallelise(list_processes, 20)
+        parallelise(list_processes_del, 20)
+
 
     @timeit
     def StoreModuleOutput(self, process="Move"):
@@ -230,7 +255,7 @@ class ModuleRunner(ModuleRunnerBase):
             if syst!="nominal": continue
             if DoControl(self.controls,self.year+collection+syst+channel, channel, ""):
                 continue
-            a = os.system("mkdir -p "+self.Path_STORAGE+self.year+"/"+self.Module+"/"+collection+"/"+channel+"channel/"+syst+"/Plots")
+            a = os.system("mkdir -p "+self.ModuleStorage+"/"+collection+"/"+channel+"channel/"+syst+"/Plots")
             process = subprocess.Popen("Plots -f Analysis/"+self.Module+"Plotter_"+channel+"channel_"+collection+"_"+syst+"_"+self.year+".steer", shell=True)
             process.wait()
         os.chdir(cwd)
@@ -277,6 +302,8 @@ class ModuleRunner(ModuleRunnerBase):
             #     print i
             print "Number of processes", len(list_processes)
             parallelise(list_processes, 20)
+            print "Number of processes", len(list_processes_merge)
+            parallelise(list_processes_merge, 20)
 
 
     @timeit

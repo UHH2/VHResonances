@@ -203,6 +203,9 @@ void ZprimeCandidateReconstruction::setDiscriminators(Event& event, ZprimeCandid
   candidate.set_discriminators("btag_ParticleNet_HccvsQCD_2", jet.btag_ParticleNetDiscriminatorsJetTags_HccvsQCD());
   candidate.set_discriminators("btag_ParticleNet_XbbvsQCD_MD", jet.btag_MassDecorrelatedParticleNetDiscriminatorsJetTags_XbbvsQCD());
   candidate.set_discriminators("btag_ParticleNet_XccvsQCD_MD", jet.btag_MassDecorrelatedParticleNetDiscriminatorsJetTags_XccvsQCD());
+
+  candidate.set_discriminators("btag_ParticleNet_XbbccvsQCD_MD",  GetXbbccvsQCD(jet));
+  candidate.set_discriminators("btag_ParticleNet_XvsQCD_MD",      GetXvsQCD(jet));
   candidate.set_discriminators("btag_ParticleNet_mass", jet.ParticleNetMassRegressionJetTags_mass());
 }
 
@@ -378,7 +381,7 @@ NLOCorrections::NLOCorrections(uhh2::Context& ctx) {
 
   std::string dataset_version = ctx.get("dataset_version");
   // Corrections for 2017 and 2018 are the same. 2016 is different
-  is2016 = FindInString("2016", ctx.get("year"));
+  is2016 = FindInString("UL16", ctx.get("year"));
 
   //TODO it's arbitrary.
   is_Wjets  = FindInString("MC_WJets",dataset_version);
@@ -592,10 +595,10 @@ ScaleFactorsManager::ScaleFactorsManager(uhh2::Context& ctx, const Event::Handle
       } else throw invalid_argument("In ScaleFactorsManager.cxx: No implementation for "+sf.first);
       SFs_ele[sf.first].reset(new MCElecScaleFactor(ctx, fname, sys, weight_postfix, "nominal", "electrons", sf.second.second, false));
     }
-    if (FindInString("Jet_Tagger", sf.first) ) {
-      std::string fname = "VHResonances/Analysis/ScaleFactors/Taggers/"+sf.second.first+".root";
-      SFs[sf.first].reset( new JetTaggerSF(ctx, fname, sf.second.second, h_ZprimeCandidates_));
-    }
+    // if (FindInString("Jet_Tagger", sf.first) ) {
+    //   std::string fname = "VHResonances/Analysis/ScaleFactors/Taggers/"+sf.second.first+".root";
+    //   SFs[sf.first].reset( new JetTaggerSF(ctx, fname, sf.second.second, h_ZprimeCandidates_));
+    // }
   }
 
 }
@@ -641,7 +644,8 @@ bool ScaleFactorsManager::process(uhh2::Event& event){
 
 MuonScaleVariations::MuonScaleVariations(uhh2::Context & ctx) {
   if(ctx.get("dataset_type") != "MC") return;
-  if(!string2bool(ctx.get("muonchannel"))) return;
+  isMuonChannel = string2bool(ctx.get("muonchannel"));
+  if(!isMuonChannel) return;
   std::string syst = ctx.get("MuonScaleVariations","nominal");
   if (syst=="nominal") mode = 0;
   else if (syst=="up") mode = 1;
@@ -651,6 +655,7 @@ MuonScaleVariations::MuonScaleVariations(uhh2::Context & ctx) {
 
 bool MuonScaleVariations::process(uhh2::Event& event) {
   if(event.isRealData) return true;
+  if(!isMuonChannel) return true;
   for(auto & muon: *event.muons){
     double newpt = GE->GeneralizedEndpointPt(muon.pt(), muon.charge(), muon.eta(), muon.phi(), mode);
     LorentzVector muon_v4_corrected = muon.v4() * (newpt/muon.pt());

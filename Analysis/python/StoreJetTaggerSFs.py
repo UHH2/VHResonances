@@ -14,96 +14,122 @@ Module to plot and store Hcc SFs
 
 def StoreJetTaggerSF():
 
-    colors = {"2016":  ROOT.kGreen+2,
-              "2017":  ROOT.kRed+1,
-              "2018":  ROOT.kOrange+1,
-              "FlavC": (ROOT.kFullCircle, 1.8, rt.kSolid),
-              "FlavB": (ROOT.kFullTriangleUp, 2.0, rt.kDashed),
-              "FlavL": (ROOT.kFullSquare, 1.6, rt.kDotted),
+    colors = {"UL16preVFP":   ROOT.kAzure+2,
+              "UL16postVFP":  ROOT.kGreen+2,
+              "UL17":         ROOT.kRed+1,
+              "UL18":         ROOT.kOrange+1,
+              "FlavC":        (ROOT.kFullCircle, 1.8, rt.kSolid),
+              "FlavB":        (ROOT.kFullSquare, 1.6, rt.kSolid),
+              "FlavL":        (ROOT.kFullTriangleUp, 2.0, rt.kSolid),
     }
 
 
     SF_Dict = {
-        "2016": {
+        "UL16preVFP": {
             "FlavC": {
-                "pt":          [(200, 250),(250, 300),(300, 350),(350, 400),(400, 500),(500, 2000)],
-                "SF":          [+1.069,+1.122,+1.121,+1.074,+0.911,+0.998],
-                "SF_err_up":   [+0.092,+0.086,+0.085,+0.067,+0.046,+0.049],
-                "SF_err_down": [-0.083,-0.077,-0.075,-0.061,-0.042,-0.046],
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [1.161,  1.161,  0.877,  1.215],
+                "SF_err_up":   [+0.218*2, +0.218, +0.120, +0.232],
+                "SF_err_down": [-0.210*2,-0.210,-0.090,-0.230],
                 },
             "FlavB": {
-                "pt":          [(200, 250),(250, 300),(300, 350),(350, 400),(400, 500),(500, 2000)],
-                "SF":          [+1.083,+1.070,+1.141,+1.056,+1.186,+1.082],
-                "SF_err_up":   [+0.087,+0.085,+0.074,+0.067,+0.061,+0.070],
-                "SF_err_down": [-0.086,-0.086,-0.074,-0.068,-0.062,-0.071],
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [1.035,  1.035,  1.066,  1.013],
+                "SF_err_up":   [+0.101*2, +0.101, +0.095, +0.117],
+                "SF_err_down": [-0.094*2, -0.094, -0.083, -0.111],
                 },
             "FlavL": {
-                "pt":          [(200, 250),(250, 300),(300, 350),(350, 400),(400, 500),(500, 2000)],
-                "SF":          [+1.136,+1.029,+1.057,+1.165,+1.265,+1.265],
-                "SF_err_up":   [+0.100,+0.078,+0.068,+0.074,+0.054,+0.060],
-                "SF_err_down": [-0.096,-0.075,-0.067,-0.072,-0.053,-0.059],
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [1.000,  1.000,  1.000,  1.000],
+                "SF_err_up":   [+0.200, +0.200, +0.200, +0.200],
+                "SF_err_down": [-0.200, -0.200, -0.200, -0.200],
                 },
             },
-        "2017": {
+        "UL16postVFP": {
             "FlavC": {
-                "pt":          [(200, 250),(250, 300),(300, 350),(350, 400),(400, 500),(500, 2000)],
-                "SF":          [+1.116,+1.091,+1.110,+0.964,+1.046,+1.050],
-                "SF_err_up":   [+0.086,+0.076,+0.084,+0.077,+0.064,+0.049],
-                "SF_err_down": [-0.078,-0.069,-0.075,-0.070,-0.059,-0.046],
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [1.164,  1.164,  1.078,  1.095],
+                "SF_err_up":   [+0.149*2, +0.149, +0.196, +0.228],
+                "SF_err_down": [-0.168*2, -0.168, -0.191, -0.269],
                 },
             "FlavB": {
-                "pt":          [(200, 250),(250, 300),(300, 350),(350, 400),(400, 500),(500, 2000)],
-                "SF":          [+1.241,+1.308,+1.326,+1.079,+1.181,+1.009],
-                "SF_err_up":   [+0.112,+0.100,+0.093,+0.102,+0.073,+0.060],
-                "SF_err_down": [-0.111,-0.099,-0.093,-0.105,-0.071,-0.061],
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [1.033,  1.033,  1.098,  1.061],
+                "SF_err_up":   [+0.062*2, +0.062, +0.081, +0.084],
+                "SF_err_down": [-0.054*2, -0.054, -0.073, -0.060],
                 },
             "FlavL": {
-                "pt":          [(200, 250),(250, 300),(300, 350),(350, 400),(400, 500),(500, 2000)],
-                "SF":          [+1.346,+1.417,+1.363,+1.744,+1.476,+1.693],
-                "SF_err_up":   [+0.101,+0.084,+0.100,+0.117,+0.080,+0.065],
-                "SF_err_down": [-0.098,-0.083,-0.097,-0.108,-0.077,-0.063],
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [1.000,  1.000,  1.000,  1.000],
+                "SF_err_up":   [+0.200, +0.200, +0.200, +0.200],
+                "SF_err_down": [-0.200, -0.200, -0.200, -0.200],
                 },
             },
-        "2018": {
+        "UL17": {
             "FlavC": {
-                "pt":          [(200, 250),(250, 300),(300, 350),(350, 400),(400, 500),(500, 2000)],
-                "SF":          [+1.019,+0.889,+1.060,+1.096,+1.087,+1.072],
-                "SF_err_up":   [+0.087,+0.068,+0.091,+0.103,+0.080,+0.048],
-                "SF_err_down": [-0.074,-0.058,-0.081,-0.091,-0.072,-0.045],
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [1.316,  1.316,  1.296,  1.115],
+                "SF_err_up":   [+0.308*2, +0.308, +0.314, +0.193],
+                "SF_err_down": [-0.303*2, -0.303, -0.314, -0.188],
                 },
             "FlavB": {
-                "pt":          [(200, 250),(250, 300),(300, 350),(350, 400),(400, 500),(500, 2000)],
-                "SF":          [+1.282,+1.464,+1.071,+1.116,+1.062,+1.172],
-                "SF_err_up":   [+0.105,+0.098,+0.105,+0.118,+0.078,+0.057],
-                "SF_err_down": [-0.102,-0.102,-0.105,-0.118,-0.078,-0.058],
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [0.957,  0.957,  1.018,  0.976],
+                "SF_err_up":   [+0.062*2, +0.062, +0.056, +0.039],
+                "SF_err_down": [-0.067*2, -0.067, -0.055, -0.043],
                 },
             "FlavL": {
-                "pt":          [(200, 250),(250, 300),(300, 350),(350, 400),(400, 500),(500, 2000)],
-                "SF":          [+1.152,+1.027,+1.245,+0.963,+1.109,+1.102],
-                "SF_err_up":   [+0.099,+0.085,+0.111,+0.106,+0.074,+0.057],
-                "SF_err_down": [-0.100,-0.091,-0.106,-0.102,-0.071,-0.055],
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [1.000,  1.000,  1.000,  1.000],
+                "SF_err_up":   [+0.200, +0.200, +0.200, +0.200],
+                "SF_err_down": [-0.200, -0.200, -0.200, -0.200],
+                },
+            },
+        "UL18": {
+            "FlavC": {
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [0.981, 0.981, 0.946, 0.951],
+                "SF_err_up":   [+0.203*2, +0.203, +0.107, +0.143],
+                "SF_err_down": [-0.136*2, -0.136, -0.108, -0.122],
+                },
+            "FlavB": {
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [0.904,  0.904,  1.005,  0.988],
+                "SF_err_up":   [+0.068*2, +0.068, +0.036, +0.030],
+                "SF_err_down": [-0.080*2, -0.080, -0.036, -0.038],
+                },
+            "FlavL": {
+                "pt":          [(200, 450),(450, 500), (500, 600), (600, 3000)],
+                "SF":          [1.000,  1.000,  1.000,  1.000],
+                "SF_err_up":   [+0.200, +0.200, +0.200, +0.200],
+                "SF_err_down": [-0.200, -0.200, -0.200, -0.200],
                 },
             },
         }
 
     dir = os.environ["CMSSW_BASE"]+"/src/UHH2/VHResonances/Analysis/ScaleFactors/Taggers/"
     os.system("mkdir -p "+dir)
-
+    flavs = ["FlavC", "FlavB", "FlavL"]
+    years = ["UL16preVFP", "UL16postVFP", "UL17", "UL18"]
     graphs = []
-    TDR.cms_lumi = self.lumi_map['RunII']['lumiPlot']+' fb^{-1}'
+    TDR.cms_lumi = VariablesBase().lumi_map['RunII']['lumiPlot']+' fb^{-1}'
     canvs = {}
     legs = {}
-    for flavor in ["FlavC", "FlavB", "FlavL"]:
-        canvs[flavor] = tdrCanvas("JetTaggerSF"+flavor, 180, 620, 0.6, 2.6, "p_{T} [GeV]", "Scale Factor")
+    lines = {}
+    for val in [1,1.2,0.8]: 
+        lines[val] = rt.TLine(180, val, 1020, val)
+    for flavor in flavs:
+        canvs[flavor] = tdrCanvas("JetTaggerSF"+flavor, 180, 1020, 0.6, 2.2, "p_{T} [GeV]", "Scale Factor")
         legs[flavor] = tdrLeg(0.70,0.60,0.85,0.85, 0.045, 42, ROOT.kBlack)
         #legs[flavor].SetNColumns(3)
-        tdrHeader(legs[flavor], "Cat. flavour-"+flavor.replace("Flav","").lower().replace("l","light"), textAlign = 22)
+        # tdrHeader(legs[flavor], "Cat. flavour-"+flavor.replace("Flav","").lower().replace("l","light"), textAlign = 22)
+        for line in lines.values():
+            tdrDrawLine(line, rt.kBlack, rt.kDotted)
 
-
-    for year in ["2016", "2017", "2018"]:
+    for year in years:
         file = ROOT.TFile(dir+"Tagger_SF_"+year+".root", "RECREATE")
 
-        for flavor in ["FlavC", "FlavB", "FlavL"]:
+        for flavor in flavs:
             pts = SF_Dict[year][flavor]["pt"]
             SFs = SF_Dict[year][flavor]["SF"]
             SFsErr_Up = SF_Dict[year][flavor]["SF_err_up"]
@@ -131,10 +157,10 @@ def StoreJetTaggerSF():
                 histUp.SetBinContent(bin,SFs[x]+SFsErr_Up[x])
                 histDown.SetBinContent(bin,SFs[x]+SFsErr_Down[x])
 
-            x_bins.pop()
-            x_up.pop()
-            x_bins.append(550)
-            x_up.append(50)
+            x_bins[0] = 350
+            x_up[0] = 150
+            x_bins[-1] = 800
+            x_up[-1] = 200
             # for x in range(1,hist.GetNbinsX()+1):
             #     print hist.GetBinCenter(x), hist.GetBinContent(x), histUp.GetBinContent(x), histDown.GetBinContent(x)
 
@@ -148,12 +174,12 @@ def StoreJetTaggerSF():
             graphs.append(graph)
             graph.SetLineWidth(3)
             graph.SetMarkerSize(colors[flavor][1])
-            tdrDraw(graph, "P", colors[flavor][0], colors[year], colors[flavor][2], colors[year], 0, colors[year])
+            tdrDraw(graph, "P", marker= colors[flavor][0], mcolor=colors[year], lstyle=colors[flavor][2], lcolor= colors[year], fstyle=0, fcolor=colors[year])
             legs[flavor].AddEntry(graph, year, "lp")
 
         file.Close()
 
-    for flavor in ["FlavC", "FlavB", "FlavL"]:
+    for flavor in flavs:
         canvs[flavor].SaveAs(dir+"JetTaggerSFs"+flavor+".pdf")
 
 

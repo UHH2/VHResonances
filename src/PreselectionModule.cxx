@@ -302,7 +302,7 @@ bool PreselectionModule::process(uhh2::Event& event) {
     // For 2016 and 2017 the SinglePhoton and SingleElectron datasets are separete.
     // To avoid double counting, we consider eleTriggers in the SingleElectron
     // and we veto eleTriggers in the SinglePhoton
-    if (MS["year"]!="2018") {
+    if (!FindInString("18", MS["year"])) {
       if (MB["is_SingleElectron"] && !FindInString("Ele", el.first)) continue;
       if (MB["is_SinglePhoton"] && FindInString("Ele", el.first) && pass) {pass_Ele_triggers_Photon_Dataset = true; break;}
     }

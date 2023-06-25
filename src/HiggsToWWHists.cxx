@@ -114,16 +114,21 @@ HiggsToWWHists::HiggsToWWHists(Context& ctx, const string& dname, const string& 
   book_TH1F("H_chi_H", "#chi^{H}",35,0,70);
   book_TH1F("H_chi_Z", "#chi^{Z}",35,0,70);
 
+  book_TH1F("hadronFlavour", "hadronFlavour", 7, -1.5, 7.5);
   book_TH1F("H_Match","Match^{H}",19, 0, 19);
   book_TH1F("H_MatchingStatus","MatchingStatus^{H}",10, 0, 10);
   book_TH2F("H_MatchvsH_MatchingStatus",";Match^{H};MatchingStatus^{H}",19, 0, 19, 10, 0, 10);
+  book_TH2F("MatchvshadronFlavour",";Match;HadronFlavor",19, 0, 19, 7, -1.5, 5.5);
+  book_TH2F("MatchingStatusvshadronFlavour",";MatchingStatus;HadronFlavor",10, 0, 10, 7, -1.5, 5.5);
   for (int i=1;i<20;i++) {
     H1("H_Match")->GetXaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
     H2("H_MatchvsH_MatchingStatus")->GetXaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
+    H2("MatchvshadronFlavour")->GetXaxis()->SetBinLabel(i,MatchingToString(i-1).c_str());
   }
   for (int i=1;i<11;i++) {
     H1("H_MatchingStatus")->GetXaxis()->SetBinLabel(i,MatchingStatusToString(i-1).c_str());
     H2("H_MatchvsH_MatchingStatus")->GetYaxis()->SetBinLabel(i,MatchingStatusToString(i-1).c_str());
+    H2("MatchingStatusvshadronFlavour")->GetXaxis()->SetBinLabel(i,MatchingStatusToString(i-1).c_str());
   }
 
   book_TH1F("btags_DeepCSV","btags_DeepCSV", 4, 0, 4);
@@ -334,6 +339,11 @@ void HiggsToWWHists::fill(const Event & event){
     H1("H_Match")->Fill(match.c_str(), weight);
     H1("H_MatchingStatus")->Fill(matchstatus.c_str(), weight);
     H2("H_MatchvsH_MatchingStatus")->Fill(match.c_str(), matchstatus.c_str(), weight);
+
+    fill_H1("hadronFlavour", cand.H().hadronFlavour(), weight);
+    H2("MatchvshadronFlavour")->Fill(match.c_str(),cand.H().hadronFlavour(), weight);
+    H2("MatchingStatusvshadronFlavour")->Fill(matchstatus.c_str(),cand.H().hadronFlavour(), weight);
+
 
     double HccvsQCD    = cand.discriminator("btag_DeepBoosted_HccvsQCD");
     double HccvsQCD_MD = cand.discriminator("btag_DeepBoosted_HccvsQCD_MD");
